@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="coupon">
+
+	<select id="select" parameterType="Long" resultType="coupon">
+		SELECT * FROM coupon WHERE id = #{id}
+	</select>
+	<select id="selectall" resultType="coupon">
+		SELECT * FROM coupon
+	</select>
+	<insert id="insert" parameterType="coupon" >
+		INSERT INTO coupon (member_id, name, discount_policy, discount_value, status) VALUES (#{memberId}, #{name}, #{discountPolicy}, #{discountValue}, #{status})
+	</insert>
+	<update id="update" parameterType="coupon">
+		UPDATE coupon SET name = #{name}, discount_policy = #{discountPolicy}, discount_value = #{discountValue}, status = #{status} WHERE id = #{id}
+	</update>
+	<delete id="delete" parameterType="Long">
+		DELETE FROM coupon WHERE id = #{id}
+	</delete>
+	
+</mapper>
+
+
+
+
+
+

@@ -12,6 +12,7 @@ target/
 *.iws
 *.iml
 *.ipr
+out
 
 ### Eclipse ###
 .apt_generated
@@ -37,3 +38,7 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+### CUSTOM ###
+logs
+src/main/resources/mysql.properties

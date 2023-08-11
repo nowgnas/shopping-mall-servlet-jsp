@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="product">
+
+	<select id="select" parameterType="Long" resultType="product">
+		SELECT * FROM product WHERE id = ${id}
+	</select>
+	<select id="selectall" resultType="product">
+		SELECT * FROM product
+	</select>
+	<insert id="insert" parameterType="product" >
+		INSERT INTO product (category_id, name, description, price, quantity, code) VALUES (#{categoryId}, #{name}, #{description}, #{price}, #{quantity}, #{code})
+	</insert>
+	<update id="update" parameterType="product">
+		UPDATE product SET category_id = #{categoryId}, name = #{name}, description = #{description}, price = #{price}, quantity = #{quantity}, code = #{code} WHERE id = #{id}
+	</update>
+	<delete id="delete" parameterType="Long">
+		DELETE FROM product WHERE id = #{id}
+	</delete>
+	
+</mapper>
+
+
+
+
+
+
