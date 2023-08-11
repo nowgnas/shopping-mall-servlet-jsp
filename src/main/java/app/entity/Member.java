@@ -8,13 +8,9 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member extends BaseEntity {
 
-    private Long id;
-    @NonNull
-    private String email;
-    @NonNull
-    private String password;
-    @NonNull
-    private String name;
-    @Builder.Default
-    private Long money = 0L;
+  private Long id;
+  @NonNull private String email;
+  @NonNull private String password;
+  @NonNull private String name;
+  @Builder.Default private Long money = 0L;
 }

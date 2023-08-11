@@ -8,9 +8,7 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Order extends BaseEntity {
 
-    private Long id;
-    @NonNull
-    private Long memberId;
-    @NonNull
-    private String status;
+  private Long id;
+  @NonNull private Long memberId;
+  @NonNull private String status;
 }

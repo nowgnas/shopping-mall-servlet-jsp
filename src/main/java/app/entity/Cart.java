@@ -8,10 +8,7 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Cart {
 
-    @NonNull
-    private Long memberId;
-    @NonNull
-    private Long productId;
-    @NonNull
-    private Integer productQuantity;
+  @NonNull private Long memberId;
+  @NonNull private Long productId;
+  @NonNull private Integer productQuantity;
 }

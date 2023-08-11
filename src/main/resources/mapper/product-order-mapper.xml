@@ -1,22 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="productOrder">
 
-	<select id="select" parameterType="Long" resultType="productOrder">
-		SELECT * FROM product_order WHERE id = #{id}
-	</select>
-	<select id="selectall" resultType="productOrder">
-		SELECT * FROM product_order WHERE order_id = #{orderId}
-	</select>
-	<insert id="insert" parameterType="productOrder" >
-		INSERT INTO product_order (product_id, order_id, price, quantity, road_name, addr_detail, zip_code) VALUES (#{productId}, #{orderId}, #{price}, #{quantity}, #{roadName}, #{addrDetail}, #{zipCode})
-	</insert>
-	<delete id="delete" parameterType="Long">
-		DELETE FROM product_order WHERE id = #{id}
-	</delete>
-	
+    <select id="select" parameterType="Long" resultType="productOrder">
+        SELECT *
+        FROM product_order
+        WHERE id = #{id}
+    </select>
+    <select id="selectall" resultType="productOrder">
+        SELECT *
+        FROM product_order
+        WHERE order_id = #{orderId}
+    </select>
+    <insert id="insert" parameterType="productOrder">
+        INSERT INTO product_order (product_id, order_id, price, quantity, road_name, addr_detail, zip_code)
+        VALUES (#{productId}, #{orderId}, #{price}, #{quantity}, #{roadName}, #{addrDetail}, #{zipCode})
+    </insert>
+    <delete id="delete" parameterType="Long">
+        DELETE
+        FROM product_order
+        WHERE id = #{id}
+    </delete>
+
 </mapper>
 
 

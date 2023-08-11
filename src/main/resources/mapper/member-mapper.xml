@@ -1,35 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="member">
 
-	<resultMap id="BaseResultMap" type="member">
-		<id column="id" jdbcType="BIGINT" property="id"/>
-		<result column="email" jdbcType="VARCHAR" property="email"/>
-		<result column="password" jdbcType="VARCHAR" property="password"/>
-		<result column="name" jdbcType="VARCHAR" property="name"/>
-		<result column="money" jdbcType="BIGINT" property="money"/>
-		<result column="created_at" jdbcType="TIMESTAMP" property="createdAt"/>
-		<result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt"/>
-	</resultMap>
+    <resultMap id="BaseResultMap" type="member">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+        <result column="password" jdbcType="VARCHAR" property="password"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="money" jdbcType="BIGINT" property="money"/>
+        <result column="created_at" jdbcType="TIMESTAMP" property="createdAt"/>
+        <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt"/>
+    </resultMap>
 
-	<select id="select" parameterType="Long" resultMap="BaseResultMap">
-		SELECT * FROM member WHERE id = #{id}
-	</select>
-	<select id="selectall" resultType="member">
-		SELECT * FROM member
-	</select>
-	<insert id="insert" parameterType="member">
-		INSERT INTO member (email, password, name, money) VALUES (#{email}, #{password}, #{name}, #{money})
-	</insert>
-	<update id="update" parameterType="member">
-		UPDATE member SET email = #{email}, password = #{password}, name = #{name}, money = #{money} WHERE id = #{id}
-	</update>
-	<delete id="delete" parameterType="Long">
-		DELETE FROM member WHERE id = #{id}
-	</delete>
-	
+    <select id="select" parameterType="Long" resultMap="BaseResultMap">
+        SELECT *
+        FROM member
+        WHERE id = #{id}
+    </select>
+    <select id="selectall" resultType="member">
+        SELECT *
+        FROM member
+    </select>
+    <insert id="insert" parameterType="member">
+        INSERT INTO member (email, password, name, money)
+        VALUES (#{email}, #{password}, #{name}, #{money})
+    </insert>
+    <update id="update" parameterType="member">
+        UPDATE member
+        SET email    = #{email},
+            password = #{password},
+            name     = #{name},
+            money    = #{money}
+        WHERE id = #{id}
+    </update>
+    <delete id="delete" parameterType="Long">
+        DELETE
+        FROM member
+        WHERE id = #{id}
+    </delete>
+
 </mapper>
 
 

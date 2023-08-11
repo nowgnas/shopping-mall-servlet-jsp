@@ -1,5 +1,7 @@
 package app.enums;
 
 public enum CouponStatus {
-    YET, USED, EXPIRED
+  YET,
+  USED,
+  EXPIRED
 }

@@ -1,25 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="order">
 
-	<select id="select" parameterType="Long" resultType="order">
-		SELECT * FROM orders WHERE id = ${id} and member_id = #{memberId}
-	</select>
-	<select id="selectall" resultType="order">
-		SELECT * FROM orders WHERE member_id = #{memberId}
-	</select>
-	<insert id="insert" parameterType="order">
-		INSERT INTO orders (member_id, status) VALUES (#{memberId}, #{status})
-	</insert>
-	<update id="update" parameterType="order">
-		UPDATE orders SET member_id = #{memberId}, status = #{status} WHERE id = #{id}
-	</update>
-	<delete id="delete" parameterType="Long">
-		DELETE FROM orders WHERE id = #{id} and member_id = #{memberId}
-	</delete>
-	
+    <select id="select" parameterType="Long" resultType="order">
+        SELECT *
+        FROM orders
+        WHERE id = ${id}
+          and member_id = #{memberId}
+    </select>
+    <select id="selectall" resultType="order">
+        SELECT *
+        FROM orders
+        WHERE member_id = #{memberId}
+    </select>
+    <insert id="insert" parameterType="order">
+        INSERT INTO orders (member_id, status)
+        VALUES (#{memberId}, #{status})
+    </insert>
+    <update id="update" parameterType="order">
+        UPDATE orders
+        SET member_id = #{memberId},
+            status    = #{status}
+        WHERE id = #{id}
+    </update>
+    <delete id="delete" parameterType="Long">
+        DELETE
+        FROM orders
+        WHERE id = #{id}
+          and member_id = #{memberId}
+    </delete>
+
 </mapper>
 
 

@@ -1,5 +1,6 @@
 package app.enums;
 
 public enum PaymentType {
-    CASH, CARD
+  CASH,
+  CARD
 }

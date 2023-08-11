@@ -1,25 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="payment">
 
-	<select id="select" parameterType="Long" resultType="payment">
-		SELECT * FROM payments WHERE id = #{id}
-	</select>
-	<select id="selectall" resultType="payment">
-		SELECT * FROM payments
-	</select>
-	<insert id="insert" parameterType="payment" >
-		INSERT INTO payments (order_id, actual_amount, type) VALUES (#{orderId}, #{actualAmount}, #{type})
-	</insert>
-	<update id="update" parameterType="payment">
-		UPDATE payments SET order_id = #{orderId}, actual_amount = #{actualAmount}, type = #{type} WHERE id = #{id}
-	</update>
-	<delete id="delete" parameterType="Long">
-		DELETE FROM payments WHERE id = #{id}
-	</delete>
-	
+    <select id="select" parameterType="Long" resultType="payment">
+        SELECT *
+        FROM payments
+        WHERE id = #{id}
+    </select>
+    <select id="selectall" resultType="payment">
+        SELECT *
+        FROM payments
+    </select>
+    <insert id="insert" parameterType="payment">
+        INSERT INTO payments (order_id, actual_amount, type)
+        VALUES (#{orderId}, #{actualAmount}, #{type})
+    </insert>
+    <update id="update" parameterType="payment">
+        UPDATE payments
+        SET order_id      = #{orderId},
+            actual_amount = #{actualAmount},
+            type          = #{type}
+        WHERE id = #{id}
+    </update>
+    <delete id="delete" parameterType="Long">
+        DELETE
+        FROM payments
+        WHERE id = #{id}
+    </delete>
+
 </mapper>
 
 

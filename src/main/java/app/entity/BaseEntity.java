@@ -12,6 +12,6 @@ import java.time.LocalDateTime;
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class BaseEntity {
 
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+  private LocalDateTime createdAt;
+  private LocalDateTime updatedAt;
 }

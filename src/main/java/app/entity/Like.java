@@ -8,8 +8,6 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Like {
 
-    @NonNull
-    private String memberId;
-    @NonNull
-    private String productId;
+  @NonNull private String memberId;
+  @NonNull private String productId;
 }

@@ -1,25 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="productImage">
 
-	<select id="select" parameterType="Long" resultType="productImage">
-		SELECT * FROM product_image WHERE id = ${id}
-	</select>
-	<select id="selectall" resultType="productImage">
-		SELECT * FROM product_image
-	</select>
-	<insert id="insert" parameterType="productImage" >
-		INSERT INTO product_image (product_id, url, is_thumbnail) VALUES (#{productId}, #{url}, #{isThumbnail})
-	</insert>
-	<update id="update" parameterType="productImage">
-		UPDATE product_image SET product_id = #{productId}, url = #{url}, is_thumbnail = #{isThumbnail} WHERE id = #{id}
-	</update>
-	<delete id="delete" parameterType="Long">
-		DELETE FROM product_image WHERE id = #{id}
-	</delete>
-	
+    <select id="select" parameterType="Long" resultType="productImage">
+        SELECT *
+        FROM product_image
+        WHERE id = ${id}
+    </select>
+    <select id="selectall" resultType="productImage">
+        SELECT *
+        FROM product_image
+    </select>
+    <insert id="insert" parameterType="productImage">
+        INSERT INTO product_image (product_id, url, is_thumbnail)
+        VALUES (#{productId}, #{url}, #{isThumbnail})
+    </insert>
+    <update id="update" parameterType="productImage">
+        UPDATE product_image
+        SET product_id   = #{productId},
+            url          = #{url},
+            is_thumbnail = #{isThumbnail}
+        WHERE id = #{id}
+    </update>
+    <delete id="delete" parameterType="Long">
+        DELETE
+        FROM product_image
+        WHERE id = #{id}
+    </delete>
+
 </mapper>
 
 
