@@ -6,7 +6,7 @@
 
     <servlet>
         <servlet-name>Log4jInit</servlet-name>
-        <servlet-class>web.dispatcher.Log4jInit</servlet-class>
+        <servlet-class>app.utils.Log4jInit</servlet-class>
         <init-param>
             <param-name>log4j-init-file</param-name>
             <param-value>WEB-INF/log4j.properties</param-value>
