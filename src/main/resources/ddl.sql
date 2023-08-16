@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS `orders`
 (
     `id`         BIGINT UNSIGNED NOT NULL,
     `member_id`  BIGINT UNSIGNED NOT NULL,
-    `status`     VARCHAR(10)     NOT NULL,
+    `status`     VARCHAR(10)     NOT NULL DEFAULT 'PENDING',
     `created_at` DATETIME        NOT NULL DEFAULT NOW(),
     `updated_at` DATETIME        NOT NULL DEFAULT NOW()
 );
@@ -53,9 +53,6 @@ CREATE TABLE IF NOT EXISTS `product_order`
     `order_id`    BIGINT UNSIGNED NOT NULL,
     `price`       BIGINT UNSIGNED NOT NULL,
     `quantity`    INT UNSIGNED    NOT NULL,
-    `road_name`   VARCHAR(255)    NOT NULL,
-    `addr_detail` VARCHAR(255)    NOT NULL,
-    `zip_code`    VARCHAR(10)     NOT NULL,
     `created_at`  DATETIME        NOT NULL DEFAULT NOW(),
     `updated_at`  DATETIME        NOT NULL DEFAULT NOW()
 );
@@ -110,6 +107,16 @@ CREATE TABLE IF NOT EXISTS `payments`
     `type`          VARCHAR(20)     NOT NULL DEFAULT 'CASH',
     `created_at`    DATETIME        NOT NULL DEFAULT NOW(),
     `updated_at`    DATETIME        NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS `delivery` (
+    `order_id`	BIGINT UNSIGNED	NOT NULL,
+    `road_name`	VARCHAR(255)	NOT NULL,
+    `addr_detail`	VARCHAR(255)	NOT NULL,
+    `zip_code`	VARCHAR(255)	NOT NULL,
+    `status`	VARCHAR(255)	NOT NULL DEFAULT 'PENDING',
+    `created_at`	DATETIME	NOT NULL,
+    `updated_at`	DATETIME	NOT NULL
 );
 
 ALTER TABLE `likes`
@@ -186,6 +193,10 @@ ALTER TABLE `payments`
         );
 ALTER TABLE payments
     MODIFY id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `delivery` ADD CONSTRAINT `PK_delivery` PRIMARY KEY (
+	`order_id`
+);
 
 ALTER TABLE `likes`
     ADD CONSTRAINT `FK_member_TO_likes_1` FOREIGN KEY (
@@ -290,3 +301,10 @@ ALTER TABLE `payments`
         REFERENCES `orders` (
                              `id`
             );
+
+ALTER TABLE `delivery` ADD CONSTRAINT `FK_orders_TO_delivery_1` FOREIGN KEY (
+                                                                             `order_id`
+    )
+    REFERENCES `orders` (
+                         `id`
+        );
