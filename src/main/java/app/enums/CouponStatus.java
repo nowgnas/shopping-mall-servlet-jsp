@@ -4,7 +4,7 @@ import lombok.Getter;
 
 @Getter
 public enum CouponStatus {
-  YET("사용 안함"),
+  UNUSED("사용 안함"),
   USED("사용됨"),
   EXPIRED("기간 만료");
 

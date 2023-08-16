@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org/DTD Config 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
-    <properties resource="mysql.properties"/>
+    <properties resource="h2.properties"/>
     <typeAliases>
         <typeAlias type="app.entity.Address" alias="address"/>
         <typeAlias type="app.entity.Cart" alias="cart"/>
@@ -18,14 +18,15 @@
         <typeAlias type="app.entity.Product" alias="product"/>
         <typeAlias type="app.entity.ProductOrder" alias="productOrder"/>
     </typeAliases>
-    <environments default="dev">
-        <environment id="dev">
+    <environments default="test">
+        <environment id="test">
             <transactionManager type="JDBC"/>
             <dataSource type="POOLED">
-                <property name="driver" value="com.mysql.cj.jdbc.Driver"/>
-                <property name="url" value="${url}"/>
-                <property name="username" value="${user}"/>
-                <property name="password" value="${password}"/>
+                <!-- Test Database Settings -->
+                <property name="driver" value="org.h2.Driver"/>
+                <property name="url" value="jdbc:h2:mem:shoppingmall;MODE=MySQL"/>
+                <property name="username" value="{user}"/>
+                <property name="password" value="{password}"/>
             </dataSource>
         </environment>
     </environments>
