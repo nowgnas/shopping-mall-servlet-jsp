@@ -9,6 +9,7 @@
         <typeAlias type="app.entity.Cart" alias="cart"/>
         <typeAlias type="app.entity.Category" alias="category"/>
         <typeAlias type="app.entity.Coupon" alias="coupon"/>
+        <typeAlias type="app.entity.Delivery" alias="delivery"/>
         <typeAlias type="app.entity.Like" alias="like"/>
         <typeAlias type="app.entity.Member" alias="member"/>
         <typeAlias type="app.entity.Order" alias="order"/>
@@ -33,6 +34,7 @@
         <mapper resource="./mapper/cart-mapper.xml"/>
         <mapper resource="./mapper/category-mapper.xml"/>
         <mapper resource="./mapper/coupon-mapper.xml"/>
+        <mapper resource="./mapper/delivery-mapper.xml"/>
         <mapper resource="./mapper/like-mapper.xml"/>
         <mapper resource="./mapper/member-mapper.xml"/>
         <mapper resource="./mapper/order-mapper.xml"/>
