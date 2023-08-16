@@ -14,5 +14,5 @@ public class Coupon extends BaseEntity {
   @NonNull private String name;
   @NonNull private String discountPolicy;
   @NonNull private String discountValue;
-  @Builder.Default private String status = CouponStatus.YET.name();
+  @Builder.Default private String status = CouponStatus.UNUSED.name();
 }
