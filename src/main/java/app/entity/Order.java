@@ -1,5 +1,6 @@
 package app.entity;
 
+import app.enums.OrderStatus;
 import lombok.*;
 
 @Getter
@@ -10,5 +11,5 @@ public class Order extends BaseEntity {
 
   private Long id;
   @NonNull private Long memberId;
-  @NonNull private String status;
+  @Builder.Default private String status = OrderStatus.PENDING.name();
 }

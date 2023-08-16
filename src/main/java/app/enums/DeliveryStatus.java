@@ -1,6 +1,6 @@
 package app.enums;
 
-public enum OrderStatus {
+public enum DeliveryStatus {
     PENDING,
     PROCESSING,
     COMPLETED,
