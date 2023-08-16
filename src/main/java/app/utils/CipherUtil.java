@@ -10,6 +10,7 @@ import javax.crypto.spec.SecretKeySpec;
 import org.apache.log4j.Logger;
 
 public class CipherUtil {
+
   public static byte[] generateKey(String algorithm, int keySize) throws NoSuchAlgorithmException {
     KeyGenerator keyGenerator = KeyGenerator.getInstance(algorithm);
     keyGenerator.init(keySize);
