@@ -3,10 +3,10 @@ package app.dao.order;
 import static app.error.ErrorCode.*;
 
 import app.dao.exception.CustomException;
+import app.dto.response.ProductOrderDto;
 import app.entity.Order;
 import java.util.List;
 import java.util.Optional;
-
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.log4j.Logger;
@@ -82,12 +82,13 @@ public class OrderDao implements OrderDaoFrame<Long, Order> {
   public Optional<Order> selectById(Long id, SqlSession session) throws Exception {
     Optional<Order> optionalOrder;
     try {
-      optionalOrder = Optional.of(session.selectOne("order.select", id));
-      optionalOrder.orElseThrow(() -> {
-        String errorMessage = CANNOT_FIND_ORDER.getMessage();
-        log.error(errorMessage);
-        return new CustomException(errorMessage);
-      });
+      optionalOrder = Optional.ofNullable(session.selectOne("order.select", id));
+      optionalOrder.orElseThrow(
+          () -> {
+            String errorMessage = CANNOT_FIND_ORDER.getMessage();
+            log.error(errorMessage);
+            return new CustomException(errorMessage);
+          });
     } catch (PersistenceException ex) {
       log.error(ex.getMessage());
       throw new PersistenceException(CANNOT_FIND_ORDER.getMessage());
@@ -103,6 +104,22 @@ public class OrderDao implements OrderDaoFrame<Long, Order> {
     List<Order> orders;
     try {
       orders = session.selectList("order.selectAll");
+    } catch (PersistenceException ex) {
+      log.error(ex.getMessage());
+      throw new PersistenceException(CANNOT_FIND_ORDER.getMessage());
+    } catch (Exception ex) {
+      log.error(ex.getMessage());
+      throw new Exception(INTERNAL_SERVER_ERROR.getMessage());
+    }
+    return orders;
+  }
+
+  @Override
+  public List<ProductOrderDto> selectProductOrdersForMemberCurrentYear(
+      Long memberId, SqlSession session) throws Exception {
+    List<ProductOrderDto> orders;
+    try {
+      orders = session.selectList("order.selectProductOrdersForMemberCurrentYear", memberId);
     } catch (PersistenceException ex) {
       log.error(ex.getMessage());
       throw new PersistenceException(CANNOT_FIND_ORDER.getMessage());

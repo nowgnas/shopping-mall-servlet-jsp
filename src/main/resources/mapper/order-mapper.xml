@@ -4,6 +4,19 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="order">
 
+    <resultMap id="ProductOrderDto" type="app.dto.response.ProductOrderDto">
+        <result property="orderId" column="orderId"/>
+        <result property="orderStatus" column="orderStatus"/>
+        <result property="orderDate" column="orderDate"/>
+        <collection property="products" ofType="app.dto.response.ProductOrderDto$ProductDto">
+            <result property="productId" column="productId"/>
+            <result property="name" column="productName"/>
+            <result property="thumbnailUrl" column="thumbnailUrl"/>
+            <result property="price" column="productPrice"/>
+            <result property="quantity" column="productQuantity"/>
+        </collection>
+    </resultMap>
+
     <select id="select" parameterType="Long" resultType="order">
         SELECT *
         FROM orders
@@ -13,14 +26,34 @@
         SELECT *
         FROM orders
     </select>
-    <insert id="insert" parameterType="order">
+    <select id="selectProductOrdersForMemberCurrentYear" parameterType="Long" resultMap="ProductOrderDto">
+        SELECT o.id         AS orderId,
+               o.status     AS orderStatus,
+               o.created_at AS orderDate,
+               p.id         AS productId,
+               p.name       AS productName,
+               CASE
+                   WHEN pi.is_thumbnail = true THEN pi.url
+                   WHEN pi.is_thumbnail = false THEN 'https://default.com'
+                   END      AS thumbnailUrl,
+               p.price      AS productPrice,
+               po.quantity  AS productQuantity
+        FROM orders o
+                 INNER JOIN product_order po on o.id = po.order_id
+                 INNER JOIN product p on p.id = po.product_id
+                 LEFT JOIN product_image pi on p.id = pi.product_id
+        WHERE member_id = #{memberId}
+          AND EXTRACT(YEAR FROM o.created_at) = EXTRACT(YEAR FROM NOW())
+        ORDER BY o.created_at DESC
+    </select>
+    <insert id="insert" parameterType="order" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO orders (member_id, status)
         VALUES (#{memberId}, #{status})
     </insert>
-    <update id="update" parameterType="order">
+    <update id="update" parameterType="order" useGeneratedKeys="true" keyProperty="id">
         UPDATE orders
-        SET member_id = #{memberId},
-            status    = #{status},
+        SET member_id  = #{memberId},
+            status     = #{status},
             updated_at = now()
         WHERE id = #{id}
     </update>

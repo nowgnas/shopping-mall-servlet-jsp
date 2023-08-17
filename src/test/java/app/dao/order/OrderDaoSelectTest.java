@@ -2,6 +2,7 @@ package app.dao.order;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import app.dto.response.ProductOrderDto;
 import app.entity.Order;
 import config.TestConfig;
 import java.util.List;
@@ -70,5 +71,22 @@ public class OrderDaoSelectTest {
 
     // then
     assertSame(orders.size(), 5);
+  }
+
+  @Test
+  @DisplayName("회원 id로 주문 모두 조회 테스트 - 정상 처리")
+  void selectAllWithProductByMemberIdAndYearOrderByTime() throws Exception {
+    // given
+    Long memberId = 1L;
+
+    // when
+    List<ProductOrderDto> productOrderDtos =
+        orderDao.selectProductOrdersForMemberCurrentYear(memberId, session);
+    session.commit();
+    session.close();
+
+    // then
+    assertSame(productOrderDtos.size(), 1);
+    assertSame(productOrderDtos.get(0).getProducts().size(), 5);
   }
 }
