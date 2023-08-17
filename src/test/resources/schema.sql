@@ -310,8 +310,8 @@ CREATE TABLE IF NOT EXISTS delivery
     addr_detail VARCHAR(255) NOT NULL,
     zip_code    VARCHAR(255) NOT NULL,
     status      VARCHAR(255) NOT NULL DEFAULT 'PENDING',
-    created_at  DATETIME     NOT NULL,
-    updated_at  DATETIME     NOT NULL
+    created_at  DATETIME     NOT NULL DEFAULT NOW(),
+    updated_at  DATETIME     NOT NULL DEFAULT NOW()
 );
 
 ALTER TABLE likes

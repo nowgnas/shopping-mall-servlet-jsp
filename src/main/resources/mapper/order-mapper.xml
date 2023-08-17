@@ -7,13 +7,11 @@
     <select id="select" parameterType="Long" resultType="order">
         SELECT *
         FROM orders
-        WHERE id = ${id}
-          and member_id = #{memberId}
+        WHERE id = #{id}
     </select>
-    <select id="selectall" resultType="order">
+    <select id="selectAll" resultType="order">
         SELECT *
         FROM orders
-        WHERE member_id = #{memberId}
     </select>
     <insert id="insert" parameterType="order">
         INSERT INTO orders (member_id, status)
@@ -22,7 +20,8 @@
     <update id="update" parameterType="order">
         UPDATE orders
         SET member_id = #{memberId},
-            status    = #{status}
+            status    = #{status},
+            updated_at = now()
         WHERE id = #{id}
     </update>
     <delete id="delete" parameterType="Long">

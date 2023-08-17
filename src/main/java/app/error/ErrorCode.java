@@ -17,7 +17,10 @@ public enum ErrorCode {
   CANNOT_FIND_ORDER(SC_BAD_REQUEST, "ERR-ORDER-001", "해당 주문을 찾을 수 없습니다."),
   CANNOT_INSERT_ORDER(SC_BAD_REQUEST, "ERR-ORDER-002", "해당 주문을 생성할 수 없습니다."),
   CANNOT_UPDATE_ORDER(SC_BAD_REQUEST, "ERR-ORDER-003", "해당 주문을 수정할 수 없습니다."),
-  CANNOT_DELETE_ORDER(SC_BAD_REQUEST, "ERR-ORDER-004", "해당 주문을 삭제할 수 없습니다.");
+  CANNOT_DELETE_ORDER(SC_BAD_REQUEST, "ERR-ORDER-004", "해당 주문을 삭제할 수 없습니다."),
+  CANNOT_INSERT_PRODUCT_ORDER(SC_BAD_REQUEST, "ERR-PRODUCT_ORDER-001", "해당 주문 상품을 생성할 수 없습니다."),
+  CANNOT_INSERT_DELIVERY(SC_BAD_REQUEST, "ERR-DELIVERY-001", "해당 배송지를 생성할 수 없습니다."),
+  CANNOT_INSERT_PAYMENT(SC_BAD_REQUEST, "ERR-PAYMENT-001", "해당 결제 정보를 생성할 수 없습니다.");
 
   private final int status;
   private final String code;

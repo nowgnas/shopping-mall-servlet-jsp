@@ -2,10 +2,11 @@ package app.dao.order;
 
 import static app.error.ErrorCode.*;
 
-import app.dao.order.exception.CustomOrderException;
+import app.dao.exception.CustomException;
 import app.entity.Order;
 import java.util.List;
 import java.util.Optional;
+
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.log4j.Logger;
@@ -16,22 +17,20 @@ public class OrderDao implements OrderDaoFrame<Long, Order> {
 
   @Override
   public int insert(Order order, SqlSession session) throws Exception {
-    int insertedRow = 0;
+    int insertedRow;
     try {
       insertedRow = session.insert("order.insert", order);
       if (insertedRow != 1) {
-        log.error(CANNOT_INSERT_ORDER.getMessage());
-        throw new CustomOrderException(CANNOT_INSERT_ORDER);
+        String errorMessage = CANNOT_INSERT_ORDER.getMessage();
+        log.error(errorMessage);
+        throw new CustomException(errorMessage);
       }
-      session.commit();
     } catch (PersistenceException ex) {
       log.error(ex.getMessage());
-      throw new RuntimeException(INTERNAL_SERVER_ERROR.getMessage());
+      throw new PersistenceException(CANNOT_UPDATE_ORDER.getMessage());
     } catch (Exception ex) {
-      session.rollback();
-      ex.printStackTrace();
-    } finally {
-      session.close();
+      log.error(ex.getMessage());
+      throw new Exception(INTERNAL_SERVER_ERROR.getMessage());
     }
 
     return insertedRow;
@@ -39,22 +38,20 @@ public class OrderDao implements OrderDaoFrame<Long, Order> {
 
   @Override
   public int update(Order order, SqlSession session) throws Exception {
-    int updatedRow = 0;
+    int updatedRow;
     try {
       updatedRow = session.update("order.update", order);
       if (updatedRow != 1) {
-        log.error(CANNOT_INSERT_ORDER.getMessage());
-        throw new CustomOrderException(CANNOT_UPDATE_ORDER);
+        String errorMessage = CANNOT_UPDATE_ORDER.getMessage();
+        log.error(errorMessage);
+        throw new CustomException(errorMessage);
       }
-      session.commit();
     } catch (PersistenceException ex) {
       log.error(ex.getMessage());
-      throw new RuntimeException(INTERNAL_SERVER_ERROR.getMessage());
+      throw new PersistenceException(CANNOT_UPDATE_ORDER.getMessage());
     } catch (Exception ex) {
-      session.rollback();
-      ex.printStackTrace();
-    } finally {
-      session.close();
+      log.error(ex.getMessage());
+      throw new Exception(INTERNAL_SERVER_ERROR.getMessage());
     }
 
     return updatedRow;
@@ -62,22 +59,20 @@ public class OrderDao implements OrderDaoFrame<Long, Order> {
 
   @Override
   public int deleteById(Long id, SqlSession session) throws Exception {
-    int deletedRow = 0;
+    int deletedRow;
     try {
       deletedRow = session.delete("order.delete", id);
       if (deletedRow != 1) {
-        log.error(CANNOT_INSERT_ORDER.getMessage());
-        throw new CustomOrderException(CANNOT_FIND_ORDER);
+        String errorMessage = CANNOT_DELETE_ORDER.getMessage();
+        log.error(errorMessage);
+        throw new CustomException(errorMessage);
       }
-      session.commit();
     } catch (PersistenceException ex) {
       log.error(ex.getMessage());
-      throw new RuntimeException(INTERNAL_SERVER_ERROR.getMessage());
+      throw new PersistenceException(CANNOT_DELETE_ORDER.getMessage());
     } catch (Exception ex) {
-      session.rollback();
-      ex.printStackTrace();
-    } finally {
-      session.close();
+      log.error(ex.getMessage());
+      throw new Exception(INTERNAL_SERVER_ERROR.getMessage());
     }
 
     return deletedRow;
@@ -85,11 +80,36 @@ public class OrderDao implements OrderDaoFrame<Long, Order> {
 
   @Override
   public Optional<Order> selectById(Long id, SqlSession session) throws Exception {
-    return Optional.empty();
+    Optional<Order> optionalOrder;
+    try {
+      optionalOrder = Optional.of(session.selectOne("order.select", id));
+      optionalOrder.orElseThrow(() -> {
+        String errorMessage = CANNOT_FIND_ORDER.getMessage();
+        log.error(errorMessage);
+        return new CustomException(errorMessage);
+      });
+    } catch (PersistenceException ex) {
+      log.error(ex.getMessage());
+      throw new PersistenceException(CANNOT_FIND_ORDER.getMessage());
+    } catch (Exception ex) {
+      log.error(ex.getMessage());
+      throw new Exception(INTERNAL_SERVER_ERROR.getMessage());
+    }
+    return optionalOrder;
   }
 
   @Override
   public List<Order> selectAll(SqlSession session) throws Exception {
-    return null;
+    List<Order> orders;
+    try {
+      orders = session.selectList("order.selectAll");
+    } catch (PersistenceException ex) {
+      log.error(ex.getMessage());
+      throw new PersistenceException(CANNOT_FIND_ORDER.getMessage());
+    } catch (Exception ex) {
+      log.error(ex.getMessage());
+      throw new Exception(INTERNAL_SERVER_ERROR.getMessage());
+    }
+    return orders;
   }
 }
