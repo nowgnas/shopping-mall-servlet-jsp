@@ -8,6 +8,14 @@ import org.apache.ibatis.session.SqlSession;
 
 public class ProductDao implements ProductDaoFrame<Long, Product> {
   private Logger log = Logger.getLogger("order");
+  private static ProductDao instance;
+
+  private ProductDao() {}
+
+  public static ProductDao getInstance() {
+    if (instance == null) return new ProductDao();
+    return instance;
+  }
 
   @Override
   public int insert(Product product, SqlSession session) throws Exception {
