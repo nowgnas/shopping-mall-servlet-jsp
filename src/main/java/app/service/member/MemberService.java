@@ -60,7 +60,7 @@ public class MemberService {
           memberDao
               .selectByEmail(dto.getEmail(), sqlSession)
               .orElseThrow(() -> new CustomException(ErrorCode.LOGIN_FAIL));
-      
+
       String hashedPassword = createHashedPassword(sqlSession, member);
 
     } catch (Exception e) {
@@ -70,7 +70,7 @@ public class MemberService {
   }
 
   private String createHashedPassword(SqlSession sqlSession, Member member) throws SQLException {
-    Encryption encryption = encryptionDao.selectById(member.getId(), sqlSession).get();
+    Encryption encryption = encryptionDao.selectByEmail(member.getEmail(), sqlSession).get();
     return new String(CipherUtil.getSHA256(member.getPassword(), encryption.getSalt()));
   }
 
