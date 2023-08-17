@@ -6,7 +6,7 @@ import java.util.List;
 public interface ProductService {
   List<ProductListItem> getProductsByLowerPrice() throws Exception;
 
-  List<ProductListItem> getProductsByHigherPrice();
+  List<ProductListItem> getProductsByHigherPrice() throws Exception;
 
-  List<ProductListItem> getProductsByDate();
+  List<ProductListItem> getProductsByDate() throws Exception;
 }

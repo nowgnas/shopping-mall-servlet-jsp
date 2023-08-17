@@ -3,13 +3,9 @@ package app.service.product;
 import app.dao.product.ProductDao;
 import app.dao.product.ProductDaoFrame;
 import app.dto.product.ProductListItem;
-import app.entity.Product;
 import app.utils.GetSessionFactory;
-import app.utils.ModelMapperStrict;
-import java.util.ArrayList;
 import java.util.List;
 import org.apache.ibatis.session.SqlSession;
-import org.modelmapper.ModelMapper;
 
 public class ProductServiceImpl implements ProductService {
   private ProductDaoFrame dao;
@@ -22,22 +18,16 @@ public class ProductServiceImpl implements ProductService {
 
   @Override
   public List<ProductListItem> getProductsByLowerPrice() throws Exception {
-    List<Product> products = dao.selectAllSortByPrice(session);
-    ModelMapper mapper = ModelMapperStrict.strictMapper();
-    List<ProductListItem> list = new ArrayList<>();
-    for (Product item : products) {
-      list.add(mapper.map(item, ProductListItem.class));
-    }
-    return list;
+    return dao.selectAllSortByPrice(session);
   }
 
   @Override
-  public List<ProductListItem> getProductsByHigherPrice() {
-    return null;
+  public List<ProductListItem> getProductsByHigherPrice() throws Exception {
+    return dao.selectAllSortByPriceDesc(session);
   }
 
   @Override
-  public List<ProductListItem> getProductsByDate() {
-    return null;
+  public List<ProductListItem> getProductsByDate() throws Exception {
+    return dao.selectAllSortByDate(session);
   }
 }

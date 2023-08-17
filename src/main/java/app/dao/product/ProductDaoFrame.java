@@ -2,16 +2,39 @@ package app.dao.product;
 
 import app.dao.DaoFrame;
 import app.dto.product.ProductItemQuantity;
+import app.dto.product.ProductListItem;
 import app.entity.Product;
 import java.util.List;
 import org.apache.ibatis.session.SqlSession;
 
 public interface ProductDaoFrame<K, V extends Product> extends DaoFrame<K, V> {
-  List<Product> selectAllSortByPriceDesc(SqlSession session) throws Exception;
 
-  List<Product> selectAllSortByPrice(SqlSession session) throws Exception;
+  /**
+   * 가격 내림차순 상품 조회
+   *
+   * @param session
+   * @return product list
+   * @throws Exception
+   */
+  List<ProductListItem> selectAllSortByPriceDesc(SqlSession session) throws Exception;
 
-  List<Product> selectAllSortByDate(SqlSession session) throws Exception;
+  /**
+   * 가격 오름차순 상품 조회
+   *
+   * @param session
+   * @return product list
+   * @throws Exception
+   */
+  List<ProductListItem> selectAllSortByPrice(SqlSession session) throws Exception;
+
+  /**
+   * 최신 상품 조회
+   *
+   * @param session
+   * @return
+   * @throws Exception
+   */
+  List<ProductListItem> selectAllSortByDate(SqlSession session) throws Exception;
 
   /**
    * 개별 상품 재고 개수 조회

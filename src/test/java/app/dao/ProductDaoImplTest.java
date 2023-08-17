@@ -2,7 +2,7 @@ package app.dao;
 
 import app.dao.product.ProductDao;
 import app.dto.product.ProductItemQuantity;
-import app.entity.Product;
+import app.dto.product.ProductListItem;
 import app.utils.GetSessionFactory;
 import config.TestConfig;
 import java.util.Arrays;
@@ -60,8 +60,8 @@ class ProductDaoImplTest {
   @Test
   void selectAll() throws Exception {
     // case
-    List<Product> products = productDao.selectAllSortByPriceDesc(session); // 모든 상품 조회
-    for (Product p : products) {
+    List<ProductListItem> products = productDao.selectAllSortByPriceDesc(session); // 모든 상품 조회
+    for (ProductListItem p : products) {
       System.out.println(p.getPrice());
     }
     Assertions.assertEquals(8, products.size());
@@ -70,8 +70,8 @@ class ProductDaoImplTest {
   @Test
   void selectAllByDate() throws Exception {
     // case
-    List<Product> products = productDao.selectAllSortByDate(session); // 모든 상품 조회
-    for (Product p : products) {
+    List<ProductListItem> products = productDao.selectAllSortByDate(session); // 모든 상품 조회
+    for (ProductListItem p : products) {
       System.out.println(p.getCreatedAt());
     }
     Assertions.assertEquals(8, products.size());

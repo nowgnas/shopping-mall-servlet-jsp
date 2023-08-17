@@ -53,14 +53,18 @@
         ORDER BY price desc
     </select>
     <select id="sortbydate" resultMap="ListResultMap">
-        SELECT *
-        FROM product
-        ORDER BY created_at desc
+      SELECT name, price, url
+      FROM product p
+             LEFT JOIN product_image i
+                       ON p.id = i.product_id
+      ORDER BY created_at desc
     </select>
     <select id="sortbyprice" resultMap="ListResultMap">
-        SELECT *
-        FROM product
-        ORDER BY price
+      SELECT name, price, url
+      FROM product p
+             LEFT JOIN product_image i
+                       ON p.id = i.product_id
+      ORDER BY price
     </select>
     <insert id="insert" parameterType="product">
         INSERT INTO product (category_id, name, description, price, quantity, code)

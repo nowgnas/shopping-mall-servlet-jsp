@@ -1,6 +1,7 @@
 package app.dao.product;
 
 import app.dto.product.ProductItemQuantity;
+import app.dto.product.ProductListItem;
 import app.entity.Product;
 import java.util.List;
 import java.util.Optional;
@@ -13,6 +14,11 @@ public class ProductDao implements ProductDaoFrame<Long, Product> {
 
   private ProductDao() {}
 
+  /**
+   * 싱글톤
+   *
+   * @return ProductDao
+   */
   public static ProductDao getInstance() {
     if (instance == null) return new ProductDao();
     return instance;
@@ -56,36 +62,23 @@ public class ProductDao implements ProductDaoFrame<Long, Product> {
   }
 
   @Override
-  public List<Product> selectAllSortByPriceDesc(SqlSession session) throws Exception {
-    List<Product> products = null;
-    try {
-      products = session.selectList("product.sortbypricedesc");
-    } finally {
-      session.close();
-    }
+  public List<ProductListItem> selectAllSortByPriceDesc(SqlSession session) throws Exception {
+    List<ProductListItem> products = session.selectList("product.sortbypricedesc");
+    session.close();
     return products;
   }
 
   @Override
-  public List<Product> selectAllSortByPrice(SqlSession session) throws Exception {
-    List<Product> products = null;
-    try {
-      products = session.selectList("product.sortbyprice");
-    } finally {
-      session.close();
-    }
+  public List<ProductListItem> selectAllSortByPrice(SqlSession session) throws Exception {
+    List<ProductListItem> products = session.selectList("product.sortbyprice");
+    session.close();
     return products;
   }
 
   @Override
-  public List<Product> selectAllSortByDate(SqlSession session) throws Exception {
-    List<Product> products = null;
-    try {
-      products = session.selectList("product.sortbydate");
-    } finally {
-      session.close();
-    }
+  public List<ProductListItem> selectAllSortByDate(SqlSession session) throws Exception {
+    List<ProductListItem> products = session.selectList("product.sortbydate");
+    session.close();
     return products;
   }
-
 }
