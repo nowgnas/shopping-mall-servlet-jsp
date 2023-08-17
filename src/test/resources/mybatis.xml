@@ -10,7 +10,7 @@
         <typeAlias type="app.entity.Category" alias="category"/>
         <typeAlias type="app.entity.Coupon" alias="coupon"/>
         <typeAlias type="app.entity.Delivery" alias="delivery"/>
-        <typeAlias type="app.entity.Like" alias="like"/>
+        <typeAlias type="app.entity.Likes" alias="like"/>
         <typeAlias type="app.entity.Member" alias="member"/>
         <typeAlias type="app.entity.Order" alias="order"/>
         <typeAlias type="app.entity.Payment" alias="payment"/>

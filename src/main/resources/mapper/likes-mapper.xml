@@ -2,20 +2,20 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="like">
+<mapper namespace="likes">
 
-    <select id="select" parameterType="Long" resultType="like">
+    <select id="select" parameterType="Long" resultType="likes">
         SELECT *
         FROM likes
         WHERE member_id = #{memberId}
           and product_id = #{productId}
     </select>
-    <select id="selectall" resultType="like">
+    <select id="selectall" resultType="likes">
         SELECT *
         FROM likes
         WHERE member_id = #{memberId}
     </select>
-    <insert id="insert" parameterType="like">
+    <insert id="insert" parameterType="likes">
         INSERT INTO likes (member_id, product_id)
         VALUES (#{memberId}, #{productId})
     </insert>

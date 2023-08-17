@@ -6,7 +6,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Like {
+public class Likes {
 
   @NonNull private String memberId;
   @NonNull private String productId;
