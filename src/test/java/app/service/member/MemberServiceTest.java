@@ -31,7 +31,7 @@ class MemberServiceTest {
 
   @Test
   @DisplayName("회원 가입 성공 테스트")
-  void insert() throws Exception {
+  void register_success() throws Exception {
 
     // given
     MemberRegisterDto dto = createMemberRegisterDto();
@@ -46,7 +46,7 @@ class MemberServiceTest {
 
   @Test
   @DisplayName("회원 가입 중 중복 된 이메일로 가입 시도 시 예외가 발생한다.")
-  void insert2() throws Exception {
+  void register_fail_duplicate_email() throws Exception {
     // given
     MemberRegisterDto dto = createMemberRegisterDto();
     String expectedMessage = "가입 된 이메일 입니다.";

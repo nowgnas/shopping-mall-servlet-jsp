@@ -8,14 +8,14 @@ import lombok.Getter;
 @Getter
 @Builder
 @AllArgsConstructor
-public class MemberDto {
+public class LoginMember {
 
   private Long id;
   private String email;
   private String name;
 
-  public static MemberDto of(Member member) {
-    return MemberDto.builder()
+  public static LoginMember of(Member member) {
+    return LoginMember.builder()
         .id(member.getId())
         .email(member.getEmail())
         .name(member.getName())
