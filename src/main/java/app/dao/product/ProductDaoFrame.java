@@ -20,5 +20,5 @@ public interface ProductDaoFrame<K, V extends Product> extends DaoFrame<K, V> {
    * @param session sql session
    * @return 개수
    */
-  ProductItemQuantity selectProductQuantity(Long productId, SqlSession session);
+  List<ProductItemQuantity> selectProductQuantity(List<Long> productId, SqlSession session);
 }

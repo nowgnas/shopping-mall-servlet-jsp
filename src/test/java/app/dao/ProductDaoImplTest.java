@@ -5,6 +5,7 @@ import app.dto.product.ProductItemQuantity;
 import app.entity.Product;
 import app.utils.GetSessionFactory;
 import config.TestConfig;
+import java.util.Arrays;
 import java.util.List;
 import org.apache.ibatis.session.SqlSession;
 import org.junit.jupiter.api.AfterEach;
@@ -34,7 +35,8 @@ class ProductDaoImplTest {
 
   @Test
   void selectProductQuantity() {
-    ProductItemQuantity product = productDao.selectProductQuantity(1L, session);
+    List<Long> lst = Arrays.asList(1L, 2L, 3L);
+    List<ProductItemQuantity> product = productDao.selectProductQuantity(lst, session);
     System.out.println(product.toString());
   }
 

@@ -19,8 +19,8 @@ public class ProductDao implements ProductDaoFrame<Long, Product> {
   }
 
   @Override
-  public ProductItemQuantity selectProductQuantity(Long productId, SqlSession session) {
-    ProductItemQuantity product = session.selectOne("product.selectone", productId);
+  public List<ProductItemQuantity> selectProductQuantity(List<Long> productId, SqlSession session) {
+    List<ProductItemQuantity> product = session.selectList("product.selectone", productId);
     session.close();
     return product;
   }
