@@ -2,13 +2,15 @@ package app.dto.response;
 
 import java.time.LocalDateTime;
 import java.util.List;
+
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ProductOrderDto {
   private Long orderId;
   private String orderStatus;
@@ -17,7 +19,7 @@ public class ProductOrderDto {
 
   @Getter
   @AllArgsConstructor
-  @NoArgsConstructor
+  @NoArgsConstructor(access = AccessLevel.PROTECTED)
   public static class ProductDto {
     private Long productId;
     private String name;
