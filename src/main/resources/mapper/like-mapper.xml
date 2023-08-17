@@ -25,6 +25,11 @@
         WHERE member_id = #{memberId}
           and product_id = #{productId}
     </delete>
+    <delete id="deleteall" parameterType="Long">
+        DELETE
+        FROM likes
+        WHERE member_id = #{memberId}
+    </delete>
 
 </mapper>
 
