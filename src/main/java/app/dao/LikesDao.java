@@ -10,7 +10,7 @@ public class LikesDao implements LikesDaoFrame<ProductAndMemberCompositeKey, Lik
 
   @Override
   public int insert(Likes likes, SqlSession session) throws Exception {
-    return 0;
+    return session.insert("likes.insert", likes);
   }
 
   @Override
@@ -21,13 +21,13 @@ public class LikesDao implements LikesDaoFrame<ProductAndMemberCompositeKey, Lik
   @Override
   public int deleteById(ProductAndMemberCompositeKey productAndMemberCompositeKey,
       SqlSession session) throws Exception {
-    return 0;
+    return session.delete("likes.delete", productAndMemberCompositeKey);
   }
 
   @Override
   public Optional<Likes> selectById(ProductAndMemberCompositeKey productAndMemberCompositeKey,
       SqlSession session) throws Exception {
-    return Optional.empty();
+    return session.selectOne("likes.select", productAndMemberCompositeKey);
   }
 
   @Override
@@ -37,6 +37,6 @@ public class LikesDao implements LikesDaoFrame<ProductAndMemberCompositeKey, Lik
 
   @Override
   public List<Likes> selectAll(Long memberId, SqlSession session) throws Exception {
-    return null;
+    return session.selectList("likes.selectall", memberId);
   }
 }

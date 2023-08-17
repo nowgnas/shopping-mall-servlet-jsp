@@ -17,6 +17,7 @@
         <typeAlias type="app.entity.ProductImage" alias="productImage"/>
         <typeAlias type="app.entity.Product" alias="product"/>
         <typeAlias type="app.entity.ProductOrder" alias="productOrder"/>
+        <typeAlias type="app.dto.comp.ProductAndMemberCompositeKey" alias="productAndMemberCompositeKey"/>
     </typeAliases>
     <environments default="dev">
         <environment id="dev">
