@@ -36,9 +36,9 @@ public class MemberDao implements MemberDaoFrame<Long, Member> {
   }
 
   @Override
-  public Optional<Member> selectByIdAndPassword(LoginDto loginDto, SqlSession session)
+  public Optional<Member> selectByEmailAndPassword(LoginDto loginDto, SqlSession session)
       throws SQLException {
-    return Optional.ofNullable(session.selectOne("member.selectByIdAndPassword", loginDto));
+    return Optional.ofNullable(session.selectOne("member.selectByEmailAndPassword", loginDto));
   }
 
   @Override
