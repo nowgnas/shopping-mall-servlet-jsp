@@ -119,6 +119,7 @@ CREATE TABLE IF NOT EXISTS `delivery` (
 
 CREATE TABLE IF NOT EXISTS `encryption` (
                                             `member_id`	BIGINT UNSIGNED	NOT NULL,
+                                            `email` VARCHAR(30) NOT NULL UNIQUE,
                                             `salt`	VARCHAR(255)	NOT NULL
     );
 

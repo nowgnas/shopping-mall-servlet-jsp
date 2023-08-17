@@ -38,7 +38,7 @@ public class MemberService {
 
       String salt = createSalt();
 
-      Encryption encryption = Encryption.from(member.getId(), salt);
+      Encryption encryption = Encryption.from(member, salt);
       encryptionDao.insert(encryption, sqlSession);
 
     } catch (PersistenceException e) {

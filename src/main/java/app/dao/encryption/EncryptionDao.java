@@ -40,4 +40,8 @@ public class EncryptionDao implements DaoFrame<Long, Encryption> {
   public List<Encryption> selectAll(SqlSession session) throws SQLException {
     return session.selectList("encryption.selectall");
   }
+
+  public Optional<Encryption> selectByEmail(String email, SqlSession session) throws SQLException {
+    return Optional.ofNullable(session.selectOne("encryption.selectByEmail", email));
+  }
 }

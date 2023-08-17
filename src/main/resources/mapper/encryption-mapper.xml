@@ -10,14 +10,20 @@
         WHERE member_id = #{memberId}
     </select>
 
+    <select id="selectByEmail" parameterType="String" resultType="encryption">
+        SELECT *
+        FROM encryption
+        WHERE email = #{email}
+    </select>
+
     <select id="selectall" resultType="encryption">
         SELECT *
         FROM encryption
     </select>
 
     <insert id="insert" parameterType="encryption">
-        INSERT INTO encryption (member_id, salt)
-        VALUES (#{memberId}, #{salt})
+        INSERT INTO encryption (member_id, email, salt)
+        VALUES (#{memberId}, #{email}, #{salt})
     </insert>
     <update id="update" parameterType="encryption">
         UPDATE encryption

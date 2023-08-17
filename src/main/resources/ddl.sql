@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS `member`
     `money`      BIGINT UNSIGNED NOT NULL DEFAULT 0,
     `created_at` DATETIME        NOT NULL DEFAULT NOW(),
     `updated_at` DATETIME        NOT NULL DEFAULT NOW()
-);
+    );
 
 CREATE TABLE IF NOT EXISTS `product`
 (
@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS `product`
     `code`        VARCHAR(255)    NOT NULL UNIQUE,
     `created_at`  DATETIME        NOT NULL DEFAULT NOW(),
     `updated_at`  DATETIME        NOT NULL DEFAULT NOW()
-);
+    );
 
 CREATE TABLE IF NOT EXISTS `cart`
 (
@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS `orders`
     `status`     VARCHAR(10)     NOT NULL DEFAULT 'PENDING',
     `created_at` DATETIME        NOT NULL DEFAULT NOW(),
     `updated_at` DATETIME        NOT NULL DEFAULT NOW()
-);
+    );
 
 CREATE TABLE IF NOT EXISTS `product_order`
 (
@@ -55,7 +55,7 @@ CREATE TABLE IF NOT EXISTS `product_order`
     `quantity`    INT UNSIGNED    NOT NULL,
     `created_at`  DATETIME        NOT NULL DEFAULT NOW(),
     `updated_at`  DATETIME        NOT NULL DEFAULT NOW()
-);
+    );
 
 CREATE TABLE IF NOT EXISTS `category`
 (
@@ -63,7 +63,7 @@ CREATE TABLE IF NOT EXISTS `category`
     `parent_id` BIGINT UNSIGNED NULL,
     `name`      VARCHAR(20)     NOT NULL,
     `level`     INT UNSIGNED    NOT NULL
-);
+    );
 
 CREATE TABLE IF NOT EXISTS `coupon`
 (
@@ -75,7 +75,7 @@ CREATE TABLE IF NOT EXISTS `coupon`
     `status`          VARCHAR(20)     NOT NULL DEFAULT 'YET',
     `created_at`      DATETIME        NOT NULL DEFAULT NOW(),
     `updated_at`      DATETIME        NOT NULL DEFAULT NOW()
-);
+    );
 
 CREATE TABLE IF NOT EXISTS `address`
 (
@@ -87,7 +87,7 @@ CREATE TABLE IF NOT EXISTS `address`
     `zip_code`    VARCHAR(10)     NOT NULL,
     `created_at`  DATETIME        NOT NULL DEFAULT NOW(),
     `updated_at`  DATETIME        NOT NULL DEFAULT NOW()
-);
+    );
 
 CREATE TABLE IF NOT EXISTS `product_image`
 (
@@ -97,7 +97,7 @@ CREATE TABLE IF NOT EXISTS `product_image`
     `is_thumbnail` BOOLEAN         NOT NULL DEFAULT FALSE,
     `created_at`   DATETIME        NOT NULL DEFAULT NOW(),
     `updated_at`   DATETIME        NOT NULL DEFAULT NOW()
-);
+    );
 
 CREATE TABLE IF NOT EXISTS `payments`
 (
@@ -107,20 +107,21 @@ CREATE TABLE IF NOT EXISTS `payments`
     `type`          VARCHAR(20)     NOT NULL DEFAULT 'CASH',
     `created_at`    DATETIME        NOT NULL DEFAULT NOW(),
     `updated_at`    DATETIME        NOT NULL DEFAULT NOW()
-);
+    );
 
 CREATE TABLE IF NOT EXISTS `delivery` (
-    `order_id`	BIGINT UNSIGNED	NOT NULL,
-    `road_name`	VARCHAR(255)	NOT NULL,
+                                          `order_id`	BIGINT UNSIGNED	NOT NULL,
+                                          `road_name`	VARCHAR(255)	NOT NULL,
     `addr_detail`	VARCHAR(255)	NOT NULL,
     `zip_code`	VARCHAR(255)	NOT NULL,
     `status`	VARCHAR(255)	NOT NULL DEFAULT 'PENDING',
     `created_at`	DATETIME	NOT NULL,
     `updated_at`	DATETIME	NOT NULL
-);
+    );
 
 CREATE TABLE IF NOT EXISTS `encryption` (
                                             `member_id`	BIGINT UNSIGNED	NOT NULL,
+                                            `email` VARCHAR(30) NOT NULL UNIQUE,
                                             `salt`	VARCHAR(255)	NOT NULL
     );
 
@@ -200,12 +201,12 @@ ALTER TABLE payments
     MODIFY id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT;
 
 ALTER TABLE `delivery` ADD CONSTRAINT `PK_delivery` PRIMARY KEY (
-	`order_id`
-);
+                                                                 `order_id`
+    );
 
 ALTER TABLE `encryption`
     ADD CONSTRAINT `PK_encryption` PRIMARY KEY (
-                                            `member_id`
+                                                `member_id`
         );
 
 ALTER TABLE `likes`
@@ -321,7 +322,7 @@ ALTER TABLE `delivery` ADD CONSTRAINT `FK_orders_TO_delivery_1` FOREIGN KEY (
 
 ALTER TABLE `encryption`
     ADD CONSTRAINT `FK_member_TO_encryption_1` FOREIGN KEY (
-                                                       `member_id`
+                                                            `member_id`
         )
         REFERENCES `member` (
                              `id`

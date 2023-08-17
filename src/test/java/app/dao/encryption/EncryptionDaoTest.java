@@ -36,14 +36,15 @@ class EncryptionDaoTest {
   void insert() throws Exception {
     // given
     Long memberId = 1L;
+    String email = "aaa@naver.com";
     byte[] key = CipherUtil.generateKey("AES", 128);
     String salt = CipherUtil.byteArrayToHex(key);
-    Encryption encryption = Encryption.builder().memberId(memberId).salt(salt).build();
+    Encryption encryption = Encryption.builder().memberId(memberId).email(email).salt(salt).build();
     // when
     encryptionDao.insert(encryption, session);
 
     // then
-    Encryption getEncryption = encryptionDao.selectById(memberId, session).get();
+    Encryption getEncryption = encryptionDao.selectByEmail(email, session).get();
     assertSame(salt, getEncryption.getSalt());
   }
 }
