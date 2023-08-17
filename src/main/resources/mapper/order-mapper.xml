@@ -29,7 +29,6 @@
         DELETE
         FROM orders
         WHERE id = #{id}
-          and member_id = #{memberId}
     </delete>
 
 </mapper>
