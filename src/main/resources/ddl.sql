@@ -1,127 +1,360 @@
-USE shoppingmall;
+USE
+shoppingmall;
 
 CREATE TABLE IF NOT EXISTS `likes`
 (
-    `member_id`  BIGINT UNSIGNED NOT NULL,
-    `product_id` BIGINT UNSIGNED NOT NULL
+    `member_id`
+    BIGINT
+    UNSIGNED
+    NOT
+    NULL,
+    `product_id`
+    BIGINT
+    UNSIGNED
+    NOT
+    NULL
 );
 
 CREATE TABLE IF NOT EXISTS `member`
 (
-    `id`         BIGINT UNSIGNED NOT NULL,
-    `email`      VARCHAR(20)     NOT NULL UNIQUE,
-    `password`   VARCHAR(20)     NOT NULL,
-    `name`       VARCHAR(20)     NOT NULL,
-    `money`      BIGINT UNSIGNED NOT NULL DEFAULT 0,
-    `created_at` DATETIME        NOT NULL DEFAULT NOW(),
-    `updated_at` DATETIME        NOT NULL DEFAULT NOW()
-);
+    `id`
+    BIGINT
+    UNSIGNED
+    NOT
+    NULL,
+    `email`
+    VARCHAR
+(
+    20
+) NOT NULL UNIQUE,
+    `password` VARCHAR
+(
+    20
+) NOT NULL,
+    `name` VARCHAR
+(
+    20
+) NOT NULL,
+    `money` BIGINT UNSIGNED NOT NULL DEFAULT 0,
+    `created_at` DATETIME NOT NULL DEFAULT NOW
+(
+),
+    `updated_at` DATETIME NOT NULL DEFAULT NOW
+(
+)
+    );
 
 CREATE TABLE IF NOT EXISTS `product`
 (
-    `id`          BIGINT UNSIGNED NOT NULL,
-    `category_id` BIGINT UNSIGNED NOT NULL,
-    `name`        VARCHAR(20)     NOT NULL,
-    `description` VARCHAR(255)    NULL     DEFAULT NULL,
-    `price`       BIGINT UNSIGNED NOT NULL,
-    `quantity`    BIGINT UNSIGNED NOT NULL,
-    `code`        VARCHAR(255)    NOT NULL UNIQUE,
-    `created_at`  DATETIME        NOT NULL DEFAULT NOW(),
-    `updated_at`  DATETIME        NOT NULL DEFAULT NOW()
-);
+    `id`
+    BIGINT
+    UNSIGNED
+    NOT
+    NULL,
+    `category_id`
+    BIGINT
+    UNSIGNED
+    NOT
+    NULL,
+    `name`
+    VARCHAR
+(
+    20
+) NOT NULL,
+    `description` VARCHAR
+(
+    255
+) NULL DEFAULT NULL,
+    `price` BIGINT UNSIGNED NOT NULL,
+    `quantity` BIGINT UNSIGNED NOT NULL,
+    `code` VARCHAR
+(
+    255
+) NOT NULL UNIQUE,
+    `created_at` DATETIME NOT NULL DEFAULT NOW
+(
+),
+    `updated_at` DATETIME NOT NULL DEFAULT NOW
+(
+)
+    );
 
 CREATE TABLE IF NOT EXISTS `cart`
 (
-    `member_id`        BIGINT UNSIGNED NOT NULL,
-    `product_id`       BIGINT UNSIGNED NOT NULL,
-    `product_quantity` INT UNSIGNED    NOT NULL
+    `member_id`
+    BIGINT
+    UNSIGNED
+    NOT
+    NULL,
+    `product_id`
+    BIGINT
+    UNSIGNED
+    NOT
+    NULL,
+    `product_quantity`
+    INT
+    UNSIGNED
+    NOT
+    NULL
 );
 
 CREATE TABLE IF NOT EXISTS `orders`
 (
-    `id`         BIGINT UNSIGNED NOT NULL,
-    `member_id`  BIGINT UNSIGNED NOT NULL,
-    `status`     VARCHAR(10)     NOT NULL DEFAULT 'PENDING',
-    `created_at` DATETIME        NOT NULL DEFAULT NOW(),
-    `updated_at` DATETIME        NOT NULL DEFAULT NOW()
-);
+    `id`
+    BIGINT
+    UNSIGNED
+    NOT
+    NULL,
+    `member_id`
+    BIGINT
+    UNSIGNED
+    NOT
+    NULL,
+    `status`
+    VARCHAR
+(
+    10
+) NOT NULL DEFAULT 'PENDING',
+    `created_at` DATETIME NOT NULL DEFAULT NOW
+(
+),
+    `updated_at` DATETIME NOT NULL DEFAULT NOW
+(
+)
+    );
 
 CREATE TABLE IF NOT EXISTS `product_order`
 (
-    `id`          BIGINT UNSIGNED NOT NULL,
-    `product_id`  BIGINT UNSIGNED NOT NULL,
-    `order_id`    BIGINT UNSIGNED NOT NULL,
-    `price`       BIGINT UNSIGNED NOT NULL,
-    `quantity`    INT UNSIGNED    NOT NULL,
-    `created_at`  DATETIME        NOT NULL DEFAULT NOW(),
-    `updated_at`  DATETIME        NOT NULL DEFAULT NOW()
-);
+    `id`
+    BIGINT
+    UNSIGNED
+    NOT
+    NULL,
+    `product_id`
+    BIGINT
+    UNSIGNED
+    NOT
+    NULL,
+    `order_id`
+    BIGINT
+    UNSIGNED
+    NOT
+    NULL,
+    `price`
+    BIGINT
+    UNSIGNED
+    NOT
+    NULL,
+    `quantity`
+    INT
+    UNSIGNED
+    NOT
+    NULL,
+    `created_at`
+    DATETIME
+    NOT
+    NULL
+    DEFAULT
+    NOW
+(
+),
+    `updated_at` DATETIME NOT NULL DEFAULT NOW
+(
+)
+    );
 
 CREATE TABLE IF NOT EXISTS `category`
 (
-    `id`        BIGINT UNSIGNED NOT NULL,
-    `parent_id` BIGINT UNSIGNED NULL,
-    `name`      VARCHAR(20)     NOT NULL,
-    `level`     INT UNSIGNED    NOT NULL
-);
+    `id`
+    BIGINT
+    UNSIGNED
+    NOT
+    NULL,
+    `parent_id`
+    BIGINT
+    UNSIGNED
+    NULL,
+    `name`
+    VARCHAR
+(
+    20
+) NOT NULL,
+    `level` INT UNSIGNED NOT NULL
+    );
 
 CREATE TABLE IF NOT EXISTS `coupon`
 (
-    `id`              BIGINT UNSIGNED NOT NULL,
-    `member_id`       BIGINT UNSIGNED NOT NULL,
-    `name`            VARCHAR(20)     NOT NULL,
-    `discount_policy` VARCHAR(20)     NOT NULL,
-    `discount_value`  INT UNSIGNED    NOT NULL,
-    `status`          VARCHAR(20)     NOT NULL DEFAULT 'YET',
-    `created_at`      DATETIME        NOT NULL DEFAULT NOW(),
-    `updated_at`      DATETIME        NOT NULL DEFAULT NOW()
-);
+    `id`
+    BIGINT
+    UNSIGNED
+    NOT
+    NULL,
+    `member_id`
+    BIGINT
+    UNSIGNED
+    NOT
+    NULL,
+    `name`
+    VARCHAR
+(
+    20
+) NOT NULL,
+    `discount_policy` VARCHAR
+(
+    20
+) NOT NULL,
+    `discount_value` INT UNSIGNED NOT NULL,
+    `status` VARCHAR
+(
+    20
+) NOT NULL DEFAULT 'YET',
+    `created_at` DATETIME NOT NULL DEFAULT NOW
+(
+),
+    `updated_at` DATETIME NOT NULL DEFAULT NOW
+(
+)
+    );
 
 CREATE TABLE IF NOT EXISTS `address`
 (
-    `id`          BIGINT UNSIGNED NOT NULL,
-    `member_id`   BIGINT UNSIGNED NOT NULL,
-    `is_default`  BOOLEAN         NOT NULL DEFAULT FALSE,
-    `road_name`   VARCHAR(255)    NOT NULL,
-    `addr_detail` VARCHAR(255)    NOT NULL,
-    `zip_code`    VARCHAR(10)     NOT NULL,
-    `created_at`  DATETIME        NOT NULL DEFAULT NOW(),
-    `updated_at`  DATETIME        NOT NULL DEFAULT NOW()
-);
+    `id`
+    BIGINT
+    UNSIGNED
+    NOT
+    NULL,
+    `member_id`
+    BIGINT
+    UNSIGNED
+    NOT
+    NULL,
+    `is_default`
+    BOOLEAN
+    NOT
+    NULL
+    DEFAULT
+    FALSE,
+    `road_name`
+    VARCHAR
+(
+    255
+) NOT NULL,
+    `addr_detail` VARCHAR
+(
+    255
+) NOT NULL,
+    `zip_code` VARCHAR
+(
+    10
+) NOT NULL,
+    `created_at` DATETIME NOT NULL DEFAULT NOW
+(
+),
+    `updated_at` DATETIME NOT NULL DEFAULT NOW
+(
+)
+    );
 
 CREATE TABLE IF NOT EXISTS `product_image`
 (
-    `id`           BIGINT UNSIGNED NOT NULL,
-    `product_id`   BIGINT UNSIGNED NOT NULL,
-    `url`          VARCHAR(255)    NOT NULL,
-    `is_thumbnail` BOOLEAN         NOT NULL DEFAULT FALSE,
-    `created_at`   DATETIME        NOT NULL DEFAULT NOW(),
-    `updated_at`   DATETIME        NOT NULL DEFAULT NOW()
-);
+    `id`
+    BIGINT
+    UNSIGNED
+    NOT
+    NULL,
+    `product_id`
+    BIGINT
+    UNSIGNED
+    NOT
+    NULL,
+    `url`
+    VARCHAR
+(
+    255
+) NOT NULL,
+    `is_thumbnail` BOOLEAN NOT NULL DEFAULT FALSE,
+    `created_at` DATETIME NOT NULL DEFAULT NOW
+(
+),
+    `updated_at` DATETIME NOT NULL DEFAULT NOW
+(
+)
+    );
 
 CREATE TABLE IF NOT EXISTS `payments`
 (
-    `id`            BIGINT UNSIGNED NOT NULL,
-    `order_id`      BIGINT UNSIGNED NOT NULL,
-    `actual_amount` BIGINT UNSIGNED NOT NULL,
-    `type`          VARCHAR(20)     NOT NULL DEFAULT 'CASH',
-    `created_at`    DATETIME        NOT NULL DEFAULT NOW(),
-    `updated_at`    DATETIME        NOT NULL DEFAULT NOW()
-);
+    `id`
+    BIGINT
+    UNSIGNED
+    NOT
+    NULL,
+    `order_id`
+    BIGINT
+    UNSIGNED
+    NOT
+    NULL,
+    `actual_amount`
+    BIGINT
+    UNSIGNED
+    NOT
+    NULL,
+    `type`
+    VARCHAR
+(
+    20
+) NOT NULL DEFAULT 'CASH',
+    `created_at` DATETIME NOT NULL DEFAULT NOW
+(
+),
+    `updated_at` DATETIME NOT NULL DEFAULT NOW
+(
+)
+    );
 
-CREATE TABLE IF NOT EXISTS `delivery` (
-    `order_id`	BIGINT UNSIGNED	NOT NULL,
-    `road_name`	VARCHAR(255)	NOT NULL,
-    `addr_detail`	VARCHAR(255)	NOT NULL,
-    `zip_code`	VARCHAR(255)	NOT NULL,
-    `status`	VARCHAR(255)	NOT NULL DEFAULT 'PENDING',
-    `created_at`	DATETIME	NOT NULL,
-    `updated_at`	DATETIME	NOT NULL
-);
+CREATE TABLE IF NOT EXISTS `delivery`
+(
+    `order_id`
+    BIGINT
+    UNSIGNED
+    NOT
+    NULL,
+    `road_name`
+    VARCHAR
+(
+    255
+) NOT NULL,
+    `addr_detail` VARCHAR
+(
+    255
+) NOT NULL,
+    `zip_code` VARCHAR
+(
+    255
+) NOT NULL,
+    `status` VARCHAR
+(
+    255
+) NOT NULL DEFAULT 'PENDING',
+    `created_at` DATETIME NOT NULL,
+    `updated_at` DATETIME NOT NULL
+    );
 
-CREATE TABLE IF NOT EXISTS `encryption` (
-                                            `member_id`	BIGINT UNSIGNED	NOT NULL,
-                                            `salt`	VARCHAR(255)	NOT NULL
+CREATE TABLE IF NOT EXISTS `encryption`
+(
+    `member_id`
+    BIGINT
+    UNSIGNED
+    NOT
+    NULL,
+    `email`
+    VARCHAR
+(
+    30
+) NOT NULL UNIQUE,
+    `salt` VARCHAR
+(
+    255
+) NOT NULL
     );
 
 ALTER TABLE `likes`
@@ -199,13 +432,14 @@ ALTER TABLE `payments`
 ALTER TABLE payments
     MODIFY id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT;
 
-ALTER TABLE `delivery` ADD CONSTRAINT `PK_delivery` PRIMARY KEY (
-	`order_id`
-);
+ALTER TABLE `delivery`
+    ADD CONSTRAINT `PK_delivery` PRIMARY KEY (
+                                              `order_id`
+        );
 
 ALTER TABLE `encryption`
     ADD CONSTRAINT `PK_encryption` PRIMARY KEY (
-                                            `member_id`
+                                                `member_id`
         );
 
 ALTER TABLE `likes`
@@ -312,16 +546,17 @@ ALTER TABLE `payments`
                              `id`
             );
 
-ALTER TABLE `delivery` ADD CONSTRAINT `FK_orders_TO_delivery_1` FOREIGN KEY (
-                                                                             `order_id`
-    )
-    REFERENCES `orders` (
-                         `id`
-        );
+ALTER TABLE `delivery`
+    ADD CONSTRAINT `FK_orders_TO_delivery_1` FOREIGN KEY (
+                                                          `order_id`
+        )
+        REFERENCES `orders` (
+                             `id`
+            );
 
 ALTER TABLE `encryption`
     ADD CONSTRAINT `FK_member_TO_encryption_1` FOREIGN KEY (
-                                                       `member_id`
+                                                            `member_id`
         )
         REFERENCES `member` (
                              `id`

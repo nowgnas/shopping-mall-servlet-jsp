@@ -1,11 +1,6 @@
 package app.entity;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
+import lombok.*;
 
 @Getter
 @Builder
@@ -13,7 +8,7 @@ import lombok.NonNull;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Encryption {
 
-    private Long memberId;
-    @NonNull
-    private String salt;
+  @NonNull private Long memberId;
+  @NonNull private String email;
+  @NonNull private String salt;
 }
