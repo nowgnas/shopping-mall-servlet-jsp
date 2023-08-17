@@ -1,5 +1,6 @@
 package app.dao;
 
+import app.dao.product.ProductDao;
 import app.entity.Product;
 import app.utils.GetSessionFactory;
 import config.TestConfig;
@@ -13,7 +14,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class ProductDaoImplTest {
-  ProductDaoImpl productDao = new ProductDaoImpl();
+  ProductDao productDao = new ProductDao();
   SqlSession session;
   private DataSource dataSource;
   private Connection connection;
