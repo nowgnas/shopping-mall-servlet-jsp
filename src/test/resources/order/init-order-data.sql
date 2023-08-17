@@ -39,9 +39,23 @@ values (4, '맥북 프로 16', '맥북 프로 16 상세정보', 3000000, 2, 'PRO
        (13, '삼성 냉장고', '삼성 냉장고 상세정보', 1800000, 80, 'PRODUCT-007'),
        (14, '웅진 코웨이 정수기', '웅진 코웨이 정수기 상세정보', 500000, 90, 'PRODUCT-008');
 
+insert into product_image (product_id, url, is_thumbnail)
+VALUES (1, 'https://example.com', true),
+       (2, 'https://example.com', false),
+       (3, 'https://example.com', true),
+       (4, 'https://example.com', false),
+       (5, 'https://example.com', true);
+
 insert into orders (member_id, status)
-    values (1, 'PENDING'),
-           (1, 'PENDING'),
-           (1, 'PENDING'),
-           (1, 'PENDING'),
-           (1, 'PENDING');
+values (1, 'PENDING'),
+       (1, 'PENDING'),
+       (1, 'PENDING'),
+       (1, 'PENDING'),
+       (1, 'PENDING');
+
+insert into product_order (product_id, order_id, price, quantity)
+values (1, 1, 3000000, 1),
+       (2, 1, 2000000, 2),
+       (3, 1, 1500000, 3),
+       (4, 1, 1400000, 5),
+       (5, 1, 1000000, 10);

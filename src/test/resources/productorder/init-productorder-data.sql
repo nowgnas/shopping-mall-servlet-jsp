@@ -40,8 +40,8 @@ values (4, '맥북 프로 16', '맥북 프로 16 상세정보', 3000000, 2, 'PRO
        (14, '웅진 코웨이 정수기', '웅진 코웨이 정수기 상세정보', 500000, 90, 'PRODUCT-008');
 
 insert into orders (member_id, status)
-    values (1, 'PENDING'),
-           (1, 'PENDING'),
-           (1, 'PENDING'),
-           (1, 'PENDING'),
-           (1, 'PENDING');
+values (1, 'PENDING'),
+       (1, 'PENDING'),
+       (1, 'PENDING'),
+       (1, 'PENDING'),
+       (1, 'PENDING');
