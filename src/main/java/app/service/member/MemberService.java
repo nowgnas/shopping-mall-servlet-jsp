@@ -56,12 +56,14 @@ public class MemberService {
     SqlSession sqlSession = sessionFactory.openSession();
 
     try {
+      String hashedPassword = createHashedPassword(dto, sqlSession);
+
       Member member =
           memberDao
               .selectByEmail(dto.getEmail(), sqlSession)
               .orElseThrow(() -> new CustomException(ErrorCode.LOGIN_FAIL));
 
-      String hashedPassword = createHashedPassword(sqlSession, member);
+
 
     } catch (Exception e) {
       e.printStackTrace();
@@ -69,9 +71,9 @@ public class MemberService {
     return null;
   }
 
-  private String createHashedPassword(SqlSession sqlSession, Member member) throws SQLException {
-    Encryption encryption = encryptionDao.selectByEmail(member.getEmail(), sqlSession).get();
-    return new String(CipherUtil.getSHA256(member.getPassword(), encryption.getSalt()));
+  private String createHashedPassword(LoginDto dto, SqlSession sqlSession) throws SQLException {
+    Encryption encryption = encryptionDao.selectByEmail(dto.getEmail(), sqlSession).get();
+    return new String(CipherUtil.getSHA256(dto.getPassword(), encryption.getSalt()));
   }
 
   private String createSalt() throws NoSuchAlgorithmException {
