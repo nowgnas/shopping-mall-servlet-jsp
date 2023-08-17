@@ -57,7 +57,20 @@ class ProductDaoImplTest {
   @Test
   void selectAll() throws Exception {
     // case
-    List<Product> products = productDao.selectAll(session); // 모든 상품 조회
+    List<Product> products = productDao.selectAllSortByPrice(session); // 모든 상품 조회
+    for (Product p : products) {
+      System.out.println(p.getPrice());
+    }
+    Assertions.assertEquals(8, products.size());
+  }
+
+  @Test
+  void selectAllByDate() throws Exception {
+    // case
+    List<Product> products = productDao.selectAllSortByDate(session); // 모든 상품 조회
+    for (Product p : products) {
+      System.out.println(p.getCreatedAt());
+    }
     Assertions.assertEquals(8, products.size());
   }
 }

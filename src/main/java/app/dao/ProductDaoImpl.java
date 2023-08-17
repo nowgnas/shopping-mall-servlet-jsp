@@ -32,7 +32,15 @@ public class ProductDaoImpl implements DaoFrame<Long, Product> {
     return session.selectList("product.selectall");
   }
 
-  public List<Product> selectAllSortByPrice(SqlSession session) throws Exception {
+  public List<Product> selectAllSortByPriceDesc(SqlSession session) throws Exception {
     return session.selectList("product.sortbypricedesc");
+  }
+
+  public List<Product> selectAllSortByPrice(SqlSession session) throws Exception {
+    return session.selectList("product.sortbyprice");
+  }
+
+  public List<Product> selectAllSortByDate(SqlSession session) throws Exception {
+    return session.selectList("product.sortbydate");
   }
 }
