@@ -16,6 +16,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 
 import java.security.NoSuchAlgorithmException;
+import java.sql.SQLException;
 
 public class MemberService {
 
@@ -55,14 +56,22 @@ public class MemberService {
     SqlSession sqlSession = sessionFactory.openSession();
 
     try {
-      Member member = memberDao.selectByEmail(dto.getEmail(), sqlSession).get();
-      Long memberId = member.getId();
-      Encryption encryption = encryptionDao.selectById(memberId, sqlSession).get();
+      Member member =
+          memberDao
+              .selectByEmail(dto.getEmail(), sqlSession)
+              .orElseThrow(() -> new CustomException(ErrorCode.LOGIN_FAIL));
+      
+      String hashedPassword = createHashedPassword(sqlSession, member);
 
     } catch (Exception e) {
       e.printStackTrace();
     }
     return null;
+  }
+
+  private String createHashedPassword(SqlSession sqlSession, Member member) throws SQLException {
+    Encryption encryption = encryptionDao.selectById(member.getId(), sqlSession).get();
+    return new String(CipherUtil.getSHA256(member.getPassword(), encryption.getSalt()));
   }
 
   private String createSalt() throws NoSuchAlgorithmException {

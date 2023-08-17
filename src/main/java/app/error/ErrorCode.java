@@ -16,6 +16,7 @@ public enum ErrorCode {
     PASSWORD_IS_NOT_INVALID(HttpServletResponse.SC_BAD_REQUEST, "0000", "비밀번호는 영문, 숫자 형식으로 최소 8자 ~ 최대 16자 사이로 입력해야 합니다."),
     NAME_IS_NOT_INVALID(HttpServletResponse.SC_BAD_REQUEST, "0000", "이름은 최소 1자에서 최대 20자로 입력할 수 있습니다."),
     EMAIL_IS_NOT_DUPLICATE(HttpServletResponse.SC_BAD_REQUEST, "0000", "가입 된 이메일 입니다."),
+    LOGIN_FAIL(HttpServletResponse.SC_BAD_REQUEST, "0000", "아이디나 비밀번호가 일치하지 않습니다."),
     INTERNAL_SERVER_ERROR(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "0000", "서버에러");
 
   private final int status;
