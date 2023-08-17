@@ -18,6 +18,11 @@ public class ProductDao implements ProductDaoFrame<Long, Product> {
     return instance;
   }
 
+  /**
+   * @param productId 상품 id list
+   * @param session sql session
+   * @return 상품 정보 (이름, 이미지, 가격, 개수)
+   */
   @Override
   public List<ProductItemQuantity> selectProductQuantity(List<Long> productId, SqlSession session) {
     List<ProductItemQuantity> product = session.selectList("product.selectone", productId);

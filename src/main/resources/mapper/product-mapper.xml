@@ -39,6 +39,7 @@
       <foreach collection="list" item="id" open="(" separator="," close=")">
         #{id}
       </foreach>
+      AND is_thumbnail = true
     </select>
     <select id="selectall" resultType="product">
         SELECT *

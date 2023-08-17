@@ -16,9 +16,9 @@ public interface ProductDaoFrame<K, V extends Product> extends DaoFrame<K, V> {
   /**
    * 개별 상품 재고 개수 조회
    *
-   * @param productId 상품 id
+   * @param productId 상품 id list
    * @param session sql session
-   * @return 개수
+   * @return 상품 정보 (이름, 이미지, 가격, 개수)
    */
   List<ProductItemQuantity> selectProductQuantity(List<Long> productId, SqlSession session);
 }
