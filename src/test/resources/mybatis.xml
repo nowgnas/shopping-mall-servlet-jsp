@@ -10,13 +10,14 @@
         <typeAlias type="app.entity.Category" alias="category"/>
         <typeAlias type="app.entity.Coupon" alias="coupon"/>
         <typeAlias type="app.entity.Delivery" alias="delivery"/>
-        <typeAlias type="app.entity.Likes" alias="like"/>
+        <typeAlias type="app.entity.Likes" alias="likes"/>
         <typeAlias type="app.entity.Member" alias="member"/>
         <typeAlias type="app.entity.Order" alias="order"/>
         <typeAlias type="app.entity.Payment" alias="payment"/>
         <typeAlias type="app.entity.ProductImage" alias="productImage"/>
         <typeAlias type="app.entity.Product" alias="product"/>
         <typeAlias type="app.entity.ProductOrder" alias="productOrder"/>
+        <typeAlias type="app.dto.comp.ProductAndMemberCompositeKey" alias="productAndMemberCompositeKey"/>
     </typeAliases>
     <environments default="test">
         <environment id="test">
@@ -36,7 +37,7 @@
         <mapper resource="./mapper/category-mapper.xml"/>
         <mapper resource="./mapper/coupon-mapper.xml"/>
         <mapper resource="./mapper/delivery-mapper.xml"/>
-        <mapper resource="./mapper/like-mapper.xml"/>
+        <mapper resource="./mapper/likes-mapper.xml"/>
         <mapper resource="./mapper/member-mapper.xml"/>
         <mapper resource="./mapper/order-mapper.xml"/>
         <mapper resource="./mapper/payment-mapper.xml"/>
