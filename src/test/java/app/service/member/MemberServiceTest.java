@@ -60,6 +60,7 @@ class MemberServiceTest {
     String email = "abc@naver.com";
     String password = "123123";
     String name = "홍길동";
+    String expectedMessage = "가입 된 이메일 입니다.";
 
     MemberRegisterDto dto = new MemberRegisterDto(email, password, name);
 
@@ -70,7 +71,7 @@ class MemberServiceTest {
     });
 
     // then
-    Assertions.assertEquals("가입 된 이메일 입니다.", customException.getMessage());
+    Assertions.assertEquals(expectedMessage, customException.getMessage());
 
   }
 }
