@@ -1,17 +1,70 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper
-        PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="product">
+    <resultMap id="BaseResultMap" type="product">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="categoryId" jdbcType="BIGINT" property="categoryId"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="description" jdbcType="VARCHAR" property="description"/>
+        <result column="price" jdbcType="BIGINT" property="price"/>
+        <result column="quantity" jdbcType="BIGINT" property="quantity"/>
+        <result column="created_at" jdbcType="TIMESTAMP" property="createdAt"/>
+        <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt"/>
+    </resultMap>
+    <resultMap id="ListResultMap" type="productListItem">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="price" jdbcType="BIGINT" property="price"/>
+        <result column="url" jdbcType="VARCHAR" property="url"/>
+        <result column="created_at" jdbcType="TIMESTAMP" property="createdAt"/>
+        <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt"/>
+    </resultMap>
+    <resultMap id="singleProduct" type="productItemQuantity">
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="price" jdbcType="BIGINT" property="price"/>
+        <result column="url" jdbcType="VARCHAR" property="url"/>
+        <result column="quantity" jdbcType="BIGINT" property="quantity"/>
+        <result column="created_at" jdbcType="TIMESTAMP" property="createdAt"/>
+        <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt"/>
+    </resultMap>
 
-    <select id="select" parameterType="Long" resultType="product">
-        SELECT *
-        FROM product
-        WHERE id = ${id}
+    <select id="selectone" parameterType="Long" resultMap="singleProduct">
+      SELECT name, quantity, price, url
+      FROM product p
+      LEFT JOIN product_image i
+      ON p.id = i.product_id
+      WHERE p.id in
+      <foreach collection="list" item="id" open="(" separator="," close=")">
+        #{id}
+      </foreach>
+      AND is_thumbnail = true
     </select>
     <select id="selectall" resultType="product">
         SELECT *
         FROM product
+    </select>
+    <select id="sortbypricedesc" resultMap="ListResultMap">
+        SELECT name, price, url
+        FROM product p
+                 LEFT JOIN product_image i
+                           ON p.id = i.product_id
+        ORDER BY price desc
+    </select>
+    <select id="sortbydate" resultMap="ListResultMap">
+      SELECT name, price, url
+      FROM product p
+             LEFT JOIN product_image i
+                       ON p.id = i.product_id
+      ORDER BY created_at desc
+    </select>
+    <select id="sortbyprice" resultMap="ListResultMap">
+      SELECT name, price, url
+      FROM product p
+             LEFT JOIN product_image i
+                       ON p.id = i.product_id
+      ORDER BY price
     </select>
     <insert id="insert" parameterType="product">
         INSERT INTO product (category_id, name, description, price, quantity, code)
