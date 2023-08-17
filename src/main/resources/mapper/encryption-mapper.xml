@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="encryption">
+
+    <select id="select" parameterType="Long" resultType="encryption">
+        SELECT *
+        FROM encryption
+        WHERE member_id = #{memberId}
+    </select>
+
+    <select id="selectall" resultType="encryption">
+        SELECT *
+        FROM encryption
+    </select>
+
+    <insert id="insert" parameterType="encryption">
+        INSERT INTO encryption (member_id, salt)
+        VALUES (#{memberId}, #{salt})
+    </insert>
+    <update id="update" parameterType="encryption">
+        UPDATE encryption
+        SET salt    = #{salt}
+        WHERE member_id = #{memberId}
+    </update>
+    <delete id="delete" parameterType="Long">
+        DELETE
+        FROM encryption
+        WHERE member_id = #{memberId}
+    </delete>
+
+</mapper>
+
+
+
+
+
+
