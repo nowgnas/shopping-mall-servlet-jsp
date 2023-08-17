@@ -1,5 +1,6 @@
 package app.dao.product;
 
+import app.dto.product.ProductItemQuantity;
 import app.entity.Product;
 import java.util.List;
 import java.util.Optional;
@@ -15,6 +16,13 @@ public class ProductDao implements ProductDaoFrame<Long, Product> {
   public static ProductDao getInstance() {
     if (instance == null) return new ProductDao();
     return instance;
+  }
+
+  @Override
+  public ProductItemQuantity selectProductQuantity(Long productId, SqlSession session) {
+    ProductItemQuantity product = session.selectOne("product.selectone", productId);
+    session.close();
+    return product;
   }
 
   @Override
@@ -75,8 +83,4 @@ public class ProductDao implements ProductDaoFrame<Long, Product> {
     return products;
   }
 
-  @Override
-  public Integer selectProductQuantity(Long productId, SqlSession session) {
-    return null;
-  }
 }

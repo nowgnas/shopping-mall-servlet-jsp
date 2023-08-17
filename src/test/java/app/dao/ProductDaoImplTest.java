@@ -1,12 +1,11 @@
 package app.dao;
 
 import app.dao.product.ProductDao;
+import app.dto.product.ProductItemQuantity;
 import app.entity.Product;
 import app.utils.GetSessionFactory;
 import config.TestConfig;
-import java.sql.Connection;
 import java.util.List;
-import javax.sql.DataSource;
 import org.apache.ibatis.session.SqlSession;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
@@ -31,6 +30,12 @@ class ProductDaoImplTest {
   void afterEach() throws Exception {
     session = GetSessionFactory.getInstance().openSession();
     testConfig.init("clear-data.sql", session);
+  }
+
+  @Test
+  void selectProductQuantity() {
+    ProductItemQuantity product = productDao.selectProductQuantity(1L, session);
+    System.out.println(product.toString());
   }
 
   @Test

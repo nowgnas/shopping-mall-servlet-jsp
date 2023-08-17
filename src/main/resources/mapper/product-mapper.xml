@@ -21,11 +21,21 @@
         <result column="created_at" jdbcType="TIMESTAMP" property="createdAt"/>
         <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt"/>
     </resultMap>
+    <resultMap id="singleProduct" type="productItemQuantity">
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="price" jdbcType="BIGINT" property="price"/>
+        <result column="url" jdbcType="VARCHAR" property="url"/>
+        <result column="quantity" jdbcType="BIGINT" property="quantity"/>
+        <result column="created_at" jdbcType="TIMESTAMP" property="createdAt"/>
+        <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt"/>
+    </resultMap>
 
-    <select id="select" parameterType="Long" resultType="product">
-        SELECT *
-        FROM product
-        WHERE id = ${id}
+    <select id="selectone" parameterType="Long" resultMap="singleProduct">
+        SELECT name, quantity, price, url
+        FROM product p
+                 LEFT JOIN product_image i
+                           ON p.id = i.product_id
+        WHERE p.id = #{id}
     </select>
     <select id="selectall" resultType="product">
         SELECT *
@@ -34,8 +44,8 @@
     <select id="sortbypricedesc" resultMap="ListResultMap">
         SELECT name, price, url
         FROM product p
-        LEFT JOIN product_image i
-        ON p.id = i.product_id
+                 LEFT JOIN product_image i
+                           ON p.id = i.product_id
         ORDER BY price desc
     </select>
     <select id="sortbydate" resultMap="ListResultMap">
