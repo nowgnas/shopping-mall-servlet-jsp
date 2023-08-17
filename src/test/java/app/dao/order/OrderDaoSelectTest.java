@@ -75,7 +75,7 @@ public class OrderDaoSelectTest {
 
   @Test
   @DisplayName("회원 id로 주문 모두 조회 테스트 - 정상 처리")
-  void selectAllWithProductByMemberIdAndYearOrderByTime() throws Exception {
+  void selectProductOrdersForMemberCurrentYear() throws Exception {
     // given
     Long memberId = 1L;
 
