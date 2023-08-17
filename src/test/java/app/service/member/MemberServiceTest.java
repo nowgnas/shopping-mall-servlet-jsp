@@ -47,8 +47,7 @@ class MemberServiceTest {
     memberService.register(dto);
 
     // then
-    List<Member> members = memberDao.selectAll(session);
-    Member member = members.get(members.size() - 1);
+    Member member = memberDao.selectByEmail(email, session).get();
     Assertions.assertEquals(email, member.getEmail());
 
 
