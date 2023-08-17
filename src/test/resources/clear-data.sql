@@ -1,3 +1,5 @@
+ALTER TABLE encryption
+DROP CONSTRAINT PK_encryption;
 
 ALTER TABLE likes
     DROP CONSTRAINT PK_likes;
@@ -34,6 +36,9 @@ ALTER TABLE payments
 
 ALTER TABLE delivery
     DROP CONSTRAINT PK_delivery;
+
+ALTER TABLE encryption
+DROP CONSTRAINT FK_member_TO_encryption_1;
 
 ALTER TABLE likes
     DROP CONSTRAINT FK_member_TO_likes_1;
