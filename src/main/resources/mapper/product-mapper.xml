@@ -13,6 +13,14 @@
         <result column="created_at" jdbcType="TIMESTAMP" property="createdAt"/>
         <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt"/>
     </resultMap>
+    <resultMap id="ListResultMap" type="productListItem">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="price" jdbcType="BIGINT" property="price"/>
+        <result column="url" jdbcType="VARCHAR" property="url"/>
+        <result column="created_at" jdbcType="TIMESTAMP" property="createdAt"/>
+        <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt"/>
+    </resultMap>
 
     <select id="select" parameterType="Long" resultType="product">
         SELECT *
@@ -23,17 +31,19 @@
         SELECT *
         FROM product
     </select>
-    <select id="sortbypricedesc" resultType="product">
-        SELECT *
-        FROM product
+    <select id="sortbypricedesc" resultMap="ListResultMap">
+        SELECT name, price, url
+        FROM product p
+        LEFT JOIN product_image i
+        ON p.id = i.product_id
         ORDER BY price desc
     </select>
-    <select id="sortbydate" resultMap="BaseResultMap">
+    <select id="sortbydate" resultMap="ListResultMap">
         SELECT *
         FROM product
         ORDER BY created_at desc
     </select>
-    <select id="sortbyprice" resultType="product">
+    <select id="sortbyprice" resultMap="ListResultMap">
         SELECT *
         FROM product
         ORDER BY price

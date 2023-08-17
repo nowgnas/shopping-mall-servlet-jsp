@@ -14,14 +14,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class ProductDaoImplTest {
-  ProductDao productDao = new ProductDao();
+  ProductDao productDao = ProductDao.getInstance();
   SqlSession session;
-  private DataSource dataSource;
-  private Connection connection;
-
-  public ProductDaoImplTest() {
-    this.session = GetSessionFactory.getInstance().openSession();
-  }
 
   private final TestConfig testConfig = new TestConfig();
 
@@ -30,6 +24,7 @@ class ProductDaoImplTest {
     session = GetSessionFactory.getInstance().openSession();
     testConfig.init("schema.sql", session);
     testConfig.init("init-data.sql", session);
+    testConfig.init("product-image.sql", session);
   }
 
   @AfterEach
@@ -58,7 +53,7 @@ class ProductDaoImplTest {
   @Test
   void selectAll() throws Exception {
     // case
-    List<Product> products = productDao.selectAllSortByPrice(session); // 모든 상품 조회
+    List<Product> products = productDao.selectAllSortByPriceDesc(session); // 모든 상품 조회
     for (Product p : products) {
       System.out.println(p.getPrice());
     }

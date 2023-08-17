@@ -74,4 +74,9 @@ public class ProductDao implements ProductDaoFrame<Long, Product> {
     }
     return products;
   }
+
+  @Override
+  public Integer selectProductQuantity(Long productId, SqlSession session) {
+    return null;
+  }
 }
