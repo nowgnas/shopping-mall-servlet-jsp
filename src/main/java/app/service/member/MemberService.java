@@ -11,6 +11,7 @@ import app.error.CustomException;
 import app.error.ErrorCode;
 import app.utils.CipherUtil;
 import app.utils.GetSessionFactory;
+import org.apache.ibatis.exceptions.PersistenceException;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 
@@ -40,12 +41,13 @@ public class MemberService {
       Encryption encryption = Encryption.from(member.getId(), salt);
       encryptionDao.insert(encryption, sqlSession);
 
-    } catch (SQLIntegrityConstraintViolationException e) {
+    } catch (PersistenceException e) {
       sqlSession.rollback();
-      e.printStackTrace();
+//      e.printStackTrace();
       throw new CustomException(ErrorCode.EMAIL_IS_NOT_DUPLICATE);
     } catch (Exception e) {
       sqlSession.rollback();
+//      e.printStackTrace();
       throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
     }
   }
