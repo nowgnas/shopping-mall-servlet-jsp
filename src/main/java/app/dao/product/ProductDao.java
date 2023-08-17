@@ -36,16 +36,34 @@ public class ProductDao implements ProductDaoFrame<Long, Product> {
 
   @Override
   public List<Product> selectAllSortByPriceDesc(SqlSession session) throws Exception {
-    return session.selectList("product.sortbypricedesc");
+    List<Product> products = null;
+    try {
+      products = session.selectList("product.sortbypricedesc");
+    } finally {
+      session.close();
+    }
+    return products;
   }
 
   @Override
   public List<Product> selectAllSortByPrice(SqlSession session) throws Exception {
-    return session.selectList("product.sortbyprice");
+    List<Product> products = null;
+    try {
+      products = session.selectList("product.sortbyprice");
+    } finally {
+      session.close();
+    }
+    return products;
   }
 
   @Override
   public List<Product> selectAllSortByDate(SqlSession session) throws Exception {
-    return session.selectList("product.sortbydate");
+    List<Product> products = null;
+    try {
+      products = session.selectList("product.sortbydate");
+    } finally {
+      session.close();
+    }
+    return products;
   }
 }
