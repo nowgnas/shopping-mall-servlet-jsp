@@ -24,7 +24,7 @@
         SELECT *
         FROM member
         WHERE id = #{id}
-        AND password = #{password}
+          AND password = #{password}
     </select>
 
     <select id="selectall" resultType="member">
@@ -32,16 +32,16 @@
         FROM member
     </select>
 
-    <insert id="insert" parameterType="member">
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="member">
         INSERT INTO member (email, password, name, money)
         VALUES (#{email}, #{password}, #{name}, #{money})
     </insert>
     <update id="update" parameterType="member">
         UPDATE member
-        SET email    = #{email},
-            password = #{password},
-            name     = #{name},
-            money    = #{money},
+        SET email      = #{email},
+            password   = #{password},
+            name       = #{name},
+            money      = #{money},
             updated_at = now()
         WHERE id = #{id}
     </update>

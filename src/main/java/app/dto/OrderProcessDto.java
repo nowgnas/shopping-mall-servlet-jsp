@@ -7,6 +7,7 @@ import app.entity.Order;
 import app.entity.Product;
 
 public class OrderProcessDto {
+
   private Member member;
   private Order order;
   private Product product;

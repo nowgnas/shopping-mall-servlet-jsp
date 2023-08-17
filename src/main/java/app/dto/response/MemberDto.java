@@ -10,15 +10,15 @@ import lombok.Getter;
 @AllArgsConstructor
 public class MemberDto {
 
-    private Long id;
-    private String email;
-    private String name;
+  private Long id;
+  private String email;
+  private String name;
 
-    public static MemberDto of(Member member) {
-        return MemberDto.builder()
-            .id(member.getId())
-            .email(member.getEmail())
-            .name(member.getName())
-            .build();
-    }
+  public static MemberDto of(Member member) {
+    return MemberDto.builder()
+        .id(member.getId())
+        .email(member.getEmail())
+        .name(member.getName())
+        .build();
+  }
 }
