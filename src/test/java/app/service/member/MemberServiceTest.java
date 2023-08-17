@@ -9,8 +9,6 @@ import org.apache.ibatis.session.SqlSession;
 import org.junit.jupiter.api.*;
 import utils.GetSessionFactory;
 
-import java.util.List;
-
 class MemberServiceTest {
 
   private final MemberService memberService = new MemberService();
@@ -36,42 +34,39 @@ class MemberServiceTest {
   void insert() throws Exception {
 
     // given
-    String email = "abc@naver.com";
-    String password = "123123";
-    String name = "홍길동";
-
-    MemberRegisterDto dto = new MemberRegisterDto(email, password, name);
-
+    MemberRegisterDto dto = createMemberRegisterDto();
 
     // when
     memberService.register(dto);
 
     // then
-    Member member = memberDao.selectByEmail(email, session).get();
-    Assertions.assertEquals(email, member.getEmail());
-
-
+    Member member = memberDao.selectByEmail(dto.getEmail(), session).get();
+    Assertions.assertEquals(dto.getEmail(), member.getEmail());
   }
 
   @Test
   @DisplayName("회원 가입 중 중복 된 이메일로 가입 시도 시 예외가 발생한다.")
   void insert2() throws Exception {
     // given
-    String email = "abc@naver.com";
-    String password = "123123";
-    String name = "홍길동";
+    MemberRegisterDto dto = createMemberRegisterDto();
     String expectedMessage = "가입 된 이메일 입니다.";
-
-    MemberRegisterDto dto = new MemberRegisterDto(email, password, name);
-
     memberService.register(dto);
     // when
-    CustomException customException = Assertions.assertThrows(CustomException.class, () -> {
-      memberService.register(dto);
-    });
+    CustomException customException =
+        Assertions.assertThrows(
+            CustomException.class,
+            () -> {
+              memberService.register(dto);
+            });
 
     // then
     Assertions.assertEquals(expectedMessage, customException.getMessage());
+  }
 
+  private MemberRegisterDto createMemberRegisterDto() {
+    String email = "abc@naver.com";
+    String password = "123123";
+    String name = "홍길동";
+    return new MemberRegisterDto(email, password, name);
   }
 }

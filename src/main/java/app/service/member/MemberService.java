@@ -40,6 +40,7 @@ public class MemberService {
 
       Encryption encryption = Encryption.from(member, salt);
       encryptionDao.insert(encryption, sqlSession);
+      sqlSession.commit();
 
     } catch (PersistenceException e) {
       sqlSession.rollback();
@@ -49,6 +50,8 @@ public class MemberService {
       sqlSession.rollback();
       //      e.printStackTrace();
       throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
+    } finally {
+      sqlSession.close();
     }
   }
 
@@ -63,9 +66,7 @@ public class MemberService {
               .selectByEmail(dto.getEmail(), sqlSession)
               .orElseThrow(() -> new CustomException(ErrorCode.LOGIN_FAIL));
 
-
-
-    } catch (Exception e) {
+    } catch (SQLException e) {
       e.printStackTrace();
     }
     return null;
