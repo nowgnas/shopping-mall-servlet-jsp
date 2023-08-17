@@ -11,4 +11,6 @@ public interface ProductDaoFrame<K, V extends Product> extends DaoFrame<K, V> {
   List<Product> selectAllSortByPrice(SqlSession session) throws Exception;
 
   List<Product> selectAllSortByDate(SqlSession session) throws Exception;
+
+  Integer selectProductQuantity(Long productId, SqlSession session);
 }

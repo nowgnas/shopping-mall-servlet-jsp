@@ -8,6 +8,14 @@ import org.apache.ibatis.session.SqlSession;
 
 public class ProductDao implements ProductDaoFrame<Long, Product> {
   private Logger log = Logger.getLogger("order");
+  private static ProductDao instance;
+
+  private ProductDao() {}
+
+  public static ProductDao getInstance() {
+    if (instance == null) return new ProductDao();
+    return instance;
+  }
 
   @Override
   public int insert(Product product, SqlSession session) throws Exception {
@@ -36,16 +44,39 @@ public class ProductDao implements ProductDaoFrame<Long, Product> {
 
   @Override
   public List<Product> selectAllSortByPriceDesc(SqlSession session) throws Exception {
-    return session.selectList("product.sortbypricedesc");
+    List<Product> products = null;
+    try {
+      products = session.selectList("product.sortbypricedesc");
+    } finally {
+      session.close();
+    }
+    return products;
   }
 
   @Override
   public List<Product> selectAllSortByPrice(SqlSession session) throws Exception {
-    return session.selectList("product.sortbyprice");
+    List<Product> products = null;
+    try {
+      products = session.selectList("product.sortbyprice");
+    } finally {
+      session.close();
+    }
+    return products;
   }
 
   @Override
   public List<Product> selectAllSortByDate(SqlSession session) throws Exception {
-    return session.selectList("product.sortbydate");
+    List<Product> products = null;
+    try {
+      products = session.selectList("product.sortbydate");
+    } finally {
+      session.close();
+    }
+    return products;
+  }
+
+  @Override
+  public Integer selectProductQuantity(Long productId, SqlSession session) {
+    return null;
   }
 }
