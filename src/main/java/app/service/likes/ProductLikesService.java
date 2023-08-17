@@ -1,13 +1,16 @@
 package app.service.likes;
 
 import app.dao.DaoFrame;
-import app.dao.LikesDao;
-import app.dao.LikesDaoFrame;
+import app.dao.Likes.LikesDao;
+import app.dao.Likes.LikesDaoFrame;
 import app.dto.comp.ProductAndMemberCompositeKey;
 import app.dto.likes.response.MemberLikesResponseDto;
 import app.entity.Likes;
 import app.entity.Product;
+import app.error.CustomException;
+import app.error.ErrorCode;
 import app.utils.GetSessionFactory;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.ibatis.session.SqlSession;
@@ -45,9 +48,11 @@ public class ProductLikesService implements LikesService {
       }
 
     } catch (Exception e) {
-      //
 
-    } finally {
+      e.printStackTrace();
+      throw new CustomException(null);
+    }
+    finally {
       session.close();
     }
     return memberLikesList;
@@ -59,6 +64,10 @@ public class ProductLikesService implements LikesService {
     try {
       session = GetSessionFactory.getInstance().openSession();
       likes = likesDao.selectById(productAndMemberCompositeKey, session).orElse(null);
+    } catch (SQLException e) {
+
+      e.printStackTrace();
+      throw new CustomException(ErrorCode.PRODUCT_IS_NOT_VALID);
     } catch (Exception e) {
       //
 
@@ -82,6 +91,11 @@ public class ProductLikesService implements LikesService {
           , session
       );
       session.commit();
+    } catch (SQLException e) {
+
+      session.rollback();
+      e.printStackTrace();
+      throw new CustomException(ErrorCode.PRODUCT_IS_NOT_VALID);
     } catch (Exception e) {
       //
       session.rollback();
@@ -98,6 +112,11 @@ public class ProductLikesService implements LikesService {
       session = GetSessionFactory.getInstance().openSession();
       res = likesDao.deleteById(productAndMemberCompositeKey, session);
       session.commit();
+    } catch (SQLException e) {
+
+      session.rollback();
+      e.printStackTrace();
+      throw new CustomException(ErrorCode.PRODUCT_IS_NOT_VALID);
     } catch (Exception e) {
       session.rollback();
     } finally {
@@ -115,7 +134,12 @@ public class ProductLikesService implements LikesService {
         res = likesDao.deleteById(key, session) > 0 ? res + 1 : res;
       }
       session.commit();
-    } catch (Exception e) {
+    } catch (SQLException e) {
+
+      session.rollback();
+      e.printStackTrace();
+      throw new CustomException(ErrorCode.PRODUCT_IS_NOT_VALID);
+    }catch (Exception e) {
       session.rollback();
     } finally {
       session.close();

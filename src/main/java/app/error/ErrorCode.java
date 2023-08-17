@@ -1,6 +1,7 @@
 package app.error;
 
 import java.util.Arrays;
+import javax.servlet.http.HttpServletResponse;
 import lombok.Getter;
 
 
@@ -10,7 +11,8 @@ public enum ErrorCode {
  QUANTITY_IS_NOT_SUFFICIENT(400,"0001",null),
  CUSTOMER_IS_NOT_AFFORDABLE(400,"0002",null),
  NO_PRODUCT_IN_CART(400,"0003",null),
- ADDRESS_IS_UNAVAILABLE(400,"0004",null);
+ ADDRESS_IS_UNAVAILABLE(400,"0004",null),
+ PRODUCT_IS_NOT_VALID(HttpServletResponse.SC_BAD_REQUEST, "0000", null);
 
   private final int status;
   private final String code;
