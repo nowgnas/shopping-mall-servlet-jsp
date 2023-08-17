@@ -119,6 +119,11 @@ CREATE TABLE IF NOT EXISTS `delivery` (
     `updated_at`	DATETIME	NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS `encryption` (
+                                            `member_id`	BIGINT UNSIGNED	NOT NULL,
+                                            `salt`	VARCHAR(255)	NOT NULL
+    );
+
 ALTER TABLE `likes`
     ADD CONSTRAINT `PK_likes` PRIMARY KEY (
                                            `member_id`,
@@ -197,6 +202,11 @@ ALTER TABLE payments
 ALTER TABLE `delivery` ADD CONSTRAINT `PK_delivery` PRIMARY KEY (
 	`order_id`
 );
+
+ALTER TABLE `encryption`
+    ADD CONSTRAINT `PK_encryption` PRIMARY KEY (
+                                            `member_id`
+        );
 
 ALTER TABLE `likes`
     ADD CONSTRAINT `FK_member_TO_likes_1` FOREIGN KEY (
@@ -308,3 +318,12 @@ ALTER TABLE `delivery` ADD CONSTRAINT `FK_orders_TO_delivery_1` FOREIGN KEY (
     REFERENCES `orders` (
                          `id`
         );
+
+ALTER TABLE `encryption`
+    ADD CONSTRAINT `FK_member_TO_encryption_1` FOREIGN KEY (
+                                                       `member_id`
+        )
+        REFERENCES `member` (
+                             `id`
+            );
+

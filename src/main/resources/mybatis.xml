@@ -17,6 +17,7 @@
         <typeAlias type="app.entity.ProductImage" alias="productImage"/>
         <typeAlias type="app.entity.Product" alias="product"/>
         <typeAlias type="app.entity.ProductOrder" alias="productOrder"/>
+        <typeAlias type="app.entity.Encryption" alias="encryption"/>
     </typeAliases>
     <environments default="dev">
         <environment id="dev">
@@ -42,6 +43,7 @@
         <mapper resource="./mapper/product-image-mapper.xml"/>
         <mapper resource="./mapper/product-mapper.xml"/>
         <mapper resource="./mapper/product-order-mapper.xml"/>
+        <mapper resource="./mapper/encryption-mapper.xml"/>
     </mappers>
 </configuration>
 
