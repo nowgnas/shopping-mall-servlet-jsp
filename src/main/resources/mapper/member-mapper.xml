@@ -20,11 +20,17 @@
         WHERE id = #{id}
     </select>
 
-    <select id="selectByIdAndPassword" parameterType="app.dto.request.LoginDto" resultMap="BaseResultMap">
+    <select id="selectByEmailAndPassword" parameterType="app.dto.request.LoginDto" resultMap="BaseResultMap">
         SELECT *
         FROM member
-        WHERE id = #{id}
+        WHERE email = #{email}
           AND password = #{password}
+    </select>
+
+    <select id="selectByEmail" parameterType="String" resultMap="BaseResultMap">
+        SELECT *
+        FROM member
+        WHERE email = #{email}
     </select>
 
     <select id="selectall" resultType="member">

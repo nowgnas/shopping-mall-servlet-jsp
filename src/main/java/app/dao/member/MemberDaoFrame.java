@@ -11,4 +11,6 @@ import java.util.Optional;
 public interface MemberDaoFrame<K, V> extends DaoFrame<K, V> {
 
   Optional<Member> selectByIdAndPassword(LoginDto loginDto, SqlSession session) throws SQLException;
+
+  Optional<Member> selectByEmail(String email, SqlSession session) throws SQLException;
 }

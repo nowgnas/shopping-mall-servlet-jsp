@@ -1,10 +1,10 @@
 package app.service.member;
 
-import app.dao.DaoFrame;
 import app.dao.encryption.EncryptionDao;
 import app.dao.member.MemberDao;
-import app.dao.member.MemberDaoFrame;
+import app.dto.request.LoginDto;
 import app.dto.request.MemberRegisterDto;
+import app.dto.response.MemberDto;
 import app.entity.Encryption;
 import app.entity.Member;
 import app.error.CustomException;
@@ -16,12 +16,11 @@ import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 
 import java.security.NoSuchAlgorithmException;
-import java.sql.SQLIntegrityConstraintViolationException;
 
 public class MemberService {
 
-  private final MemberDaoFrame memberDao;
-  private final DaoFrame encryptionDao;
+  private final MemberDao memberDao;
+  private final EncryptionDao encryptionDao;
   private final SqlSessionFactory sessionFactory;
 
   public MemberService() {
@@ -43,13 +42,27 @@ public class MemberService {
 
     } catch (PersistenceException e) {
       sqlSession.rollback();
-//      e.printStackTrace();
+      //      e.printStackTrace();
       throw new CustomException(ErrorCode.EMAIL_IS_NOT_DUPLICATE);
     } catch (Exception e) {
       sqlSession.rollback();
-//      e.printStackTrace();
+      //      e.printStackTrace();
       throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
     }
+  }
+
+  public MemberDto login(LoginDto dto) {
+    SqlSession sqlSession = sessionFactory.openSession();
+
+    try {
+      Member member = memberDao.selectByEmail(dto.getEmail(), sqlSession).get();
+      Long memberId = member.getId();
+      Encryption encryption = encryptionDao.selectById(memberId, sqlSession).get();
+
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return null;
   }
 
   private String createSalt() throws NoSuchAlgorithmException {

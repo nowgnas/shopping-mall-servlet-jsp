@@ -40,4 +40,9 @@ public class MemberDao implements MemberDaoFrame<Long, Member> {
       throws SQLException {
     return Optional.ofNullable(session.selectOne("member.selectByIdAndPassword", loginDto));
   }
+
+  @Override
+  public Optional<Member> selectByEmail(String email, SqlSession session) throws SQLException {
+    return Optional.ofNullable(session.selectOne("member.selectByEmail", email));
+  }
 }
