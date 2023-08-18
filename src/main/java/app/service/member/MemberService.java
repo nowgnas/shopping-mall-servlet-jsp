@@ -76,6 +76,23 @@ public class MemberService {
     return loginMember;
   }
 
+  public MemberDetail get(Long id) {
+    SqlSession sqlSession = sessionFactory.openSession();
+    MemberDetail memberDetail = null;
+    try {
+      Member member =
+          memberDao
+              .selectById(id, sqlSession)
+              .orElseThrow(() -> new CustomException(ErrorCode.LOGIN_FAIL));
+      memberDetail = MemberDetail.of(member);
+    } catch (SQLException e) {
+      e.printStackTrace();
+    } finally {
+      sqlSession.close();
+    }
+    return memberDetail;
+  }
+
   private String createHashedPassword(LoginDto dto, SqlSession sqlSession) throws SQLException {
     Encryption encryption = encryptionDao.selectByEmail(dto.getEmail(), sqlSession).get();
     return new String(CipherUtil.getSHA256(dto.getPassword(), encryption.getSalt()));
