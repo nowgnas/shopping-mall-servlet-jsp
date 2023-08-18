@@ -11,4 +11,5 @@ public class ProductListItem extends BaseEntity {
   private String name;
   private Long price;
   private String url;
+  private Boolean isLiked;
 }
