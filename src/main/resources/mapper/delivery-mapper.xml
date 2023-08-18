@@ -19,7 +19,8 @@
     </insert>
     <update id="update" parameterType="delivery">
         UPDATE delivery
-        SET status = #{status}, updated_at = now()
+        SET status     = #{status},
+            updated_at = now()
         WHERE order_id = #{orderId}
     </update>
     <delete id="delete" parameterType="Long">

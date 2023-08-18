@@ -2,8 +2,10 @@ package app.service.order;
 
 import app.dao.delivery.DeliveryDao;
 import app.dao.exception.CustomException;
+import app.dao.member.MemberDao;
 import app.dao.order.OrderDao;
 import app.dao.payment.PaymentDao;
+import app.dto.request.OrderCancelDto;
 import app.dto.request.OrderCreateDto;
 import app.dto.response.ProductOrderDetailDto;
 import app.dto.response.ProductOrderDto;
@@ -25,17 +27,12 @@ import org.apache.ibatis.session.SqlSessionFactory;
 public class OrderServiceImpl {
 
   private final SqlSessionFactory sessionFactory = GetSessionFactory.getInstance();
-  private final OrderDao orderDao;
-  private final DeliveryDao deliveryDao;
-  private final PaymentDao paymentDao;
+  private final OrderDao orderDao = new OrderDao();
+  private final DeliveryDao deliveryDao = new DeliveryDao();
+  private final PaymentDao paymentDao = new PaymentDao();
+  private final MemberDao memberDao = new MemberDao();
 
-  public OrderServiceImpl(OrderDao orderDao, DeliveryDao deliveryDao, PaymentDao paymentDao) {
-    this.orderDao = orderDao;
-    this.deliveryDao = deliveryDao;
-    this.paymentDao = paymentDao;
-  }
-
-  // TODO 상품 주문
+  //TODO: 상품 주문
   public void createOrder(OrderCreateDto orderCreateDto) throws Exception {
     SqlSession session = sessionFactory.openSession();
     try {
@@ -80,6 +77,32 @@ public class OrderServiceImpl {
     }
   }
 
+  //TODO: 상품 주문 취소
+  public void cancelOrder(OrderCancelDto orderCancelDto) throws Exception {
+    SqlSession session = sessionFactory.openSession();
+    try {
+      /* 배송 상태를 확인 1. 배송중이면 취소 불가 2. 배송중이 아니라면 배송 정보를 취소 상태로 바꾼다 */
+
+      /* 사용했던 회원의 쿠폰이 있다면 쿠폰의 상태를 UNUSED로 바꿈 */
+
+      /* 회원의 보유 금액을 실제 결제 금액에 비례하여 증가시킴 */
+
+      /* 취소한 상품들에 대한 수량을 증가시킴 */
+
+      /* 주문 정보 정보를 취소 상태로 바꿈 */
+
+      session.commit();
+    } catch (CustomException ex) {
+      session.rollback();
+      throw new CustomException(ex.getMessage());
+    } catch (Exception ex) {
+      session.rollback();
+      throw new Exception(ex.getMessage());
+    } finally {
+      session.close();
+    }
+  }
+
   /* 회원의 1년내의 주문 목록들을 최신순으로 조회 */
   public List<ProductOrderDto> getProductOrdersForMemberCurrentYear(Long memberId)
       throws Exception {
@@ -106,7 +129,7 @@ public class OrderServiceImpl {
     try {
       final Map<String, Long> orderIdAndMemberIdParameterMap = new HashMap<>();
       orderIdAndMemberIdParameterMap.put("orderId", orderId);
-      orderIdAndMemberIdParameterMap.put("memberId", orderId);
+      orderIdAndMemberIdParameterMap.put("memberId", memberId);
       productOrderDetailDto =
           orderDao
               .selectOrderDetailsForMemberAndOrderId(orderIdAndMemberIdParameterMap, session)

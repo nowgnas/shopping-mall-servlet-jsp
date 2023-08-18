@@ -26,9 +26,6 @@ public class OrderServiceTest {
 
   private SqlSession session;
   private final TestConfig testConfig = new TestConfig();
-  private final OrderDao orderDao = new OrderDao();
-  private final DeliveryDao deliveryDao = new DeliveryDao();
-  private final PaymentDao paymentDao = new PaymentDao();
   private OrderServiceImpl orderService;
 
   @BeforeEach
@@ -37,7 +34,7 @@ public class OrderServiceTest {
     testConfig.init("schema.sql", session);
     testConfig.init("order/init-order-data.sql", session);
 
-    orderService = new OrderServiceImpl(orderDao, deliveryDao, paymentDao);
+    orderService = new OrderServiceImpl();
   }
 
   @AfterEach

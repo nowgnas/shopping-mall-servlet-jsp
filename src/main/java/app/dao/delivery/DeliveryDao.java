@@ -42,13 +42,30 @@ public class DeliveryDao implements DeliveryDaoFrame<Long, Delivery> {
   }
 
   @Override
-  public int deleteById(Long aLong, SqlSession session) throws Exception {
+  public int deleteById(Long orderId, SqlSession session) throws Exception {
     return 0;
   }
 
   @Override
-  public Optional<Delivery> selectById(Long aLong, SqlSession session) throws Exception {
-    return Optional.empty();
+  public Optional<Delivery> selectById(Long orderId, SqlSession session) throws Exception {
+    Optional<Delivery> optionalDelivery;
+    try {
+      optionalDelivery = Optional.ofNullable(session.selectOne("delivery.select", orderId));
+      optionalDelivery.orElseThrow(
+          () -> {
+            String errorMessage = CANNOT_FIND_DELIVERY.getMessage();
+            log.error(errorMessage);
+            return new CustomException(errorMessage);
+          });
+    } catch (PersistenceException ex) {
+      log.error(ex.getMessage());
+      throw new PersistenceException(CANNOT_FIND_DELIVERY.getMessage());
+    } catch (Exception ex) {
+      log.error(ex.getMessage());
+      throw new Exception(INTERNAL_SERVER_ERROR.getMessage());
+    }
+
+    return optionalDelivery;
   }
 
   @Override
