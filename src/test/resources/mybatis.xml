@@ -15,8 +15,11 @@
         <typeAlias type="app.entity.Order" alias="order"/>
         <typeAlias type="app.entity.Payment" alias="payment"/>
         <typeAlias type="app.entity.ProductImage" alias="productImage"/>
+        <typeAlias type="app.dto.product.ProductListItem" alias="productListItem"/>
+        <typeAlias type="app.dto.product.ProductItemQuantity" alias="productItemQuantity"/>
         <typeAlias type="app.entity.Product" alias="product"/>
         <typeAlias type="app.entity.ProductOrder" alias="productOrder"/>
+        <typeAlias type="app.dto.product.ProductListItemOfLike" alias="productOfLike"/>
         <typeAlias type="app.entity.Encryption" alias="encryption"/>
     </typeAliases>
     <environments default="test">
