@@ -13,21 +13,18 @@ public class EncryptionDao implements DaoFrame<Long, Encryption> {
   @Override
   public int insert(Encryption encryption, SqlSession session) throws SQLException {
     int result = session.insert("encryption.insert", encryption);
-    session.commit();
     return result;
   }
 
   @Override
   public int update(Encryption encryption, SqlSession session) throws SQLException {
     int result = session.update("encryption.update", encryption);
-    session.commit();
     return result;
   }
 
   @Override
   public int deleteById(Long memberId, SqlSession session) throws SQLException {
     int result = session.delete("encryption.delete", session);
-    session.commit();
     return result;
   }
 
