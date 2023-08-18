@@ -4,7 +4,7 @@ import app.dao.encryption.EncryptionDao;
 import app.dao.member.MemberDao;
 import app.dto.request.LoginDto;
 import app.dto.request.MemberRegisterDto;
-import app.dto.response.LoginMember;
+import app.dto.response.MemberDetail;
 import app.entity.Encryption;
 import app.entity.Member;
 import app.error.CustomException;
@@ -55,9 +55,9 @@ public class MemberService {
     }
   }
 
-  public LoginMember login(LoginDto dto) {
+  public MemberDetail login(LoginDto dto) {
     SqlSession sqlSession = sessionFactory.openSession();
-    LoginMember loginMember = null;
+    MemberDetail loginMember = null;
     try {
       String hashedPassword = createHashedPassword(dto, sqlSession);
       dto.setPassword(hashedPassword);
@@ -66,7 +66,7 @@ public class MemberService {
               .selectByEmailAndPassword(dto, sqlSession)
               .orElseThrow(() -> new CustomException(ErrorCode.LOGIN_FAIL));
 
-      loginMember = LoginMember.of(member);
+      loginMember = MemberDetail.of(member);
 
     } catch (SQLException e) {
       e.printStackTrace();

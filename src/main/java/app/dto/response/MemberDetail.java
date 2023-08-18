@@ -8,15 +8,15 @@ import lombok.Getter;
 @Getter
 @Builder
 @AllArgsConstructor
-public class LoginMember {
+public class MemberDetail {
 
   private Long id;
   private String email;
   private String name;
   private Long money;
 
-  public static LoginMember of(Member member) {
-    return LoginMember.builder()
+  public static MemberDetail of(Member member) {
+    return MemberDetail.builder()
         .id(member.getId())
         .email(member.getEmail())
         .name(member.getName())

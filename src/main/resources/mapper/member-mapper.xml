@@ -33,21 +33,21 @@
         WHERE email = #{email}
     </select>
 
-    <select id="selectAddressAndCouponById" parameterType="Long" resultMap="">
-        SELECT
-            m.email, m.name, m.money,
-            a.is_default, a.road_name, a.addr_detail, a.zip_code,
-            c.name, c.discount_policy, c.discount_value, c.status
-        FROM
-            member m LEFT OUTER JOIN coupon c
-                                     ON m.id = c.member_id,
-            address a
-        WHERE m.id = a.member_id
-          AND m.id = #{id}
-          AND a.is_default = '1'
-          AND status = 'UNUSED'
+<!--    <select id="selectAddressAndCouponById" parameterType="Long" resultMap="">-->
+<!--        SELECT-->
+<!--            m.id, m.email, m.name, m.money,-->
+<!--            a.is_default, a.road_name, a.addr_detail, a.zip_code,-->
+<!--            c.name, c.discount_policy, c.discount_value, c.status-->
+<!--        FROM-->
+<!--            member m LEFT OUTER JOIN coupon c-->
+<!--                                     ON m.id = c.member_id,-->
+<!--            address a-->
+<!--        WHERE m.id = a.member_id-->
+<!--          AND m.id = #{id}-->
+<!--          AND a.is_default = '1'-->
+<!--          AND status = 'UNUSED'-->
 
-    </select>
+<!--    </select>-->
 
     <select id="selectall" resultType="member">
         SELECT *

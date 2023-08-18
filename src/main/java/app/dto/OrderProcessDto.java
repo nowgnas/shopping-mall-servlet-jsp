@@ -1,10 +1,6 @@
 package app.dto;
 
-import app.entity.Cart;
-import app.entity.Coupon;
-import app.entity.Member;
-import app.entity.Order;
-import app.entity.Product;
+import app.entity.*;
 
 public class OrderProcessDto {
 
