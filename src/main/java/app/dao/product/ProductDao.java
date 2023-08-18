@@ -51,9 +51,19 @@ public class ProductDao implements ProductDaoFrame<Long, Product> {
     return 0;
   }
 
+  /**
+   * 상품 상세 조회
+   *
+   * @param productId 상품 id
+   * @param session sql session
+   * @return 상품 객체
+   * @throws Exception select error
+   */
   @Override
-  public Optional<Product> selectById(Long aLong, SqlSession session) throws Exception {
-    return Optional.empty();
+  public Optional<Product> selectById(Long productId, SqlSession session) throws Exception {
+    Optional<Product> product = session.selectOne("product.select", productId);
+    session.close();
+    return product;
   }
 
   @Override
