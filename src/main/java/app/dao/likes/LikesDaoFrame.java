@@ -1,4 +1,4 @@
-package app.dao.Likes;
+package app.dao.likes;
 
 import app.dao.DaoFrame;
 import java.sql.SQLException;

@@ -1,4 +1,4 @@
-package app.dao.Likes;
+package app.dao.likes;
 
 import static org.junit.jupiter.api.Assertions.*;
 

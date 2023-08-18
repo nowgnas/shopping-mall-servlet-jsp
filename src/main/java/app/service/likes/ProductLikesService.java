@@ -1,8 +1,8 @@
 package app.service.likes;
 
 import app.dao.DaoFrame;
-import app.dao.Likes.LikesDao;
-import app.dao.Likes.LikesDaoFrame;
+import app.dao.likes.LikesDao;
+import app.dao.likes.LikesDaoFrame;
 import app.dto.comp.ProductAndMemberCompositeKey;
 import app.dto.likes.response.MemberLikesResponseDto;
 import app.entity.Likes;

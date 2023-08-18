@@ -1,4 +1,4 @@
-package app.dao.Likes;
+package app.dao.likes;
 
 import app.dto.comp.ProductAndMemberCompositeKey;
 import app.entity.Likes;
