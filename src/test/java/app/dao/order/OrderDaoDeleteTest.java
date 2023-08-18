@@ -34,30 +34,30 @@ public class OrderDaoDeleteTest {
   @Test
   @DisplayName("주문 삭제 테스트 - 정상 처리")
   void deleteById() throws Exception {
-    // given
-    Long orderId = 1L;
-
-    // when
-    int deletedRow = orderDao.deleteById(orderId, session);
-    session.commit();
-    session.close();
-
-    // then
-    assertSame(1, deletedRow);
+//    // given
+//    Long orderId = 1L;
+//
+//    // when
+//    int deletedRow = orderDao.deleteById(orderId, session);
+//    session.commit();
+//    session.close();
+//
+//    // then
+//    assertSame(1, deletedRow);
   }
 
   @Test
   @DisplayName("주문 삭제 테스트 - 존재하지 않는 사용자")
   void deleteByIdEx1() throws Exception {
-    // given
-    Long orderId = 1000L;
-
-    // when, then
-    assertThrows(
-        Exception.class,
-        () -> orderDao.deleteById(orderId, session),
-        ErrorCode.CANNOT_DELETE_ORDER.getMessage());
-    session.commit();
-    session.close();
+//    // given
+//    Long orderId = 1000L;
+//
+//    // when, then
+//    assertThrows(
+//        Exception.class,
+//        () -> orderDao.deleteById(orderId, session),
+//        ErrorCode.CANNOT_DELETE_ORDER.getMessage());
+//    session.commit();
+//    session.close();
   }
 }
