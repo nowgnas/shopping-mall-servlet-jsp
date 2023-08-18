@@ -1,6 +1,7 @@
 package app.dao.member;
 
 import app.dto.request.LoginDto;
+import app.dto.response.OrderMemberDetail;
 import app.entity.Member;
 import org.apache.ibatis.session.SqlSession;
 
@@ -44,5 +45,10 @@ public class MemberDao implements MemberDaoFrame<Long, Member> {
   @Override
   public Optional<Member> selectByEmail(String email, SqlSession session) throws SQLException {
     return Optional.ofNullable(session.selectOne("member.selectByEmail", email));
+  }
+
+  public Optional<OrderMemberDetail> selectAddressAndCouponById(Long id, SqlSession session)
+      throws SQLException {
+    return Optional.ofNullable(session.selectOne("member.selectAddressAndCouponById", id));
   }
 }

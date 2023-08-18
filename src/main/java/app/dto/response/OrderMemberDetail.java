@@ -10,10 +10,10 @@ import java.util.List;
 @AllArgsConstructor
 @ToString
 public class OrderMemberDetail {
-    private Long id;
-    private String email;
-    private String name;
-    private Long money;
-    private AddressDetail addressDetail;
-    private List<CouponDetail> coupons;
+  private Long id;
+  private String email;
+  private String name;
+  private Long money;
+  private AddressDetail address;
+  private List<CouponDetail> coupons;
 }

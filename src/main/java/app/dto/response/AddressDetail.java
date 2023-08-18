@@ -8,8 +8,8 @@ import lombok.*;
 @AllArgsConstructor
 @ToString
 public class AddressDetail {
-    private boolean isDefault;
-    private String roadName;
-    private String addrDetail;
-    private String zipCode;
+  private boolean isDefault;
+  private String roadName;
+  private String addrDetail;
+  private String zipCode;
 }

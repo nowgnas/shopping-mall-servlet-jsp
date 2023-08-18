@@ -8,8 +8,8 @@ import lombok.*;
 @AllArgsConstructor
 @ToString
 public class CouponDetail {
-    private String name;
-    private String discountPolicy;
-    private String discountValue;
-    private String status;
+  private String name;
+  private String discountPolicy;
+  private String discountValue;
+  private String status;
 }
