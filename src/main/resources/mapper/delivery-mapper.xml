@@ -10,6 +10,8 @@
         <result column="addr_detail" jdbcType="VARCHAR" property="addrDetail"/>
         <result column="zip_code" jdbcType="VARCHAR" property="zipCode"/>
         <result column="status" jdbcType="VARCHAR" property="status"/>
+        <result column="created_at" jdbcType="TIMESTAMP" property="createdAt"/>
+        <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt"/>
     </resultMap>
 
     <select id="select" parameterType="Long" resultMap="BaseResultMap">
