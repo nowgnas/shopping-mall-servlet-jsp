@@ -4,13 +4,13 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cart">
 
-    <select id="select" parameterType="Long" resultType="cart">
+    <select id="select" parameterType="product-member-comp-key" resultType="cart">
         SELECT *
         FROM cart
         WHERE member_id = #{memberId}
           and product_id = #{productId}
     </select>
-    <select id="selectall" resultType="cart">
+    <select id="select-all-by-member" resultType="cart">
         SELECT *
         FROM cart
         WHERE member_id = #{memberId}
@@ -24,7 +24,7 @@
         SET product_quantity = #{productQuantity}
         WHERE member_id = #{memberId}, product_id = #{productId}
     </update>
-    <delete id="delete" parameterType="Long">
+    <delete id="delete" parameterType="product-member-comp-key">
         DELETE
         FROM cart
         WHERE member_id = #{memberId}
