@@ -9,6 +9,17 @@ import org.apache.ibatis.session.SqlSession;
 
 public class LikesDao implements LikesDaoFrame<ProductAndMemberCompositeKey, Likes> {
 
+  private static LikesDao instance;
+
+  private LikesDao() {}
+
+  public static LikesDao getInstance() {
+    if (instance == null) {
+      instance = new LikesDao();
+    }
+    return instance;
+  }
+
   @Override
   public int insert(Likes likes, SqlSession session) throws SQLException {
     return session.insert("likes.insert", likes);

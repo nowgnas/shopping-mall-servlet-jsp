@@ -25,7 +25,7 @@ class LikesDaoTest {
   @BeforeEach
   void beforeEach() throws Exception {
 //    log.info("before");
-    likesDao = new LikesDao();
+    likesDao = LikesDao.getInstance();
     session = sessionFactory.openSession();
     testConfig.init("schema.sql", session);
     testConfig.init("init-data.sql", session);

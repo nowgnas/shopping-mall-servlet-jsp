@@ -24,7 +24,7 @@ public class ProductLikesService implements LikesService {
   SqlSession session;
 
   public ProductLikesService() {
-    likesDao = new LikesDao();
+    likesDao = LikesDao.getInstance();
     productDao = ProductDao.getInstance();
   }
 
