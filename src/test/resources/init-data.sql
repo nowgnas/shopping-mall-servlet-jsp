@@ -41,3 +41,8 @@ values (4, '맥북 프로 16', '맥북 프로 16 상세정보', 3000000, 2, 'PRO
 
 insert into likes (member_id, product_id)
 values (1, 2);
+
+insert into product_image (product_id, url, is_thumbnail)
+values (2, 'img_1', 1),
+       (3, 'img_2', 1),
+       (4, 'img_3', 1);
