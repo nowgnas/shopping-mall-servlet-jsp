@@ -1,13 +1,12 @@
 package app.utils;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
-import org.apache.log4j.Logger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 public class CipherUtil {
 

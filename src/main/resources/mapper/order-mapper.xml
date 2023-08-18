@@ -4,32 +4,125 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="order">
 
+    <resultMap id="ProductOrderDto" type="app.dto.response.ProductOrderDto">
+        <result property="orderId" column="orderId"/>
+        <result property="orderStatus" column="orderStatus"/>
+        <result property="orderDate" column="orderDate"/>
+        <collection property="products" ofType="app.dto.response.ProductOrderDto$ProductDto">
+            <result property="productId" column="productId"/>
+            <result property="name" column="productName"/>
+            <result property="thumbnailUrl" column="thumbnailUrl"/>
+            <result property="price" column="productPrice"/>
+            <result property="quantity" column="productQuantity"/>
+        </collection>
+    </resultMap>
+
+    <resultMap id="ProductOrderDetailDto" type="app.dto.response.ProductOrderDetailDto">
+        <result property="orderId" column="orderId"/>
+        <result property="orderStatus" column="orderStatus"/>
+        <result property="orderDate" column="orderDate"/>
+        <result property="memberName" column="memberName"/>
+        <association property="address" javaType="app.dto.response.ProductOrderDetailDto$DeliveryDto">
+            <result property="roadName" column="roadName"/>
+            <result property="addrDetail" column="addrDetail"/>
+            <result property="zipCode" column="zipCode"/>
+        </association>
+        <association property="payment" javaType="app.dto.response.ProductOrderDetailDto$PaymentDto">
+            <result property="paymentType" column="paymentType"/>
+            <result property="actualAmount" column="actualAmount"/>
+        </association>
+        <collection property="products" ofType="app.dto.response.ProductOrderDetailDto$ProductDto">
+            <result property="productId" column="productId"/>
+            <result property="name" column="productName"/>
+            <result property="thumbnailUrl" column="thumbnailUrl"/>
+            <result property="price" column="productPrice"/>
+            <result property="quantity" column="productQuantity"/>
+        </collection>
+    </resultMap>
+
     <select id="select" parameterType="Long" resultType="order">
         SELECT *
         FROM orders
-        WHERE id = ${id}
-          and member_id = #{memberId}
+        WHERE id = #{id}
     </select>
-    <select id="selectall" resultType="order">
+    <select id="selectAll" resultType="order">
         SELECT *
         FROM orders
-        WHERE member_id = #{memberId}
     </select>
-    <insert id="insert" parameterType="order">
+    <select id="selectProductOrdersForMemberCurrentYear" parameterType="Long" resultMap="ProductOrderDto">
+        SELECT o.id                                       AS orderId,
+               o.status                                   AS orderStatus,
+               o.created_at                               AS orderDate,
+               p.id                                       AS productId,
+               p.name                                     AS productName,
+               COALESCE((SELECT CASE
+                                    WHEN pi.id IS NOT NULL AND pi.is_thumbnail = true THEN pi.url
+                                    WHEN pi.id IS NULL THEN 'https://default.com'
+                                    END
+                         FROM product_image pi
+                         WHERE p.id = pi.product_id
+                         LIMIT 1), 'https://default.com') AS thumbnailUrl,
+               p.price                                    AS productPrice,
+               po.quantity                                AS productQuantity
+        FROM orders o
+                 INNER JOIN product_order po on o.id = po.order_id
+                 INNER JOIN product p on p.id = po.product_id
+                 LEFT JOIN product_image pi on p.id = pi.product_id
+        WHERE member_id = #{memberId}
+          AND EXTRACT(YEAR FROM o.created_at) = EXTRACT(YEAR FROM NOW())
+        ORDER BY o.created_at DESC
+    </select>
+    <parameterMap id="orderIdAndMemberIdParameterMap" type="map">
+        <parameter property="memberId" javaType="Long" jdbcType="BIGINT"/>
+        <parameter property="orderId" javaType="Long" jdbcType="BIGINT"/>
+    </parameterMap>
+    <select id="selectOrderDetailsForMemberAndOrderId" parameterMap="orderIdAndMemberIdParameterMap"
+            resultMap="ProductOrderDetailDto">
+        SELECT o.id                                       AS orderId,
+               o.status                                   AS orderStatus,
+               o.created_at                               AS orderDate,
+               p.id                                       AS productId,
+               p.name                                     AS productName,
+               COALESCE((SELECT CASE
+                                    WHEN pi.id IS NOT NULL AND pi.is_thumbnail = true THEN pi.url
+                                    WHEN pi.id IS NULL THEN 'https://default.com'
+                                    END
+                         FROM product_image pi
+                         WHERE p.id = pi.product_id
+                         LIMIT 1), 'https://default.com') AS thumbnailUrl,
+               p.price                                    AS productPrice,
+               po.quantity                                AS productQuantity,
+               m.name                                     AS memberName,
+               d.road_name                                AS roadName,
+               d.addr_detail                              AS addrDetail,
+               d.zip_code                                 AS zipCode,
+               pm.type                                    AS paymentType,
+               pm.actual_amount                           AS actualAmount
+        FROM orders o
+                 INNER JOIN member m on o.member_id = m.id
+                 INNER JOIN product_order po on o.id = po.order_id
+                 INNER JOIN delivery d on o.id = d.order_id
+                 INNER JOIN payments pm on o.id = pm.order_id
+                 INNER JOIN product p on p.id = po.product_id
+                 LEFT JOIN product_image pi on p.id = pi.product_id
+        WHERE o.member_id = #{memberId}
+          AND o.id = #{orderId}
+    </select>
+    <insert id="insert" parameterType="order" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO orders (member_id, status)
         VALUES (#{memberId}, #{status})
     </insert>
-    <update id="update" parameterType="order">
+    <update id="update" parameterType="order" useGeneratedKeys="true" keyProperty="id">
         UPDATE orders
-        SET member_id = #{memberId},
-            status    = #{status}
+        SET member_id  = #{memberId},
+            status     = #{status},
+            updated_at = now()
         WHERE id = #{id}
     </update>
     <delete id="delete" parameterType="Long">
         DELETE
         FROM orders
         WHERE id = #{id}
-          and member_id = #{memberId}
     </delete>
 
 </mapper>
