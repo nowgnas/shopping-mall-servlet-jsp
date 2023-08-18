@@ -2,6 +2,7 @@ package app.service.member;
 
 import app.dao.member.MemberDao;
 import app.dto.request.MemberRegisterDto;
+import app.dto.response.MemberDetail;
 import app.entity.Member;
 import app.error.CustomException;
 import config.TestConfig;
@@ -61,6 +62,17 @@ class MemberServiceTest {
 
     // then
     Assertions.assertEquals(expectedMessage, customException.getMessage());
+  }
+
+  @Test
+  @DisplayName("회원 아이디(pk)로 내 정보 조회를 할 수 있다.")
+  void getMemberDetail() throws Exception {
+    // given
+    Long id= 1L;
+    // when
+    MemberDetail memberDetail = memberService.get(id);
+    // then
+    Assertions.assertEquals(id, memberDetail.getId());
   }
 
   private MemberRegisterDto createMemberRegisterDto() {
