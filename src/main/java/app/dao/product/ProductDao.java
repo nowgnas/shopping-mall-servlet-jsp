@@ -3,7 +3,6 @@ package app.dao.product;
 import app.dto.product.response.ProductItemQuantity;
 import app.dto.product.response.ProductListItem;
 import app.dto.product.response.ProductListItemOfLike;
-import app.dto.product.response.ProductQuantity;
 import app.entity.Product;
 import app.error.CustomException;
 import app.error.ErrorCode;
@@ -29,12 +28,16 @@ public class ProductDao implements ProductDaoFrame<Long, Product> {
   }
 
   @Override
-  public List<ProductQuantity> checkProductQuantity(List<Long> productIds, SqlSession session) {
+  public List<Product> checkProductQuantity(List<Long> productIds, SqlSession session) {
     // todo: 상품 재고 확인
-    List<ProductQuantity> productQuantities =
-        session.selectList("product.checkQuantity", productIds);
+    List<Product> productQuantities = session.selectList("product.checkQuantity", productIds);
     session.close();
     return productQuantities;
+  }
+
+  @Override
+  public Integer updateProductQuantityCauseCancelOrder() {
+    return null;
   }
 
   @Override

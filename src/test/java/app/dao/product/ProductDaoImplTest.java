@@ -3,7 +3,7 @@ package app.dao.product;
 import app.dto.product.response.ProductItemQuantity;
 import app.dto.product.response.ProductListItem;
 import app.dto.product.response.ProductListItemOfLike;
-import app.dto.product.response.ProductQuantity;
+import app.entity.Product;
 import app.utils.GetSessionFactory;
 import config.TestConfig;
 import java.util.Arrays;
@@ -35,10 +35,10 @@ class ProductDaoImplTest {
   }
 
   @Test
-  void checkProductQuantity(){
+  void checkProductQuantity() {
     List<Long> lst = Arrays.asList(1L, 2L, 3L);
-    List<ProductQuantity> productQuantities = productDao.checkProductQuantity(lst, session);
-
+    List<Product> productQuantities = productDao.checkProductQuantity(lst, session);
+    System.out.println(productQuantities.toString());
   }
 
   @Test
