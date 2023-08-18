@@ -2,8 +2,6 @@ drop table address;
 
 drop table cart;
 
-drop table coupon;
-
 drop table delivery;
 
 drop table encryption;
@@ -17,6 +15,8 @@ drop table product_image;
 drop table product_order;
 
 drop table orders;
+
+drop table coupon;
 
 drop table member;
 

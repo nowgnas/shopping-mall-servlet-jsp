@@ -11,5 +11,6 @@ public class Order extends BaseEntity {
 
   private Long id;
   @NonNull private Long memberId;
+  private Long couponId;
   @Builder.Default private String status = OrderStatus.PENDING.name();
 }
