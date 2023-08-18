@@ -14,6 +14,25 @@
         <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt"/>
     </resultMap>
 
+    <resultMap id="OrderMemberDetail" type="app.dto.response.OrderMemberDetail">
+        <result property="id" column="m.id"/>
+        <result property="email" column="m.email"/>
+        <result property="name" column="m.name"/>
+        <result property="money" column="m.money"/>
+        <association property="address" javaType="app.dto.response.AddressDetail">
+            <result property="isDefault" column="a.isDefault"/>
+            <result property="roadName" column="a.roadName"/>
+            <result property="addrDetail" column="a.addrDetail"/>
+            <result property="zipCode" column="a.zipCode"/>
+        </association>
+        <collection property="coupons" ofType="app.dto.response.CouponDetail">
+            <result property="name" column="c.name"/>
+            <result property="discountPolicy" column="c.discount_policy"/>
+            <result property="discountValue" column="c.discount_value"/>
+            <result property="status" column="c.status"/>
+        </collection>
+    </resultMap>
+
     <select id="select" parameterType="Long" resultMap="BaseResultMap">
         SELECT *
         FROM member
@@ -33,21 +52,21 @@
         WHERE email = #{email}
     </select>
 
-<!--    <select id="selectAddressAndCouponById" parameterType="Long" resultMap="">-->
-<!--        SELECT-->
-<!--            m.id, m.email, m.name, m.money,-->
-<!--            a.is_default, a.road_name, a.addr_detail, a.zip_code,-->
-<!--            c.name, c.discount_policy, c.discount_value, c.status-->
-<!--        FROM-->
-<!--            member m LEFT OUTER JOIN coupon c-->
-<!--                                     ON m.id = c.member_id,-->
-<!--            address a-->
-<!--        WHERE m.id = a.member_id-->
-<!--          AND m.id = #{id}-->
-<!--          AND a.is_default = '1'-->
-<!--          AND status = 'UNUSED'-->
+    <select id="selectAddressAndCouponById" parameterType="Long" resultMap="OrderMemberDetail">
+        SELECT
+            m.id, m.email, m.name, m.money,
+            a.is_default, a.road_name, a.addr_detail, a.zip_code,
+            c.name, c.discount_policy, c.discount_value, c.status
+        FROM
+            member m LEFT OUTER JOIN coupon c
+                                     ON m.id = c.member_id,
+            address a
+        WHERE m.id = a.member_id
+          AND m.id = #{id}
+          AND a.is_default = '1'
+          AND status = 'UNUSED'
 
-<!--    </select>-->
+    </select>
 
     <select id="selectall" resultType="member">
         SELECT *

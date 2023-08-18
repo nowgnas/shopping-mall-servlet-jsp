@@ -2,13 +2,18 @@ package app.dto.response;
 
 import lombok.*;
 
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
 public class OrderMemberDetail {
-    private MemberDetail memberDetail;
+    private Long id;
+    private String email;
+    private String name;
+    private Long money;
     private AddressDetail addressDetail;
-    private CouponDetail couponDetail;
+    private List<CouponDetail> coupons;
 }
