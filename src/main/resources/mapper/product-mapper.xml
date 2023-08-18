@@ -30,6 +30,26 @@
         <result column="created_at" jdbcType="TIMESTAMP" property="createdAt"/>
         <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt"/>
     </resultMap>
+  <resultMap id="productOfLike" type="productOfLike">
+    <id column="id" jdbcType="BIGINT" property="id"/>
+    <result column="name" jdbcType="VARCHAR" property="name"/>
+    <result column="price" jdbcType="BIGINT" property="price"/>
+    <result column="url" jdbcType="VARCHAR" property="url"/>
+    <result column="created_at" jdbcType="TIMESTAMP" property="createdAt"/>
+    <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt"/>
+  </resultMap>
+
+  <select id="selectProductListItemOfLike" parameterType="Long" resultMap="productOfLike">
+    SELECT p.id, p.name, p.price, i.url
+    FROM product p
+    LEFT JOIN product_image i
+    ON p.id = i.product_id
+    WHERE p.id in
+    <foreach collection="list" item="id" open="(" separator="," close=")">
+      #{id}
+    </foreach>
+    AND is_thumbnail = true
+  </select>
 
   <select id="select" parameterType="Long" resultType="product">
     SELECT *

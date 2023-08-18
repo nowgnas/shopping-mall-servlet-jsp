@@ -19,6 +19,7 @@
         <typeAlias type="app.dto.product.ProductItemQuantity" alias="productItemQuantity"/>
         <typeAlias type="app.entity.Product" alias="product"/>
         <typeAlias type="app.entity.ProductOrder" alias="productOrder"/>
+        <typeAlias type="app.dto.product.ProductListItemOfLike" alias="productOfLike"/>
     </typeAliases>
     <environments default="dev">
         <environment id="dev">

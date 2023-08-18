@@ -2,6 +2,7 @@ package app.dao.product;
 
 import app.dto.product.ProductItemQuantity;
 import app.dto.product.ProductListItem;
+import app.dto.product.ProductListItemOfLike;
 import app.entity.Product;
 import java.util.List;
 import java.util.Optional;
@@ -22,6 +23,16 @@ public class ProductDao implements ProductDaoFrame<Long, Product> {
   public static ProductDao getInstance() {
     if (instance == null) return new ProductDao();
     return instance;
+  }
+
+  @Override
+  public List<ProductListItemOfLike> selectProductListItemOfLike(
+      List<Long> productId, SqlSession session) throws Exception {
+    List<ProductListItemOfLike> productListItemOfLikes =
+        session.selectList("product.selectProductListItemOfLike", productId);
+    session.close();
+    if (productListItemOfLikes.size() == 0) throw new Exception("item not found");
+    return productListItemOfLikes;
   }
 
   /**
