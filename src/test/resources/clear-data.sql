@@ -1,91 +1,26 @@
+drop table address;
 
-ALTER TABLE likes
-    DROP CONSTRAINT PK_likes;
+drop table cart;
 
-ALTER TABLE member
-    DROP CONSTRAINT PK_member;
+drop table coupon;
 
-ALTER TABLE product
-    DROP CONSTRAINT PK_product;
+drop table delivery;
 
-ALTER TABLE cart
-    DROP CONSTRAINT PK_cart;
+drop table encryption;
 
-ALTER TABLE orders
-    DROP CONSTRAINT PK_orders;
+drop table likes;
 
-ALTER TABLE product_order
-    DROP CONSTRAINT PK_product_order;
+drop table payments;
 
-ALTER TABLE category
-    DROP CONSTRAINT PK_category;
+drop table product_image;
 
-ALTER TABLE coupon
-    DROP CONSTRAINT PK_coupon;
+drop table product_order;
 
-ALTER TABLE address
-    DROP CONSTRAINT PK_address;
+drop table orders;
 
-ALTER TABLE product_image
-    DROP CONSTRAINT PK_product_image;
+drop table member;
 
-ALTER TABLE payments
-    DROP CONSTRAINT PK_payments;
+drop table product;
 
-ALTER TABLE delivery
-    DROP CONSTRAINT PK_delivery;
+drop table category;
 
-ALTER TABLE likes
-    DROP CONSTRAINT FK_member_TO_likes_1;
-
-ALTER TABLE likes
-    DROP CONSTRAINT FK_product_TO_likes_1;
-
-ALTER TABLE product
-    DROP CONSTRAINT FK_category_TO_product_1;
-
-ALTER TABLE cart
-    DROP CONSTRAINT FK_member_TO_cart_1;
-
-ALTER TABLE cart
-    DROP CONSTRAINT FK_product_TO_cart_1;
-
-ALTER TABLE orders
-    DROP CONSTRAINT FK_member_TO_orders_1;
-
-ALTER TABLE product_order
-    DROP CONSTRAINT FK_product_TO_product_order_1;
-
-ALTER TABLE product_order
-    DROP CONSTRAINT FK_orders_TO_product_order_1;
-
-ALTER TABLE category
-    DROP CONSTRAINT FK_category_TO_category_1;
-
-ALTER TABLE coupon
-    DROP CONSTRAINT FK_member_TO_coupon_1;
-
-ALTER TABLE address
-    DROP CONSTRAINT FK_member_TO_address_1;
-
-ALTER TABLE product_image
-    DROP CONSTRAINT FK_product_TO_product_image_1;
-
-ALTER TABLE payments
-    DROP CONSTRAINT FK_orders_TO_payments_1;
-
-ALTER TABLE delivery
-    DROP CONSTRAINT FK_orders_TO_delivery_1;
-
-DROP TABLE address;
-DROP TABLE cart;
-DROP TABLE category;
-DROP TABLE coupon;
-DROP TABLE delivery;
-DROP TABLE likes;
-DROP TABLE member;
-DROP TABLE orders;
-DROP TABLE payments;
-DROP TABLE product;
-DROP TABLE product_image;
-DROP TABLE product_order;

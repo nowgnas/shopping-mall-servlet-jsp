@@ -1,12 +1,14 @@
 package app.error;
 
-public class CustomException extends RuntimeException{
+import lombok.Getter;
 
-  private ErrorCode errorCode;
+@Getter
+public class CustomException extends RuntimeException {
+
+  private int statusCode;
 
   public CustomException(ErrorCode errorCode) {
-    this.errorCode = errorCode;
+    super(errorCode.getMessage());
+    this.statusCode = errorCode.getStatus();
   }
-
-
 }
