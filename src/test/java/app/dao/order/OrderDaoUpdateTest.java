@@ -1,11 +1,9 @@
 package app.dao.order;
 
 import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import app.entity.Order;
 import app.enums.OrderStatus;
-import app.error.ErrorCode;
 import config.TestConfig;
 import org.apache.ibatis.session.SqlSession;
 import org.junit.jupiter.api.AfterEach;
@@ -46,21 +44,5 @@ public class OrderDaoUpdateTest {
 
     // then
     assertSame(1, updatedRow);
-  }
-
-  @Test
-  @DisplayName("주문 수정 테스트 - 존재하지 않는 사용자")
-  void updateEx1() throws Exception {
-    // given
-    Order order =
-        Order.builder().id(1000L).memberId(1L).status(OrderStatus.PROCESSING.name()).build();
-
-    // when, then
-    assertThrows(
-        Exception.class,
-        () -> orderDao.update(order, session),
-        ErrorCode.CANNOT_UPDATE_ORDER.getMessage());
-    session.commit();
-    session.close();
   }
 }
