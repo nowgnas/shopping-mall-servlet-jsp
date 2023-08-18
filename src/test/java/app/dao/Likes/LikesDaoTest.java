@@ -11,6 +11,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import utils.GetSessionFactory;
 
@@ -37,29 +38,46 @@ class LikesDaoTest {
     testConfig.init("clear-data.sql", session);
   }
 
+  @DisplayName("insert test")
   @Test
   void insert() throws Exception {
     int res = likesDao.insert(new Likes(1L, 1L), session);
     session.commit();
 
-    log.info("[insert test] insert result : " + (res == 1 ? "true" : "false"));
+    assertTrue(res == 1);
+//    log.info("[insert test] insert result : " + (res == 1 ? "true" : "false"));
   }
 
+  @DisplayName("delete test")
   @Test
   void deleteById() throws Exception {
     int res = likesDao.deleteById(new ProductAndMemberCompositeKey(1L, 2L), session);
     session.commit();
 
-    log.info("[delete test] delete result : " + (res == 1 ? "true" : "false"));
+    assertTrue(res == 1);
+//    log.info("[delete test] delete result : " + (res == 1 ? "true" : "false"));
   }
 
+  @DisplayName("select test")
   @Test
   void selectById() throws Exception {
-    Likes likes = likesDao.selectById(new ProductAndMemberCompositeKey(1L, 2L), session).get();
-    log.info("[select test] member id : " + likes.getMemberId());
-    log.info("[select test] product id : " + likes.getProductId());
+    Likes inputLikes = new Likes(1L, 3L);
+    likesDao.insert(inputLikes, session);
+    session.commit();
+
+    Likes ouputLikes = likesDao.selectById(
+            new ProductAndMemberCompositeKey(1L, 3L)
+            , session)
+        .get();
+
+    assertEquals(inputLikes.getMemberId(), ouputLikes.getMemberId());
+    assertEquals(inputLikes.getProductId(), ouputLikes.getProductId());
+//    Likes likes = likesDao.selectById(new ProductAndMemberCompositeKey(1L, 2L), session).get();
+//    log.info("[select test] member id : " + likes.getMemberId());
+//    log.info("[select test] product id : " + likes.getProductId());
   }
 
+  @DisplayName("select all test")
   @Test
   void selectAll() throws Exception {
     likesDao.insert(new Likes(1L, 3L), session);
@@ -68,7 +86,8 @@ class LikesDaoTest {
 
     List<Likes> list = likesDao.selectAll(1L, session);
     for (Likes likes : list) {
-      log.info("[select all test] product id : " + likes.getProductId());
+      assertEquals(likes.getMemberId(), 1L);
+//      log.info("[select all test] product id : " + likes.getProductId());
     }
   }
 }

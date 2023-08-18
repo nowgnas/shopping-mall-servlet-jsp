@@ -75,7 +75,7 @@ public class ProductLikesService implements LikesService {
       session.close();
     }
 
-    return likes == null;
+    return likes != null;
   }
 
   @Override

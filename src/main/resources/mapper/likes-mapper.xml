@@ -9,7 +9,7 @@
         <result column="product_id" property="productId" jdbcType="BIGINT" javaType="Long"/>
     </resultMap>
 
-    <select id="select" parameterType="ProductAndMemberCompositeKey" resultMap="likes">
+    <select id="select" parameterType="productAndMemberCompositeKey" resultMap="likes">
         SELECT *
         FROM likes
         WHERE member_id = #{memberId}
@@ -24,7 +24,7 @@
         INSERT INTO likes (member_id, product_id)
         VALUES (#{memberId}, #{productId})
     </insert>
-    <delete id="delete" parameterType="app.dto.comp.ProductAndMemberCompositeKey">
+    <delete id="delete" parameterType="productAndMemberCompositeKey">
         DELETE
         FROM likes
         WHERE member_id = #{memberId}
