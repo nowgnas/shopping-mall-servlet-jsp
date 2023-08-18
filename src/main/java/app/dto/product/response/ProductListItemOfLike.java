@@ -1,19 +1,20 @@
-package app.dto.product;
+package app.dto.product.response;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ProductDetail {
+@ToString
+public class ProductListItemOfLike {
+  private Long id;
   private String name;
-  private String description;
   private Long price;
   private String url;
-  private boolean isThumbnaile;
 }

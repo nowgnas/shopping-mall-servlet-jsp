@@ -1,4 +1,4 @@
-package app.dto.product;
+package app.dto.product.response;
 
 import app.entity.BaseEntity;
 import lombok.Builder;

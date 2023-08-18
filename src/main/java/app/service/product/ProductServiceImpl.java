@@ -2,8 +2,8 @@ package app.service.product;
 
 import app.dao.product.ProductDao;
 import app.dao.product.ProductDaoFrame;
-import app.dto.product.ProductDetail;
-import app.dto.product.ProductListItem;
+import app.dto.product.response.ProductDetail;
+import app.dto.product.response.ProductListItem;
 import app.utils.GetSessionFactory;
 import java.util.List;
 import org.apache.ibatis.session.SqlSession;

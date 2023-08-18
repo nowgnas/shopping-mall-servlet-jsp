@@ -1,4 +1,4 @@
-package app.dto.product;
+package app.dto.product.response;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -12,9 +12,10 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
-public class ProductListItemOfLike {
+public class ProductItemQuantity {
   private Long id;
   private String name;
+  private Integer quantity;
   private Long price;
   private String url;
 }

@@ -39,6 +39,20 @@
     <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt"/>
   </resultMap>
 
+  <resultMap id="checkQuantity" type="product">
+    <id column="id" jdbcType="BIGINT" property="id"/>
+    <result column="quantity" jdbcType="BIGINT" property="quantity"/>
+  </resultMap>
+
+  <select id="checkQuantity" parameterType="Long" resultMap="checkQuantity">
+    SELECT id, quantity
+    FROM product
+    WHERE id in
+    <foreach collection="list" item="id" open="(" separator="," close=")">
+      #{id}
+    </foreach>
+  </select>
+
   <select id="selectProductListItemOfLike" parameterType="Long" resultMap="productOfLike">
     SELECT p.id, p.name, p.price, i.url
     FROM product p
