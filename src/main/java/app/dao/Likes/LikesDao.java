@@ -28,9 +28,7 @@ public class LikesDao implements LikesDaoFrame<ProductAndMemberCompositeKey, Lik
   @Override
   public Optional<Likes> selectById(ProductAndMemberCompositeKey productAndMemberCompositeKey,
       SqlSession session) throws SQLException {
-    Likes like = session.selectOne("likes.select", productAndMemberCompositeKey);
-//    Likes like = session.selectOne("likes.select", productAndMemberCompositeKey);
-    return Optional.ofNullable(like);
+    return Optional.ofNullable(session.selectOne("likes.select", productAndMemberCompositeKey));
   }
 
   @Override

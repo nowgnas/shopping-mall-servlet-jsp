@@ -17,75 +17,58 @@ import utils.GetSessionFactory;
 class LikesDaoTest {
   private Logger log = Logger.getLogger("LikesDaoTest");
   private SqlSessionFactory sessionFactory = GetSessionFactory.getInstance();
+  private SqlSession session;
   private final TestConfig testConfig = new TestConfig();
   private LikesDaoFrame<ProductAndMemberCompositeKey, Likes> likesDao;
 
   @BeforeEach
   void beforeEach() throws Exception {
-    log.info("before");
+//    log.info("before");
     likesDao = new LikesDao();
-    SqlSession session = sessionFactory.openSession();
+    session = sessionFactory.openSession();
     testConfig.init("schema.sql", session);
     testConfig.init("init-data.sql", session);
   }
 
-//  @AfterEach
-//  void afterEach() throws Exception {
+  @AfterEach
+  void afterEach() throws Exception {
 //    log.info("after");
-//    session = GetSessionFactory.getInstance().openSession();
-//    testConfig.init("clear-data.sql", session);
-//  }
+    session = GetSessionFactory.getInstance().openSession();
+    testConfig.init("clear-data.sql", session);
+  }
 
-//  @Test
-//  void insert() throws Exception {
-//    SqlSession session2 = GetSessionFactory.getInstance().openSession();
-//
-//    log.info("insert");
-//    int res = likesDao.insert(new Likes(1L, 1L), session2);
-//    session2.commit();
-//    session2.close();
-//    log.info("insert result : " + res);
-//
-//    SqlSession session3 = GetSessionFactory.getInstance().openSession();
-//    Likes likes = likesDao.selectById(new ProductAndMemberCompositeKey(1L, 1L), session3).get();
-//    log.info(likes.getMemberId()+"");
-//  }
+  @Test
+  void insert() throws Exception {
+    int res = likesDao.insert(new Likes(1L, 1L), session);
+    session.commit();
 
-//  @Test
-//  void update() {
-//  }
-//
-//  @Test
-//  void deleteById() {
-//  }
-//
+    log.info("[insert test] insert result : " + (res == 1 ? "true" : "false"));
+  }
+
+  @Test
+  void deleteById() throws Exception {
+    int res = likesDao.deleteById(new ProductAndMemberCompositeKey(1L, 2L), session);
+    session.commit();
+
+    log.info("[delete test] delete result : " + (res == 1 ? "true" : "false"));
+  }
+
   @Test
   void selectById() throws Exception {
-    SqlSession session = sessionFactory.openSession();
-//    likesDao.insert(new Likes(1L, 3L), session);
-//    session.commit();
-//
-//    List<Likes> list = likesDao.selectAll(1L, session);
-    ProductAndMemberCompositeKey productAndMemberCompositeKey = new ProductAndMemberCompositeKey(1L,
-        2L);
-    System.out.println(productAndMemberCompositeKey.getMemberId());
-    System.out.println(productAndMemberCompositeKey.getProductId());
-    Likes getLikes = likesDao.selectById(
-        productAndMemberCompositeKey
-        , session
-    ).orElse(new Likes(5L, 5L));
-
-    log.info(getLikes.getMemberId() + "");
-
-//    int res = likesDao.deleteById(new ProductAndMemberCompositeKey(1L, 2L), session);
-//    log.info(res+"");
+    Likes likes = likesDao.selectById(new ProductAndMemberCompositeKey(1L, 2L), session).get();
+    log.info("[select test] member id : " + likes.getMemberId());
+    log.info("[select test] product id : " + likes.getProductId());
   }
-//
-//  @Test
-//  void selectAll() {
-//  }
-//
-//  @Test
-//  void testSelectAll() {
-//  }
+
+  @Test
+  void selectAll() throws Exception {
+    likesDao.insert(new Likes(1L, 3L), session);
+    likesDao.insert(new Likes(1L, 4L), session);
+    session.commit();
+
+    List<Likes> list = likesDao.selectAll(1L, session);
+    for (Likes likes : list) {
+      log.info("[select all test] product id : " + likes.getProductId());
+    }
+  }
 }
