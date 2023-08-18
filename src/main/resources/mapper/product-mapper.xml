@@ -30,7 +30,7 @@
         <result column="created_at" jdbcType="TIMESTAMP" property="createdAt"/>
         <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt"/>
     </resultMap>
-  <resultMap id="singleProduct" type="productOfLike">
+  <resultMap id="productOfLike" type="productOfLike">
     <id column="id" jdbcType="BIGINT" property="id"/>
     <result column="name" jdbcType="VARCHAR" property="name"/>
     <result column="price" jdbcType="BIGINT" property="price"/>

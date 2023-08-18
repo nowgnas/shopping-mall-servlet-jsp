@@ -3,6 +3,7 @@ package app.dao.product;
 import app.dao.product.ProductDao;
 import app.dto.product.ProductItemQuantity;
 import app.dto.product.ProductListItem;
+import app.dto.product.ProductListItemOfLike;
 import app.utils.GetSessionFactory;
 import config.TestConfig;
 import java.util.Arrays;
@@ -31,6 +32,14 @@ class ProductDaoImplTest {
   void afterEach() throws Exception {
     session = GetSessionFactory.getInstance().openSession();
     testConfig.init("clear-data.sql", session);
+  }
+
+  @Test
+  void selectProductListItemOfLike() throws Exception {
+    List<Long> lst = Arrays.asList(1L, 2L, 3L);
+    List<ProductListItemOfLike> productListItemOfLikes = productDao.selectProductListItemOfLike(lst,
+            session);
+    System.out.println(productListItemOfLikes.toString());
   }
 
   @Test
