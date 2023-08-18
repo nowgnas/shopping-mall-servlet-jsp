@@ -3,9 +3,11 @@ package app.dao.order;
 import static app.error.ErrorCode.*;
 
 import app.dao.exception.CustomException;
+import app.dto.response.ProductOrderDetailDto;
 import app.dto.response.ProductOrderDto;
 import app.entity.Order;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.apache.ibatis.session.SqlSession;
@@ -128,5 +130,30 @@ public class OrderDao implements OrderDaoFrame<Long, Order> {
       throw new Exception(INTERNAL_SERVER_ERROR.getMessage());
     }
     return orders;
+  }
+
+  @Override
+  public Optional<ProductOrderDetailDto> selectOrderDetailsForMemberAndOrderId(
+      Map<String, Long> orderIdAndMemberIdParameterMap, SqlSession session) throws Exception {
+    Optional<ProductOrderDetailDto> optionalProductOrderDetailDto;
+    try {
+      optionalProductOrderDetailDto =
+          Optional.ofNullable(
+              session.selectOne(
+                  "order.selectOrderDetailsForMemberAndOrderId", orderIdAndMemberIdParameterMap));
+      optionalProductOrderDetailDto.orElseThrow(
+          () -> {
+            String errorMessage = CANNOT_FIND_ORDER.getMessage();
+            log.error(errorMessage);
+            return new CustomException(errorMessage);
+          });
+    } catch (PersistenceException ex) {
+      log.error(ex.getMessage());
+      throw new PersistenceException(CANNOT_FIND_ORDER.getMessage());
+    } catch (Exception ex) {
+      log.error(ex.getMessage());
+      throw new Exception(INTERNAL_SERVER_ERROR.getMessage());
+    }
+    return optionalProductOrderDetailDto;
   }
 }

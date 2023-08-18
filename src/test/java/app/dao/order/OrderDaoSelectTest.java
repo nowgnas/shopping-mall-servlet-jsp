@@ -2,10 +2,14 @@ package app.dao.order;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import app.dto.response.ProductOrderDetailDto;
 import app.dto.response.ProductOrderDto;
 import app.entity.Order;
 import config.TestConfig;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import org.apache.ibatis.session.SqlSession;
 import org.junit.jupiter.api.AfterEach;
@@ -88,5 +92,25 @@ public class OrderDaoSelectTest {
     // then
     assertSame(productOrderDtos.size(), 1);
     assertSame(productOrderDtos.get(0).getProducts().size(), 5);
+  }
+
+  @Test
+  @DisplayName("주문 id, 회원 id로 주문 조회 테스트 - 정상 처리")
+  void selectOrderDetailsForMemberAndOrderId() throws Exception {
+    // given
+    final Map<String, Long> orderIdAndMemberIdParameterMap = new HashMap<>();
+    orderIdAndMemberIdParameterMap.put("orderId", 1L);
+    orderIdAndMemberIdParameterMap.put("memberId", 1L);
+
+    // when
+
+    Optional<ProductOrderDetailDto> optionalProductOrderDetailDto =
+        orderDao.selectOrderDetailsForMemberAndOrderId(orderIdAndMemberIdParameterMap, session);
+    session.commit();
+    session.close();
+
+    // then
+    assertTrue(optionalProductOrderDetailDto.isPresent());
+    assertSame(optionalProductOrderDetailDto.get().getOrderId(), 1L);
   }
 }

@@ -5,6 +5,7 @@ import app.dao.exception.CustomException;
 import app.dao.order.OrderDao;
 import app.dao.payment.PaymentDao;
 import app.dto.request.OrderCreateDto;
+import app.dto.response.ProductOrderDetailDto;
 import app.dto.response.ProductOrderDto;
 import app.entity.Delivery;
 import app.entity.Order;
@@ -13,7 +14,11 @@ import app.enums.DeliveryStatus;
 import app.enums.OrderStatus;
 import app.enums.PaymentType;
 import app.utils.GetSessionFactory;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 
@@ -83,15 +88,37 @@ public class OrderServiceImpl {
     try {
       productOrderDtos = orderDao.selectProductOrdersForMemberCurrentYear(memberId, session);
     } catch (CustomException ex) {
-      session.rollback();
       throw new CustomException(ex.getMessage());
     } catch (Exception ex) {
-      session.rollback();
       throw new Exception(ex.getMessage());
     } finally {
       session.close();
     }
 
     return productOrderDtos;
+  }
+
+  /* 회원의 상세 주문을 조회 */
+  public ProductOrderDetailDto getOrderDetailsForMemberAndOrderId(Long orderId, Long memberId)
+      throws Exception {
+    SqlSession session = sessionFactory.openSession();
+    ProductOrderDetailDto productOrderDetailDto;
+    try {
+      final Map<String, Long> orderIdAndMemberIdParameterMap = new HashMap<>();
+      orderIdAndMemberIdParameterMap.put("orderId", orderId);
+      orderIdAndMemberIdParameterMap.put("memberId", orderId);
+      productOrderDetailDto =
+          orderDao
+              .selectOrderDetailsForMemberAndOrderId(orderIdAndMemberIdParameterMap, session)
+              .get();
+    } catch (CustomException ex) {
+      throw new CustomException(ex.getMessage());
+    } catch (Exception ex) {
+      throw new Exception(ex.getMessage());
+    } finally {
+      session.close();
+    }
+
+    return productOrderDetailDto;
   }
 }
