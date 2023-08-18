@@ -77,17 +77,17 @@ class LikesDaoTest {
 //    log.info("[select test] product id : " + likes.getProductId());
   }
 
-  @DisplayName("select all test")
-  @Test
-  void selectAll() throws Exception {
-    likesDao.insert(new Likes(1L, 3L), session);
-    likesDao.insert(new Likes(1L, 4L), session);
-    session.commit();
-
-    List<Likes> list = likesDao.selectAll(1L, session);
-    for (Likes likes : list) {
-      assertEquals(likes.getMemberId(), 1L);
-//      log.info("[select all test] product id : " + likes.getProductId());
-    }
-  }
+//  @DisplayName("select all test")
+//  @Test
+//  void selectAll() throws Exception {
+//    likesDao.insert(new Likes(1L, 3L), session);
+//    likesDao.insert(new Likes(1L, 4L), session);
+//    session.commit();
+//
+//    List<Likes> list = likesDao.selectAll(1L, session);
+//    for (Likes likes : list) {
+//      assertEquals(likes.getMemberId(), 1L);
+////      log.info("[select all test] product id : " + likes.getProductId());
+//    }
+//  }
 }

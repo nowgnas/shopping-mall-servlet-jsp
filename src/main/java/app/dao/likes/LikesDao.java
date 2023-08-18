@@ -37,7 +37,7 @@ public class LikesDao implements LikesDaoFrame<ProductAndMemberCompositeKey, Lik
   }
 
   @Override
-  public List<Likes> selectAll(Long memberId, SqlSession session) throws SQLException {
+  public List<Long> selectAll(Long memberId, SqlSession session) throws SQLException {
     return session.selectList("likes.selectall", memberId);
   }
 }
