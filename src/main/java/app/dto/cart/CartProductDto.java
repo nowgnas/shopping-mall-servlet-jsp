@@ -12,13 +12,8 @@ public class CartProductDto {
   private String imgUrl;
 
 
-  public void setTotalProductPrice() {
+  public CartProductDto getCartProductDto() {
     totalProductPrice = quantity * productPrice;
-  }
-
-  public List<CartProductDto> getCartProductsFromCompKey(
-      ProductAndMemberCompositeKey productAndMemberCompositeKey) {
-
   }
 
 

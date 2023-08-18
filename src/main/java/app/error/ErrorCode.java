@@ -7,7 +7,7 @@ import lombok.Getter;
 
 
 @Getter
-public enum ErrorCode implements Supplier<X> {
+public enum ErrorCode{
   //@formatter:off
   //시스템 에러
   NO_AUTHORIZATION(HttpServletResponse.SC_UNAUTHORIZED, "0000", "권한 오류"),
@@ -69,5 +69,5 @@ public enum ErrorCode implements Supplier<X> {
         .findAny()
         .orElse(null);
   }
-  public
+
 }

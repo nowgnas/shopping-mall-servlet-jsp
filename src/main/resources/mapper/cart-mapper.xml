@@ -15,6 +15,10 @@
         FROM cart
         WHERE member_id = #{memberId}
     </select>
+    <select id="select-all" resultType="cart">
+        SELECT *
+        FROM cart
+    </select>
     <insert id="insert" parameterType="cart">
         INSERT INTO cart (member_id, product_id, product_quantity)
         VALUES (#{memberId}, #{productId}, #{productQuantity})

@@ -1,6 +1,7 @@
 package app.dao;
 
 import app.dto.comp.ProductAndMemberCompositeKey;
+import app.dto.product.ProductItemQuantity;
 import app.entity.Cart;
 import java.util.List;
 import java.util.Optional;
@@ -10,30 +11,46 @@ public class CartDaoFrameImpl implements CartDaoFrame<ProductAndMemberCompositeK
 
   @Override
   public int insert(Cart cart, SqlSession session) throws Exception {
-    return session.insert("cart.insert",cart);
+    int returnValue = session.insert("cart.insert", cart);
+    session.close();
+    return returnValue;
   }
 
   @Override
   public int update(Cart cart, SqlSession session) throws Exception {
-    return session.update("cart.update",cart);
+
+    int returnValue = session.update("cart.update", cart);
+    session.close();
+    return returnValue;
   }
 
   @Override
   public int deleteById(ProductAndMemberCompositeKey productAndMemberCompositeKey,
       SqlSession session) throws Exception {
-    return session.delete("cart.delete",productAndMemberCompositeKey);
+    int returnValue = session.delete("cart.delete", productAndMemberCompositeKey);
+    session.close();
+    return returnValue;
   }
 
   @Override
   public Optional<Cart> selectById(ProductAndMemberCompositeKey productAndMemberCompositeKey,
       SqlSession session) throws Exception {
-    return Optional.ofNullable(session.selectOne("cart.select"));
+    Optional<Cart> cartOptional = Optional.ofNullable(session.selectOne("cart.select"));
+    session.close();
+    return cartOptional;
   }
 
   @Override
   public List<Cart> selectAll(SqlSession session) throws Exception {
-    return session.selectList("select-all-by-member");
+    List<Cart> cartList = session.selectList("select-all");
+    session.close();
+    return cartList;
   }
 
-
+  @Override
+  public List<Cart> getCartProductListByMember(Long memberId, SqlSession session) {
+    List<Cart> cartList = session.selectList("select-all-by-member");
+    session.close();
+    return cartList;
+  }
 }
