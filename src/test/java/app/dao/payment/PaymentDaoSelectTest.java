@@ -1,9 +1,12 @@
 package app.dao.payment;
 
-import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.*;
 
+import app.dao.delivery.DeliveryDao;
+import app.entity.Delivery;
 import app.entity.Payment;
 import config.TestConfig;
+import java.util.Optional;
 import org.apache.ibatis.session.SqlSession;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,7 +14,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import utils.GetSessionFactory;
 
-public class PaymentDaoInsertTest {
+public class PaymentDaoSelectTest {
 
   private PaymentDao paymentDao = new PaymentDao();
   private SqlSession session;
@@ -31,17 +34,19 @@ public class PaymentDaoInsertTest {
   }
 
   @Test
-  @DisplayName("결제정보 생성 테스트 - 정상 처리")
-  void insert() throws Exception {
+  @DisplayName("결제정보 조회 테스트 - 정상 처리")
+  void selectByOrderId() throws Exception {
     // given
-    Payment payment = Payment.builder().orderId(1L).actualAmount(10000L).build();
+    Long orderId = 1L;
 
     // when
-    int insertedRow = paymentDao.insert(payment, session);
+    Optional<Payment> optionalPayment = paymentDao.selectByOrderId(orderId, session);
     session.commit();
     session.close();
 
     // then
-    assertSame(1, insertedRow);
+    Payment findPayment = optionalPayment.orElse(null);
+    assertNotNull(findPayment);
+    assertSame(orderId, findPayment.getOrderId());
   }
 }
