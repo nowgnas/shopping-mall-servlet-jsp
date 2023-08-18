@@ -29,6 +29,8 @@ public enum ErrorCode {
   EMAIL_IS_NOT_DUPLICATE(HttpServletResponse.SC_BAD_REQUEST, "0000", "가입 된 이메일 입니다."),
   ITEM_NOT_FOUND(SC_BAD_REQUEST, "ERR-PRODUCT-001", "아이템이 존재하지 않습니다"),
   LOGIN_FAIL(HttpServletResponse.SC_BAD_REQUEST, "0000", "아이디나 비밀번호가 일치하지 않습니다.");
+  PRODUCT_IS_NOT_VALID(HttpServletResponse.SC_BAD_REQUEST, "0000", null);
+
 
   private final int status;
   private final String code;
