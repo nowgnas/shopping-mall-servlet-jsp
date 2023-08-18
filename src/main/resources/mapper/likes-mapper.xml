@@ -4,7 +4,12 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="likes">
 
-    <select id="select" parameterType="productAndMemberCompositeKey" resultType="likes">
+    <parameterMap id="ProductAndMemberCompositeKey" type="map">
+        <parameter property="memberId" javaType="Long" jdbcType="BIGINT"/>
+        <parameter property="productId" javaType="Long" jdbcType="BIGINT"/>
+    </parameterMap>
+
+    <select id="select" parameterType="ProductAndMemberCompositeKey" resultType="likes">
         SELECT *
         FROM likes
         WHERE member_id = #{memberId}
@@ -19,7 +24,7 @@
         INSERT INTO likes (member_id, product_id)
         VALUES (#{memberId}, #{productId})
     </insert>
-    <delete id="delete" parameterType="productAndMemberCompositeKey">
+    <delete id="delete" parameterType="app.dto.comp.ProductAndMemberCompositeKey">
         DELETE
         FROM likes
         WHERE member_id = #{memberId}
