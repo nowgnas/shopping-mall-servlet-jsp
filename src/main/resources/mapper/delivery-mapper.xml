@@ -14,8 +14,8 @@
         FROM delivery
     </select>
     <insert id="insert" parameterType="delivery">
-        INSERT INTO delivery (road_name, addr_detail, zip_code, status)
-        VALUES (#{roadName}, #{addrDetail}, #{zipCode}, #{status})
+        INSERT INTO delivery (order_id, road_name, addr_detail, zip_code, status)
+        VALUES (#{orderId}, #{roadName}, #{addrDetail}, #{zipCode}, #{status})
     </insert>
     <update id="update" parameterType="delivery">
         UPDATE delivery
