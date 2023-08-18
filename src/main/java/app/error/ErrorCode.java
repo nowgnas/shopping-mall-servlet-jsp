@@ -1,6 +1,7 @@
 package app.error;
 
 import java.util.Arrays;
+import javax.servlet.http.HttpServletResponse;
 import lombok.Getter;
 
 import javax.servlet.http.HttpServletResponse;
@@ -20,7 +21,13 @@ public enum ErrorCode {
   CANNOT_DELETE_ORDER(SC_BAD_REQUEST, "ERR-ORDER-004", "해당 주문을 삭제할 수 없습니다."),
   CANNOT_INSERT_PRODUCT_ORDER(SC_BAD_REQUEST, "ERR-PRODUCT_ORDER-001", "해당 주문 상품을 생성할 수 없습니다."),
   CANNOT_INSERT_DELIVERY(SC_BAD_REQUEST, "ERR-DELIVERY-001", "해당 배송지를 생성할 수 없습니다."),
-  CANNOT_INSERT_PAYMENT(SC_BAD_REQUEST, "ERR-PAYMENT-001", "해당 결제 정보를 생성할 수 없습니다.");
+  CANNOT_INSERT_PAYMENT(SC_BAD_REQUEST, "ERR-PAYMENT-001", "해당 결제 정보를 생성할 수 없습니다."),
+  EMAIL_IS_NOT_INVALID(HttpServletResponse.SC_BAD_REQUEST, "0000", "유효한 이메일이 아닙니다."),
+  PASSWORD_IS_NOT_INVALID(
+      HttpServletResponse.SC_BAD_REQUEST, "0000", "비밀번호는 영문, 숫자 형식으로 최소 8자 ~ 최대 16자 사이로 입력해야 합니다."),
+  NAME_IS_NOT_INVALID(
+      HttpServletResponse.SC_BAD_REQUEST, "0000", "이름은 최소 1자에서 최대 20자로 입력할 수 있습니다."),
+  EMAIL_IS_NOT_DUPLICATE(HttpServletResponse.SC_BAD_REQUEST, "0000", "가입 된 이메일 입니다.");
 
   private final int status;
   private final String code;
