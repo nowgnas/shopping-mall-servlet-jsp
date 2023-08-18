@@ -8,6 +8,7 @@ import lombok.Getter;
 
 @Getter
 public enum ErrorCode {
+  //@formatter:off
   INTERNAL_SERVER_ERROR(SC_INTERNAL_SERVER_ERROR, "ERR-SERVER-001", "시스템 오류"),
   QUANTITY_IS_NOT_SUFFICIENT(400, "0001", null),
   CUSTOMER_IS_NOT_AFFORDABLE(400, "0002", null),
@@ -25,8 +26,13 @@ public enum ErrorCode {
       HttpServletResponse.SC_BAD_REQUEST, "0000", "비밀번호는 영문, 숫자 형식으로 최소 8자 ~ 최대 16자 사이로 입력해야 합니다."),
   NAME_IS_NOT_INVALID(
       HttpServletResponse.SC_BAD_REQUEST, "0000", "이름은 최소 1자에서 최대 20자로 입력할 수 있습니다."),
+<<<<<<< HEAD
   EMAIL_IS_NOT_DUPLICATE(HttpServletResponse.SC_BAD_REQUEST, "0000", "가입 된 이메일 입니다."),
   ITEM_NOT_FOUND(SC_BAD_REQUEST, "ERR-PRODUCT-001", "아이템이 존재하지 않습니다");
+=======
+  LOGIN_FAIL(HttpServletResponse.SC_BAD_REQUEST, "0000", "아이디나 비밀번호가 일치하지 않습니다."),
+  EMAIL_IS_NOT_DUPLICATE(HttpServletResponse.SC_BAD_REQUEST, "0000", "가입 된 이메일 입니다.");
+>>>>>>> 056ead4fd3aa5f55d4f33c5a1d35b3abfdc0ec9d
 
   private final int status;
   private final String code;
