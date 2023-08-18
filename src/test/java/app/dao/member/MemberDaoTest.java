@@ -31,11 +31,11 @@ class MemberDaoTest {
   void select() throws Exception {
     // given
     SqlSession session = sessionFactory.openSession();
-    // when
-    //    List<OrderMemberDetail> orderMemberDetails = memberDao.selectAddressAndCouponById(1L,
-    // session);
 
+    // when
     OrderMemberDetail orderMemberDetail = memberDao.selectAddressAndCouponById(1L, session).get();
+
+    // then
     Assertions.assertEquals(1L, orderMemberDetail.getId());
   }
 }
