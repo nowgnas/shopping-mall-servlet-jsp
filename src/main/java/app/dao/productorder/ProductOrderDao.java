@@ -16,23 +16,7 @@ public class ProductOrderDao implements ProductOrderDaoFrame<Long, ProductOrder>
 
   @Override
   public int insert(ProductOrder productOrder, SqlSession session) throws Exception {
-    int insertedRow;
-    try {
-      insertedRow = session.insert("productOrder.insert", productOrder);
-      if (insertedRow != 1) {
-        String errorMessage = CANNOT_INSERT_PRODUCT_ORDER.getMessage();
-        log.error(errorMessage);
-        throw new CustomException(errorMessage);
-      }
-    } catch (PersistenceException ex) {
-      log.error(ex.getMessage());
-      throw new PersistenceException(CANNOT_INSERT_PRODUCT_ORDER.getMessage());
-    } catch (Exception ex) {
-      log.error(ex.getMessage());
-      throw new Exception(INTERNAL_SERVER_ERROR.getMessage());
-    }
-
-    return insertedRow;
+    return session.insert("productOrder.insert", productOrder);
   }
 
   @Override
