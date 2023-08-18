@@ -75,6 +75,23 @@ class MemberServiceTest {
     Assertions.assertEquals(id, memberDetail.getId());
   }
 
+  @Test
+  @DisplayName("존재 하지 않는 회원 아이디로 조회 시 예외가 발생한다.")
+  void getMemberDetail_fail() throws Exception {
+    // given
+    Long id= 10L;
+    String expectedMessage = "해당 아이디의 회원은 존재 하지 않습니다.";
+    // when
+    CustomException customException =
+            Assertions.assertThrows(
+                    CustomException.class,
+                    () -> {
+                      memberService.get(id);
+                    });
+    // then
+    Assertions.assertEquals(expectedMessage, customException.getMessage());
+  }
+
   private MemberRegisterDto createMemberRegisterDto() {
     String email = "abc@naver.com";
     String password = "123123";

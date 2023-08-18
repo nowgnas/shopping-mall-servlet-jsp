@@ -83,7 +83,7 @@ public class MemberService {
       Member member =
           memberDao
               .selectById(id, sqlSession)
-              .orElseThrow(() -> new CustomException(ErrorCode.LOGIN_FAIL));
+              .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
       memberDetail = MemberDetail.of(member);
     } catch (SQLException e) {
       e.printStackTrace();
