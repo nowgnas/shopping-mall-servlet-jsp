@@ -1,4 +1,4 @@
-package app.dao;
+package app.dao.product;
 
 import app.dao.product.ProductDao;
 import app.dto.product.ProductItemQuantity;
