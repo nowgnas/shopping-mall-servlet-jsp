@@ -6,6 +6,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@ToString
 public class ProductImage extends BaseEntity {
 
   private Long id;
