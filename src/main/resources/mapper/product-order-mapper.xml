@@ -14,7 +14,13 @@
         FROM product_order
     </select>
     <select id="selectAllByOrderId" resultType="productOrder">
-        SELECT *
+        SELECT id         AS id,
+               product_id AS productId,
+               order_id   AS orderId,
+               price      AS price,
+               quantity   AS quantity,
+               created_at AS createdAt,
+               updated_at AS updatedAt
         FROM product_order
         WHERE order_id = #{orderId}
     </select>

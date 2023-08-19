@@ -51,21 +51,27 @@ public class OrderServiceImpl {
               .orElseThrow(Exception::new);
       validateEnoughStockQuantity(product.getQuantity(), orderCreateDto.getProduct().getQuantity());
       product.updateQuantity(product.getQuantity() - orderCreateDto.getProduct().getQuantity());
-      productDao.update(product, session);
+      if (productDao.update(product, session) == 0) {
+        throw new CustomException("상품 수량 업데이트 오류");
+      }
 
       /* 회원의 잔액 확인 1. 총 상품 가격보다 잔액이 적다면 구매 불가 2. 잔액이 충분하다면 회원의 잔액에서 차감 */
       Member member =
           memberDao.selectById(orderCreateDto.getMemberId(), session).orElseThrow(Exception::new);
       validateEnoughMoney(member.getMoney(), orderCreateDto.getTotalPrice());
       member.updateMoney(member.getMoney() - orderCreateDto.getTotalPrice());
-      memberDao.update(member, session);
+      if (memberDao.update(member, session) == 0) {
+        throw new CustomException("회원 잔고 업데이트 오류");
+      }
 
       /* 회원이 쿠폰을 썼는지 확인 1. 쿠폰을 적용했다면 회원의 쿠폰 정보 '사용됨' 상태로 바꿈 2. 쿠폰을 적용하지 않았다면 패스 */
       if (isCouponUsed(orderCreateDto.getCouponId())) {
         Coupon coupon =
             couponDao.selectById(orderCreateDto.getCouponId(), session).orElseThrow(Exception::new);
         coupon.updateStatus(CouponStatus.USED.name());
-        couponDao.update(coupon, session);
+        if (couponDao.update(coupon, session) == 0) {
+          throw new CustomException("쿠폰 상태 업데이트 오류");
+        }
       }
 
       /* 상품 주문 orders, product_order, payment, delivery 생성 */
@@ -121,7 +127,9 @@ public class OrderServiceImpl {
                       productDao.selectById(p.getProductId(), session).orElseThrow(Exception::new);
                   validateEnoughStockQuantity(product.getQuantity(), p.getQuantity());
                   product.updateQuantity(product.getQuantity() - p.getQuantity());
-                  productDao.update(product, session);
+                  if (productDao.update(product, session) == 0) {
+                    throw new CustomException("상품 수량 업데이트 오류");
+                  }
                 } catch (Exception e) {
                   throw new RuntimeException(e);
                 }
@@ -134,7 +142,9 @@ public class OrderServiceImpl {
               .orElseThrow(Exception::new);
       validateEnoughMoney(member.getMoney(), cartOrderCreateDto.getTotalPrice());
       member.updateMoney(member.getMoney() - cartOrderCreateDto.getTotalPrice());
-      memberDao.update(member, session);
+      if (memberDao.update(member, session) == 0) {
+        throw new CustomException("회원 잔고 업데이트 오류");
+      }
 
       /* 회원이 쿠폰을 썼는지 확인 1. 쿠폰을 적용했다면 회원의 쿠폰 정보 '사용됨' 상태로 바꿈 2. 쿠폰을 적용하지 않았다면 패스 */
       if (isCouponUsed(cartOrderCreateDto.getCouponId())) {
@@ -143,7 +153,9 @@ public class OrderServiceImpl {
                 .selectById(cartOrderCreateDto.getCouponId(), session)
                 .orElseThrow(Exception::new);
         coupon.updateStatus(CouponStatus.USED.name());
-        couponDao.update(coupon, session);
+        if (couponDao.update(coupon, session) == 0) {
+          throw new CustomException("쿠폰 상태 업데이트 오류");
+        }
       }
 
       /* 상품 주문 orders, product_order, payment, delivery 생성 */
@@ -167,6 +179,9 @@ public class OrderServiceImpl {
               .actualAmount(cartOrderCreateDto.getTotalPrice())
               .build();
       paymentDao.insert(payment, session);
+
+      /* 장바구니에서 상품들 제거 */
+
 
       session.commit();
 
@@ -203,7 +218,9 @@ public class OrderServiceImpl {
       /* 주문 정보 정보를 취소 상태로 바꿈 */
       Order order = orderDao.selectById(orderId, session).orElseThrow(Exception::new);
       order.updateStatus(OrderStatus.CANCELED.name());
-      orderDao.update(order, session);
+      if (orderDao.update(order, session) == 0) {
+        throw new CustomException("주문 상태 업데이트 오류");
+      }
 
       /* 배송 상태를 확인 1. 배송중이면 취소 불가 2. 배송중이 아니라면 배송 정보를 취소 상태로 바꾼다 */
       Delivery delivery = deliveryDao.selectById(orderId, session).orElseThrow(Exception::new);
@@ -212,17 +229,17 @@ public class OrderServiceImpl {
       }
       // 배송중이 아니라면 배송 취소상태로 변경
       delivery.updateStatus(DeliveryStatus.CANCELED.name());
-      deliveryDao.update(delivery, session);
+      if (deliveryDao.update(delivery, session) == 0) {
+        throw new CustomException("배송 상태 업데이트 오류");
+      }
 
       /* 사용했던 회원의 쿠폰이 있다면 쿠폰의 상태를 UNUSED로 바꿈 */
-
       if (isCouponUsed(order.getCouponId())) {
         Coupon coupon =
             couponDao.selectById(order.getCouponId(), session).orElseThrow(Exception::new);
         coupon.updateStatus(CouponStatus.UNUSED.name());
-        int updatedRow = couponDao.update(coupon, session);
-        if (updatedRow == 0) {
-          throw new CustomException("쿠폰 페이백 오류");
+        if (couponDao.update(coupon, session) == 0) {
+          throw new CustomException("쿠폰 상태 업데이트 오류");
         }
       }
 
@@ -231,9 +248,8 @@ public class OrderServiceImpl {
       Member member =
           memberDao.selectById(order.getMemberId(), session).orElseThrow(Exception::new);
       member.updateMoney(member.getMoney() + payment.getActualAmount());
-      int updatedRow = memberDao.update(member, session);
-      if (updatedRow == 0) {
-        throw new CustomException("환불 페이백 오류");
+      if (memberDao.update(member, session) == 0) {
+        throw new CustomException("회원 잔고 업데이트 오류");
       }
 
       /* 취소한 상품들에 대한 수량을 증가시킴 */
@@ -244,7 +260,9 @@ public class OrderServiceImpl {
               Product product =
                   productDao.selectById(po.getProductId(), session).orElseThrow(Exception::new);
               product.updateQuantity(product.getQuantity() + po.getQuantity());
-              productDao.update(product, session);
+              if (productDao.update(product, session) == 0) {
+                throw new CustomException("상품 수량 업데이트 오류");
+              }
             } catch (Exception e) {
               throw new RuntimeException(e);
             }
