@@ -41,7 +41,7 @@
         UPDATE coupon
         SET status     = #{status},
             updated_at = now()
-        WHERE id = #{id} AND member_id = #{memberId}
+        WHERE id = #{id}
     </update>
     <delete id="delete" parameterType="Long">
         DELETE

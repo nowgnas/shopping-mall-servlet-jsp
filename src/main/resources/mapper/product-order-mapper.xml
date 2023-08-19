@@ -13,6 +13,11 @@
         SELECT *
         FROM product_order
     </select>
+    <select id="selectAllByOrderId" resultType="productOrder">
+        SELECT *
+        FROM product_order
+        WHERE order_id = #{orderId}
+    </select>
     <insert id="insert" parameterType="productOrder">
         INSERT INTO product_order (product_id, order_id, price, quantity)
         VALUES (#{productId}, #{orderId}, #{price}, #{quantity})

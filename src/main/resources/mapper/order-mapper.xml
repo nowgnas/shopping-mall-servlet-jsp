@@ -41,7 +41,12 @@
     </resultMap>
 
     <select id="select" parameterType="Long" resultType="order">
-        SELECT *
+        SELECT id         AS id,
+               member_id  AS memberId,
+               coupon_id  AS couponId,
+               status     AS status,
+               created_at AS createdAt,
+               updated_at AS updatedAt
         FROM orders
         WHERE id = #{id}
     </select>

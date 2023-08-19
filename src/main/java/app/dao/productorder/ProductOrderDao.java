@@ -38,4 +38,9 @@ public class ProductOrderDao implements ProductOrderDaoFrame<Long, ProductOrder>
   public List<ProductOrder> selectAll(SqlSession session) throws Exception {
     return null;
   }
+
+  @Override
+  public List<ProductOrder> selectAllByOrderId(Long orderId, SqlSession session) {
+    return session.selectList("productOrder.selectAllByOrderId", orderId);
+  }
 }
