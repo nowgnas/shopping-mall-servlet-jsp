@@ -31,9 +31,13 @@
             <result property="paymentType" column="paymentType"/>
             <result property="actualAmount" column="actualAmount"/>
         </association>
+        <association property="coupon" javaType="app.dto.response.ProductOrderDetailDto$CouponDto">
+            <result property="couponName" column="name"/>
+            <result property="couponStatus" column="status"/>
+        </association>
         <collection property="products" ofType="app.dto.response.ProductOrderDetailDto$ProductDto">
             <result property="productId" column="productId"/>
-            <result property="name" column="productName"/>
+            <result property="productName" column="name"/>
             <result property="thumbnailUrl" column="thumbnailUrl"/>
             <result property="price" column="productPrice"/>
             <result property="quantity" column="productQuantity"/>
@@ -102,7 +106,9 @@
                d.addr_detail                              AS addrDetail,
                d.zip_code                                 AS zipCode,
                pm.type                                    AS paymentType,
-               pm.actual_amount                           AS actualAmount
+               pm.actual_amount                           AS actualAmount,
+               c.name                                     AS couponName,
+               c.status                                   AS couponStatus
         FROM orders o
                  INNER JOIN member m on o.member_id = m.id
                  INNER JOIN product_order po on o.id = po.order_id
@@ -110,6 +116,7 @@
                  INNER JOIN payments pm on o.id = pm.order_id
                  INNER JOIN product p on p.id = po.product_id
                  LEFT JOIN product_image pi on p.id = pi.product_id
+                 LEFT JOIN coupon c on o.coupon_id = c.id
         WHERE o.member_id = #{memberId}
           AND o.id = #{orderId}
     </select>
