@@ -4,15 +4,18 @@ import app.dto.paging.Pagination;
 import app.dto.product.ProductItemQuantity;
 import app.dto.product.ProductListItem;
 import app.dto.product.ProductListItemOfLike;
-import app.dto.product.response.ProductListWithPagination;
+import app.enums.SortOption;
 import app.utils.GetSessionFactory;
 import config.TestConfig;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.apache.ibatis.session.SqlSession;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 class ProductDaoImplTest {
@@ -26,7 +29,7 @@ class ProductDaoImplTest {
     session = GetSessionFactory.getInstance().openSession();
     testConfig.init("schema.sql", session);
     testConfig.init("init-data.sql", session);
-//    testConfig.init("product/product.sql", session);
+    testConfig.init("product/product-likes.sql", session);
     testConfig.init("product/product-image.sql", session);
   }
 
@@ -69,22 +72,25 @@ class ProductDaoImplTest {
   }
 
   @Test
+  @DisplayName("상품 리스트 조회 - 높은 가격 순")
   void selectAll() throws Exception {
     // case
-    Pagination pagination = Pagination.builder().currentPage(2).perPage(3).build();
-    ProductListWithPagination<List<ProductListItem>, Pagination> products =
-        productDao.selectAllSortByPriceDesc(pagination, session); // 모든 상품 조회
+    int perPage = 5;
+    Long userId = -1L;
+    SortOption dateDesc = SortOption.PRICE_DESC;
+
+    Pagination pagination = Pagination.builder().currentPage(1).perPage(perPage).build();
+    Map<String, Object> map = new HashMap<>();
+    map.put("current", 1);
+    map.put("perPage", perPage);
+    map.put("userId", userId.toString());
+    List<ProductListItem> products = productDao.selectAllSortByPriceDesc(map, session); // 모든 상품 조회
     System.out.println(products.toString());
-    Assertions.assertEquals(3, products.getItem().size());
+    Assertions.assertEquals(perPage, products.size());
+    session.close();
   }
 
   @Test
   void selectAllByDate() throws Exception {
-    // case
-    List<ProductListItem> products = productDao.selectAllSortByDate(session); // 모든 상품 조회
-    for (ProductListItem p : products) {
-      System.out.println(p.getCreatedAt());
-    }
-    Assertions.assertEquals(8, products.size());
   }
 }

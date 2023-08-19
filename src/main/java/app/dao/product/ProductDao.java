@@ -1,14 +1,11 @@
 package app.dao.product;
 
-import app.dto.paging.Pagination;
 import app.dto.product.ProductItemQuantity;
 import app.dto.product.ProductListItem;
 import app.dto.product.ProductListItemOfLike;
-import app.dto.product.response.ProductListWithPagination;
 import app.entity.Product;
 import app.error.CustomException;
 import app.error.ErrorCode;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -88,31 +85,31 @@ public class ProductDao implements ProductDaoFrame<Long, Product> {
   }
 
   @Override
-  public ProductListWithPagination<List<ProductListItem>, Pagination> selectAllSortByPriceDesc(
-      Pagination pagination, SqlSession session) throws Exception {
-
-    Map<String, Integer> map = new HashMap<>();
-    map.put("current", pagination.getCurrentPage());
-    map.put("perPage", pagination.getPerPage());
-
+  public List<ProductListItem> selectAllSortByPriceDesc(Map<String, Object> map, SqlSession session)
+      throws Exception {
     List<ProductListItem> products = session.selectList("product.sortbypricedesc", map);
-
-    int totalPages = session.selectOne("product.gettotalpage", pagination.getPerPage());
     if (products.size() == 0) throw new CustomException(ErrorCode.ITEM_NOT_FOUND);
-    return ProductListWithPagination.makeListWithPaging(products, pagination, totalPages);
+    return products;
   }
 
   @Override
-  public List<ProductListItem> selectAllSortByPrice(SqlSession session) throws Exception {
+  public List<ProductListItem> selectAllSortByPrice(Map<String, Object> map, SqlSession session)
+      throws Exception {
     List<ProductListItem> products = session.selectList("product.sortbyprice");
     if (products.size() == 0) throw new CustomException(ErrorCode.ITEM_NOT_FOUND);
     return products;
   }
 
   @Override
-  public List<ProductListItem> selectAllSortByDate(SqlSession session) throws Exception {
+  public List<ProductListItem> selectAllSortByDate(Map<String, Object> map, SqlSession session)
+      throws Exception {
     List<ProductListItem> products = session.selectList("product.sortbydate");
     if (products.size() == 0) throw new CustomException(ErrorCode.ITEM_NOT_FOUND);
     return products;
+  }
+
+  @Override
+  public int getTotalPage(SqlSession session) {
+    return session.selectOne("product.gettotalpage", 10);
   }
 }

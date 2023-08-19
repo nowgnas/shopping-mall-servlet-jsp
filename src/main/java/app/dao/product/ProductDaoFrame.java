@@ -1,16 +1,16 @@
 package app.dao.product;
 
 import app.dao.DaoFrame;
-import app.dto.paging.Pagination;
 import app.dto.product.ProductItemQuantity;
 import app.dto.product.ProductListItem;
 import app.dto.product.ProductListItemOfLike;
-import app.dto.product.response.ProductListWithPagination;
 import app.entity.Product;
 import java.util.List;
+import java.util.Map;
 import org.apache.ibatis.session.SqlSession;
 
 public interface ProductDaoFrame<K, V extends Product> extends DaoFrame<K, V> {
+  int getTotalPage(SqlSession session);
 
   /**
    * 가격 내림차순 상품 조회
@@ -19,8 +19,8 @@ public interface ProductDaoFrame<K, V extends Product> extends DaoFrame<K, V> {
    * @return product list
    * @throws Exception
    */
-  ProductListWithPagination<List<ProductListItem>, Pagination> selectAllSortByPriceDesc(
-      Pagination pagination, SqlSession session) throws Exception;
+  List<ProductListItem> selectAllSortByPriceDesc(Map<String, Object> map, SqlSession session)
+      throws Exception;
 
   /**
    * 가격 오름차순 상품 조회
@@ -29,7 +29,8 @@ public interface ProductDaoFrame<K, V extends Product> extends DaoFrame<K, V> {
    * @return product list
    * @throws Exception
    */
-  List<ProductListItem> selectAllSortByPrice(SqlSession session) throws Exception;
+  List<ProductListItem> selectAllSortByPrice(Map<String, Object> map, SqlSession session)
+      throws Exception;
 
   /**
    * 최신 상품 조회
@@ -38,7 +39,8 @@ public interface ProductDaoFrame<K, V extends Product> extends DaoFrame<K, V> {
    * @return
    * @throws Exception
    */
-  List<ProductListItem> selectAllSortByDate(SqlSession session) throws Exception;
+  List<ProductListItem> selectAllSortByDate(Map<String, Object> map, SqlSession session)
+      throws Exception;
 
   /**
    * 개별 상품 재고 개수 조회
