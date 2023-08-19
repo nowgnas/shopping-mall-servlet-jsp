@@ -2,8 +2,10 @@ package app.service.product;
 
 import app.dao.product.ProductDao;
 import app.dao.product.ProductDaoFrame;
+import app.dto.paging.Pagination;
 import app.dto.product.ProductDetail;
 import app.dto.product.ProductListItem;
+import app.dto.product.response.ProductListWithPagination;
 import app.utils.GetSessionFactory;
 import java.util.List;
 import org.apache.ibatis.session.SqlSession;
@@ -28,8 +30,9 @@ public class ProductServiceImpl implements ProductService {
   }
 
   @Override
-  public List<ProductListItem> getProductsByHigherPrice() throws Exception {
-    return dao.selectAllSortByPriceDesc(session);
+  public ProductListWithPagination<List<ProductListItem>, Pagination> getProductsByHigherPrice() throws Exception {
+    Pagination pagination = Pagination.builder().build();
+    return dao.selectAllSortByPriceDesc(pagination, session);
   }
 
   @Override

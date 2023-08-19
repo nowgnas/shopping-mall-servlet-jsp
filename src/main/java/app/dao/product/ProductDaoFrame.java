@@ -1,9 +1,11 @@
 package app.dao.product;
 
 import app.dao.DaoFrame;
+import app.dto.paging.Pagination;
 import app.dto.product.ProductItemQuantity;
 import app.dto.product.ProductListItem;
 import app.dto.product.ProductListItemOfLike;
+import app.dto.product.response.ProductListWithPagination;
 import app.entity.Product;
 import java.util.List;
 import org.apache.ibatis.session.SqlSession;
@@ -17,7 +19,8 @@ public interface ProductDaoFrame<K, V extends Product> extends DaoFrame<K, V> {
    * @return product list
    * @throws Exception
    */
-  List<ProductListItem> selectAllSortByPriceDesc(SqlSession session) throws Exception;
+  ProductListWithPagination<List<ProductListItem>, Pagination> selectAllSortByPriceDesc(
+      Pagination pagination, SqlSession session) throws Exception;
 
   /**
    * 가격 오름차순 상품 조회

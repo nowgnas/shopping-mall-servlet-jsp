@@ -1,8 +1,10 @@
 package app.dao.product;
 
+import app.dto.paging.Pagination;
 import app.dto.product.ProductItemQuantity;
 import app.dto.product.ProductListItem;
 import app.dto.product.ProductListItemOfLike;
+import app.dto.product.response.ProductListWithPagination;
 import app.utils.GetSessionFactory;
 import config.TestConfig;
 import java.util.Arrays;
@@ -24,7 +26,8 @@ class ProductDaoImplTest {
     session = GetSessionFactory.getInstance().openSession();
     testConfig.init("schema.sql", session);
     testConfig.init("init-data.sql", session);
-    testConfig.init("product-image.sql", session);
+//    testConfig.init("product/product.sql", session);
+    testConfig.init("product/product-image.sql", session);
   }
 
   @AfterEach
@@ -68,11 +71,11 @@ class ProductDaoImplTest {
   @Test
   void selectAll() throws Exception {
     // case
-    List<ProductListItem> products = productDao.selectAllSortByPriceDesc(session); // 모든 상품 조회
-    for (ProductListItem p : products) {
-      System.out.println(p.getPrice());
-    }
-    Assertions.assertEquals(8, products.size());
+    Pagination pagination = Pagination.builder().currentPage(2).perPage(3).build();
+    ProductListWithPagination<List<ProductListItem>, Pagination> products =
+        productDao.selectAllSortByPriceDesc(pagination, session); // 모든 상품 조회
+    System.out.println(products.toString());
+    Assertions.assertEquals(3, products.getItem().size());
   }
 
   @Test

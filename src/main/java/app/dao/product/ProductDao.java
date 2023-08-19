@@ -1,12 +1,16 @@
 package app.dao.product;
 
+import app.dto.paging.Pagination;
 import app.dto.product.ProductItemQuantity;
 import app.dto.product.ProductListItem;
 import app.dto.product.ProductListItemOfLike;
+import app.dto.product.response.ProductListWithPagination;
 import app.entity.Product;
 import app.error.CustomException;
 import app.error.ErrorCode;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.logging.Logger;
 import org.apache.ibatis.session.SqlSession;
@@ -84,10 +88,18 @@ public class ProductDao implements ProductDaoFrame<Long, Product> {
   }
 
   @Override
-  public List<ProductListItem> selectAllSortByPriceDesc(SqlSession session) throws Exception {
-    List<ProductListItem> products = session.selectList("product.sortbypricedesc");
+  public ProductListWithPagination<List<ProductListItem>, Pagination> selectAllSortByPriceDesc(
+      Pagination pagination, SqlSession session) throws Exception {
+
+    Map<String, Integer> map = new HashMap<>();
+    map.put("current", pagination.getCurrentPage());
+    map.put("perPage", pagination.getPerPage());
+
+    List<ProductListItem> products = session.selectList("product.sortbypricedesc", map);
+
+    int totalPages = session.selectOne("product.gettotalpage", pagination.getPerPage());
     if (products.size() == 0) throw new CustomException(ErrorCode.ITEM_NOT_FOUND);
-    return products;
+    return ProductListWithPagination.makeListWithPaging(products, pagination, totalPages);
   }
 
   @Override
