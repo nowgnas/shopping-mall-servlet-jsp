@@ -1,8 +1,11 @@
 package app.dao.product;
 
+import app.dto.product.ProductDetail;
+import app.dto.product.ProductDetailParameter;
 import app.dto.product.ProductItemQuantity;
 import app.dto.product.ProductListItem;
 import app.dto.product.ProductListItemOfLike;
+import app.entity.Category;
 import app.entity.Product;
 import app.error.CustomException;
 import app.error.ErrorCode;
@@ -111,5 +114,19 @@ public class ProductDao implements ProductDaoFrame<Long, Product> {
   @Override
   public int getTotalPage(SqlSession session) {
     return session.selectOne("product.gettotalpage", 10);
+  }
+
+  @Override
+  public ProductDetail selectProductDetailWithCategory(
+      Long memberId, Long productId, SqlSession session) {
+    return session.selectOne(
+        "product.select",
+        ProductDetailParameter.builder().productId(productId).memberId(memberId).build());
+  }
+
+  @Override
+  public List<Category> selectProductParentCategory(Long productId, SqlSession session) {
+    List<Category> categories = session.selectList("product.get-category", productId);
+    return null;
   }
 }

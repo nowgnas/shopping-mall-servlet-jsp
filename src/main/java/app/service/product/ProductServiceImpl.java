@@ -30,7 +30,7 @@ public class ProductServiceImpl implements ProductService {
   }
 
   @Override
-  public ProductListWithPagination<List<ProductListItem>, Pagination> getProductList(
+  public ProductListWithPagination getProductList(
       Long userId, int currentPage, SortOption sortOption) throws Exception {
     Map<String, Object> map = new HashMap<>();
     map.put("current", currentPage);
