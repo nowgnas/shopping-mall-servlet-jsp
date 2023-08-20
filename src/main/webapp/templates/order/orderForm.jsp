@@ -30,6 +30,7 @@
                 if (product != null) {
         %>
         <li class="product-item">
+            <input type="hidden" id="product_id" name="product_id" value="<%= product.getProductId() %>">
             <img src="<%= product.getImageUrl() %>" alt="상품 이미지">
             <span class="product-name"><%= product.getName() %></span>
             <span class="product-price">가격: <%= product.getPrice() %></span>
@@ -43,7 +44,7 @@
 
     <label for="coupon">쿠폰 선택:</label>
     <select id="coupon" name="coupon">
-        <option id="coupon-nothing" value="0">할인 없음</option>
+        <option value="0">적용 안함</option>
         <%
             if (request.getAttribute("products") != null && request.getAttribute("coupons").getClass().isAssignableFrom(OrderCreateForm.CouponDto.class)) {
                 List<OrderCreateForm.CouponDto> coupons = (List<OrderCreateForm.CouponDto>) request.getAttribute("coupons");
@@ -51,7 +52,7 @@
                     if (coupon.getStatus().equals(CouponStatus.UNUSED) && coupon.getDiscountPolicy().equals(CouponPolicy.CASH)) {
 
         %>
-        <option id="coupon-<%= coupon.getDiscountPolicy().name() %>"
+        <option id="<%= coupon.getCouponId() %>" name="<%= coupon.getDiscountPolicy().name() %>"
                 value="<%= coupon.getDiscountValue() %>"><%= coupon.getName() %>>
         </option>
         <%
@@ -59,7 +60,10 @@
                 }
             }
         %>
-    </select><br><br>
+    </select>
+
+    <br>
+    <br>
 
     <h2>요약 정보</h2>
     <p id="total-price">총 가격: <span id="calculated-total">0</span>원</p>
@@ -99,12 +103,14 @@
             calculatedTotal += totalItemPrice;
         });
 
-        const couponDiscountPolicy = couponSelect.id.toString();
+        const selectedOption = couponSelect.options[couponSelect.selectedIndex];
+        const couponDiscountPolicy = selectedOption.getAttribute("name");
         const couponDiscountValue = parseInt(couponSelect.value);
-        if (couponDiscountPolicy === 'coupon-CASH') {
+
+        if (couponDiscountPolicy === 'CASH') {
             calculatedTotal -= couponDiscountValue;
         }
-        if (couponDiscountPolicy === 'coupon-DISCOUNT') {
+        if (couponDiscountPolicy === 'DISCOUNT') {
             calculatedTotal -= (calculatedTotal * (couponDiscountValue / 100));
         }
 
