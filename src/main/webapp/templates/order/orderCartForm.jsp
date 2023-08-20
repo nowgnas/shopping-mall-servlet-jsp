@@ -26,14 +26,24 @@
     %>
 
     <h2>배송지 입력</h2>
-    <label for="address">도로명 주소</label>
-    <input type="text" id="address" name="address" required><br><br>
 
-    <label for="detail-address">상세 주소</label>
-    <input type="text" id="detail-address" name="detail-address" required><br><br>
+    <button id="set-address-btn">기본 주소지로 설정</button>
+
+    <br/>
+    <br/>
+
+    <label for="road-name">도로명 주소</label>
+    <input type="text" id="road-name" name="road-name" required oninvalid="this.setCustomValidity('도로명 주소를 입력해주세요.')"
+           oninput="this.setCustomValidity('')"><br><br>
+
+    <label for="addr-detail">상세 주소</label>
+    <input type="text" id="addr-detail" name="addr-detail" required
+           oninvalid="this.setCustomValidity('상세 주소를 입력해주세요.')"
+           oninput="this.setCustomValidity('')"><br><br>
 
     <label for="zipcode">우편번호</label>
-    <input type="text" id="zipcode" name="zipcode" required><br><br>
+    <input type="text" id="zipcode" name="zipcode" required oninvalid="this.setCustomValidity('우편번호를 입력해주세요.')"
+           oninput="this.setCustomValidity('')"><br><br>
 
     <h2>주문 상품 목록</h2>
     <ul>
@@ -128,6 +138,24 @@
 
     // 초기 총 가격 계산
     updateTotalPrice();
+</script>
+<script>
+    const setAddressBtn = document.getElementById("set-address-btn");
+    const addressInput = document.getElementById("road-name");
+    const detailAddressInput = document.getElementById("addr-detail");
+    const zipcodeInput = document.getElementById("zipcode");
+
+    setAddressBtn.addEventListener("click", function(event) {
+        event.preventDefault();
+        // 기본 주소지로 설정
+        const defaultRoadName = "서울특별시 강남구 삼성동 123번지";
+        const defaultAddrDetail = "상세 주소";
+        const defaultZipCode = "12345";
+
+        addressInput.value = defaultRoadName;
+        detailAddressInput.value = defaultAddrDetail;
+        zipcodeInput.value = defaultZipCode;
+    });
 </script>
 </body>
 </html>
