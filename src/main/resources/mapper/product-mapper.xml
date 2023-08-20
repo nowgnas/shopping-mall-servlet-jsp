@@ -17,6 +17,7 @@
         <id column="id" jdbcType="BIGINT" property="id"/>
         <result column="name" jdbcType="VARCHAR" property="name"/>
         <result column="price" jdbcType="BIGINT" property="price"/>
+        <result column="is_liked" jdbcType="BIGINT" property="isLiked"/>
         <result column="url" jdbcType="VARCHAR" property="url"/>
         <result column="created_at" jdbcType="TIMESTAMP" property="createdAt"/>
         <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt"/>
@@ -38,6 +39,11 @@
     <result column="created_at" jdbcType="TIMESTAMP" property="createdAt"/>
     <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt"/>
   </resultMap>
+
+  <select id="gettotalpage" resultType="int" parameterType="int">
+    SELECT CEIL(COUNT(*) / #{perPage})
+    FROM product;
+  </select>
 
   <select id="selectProductListItemOfLike" parameterType="Long" resultMap="productOfLike">
     SELECT p.id, p.name, p.price, i.url
@@ -72,26 +78,38 @@
         SELECT *
         FROM product
     </select>
-    <select id="sortbypricedesc" resultMap="ListResultMap">
-        SELECT name, price, url
-        FROM product p
-                 LEFT JOIN product_image i
-                           ON p.id = i.product_id
-        ORDER BY price desc
+    <select id="sortbypricedesc" parameterType="hashMap" resultMap="ListResultMap">
+      SELECT p.name,
+             p.price,
+             pi.url,
+             CASE WHEN l.product_id IS NOT NULL THEN true ELSE false END AS is_liked
+      FROM product p
+             LEFT JOIN likes l ON l.product_id = p.id AND l.member_id = #{userId}
+             left join product_image pi on p.id = pi.product_id
+      ORDER BY p.price desc
+        LIMIT #{current}, #{perPage}
     </select>
     <select id="sortbydate" resultMap="ListResultMap">
-      SELECT name, price, url
+      SELECT p.name,
+             p.price,
+             pi.url,
+             CASE WHEN l.product_id IS NOT NULL THEN true ELSE false END AS is_liked
       FROM product p
-             LEFT JOIN product_image i
-                       ON p.id = i.product_id
-      ORDER BY created_at desc
+             LEFT JOIN likes l ON l.product_id = p.id AND l.member_id = #{userId}
+             left join product_image pi on p.id = pi.product_id
+      ORDER BY p.created_at desc
+        LIMIT #{current}, #{perPage}
     </select>
     <select id="sortbyprice" resultMap="ListResultMap">
-      SELECT name, price, url
+      SELECT p.name,
+             p.price,
+             pi.url,
+             CASE WHEN l.product_id IS NOT NULL THEN true ELSE false END AS is_liked
       FROM product p
-             LEFT JOIN product_image i
-                       ON p.id = i.product_id
-      ORDER BY price
+             LEFT JOIN likes l ON l.product_id = p.id AND l.member_id = #{userId}
+             left join product_image pi on p.id = pi.product_id
+      ORDER BY p.price
+        LIMIT #{current}, #{perPage}
     </select>
     <insert id="insert" parameterType="product">
         INSERT INTO product (category_id, name, description, price, quantity, code)
