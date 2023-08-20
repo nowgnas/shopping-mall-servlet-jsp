@@ -9,20 +9,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>상품 주문</title>
+    <link type="text/css" rel="stylesheet" href="css/order-form.css"/>
 </head>
 <body>
 <h1>상품 주문</h1>
 <form action="/order.bit?view=direct&cmd=create" method="post">
-    <label for="address">도로명 주소:</label>
+    <h2>회원 이름</h2>
+    <%
+        String memberName = (String) request.getAttribute("memberName");
+        if (memberName != null) {
+    %>
+    <p id="member-name"><%= memberName %>
+    </p>
+    <%
+        }
+    %>
+
+    <h2>배송지 입력</h2>
+    <label for="address">도로명 주소</label>
     <input type="text" id="address" name="address" required><br><br>
 
-    <label for="detail-address">상세 주소:</label>
+    <label for="detail-address">상세 주소</label>
     <input type="text" id="detail-address" name="detail-address" required><br><br>
 
-    <label for="zipcode">우편번호:</label>
+    <label for="zipcode">우편번호</label>
     <input type="text" id="zipcode" name="zipcode" required><br><br>
 
-    <h2>상품 선택</h2>
+    <h2>주문 상품 목록</h2>
     <ul>
         <%
             if (request.getAttribute("products") != null && request.getAttribute("products").getClass().isAssignableFrom(OrderCreateForm.ProductDto.class)) {
@@ -42,11 +55,11 @@
         %>
     </ul>
 
-    <label for="coupon">쿠폰 선택:</label>
+    <label for="coupon">쿠폰 선택</label>
     <select id="coupon" name="coupon">
         <option value="0">적용 안함</option>
         <%
-            if (request.getAttribute("products") != null && request.getAttribute("coupons").getClass().isAssignableFrom(OrderCreateForm.CouponDto.class)) {
+            if (request.getAttribute("coupons") != null && request.getAttribute("coupons").getClass().isAssignableFrom(OrderCreateForm.CouponDto.class)) {
                 List<OrderCreateForm.CouponDto> coupons = (List<OrderCreateForm.CouponDto>) request.getAttribute("coupons");
                 for (OrderCreateForm.CouponDto coupon : coupons) {
                     if (coupon.getStatus().equals(CouponStatus.UNUSED) && coupon.getDiscountPolicy().equals(CouponPolicy.CASH)) {
