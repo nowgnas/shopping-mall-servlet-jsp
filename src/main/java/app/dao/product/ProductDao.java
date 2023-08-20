@@ -124,9 +124,15 @@ public class ProductDao implements ProductDaoFrame<Long, Product> {
         ProductDetailParameter.builder().productId(productId).memberId(memberId).build());
   }
 
+  /**
+   * 상품 카테고리 정보
+   *
+   * @param productId 상품 정보
+   * @param session
+   * @return
+   */
   @Override
   public List<Category> selectProductParentCategory(Long productId, SqlSession session) {
-    List<Category> categories = session.selectList("product.get-category", productId);
-    return null;
+    return session.selectList("product.get-category", productId);
   }
 }

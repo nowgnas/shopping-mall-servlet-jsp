@@ -2,8 +2,10 @@ package app.dao.product;
 
 import app.dto.product.ProductDetail;
 import app.dto.product.ProductDetailParameter;
+import app.entity.Category;
 import app.utils.GetSessionFactory;
 import config.TestConfig;
+import java.util.List;
 import java.util.logging.Logger;
 import org.apache.ibatis.session.SqlSession;
 import org.junit.jupiter.api.AfterEach;
@@ -40,5 +42,12 @@ public class ProductDetailTest {
             "product.select", ProductDetailParameter.builder().productId(2L).memberId(1L).build());
     log.info(detail.toString());
     session.close();
+  }
+
+  @Test
+  @DisplayName("select product's category")
+  void productCategory() {
+    List<Category> categories = session.selectList("product.get-category", 2L);
+    log.info(categories.toString());
   }
 }

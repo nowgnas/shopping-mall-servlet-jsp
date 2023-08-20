@@ -41,7 +41,7 @@
   </resultMap>
 
   <select id="gettotalpage" resultType="int" parameterType="int">
-    SELECT CEIL(COUNT(*) / #{perPage})
+    SELECT CEIL(COUNT(*) / #{perPage})1
     FROM product;
   </select>
 
@@ -145,16 +145,16 @@
     </delete>
 
   <select id="get-category" parameterType="Long" resultType="category">
-    SELECT c1.id AS category_id, c1.parent_id, c1.name, c1.level
+    SELECT c1.id AS id, c1.parent_id parentId, c1.name name, c1.level level
     FROM category c1
     WHERE c1.id = #{id}
     UNION
-    SELECT distinct c2.id AS category_id, c2.parent_id, c2.name, c2.level
+    SELECT distinct c2.id AS id, c2.parent_id parentId, c2.name name, c2.level level
     FROM category c1
            JOIN category c2 ON c2.id = c1.parent_id
     WHERE c1.id = #{id}
     UNION
-    SELECT c3.id AS category_id, c3.parent_id, c3.name, c3.level
+    SELECT c3.id AS id, c3.parent_id parentId, c3.name name, c3.level level
     FROM category c1
            JOIN category c2 ON c2.id = c1.parent_id
            JOIN category c3 ON c3.id = c2.parent_id
