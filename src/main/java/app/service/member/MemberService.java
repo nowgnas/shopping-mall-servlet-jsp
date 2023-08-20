@@ -59,8 +59,10 @@ public class MemberService {
     SqlSession sqlSession = sessionFactory.openSession();
     MemberDetail loginMember = null;
     try {
+
       String hashedPassword = createHashedPassword(dto, sqlSession);
       dto.setPassword(hashedPassword);
+
       Member member =
           memberDao
               .selectByEmailAndPassword(dto, sqlSession)
