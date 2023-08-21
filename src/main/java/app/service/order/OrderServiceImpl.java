@@ -276,7 +276,7 @@ public class OrderServiceImpl {
     try {
       /* 주문 정보 정보를 취소 상태로 바꿈 */
       Order order = orderDao.selectById(orderId, session).orElseThrow(Exception::new);
-      if(order.getStatus().equals(OrderStatus.CANCELED.name())) {
+      if (order.getStatus().equals(OrderStatus.CANCELED.name())) {
         throw new Exception("이미 취소된 주문입니다.");
       }
       order.updateStatus(OrderStatus.CANCELED.name());
@@ -286,7 +286,7 @@ public class OrderServiceImpl {
 
       /* 배송 상태를 확인 1. 배송중이면 취소 불가 2. 배송중이 아니라면 배송 정보를 취소 상태로 바꾼다 */
       Delivery delivery = deliveryDao.selectById(orderId, session).orElseThrow(Exception::new);
-      if(delivery.getStatus().equals(DeliveryStatus.CANCELED.name())) {
+      if (delivery.getStatus().equals(DeliveryStatus.CANCELED.name())) {
         throw new Exception("이미 취소된 배송입니다.");
       }
       if (isDeliveryProcessing(delivery.getStatus())) {
