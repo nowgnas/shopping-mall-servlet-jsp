@@ -3,10 +3,11 @@
         PUBLIC "-//mybatis.org/DTD Config 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
-    <properties resource="mysql.properties"/>
+    <properties resource="mybatis.properties"/>
     <typeAliases>
         <typeAlias type="app.entity.Address" alias="address"/>
         <typeAlias type="app.entity.Cart" alias="cart"/>
+        <typeAlias type="app.dto.comp.ProductAndMemberCompositeKey" alias="comp"/>
         <typeAlias type="app.entity.Category" alias="category"/>
         <typeAlias type="app.entity.Coupon" alias="coupon"/>
         <typeAlias type="app.entity.Delivery" alias="delivery"/>

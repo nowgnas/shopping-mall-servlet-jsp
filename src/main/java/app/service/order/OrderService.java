@@ -10,6 +10,5 @@ public interface OrderService {
   Optional<Map<ErrorCode, Boolean>> buy(OrderProcessDto orderProcessDto);
 
   Optional<Map<ErrorCode, Boolean>> cancel(OrderProcessDto orderProcessDto);
-//  void track(); => ambiguous requirement
 
 }

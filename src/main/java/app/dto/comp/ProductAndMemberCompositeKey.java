@@ -1,14 +1,16 @@
 package app.dto.comp;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
+@Builder
 @AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ProductAndMemberCompositeKey {
-  private Long memberId;
   private Long productId;
+  private Long memberId;
 }
