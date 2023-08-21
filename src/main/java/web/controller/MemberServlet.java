@@ -30,7 +30,7 @@ public class MemberServlet extends HttpServlet {
 
   protected void service(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
-    String next = "index.jsp";
+    String next = Navi.REDIRECT_MAIN;
     String view = request.getParameter("view");
     if (view != null) {
       next = build(request, view);
@@ -55,11 +55,9 @@ public class MemberServlet extends HttpServlet {
       case "loginForm":
         return loginForm();
       case "login":
-        login(request);
-        break;
+        return login(request);
       case "logout":
-        logout(request);
-        break;
+        return logout(request);
     }
     return path;
   }
