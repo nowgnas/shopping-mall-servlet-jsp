@@ -10,6 +10,8 @@ import app.dao.payment.PaymentDao;
 import app.dao.product.ProductDao;
 import app.dao.productorder.ProductOrderDao;
 import app.dto.comp.ProductAndMemberCompositeKey;
+import app.dto.form.OrderCreateForm;
+import app.dto.product.response.ProductDetailForOrder;
 import app.dto.request.CartOrderCreateDto;
 import app.dto.request.OrderCreateDto;
 import app.dto.response.OrderMemberDetail;
@@ -24,6 +26,8 @@ import app.utils.GetSessionFactory;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.log4j.Logger;
@@ -44,10 +48,33 @@ public class OrderServiceImpl {
   private final CartDaoFrameImpl cartDao = new CartDaoFrameImpl();
 
   // TODO: 상품 주문 폼
-  public OrderMemberDetail getCreateOrderForm(Long memberId) throws Exception {
+  public OrderCreateForm getCreateOrderForm(Long memberId, Long productId) throws Exception {
     SqlSession session = sessionFactory.openSession();
     try {
-      return memberDao.selectAddressAndCouponById(memberId, session).orElseThrow(Exception::new);
+      ProductDetailForOrder productDetail = productDao.selectProductDetail(productId, session);
+      OrderMemberDetail orderMemberDetail =
+          memberDao.selectAddressAndCouponById(memberId, session).orElseThrow(Exception::new);
+      return new OrderCreateForm(
+          orderMemberDetail.getName(),
+          new OrderCreateForm.ProductDto(
+              productDetail.getId(),
+              productDetail.getName(),
+              productDetail.getUrl(),
+              productDetail.getPrice()),
+          new OrderCreateForm.AddressDto(
+              orderMemberDetail.getAddress().getRoadName(),
+              orderMemberDetail.getAddress().getAddrDetail(),
+              orderMemberDetail.getAddress().getZipCode()),
+          orderMemberDetail.getCoupons().stream()
+              .map(
+                  c ->
+                      new OrderCreateForm.CouponDto(
+                          c.getId(),
+                          c.getName(),
+                          c.getDiscountPolicy(),
+                          c.getDiscountValue(),
+                          c.getStatus()))
+              .collect(Collectors.toList()));
     } catch (CustomException ex) {
       log.error(ex.getMessage());
       session.rollback();

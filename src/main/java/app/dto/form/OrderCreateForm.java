@@ -19,7 +19,6 @@ public class OrderCreateForm {
   @AllArgsConstructor
   @NoArgsConstructor(access = AccessLevel.PROTECTED)
   public static class AddressDto {
-    private Long addressId;
     private String roadName;
     private String addrDetail;
     private String zipCode;
@@ -31,9 +30,9 @@ public class OrderCreateForm {
   public static class CouponDto {
     private Long couponId;
     private String name;
-    private CouponPolicy discountPolicy;
+    private String discountPolicy;
     private String discountValue;
-    private CouponStatus status;
+    private String status;
   }
 
   @Getter
@@ -43,7 +42,6 @@ public class OrderCreateForm {
     private Long productId;
     private String name;
     private String imageUrl;
-    private String price;
-    private Long quantity;
+    private Long price;
   }
 }

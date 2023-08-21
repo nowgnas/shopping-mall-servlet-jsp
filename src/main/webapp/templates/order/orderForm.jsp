@@ -13,7 +13,7 @@
 <h1>상품 주문</h1>
 <form action="/order.bit?view=direct&cmd=create" method="post">
     <h2>회원 이름</h2>
-    <p id="member-name">${createOrderForm.memberName}</p>
+    <p id="member-name">${memberName}</p>
 
     <h2>배송지 입력</h2>
 
@@ -37,18 +37,18 @@
     <h2>주문 상품</h2>
     <ul>
         <li class="product-item">
-            <input type="hidden" id="productId" name="productId" value="${createOrderForm.product.productId}">
-            <img src="${createOrderForm.product.imageUrl}" alt="상품 썸네일 이미지">
-            <span class="product-name">${createOrderForm.product.name}</span>
-            <span class="product-price">가격: ${createOrderForm.product.price}</span>
-            <span class="product-quantity">수량: ${createOrderForm.product.quantity}개</span>
+            <input type="hidden" id="productId" name="productId" value="${product.productId}">
+            <img src="${product.imageUrl}" alt="상품 이미지">
+            <span class="product-name">${product.name}</span>
+            <span class="product-price">가격: ${product.price}</span>
+            <span class="product-quantity">수량: ${productQuantity}개</span>
         </li>
     </ul>
 
     <label for="coupon">쿠폰 선택</label>
     <select id="coupon" name="coupon">
         <option value="0">적용 안함</option>
-        <c:forEach var="coupon" items="${createOrderForm.coupons}">
+        <c:forEach var="coupon" items="${coupons}">
             <option name="${coupon.discountPolicy}" value="${coupon.discountValue}">${coupon.name}</option>
         </c:forEach>
     </select>
@@ -57,6 +57,7 @@
     <br>
 
     <h2>요약 정보</h2>
+    <input type="hidden" id="totalPrice" name="totalPrice">
     <p id="total-price">총 가격: <span id="calculated-total">0</span>원</p>
     <input type="submit" value="구매하기">
 </form>
@@ -64,6 +65,7 @@
 <script>
     const productItems = document.querySelectorAll(".product-item");
     const calculatedTotalElem = document.getElementById("calculated-total");
+    const calculatedTotalPrice = document.getElementById("totalPrice");
     const couponSelect = document.getElementById("coupon");
 
     let total = 0;
@@ -107,6 +109,7 @@
         }
 
         calculatedTotalElem.textContent = calculatedTotal < 0 ? 0 : calculatedTotal;
+        calculatedTotalPrice.value = calculatedTotal < 0 ? 0 : calculatedTotal;
     }
 
     // 초기 총 가격 계산
@@ -121,9 +124,9 @@
     setAddressBtn.addEventListener("click", function (event) {
         event.preventDefault();
         // 기본 주소지로 설정
-        const defaultRoadName = '${createOrderForm.defaultAddress.roadName}';
-        const defaultAddrDetail = '${createOrderForm.defaultAddress.addrDetail}';
-        const defaultZipCode = '${createOrderForm.defaultAddress.zipCode}';
+        const defaultRoadName = '${defaultAddress.roadName}';
+        const defaultAddrDetail = '${defaultAddress.addrDetail}';
+        const defaultZipCode = '${defaultAddress.zipCode}';
 
         addressInput.value = defaultRoadName;
         detailAddressInput.value = defaultAddrDetail;
