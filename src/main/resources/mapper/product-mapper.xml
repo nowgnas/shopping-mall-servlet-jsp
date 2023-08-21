@@ -29,7 +29,7 @@
         <result column="url" jdbcType="VARCHAR" property="url"/>
         <result column="quantity" jdbcType="BIGINT" property="quantity"/>
         <result column="created_at" jdbcType="TIMESTAMP" property="createdAt"/>
-        <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt"/>
+      <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt"/>
     </resultMap>
   <resultMap id="productOfLike" type="productOfLike">
     <id column="id" jdbcType="BIGINT" property="id"/>
@@ -38,6 +38,13 @@
     <result column="url" jdbcType="VARCHAR" property="url"/>
     <result column="created_at" jdbcType="TIMESTAMP" property="createdAt"/>
     <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt"/>
+  </resultMap>
+  <resultMap id="ProductDetailForOrder" type="app.dto.product.response.ProductDetailForOrder">
+    <id column="id" jdbcType="BIGINT" property="id"/>
+    <result column="name" jdbcType="VARCHAR" property="name"/>
+    <result column="price" jdbcType="BIGINT" property="price"/>
+    <result column="url" jdbcType="VARCHAR" property="url"/>
+    <result column="quantity" jdbcType="BIGINT" property="quantity"/>
   </resultMap>
 
   <select id="gettotalpage" resultType="int" parameterType="int">
@@ -160,6 +167,20 @@
            JOIN category c3 ON c3.id = c2.parent_id
     WHERE c1.id = #{id}
     ORDER BY level
+  </select>
+
+  <select id="check-qty" parameterType="Long" resultType="int">
+    SELECT quantity
+    FROM product
+    WHERE id = #{id}
+  </select>
+
+  <select id="product-detail-for-order" resultType="Long" resultMap="ProductDetailForOrder">
+    select p.id id, p.name name, p.quantity quantity, p.price price, pi.url url
+    from product p
+           left join product_image pi on p.id = pi.product_id
+    where p.id = #{id}
+      and pi.is_thumbnail = true
   </select>
 </mapper>
 
