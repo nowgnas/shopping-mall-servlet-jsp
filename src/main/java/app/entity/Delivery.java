@@ -14,4 +14,8 @@ public class Delivery extends BaseEntity {
   @NonNull private String addrDetail;
   @NonNull private String zipCode;
   @Builder.Default private String status = DeliveryStatus.PENDING.name();
+
+  public void updateStatus(String status) {
+    this.status = status;
+  }
 }

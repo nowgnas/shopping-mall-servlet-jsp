@@ -59,8 +59,10 @@ public class MemberService {
     SqlSession sqlSession = sessionFactory.openSession();
     MemberDetail loginMember = null;
     try {
+
       String hashedPassword = createHashedPassword(dto, sqlSession);
       dto.setPassword(hashedPassword);
+
       Member member =
           memberDao
               .selectByEmailAndPassword(dto, sqlSession)
@@ -74,6 +76,23 @@ public class MemberService {
       sqlSession.close();
     }
     return loginMember;
+  }
+
+  public MemberDetail get(Long id) {
+    SqlSession sqlSession = sessionFactory.openSession();
+    MemberDetail memberDetail = null;
+    try {
+      Member member =
+          memberDao
+              .selectById(id, sqlSession)
+              .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+      memberDetail = MemberDetail.of(member);
+    } catch (SQLException e) {
+      e.printStackTrace();
+    } finally {
+      sqlSession.close();
+    }
+    return memberDetail;
   }
 
   private String createHashedPassword(LoginDto dto, SqlSession sqlSession) throws SQLException {

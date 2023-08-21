@@ -18,6 +18,7 @@ public class ProductOrderDetailDto {
   private String memberName;
   private DeliveryDto address;
   private PaymentDto payment;
+  private CouponDto coupon;
   private int totalPrice;
   private int discountPrice;
 
@@ -30,7 +31,7 @@ public class ProductOrderDetailDto {
   @NoArgsConstructor(access = AccessLevel.PROTECTED)
   public static class ProductDto {
     private Long productId;
-    private String name;
+    private String productName;
     private String thumbnailUrl;
     private int price;
     private int quantity;
@@ -51,5 +52,13 @@ public class ProductOrderDetailDto {
   public static class PaymentDto {
     private String paymentType;
     private int actualAmount;
+  }
+
+  @Getter
+  @AllArgsConstructor
+  @NoArgsConstructor
+  public static class CouponDto {
+    private String couponName;
+    private String couponStatus;
   }
 }

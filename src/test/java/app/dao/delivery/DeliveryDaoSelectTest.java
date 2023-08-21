@@ -1,10 +1,10 @@
-package app.dao.order;
+package app.dao.delivery;
 
-import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
-import app.error.ErrorCode;
+import app.entity.Delivery;
 import config.TestConfig;
+import java.util.Optional;
 import org.apache.ibatis.session.SqlSession;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,9 +12,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import utils.GetSessionFactory;
 
-public class OrderDaoDeleteTest {
+public class DeliveryDaoSelectTest {
 
-  private final OrderDao orderDao = new OrderDao();
+  private DeliveryDao deliveryDao = new DeliveryDao();
   private SqlSession session;
   private final TestConfig testConfig = new TestConfig();
 
@@ -22,7 +22,7 @@ public class OrderDaoDeleteTest {
   void beforeEach() throws Exception {
     session = GetSessionFactory.getInstance().openSession();
     testConfig.init("schema.sql", session);
-    testConfig.init("order/init-order-data.sql", session);
+    testConfig.init("delivery/init-delivery-data.sql", session);
   }
 
   @AfterEach
@@ -32,31 +32,32 @@ public class OrderDaoDeleteTest {
   }
 
   @Test
-  @DisplayName("주문 삭제 테스트 - 정상 처리")
-  void deleteById() throws Exception {
+  @DisplayName("배송지 조회 테스트 - 정상 처리")
+  void selectById() throws Exception {
     // given
     Long orderId = 1L;
 
     // when
-    int deletedRow = orderDao.deleteById(orderId, session);
+    Optional<Delivery> optionalDelivery = deliveryDao.selectById(orderId, session);
     session.commit();
     session.close();
 
     // then
-    assertSame(1, deletedRow);
+    Delivery findDelivery = optionalDelivery.orElse(null);
+    assertNotNull(findDelivery);
+    assertSame(orderId, findDelivery.getOrderId());
   }
 
   @Test
-  @DisplayName("주문 삭제 테스트 - 존재하지 않는 사용자")
-  void deleteByIdEx1() throws Exception {
+  @DisplayName("배송지 조회 테스트 - 존재하지 않는 주문")
+  void selectByIdEx1() throws Exception {
     // given
     Long orderId = 1000L;
 
     // when, then
     assertThrows(
         Exception.class,
-        () -> orderDao.deleteById(orderId, session),
-        ErrorCode.CANNOT_DELETE_ORDER.getMessage());
+        () -> deliveryDao.selectById(orderId, session).orElseThrow(Exception::new));
     session.commit();
     session.close();
   }

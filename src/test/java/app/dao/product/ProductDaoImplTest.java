@@ -29,7 +29,7 @@ class ProductDaoImplTest {
     session = GetSessionFactory.getInstance().openSession();
     testConfig.init("schema.sql", session);
     testConfig.init("init-data.sql", session);
-    testConfig.init("product/product-likes.sql", session);
+//    testConfig.init("product/product-likes.sql", session);
     testConfig.init("product/product-image.sql", session);
   }
 

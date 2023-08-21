@@ -1,5 +1,5 @@
 insert into member (email, password, name, money)
-values ('test@naver.com', 'test123', 'test', 2000000);
+values ('test@naver.com', 'test123', 'test', 6000000);
 
 insert into address (member_id, is_default, road_name, addr_detail, zip_code)
 values (1, true, '경기도 안양시 동안구 관악대로 135', '삼성래미안 000동 000호', '13922'),
@@ -46,18 +46,19 @@ VALUES (1, 'https://example.com', true),
        (4, 'https://example.com', false),
        (4, 'https://example.com', true);
 
-insert into orders (member_id, status)
-values (1, 'PENDING'),
-       (1, 'PENDING'),
-       (1, 'PENDING'),
-       (1, 'PENDING'),
-       (1, 'PENDING');
+insert into orders (member_id, coupon_id, status)
+values (1, 1, 'PENDING'),
+       (1, null, 'PENDING'),
+       (1, 1, 'PENDING'),
+       (1, 1, 'PENDING'),
+       (1, 3, 'PENDING');
 
 insert into payments (order_id, actual_amount, type)
 values (1, 28500000, 'CASH');
 
 insert into delivery (order_id, road_name, addr_detail, zip_code, status)
-values (1, '도로명 주소', '상세 주소', '우편번호', 'PENDING');
+values (1, '도로명 주소', '상세 주소', '우편번호', 'PENDING'),
+       (2, '도로명 주소', '상세 주소', '우편번호', 'PROCESSING');
 
 insert into product_order (product_id, order_id, price, quantity)
 values (1, 1, 3000000, 1),

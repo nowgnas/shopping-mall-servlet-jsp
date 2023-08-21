@@ -2,24 +2,29 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="like">
+<mapper namespace="likes">
 
-    <select id="select" parameterType="Long" resultType="like">
+    <resultMap id="likes" type="app.entity.Likes">
+        <result column="member_id" property="memberId" jdbcType="BIGINT" javaType="Long"/>
+        <result column="product_id" property="productId" jdbcType="BIGINT" javaType="Long"/>
+    </resultMap>
+
+    <select id="select" parameterType="productAndMemberCompositeKey" resultMap="likes">
         SELECT *
         FROM likes
         WHERE member_id = #{memberId}
           and product_id = #{productId}
     </select>
-    <select id="selectall" resultType="like">
+    <select id="selectall" resultMap="likes">
         SELECT *
         FROM likes
         WHERE member_id = #{memberId}
     </select>
-    <insert id="insert" parameterType="like">
+    <insert id="insert" parameterType="likes">
         INSERT INTO likes (member_id, product_id)
         VALUES (#{memberId}, #{productId})
     </insert>
-    <delete id="delete" parameterType="Long">
+    <delete id="delete" parameterType="productAndMemberCompositeKey">
         DELETE
         FROM likes
         WHERE member_id = #{memberId}
