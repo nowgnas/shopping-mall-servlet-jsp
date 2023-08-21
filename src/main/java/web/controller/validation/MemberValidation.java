@@ -15,7 +15,7 @@ public abstract class MemberValidation {
       "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d~!@#$%^&*()+|=]{8,16}$";
 
   private static final String NAME_REGEX =
-          "^[ㄱ-ㅎ가-힣]{1,20}$";
+          "^[ㄱ-ㅎ가-힣]{2,20}$";
 
   public static boolean isValidEmail(String email) {
     Pattern pattern = Pattern.compile(EMAIL_REGEX);
