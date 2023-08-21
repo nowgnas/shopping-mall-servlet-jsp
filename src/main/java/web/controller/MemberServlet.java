@@ -52,6 +52,7 @@ public class MemberServlet extends HttpServlet {
   }
 
   private void register(HttpServletRequest request) {
+
     String email = request.getParameter("email");
     String password = request.getParameter("password");
     String name = request.getParameter("name");

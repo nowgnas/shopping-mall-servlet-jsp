@@ -26,7 +26,7 @@
             <result property="zipCode" column="zip_code"/>
         </association>
         <collection property="coupons" ofType="app.dto.response.CouponDetail">
-            <result property="id" column="id"/>
+            <result property="id" column="coupon_id"/>
             <result property="name" column="coupon_name"/>
             <result property="discountPolicy" column="discount_policy"/>
             <result property="discountValue" column="discount_value"/>
@@ -54,14 +54,23 @@
     </select>
 
     <select id="selectAddressAndCouponById" parameterType="Long" resultMap="OrderMemberDetail">
-        SELECT
-            m.id, m.email, m.name, m.money,
-            a.is_default, a.road_name, a.addr_detail, a.zip_code,
-            c.name AS coupon_name, c.discount_policy, c.discount_value, c.status
-        FROM
-            member m LEFT OUTER JOIN coupon c
-                                     ON m.id = c.member_id,
-            address a
+        SELECT m.id,
+               m.email,
+               m.name,
+               m.money,
+               a.is_default,
+               a.road_name,
+               a.addr_detail,
+               a.zip_code,
+               c.id   AS coupon_id,
+               c.name AS coupon_name,
+               c.discount_policy,
+               c.discount_value,
+               c.status
+        FROM member m
+                 LEFT OUTER JOIN coupon c
+                                 ON m.id = c.member_id,
+             address a
         WHERE m.id = a.member_id
           AND m.id = #{id}
           AND a.is_default = '1'
