@@ -1,5 +1,6 @@
 package app.service.order;
 
+import app.dao.CartDaoFrameImpl;
 import app.dao.coupon.CouponDao;
 import app.dao.delivery.DeliveryDao;
 import app.dao.exception.CustomException;
@@ -8,6 +9,7 @@ import app.dao.order.OrderDao;
 import app.dao.payment.PaymentDao;
 import app.dao.product.ProductDao;
 import app.dao.productorder.ProductOrderDao;
+import app.dto.comp.ProductAndMemberCompositeKey;
 import app.dto.request.CartOrderCreateDto;
 import app.dto.request.OrderCreateDto;
 import app.dto.response.OrderMemberDetail;
@@ -39,6 +41,7 @@ public class OrderServiceImpl {
   private final MemberDao memberDao = new MemberDao();
   private final ProductOrderDao productOrderDao = new ProductOrderDao();
   private final ProductDao productDao = ProductDao.getInstance();
+  private final CartDaoFrameImpl cartDao = new CartDaoFrameImpl();
 
   // TODO: 상품 주문 폼
   public OrderMemberDetail getCreateOrderForm(Long memberId) throws Exception {
@@ -149,6 +152,14 @@ public class OrderServiceImpl {
                   if (productDao.update(product, session) == 0) {
                     throw new CustomException("상품 수량 업데이트 오류");
                   }
+
+                  /* 장바구니에서 상품들 제거 */
+                  int deletedRow = cartDao.deleteById(ProductAndMemberCompositeKey.builder().memberId(memberId)
+                          .productId(product.getId()).build(), session);
+                  if(deletedRow == 0) {
+                    throw new CustomException("장바구니 상품 삭제 오류");
+                  }
+
                 } catch (Exception e) {
                   throw new RuntimeException(e);
                 }
@@ -198,8 +209,6 @@ public class OrderServiceImpl {
               .actualAmount(cartOrderCreateDto.getTotalPrice())
               .build();
       paymentDao.insert(payment, session);
-
-      /* 장바구니에서 상품들 제거 */
 
       session.commit();
 
