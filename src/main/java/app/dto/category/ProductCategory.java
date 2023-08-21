@@ -1,6 +1,6 @@
-package app.dto.product;
+package app.dto.category;
 
-import app.entity.BaseEntity;
+import java.util.Map;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,10 +13,6 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
-public class ProductListItem extends BaseEntity {
-
-  private String name;
-  private Long price;
-  private String url;
-  private Boolean isLiked;
+public class ProductCategory {
+  private Map<Integer, String> categoryList;
 }
