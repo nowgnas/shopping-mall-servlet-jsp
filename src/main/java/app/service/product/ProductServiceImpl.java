@@ -8,7 +8,9 @@ import app.dto.product.ProductListItem;
 import app.dto.product.response.ProductDetailForOrder;
 import app.dto.product.response.ProductDetailWithCategory;
 import app.dto.product.response.ProductListWithPagination;
+import app.dto.product.response.ProductSearchByKeyword;
 import app.entity.Category;
+import app.entity.Product;
 import app.enums.SortOption;
 import app.error.CustomException;
 import app.error.ErrorCode;
@@ -93,5 +95,13 @@ public class ProductServiceImpl implements ProductService {
     ProductDetailForOrder detail = dao.selectProductDetail(productId, session);
     session.close();
     return detail;
+  }
+
+  @Override
+  public List<ProductSearchByKeyword> getProductsByKeyword(String keyword) throws Exception {
+    List<Product> products = dao.selectProductsByKeyword(keyword, session);
+    if (products.size() == 0) throw new Exception("상품이 존재하지 않습니다");
+    session.close();
+    return Product.productSearchByKeyword(products);
   }
 }
