@@ -1,21 +1,22 @@
-package app.dao;
+package app.dao.product;
 
-import app.dao.product.ProductDao;
-import app.dto.comp.ProductAndMemberCompositeKey;
-import app.entity.Cart;
+import static org.junit.jupiter.api.Assertions.*;
+
+import app.entity.ProductImage;
 import app.utils.GetSessionFactory;
 import config.TestConfig;
 import java.util.Optional;
+import java.util.logging.Logger;
 import org.apache.ibatis.session.SqlSession;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class CartDaoImplTest {
-
+class ProductImageDaoTest {
   private final TestConfig testConfig = new TestConfig();
-  CartDaoFrame<ProductAndMemberCompositeKey, Cart> cartDaoFrame = new CartDaoFrameImpl();
+  Logger log = Logger.getLogger("ProductImageDaoTest");
+  ProductImageDao dao = ProductImageDao.getInstance();
   SqlSession session;
 
   @BeforeEach
@@ -23,7 +24,8 @@ public class CartDaoImplTest {
     session = GetSessionFactory.getInstance().openSession();
     testConfig.init("schema.sql", session);
     testConfig.init("init-data.sql", session);
-    testConfig.init("cart-mapper.sql", session);
+    testConfig.init("product-image.sql", session);
+    log.info("image inserted");
   }
 
   @AfterEach
@@ -33,34 +35,10 @@ public class CartDaoImplTest {
   }
 
   @Test
-  void insert() throws Exception {
-    Cart expectedCart = new Cart(1L, 1L, 1);
-    cartDaoFrame.insert(expectedCart, session);
-    Cart actual = cartDaoFrame.selectById(new ProductAndMemberCompositeKey(1L, 1L), session).get();
-
-    Assertions.assertEquals(expectedCart, actual);
-
-
+  void selectById() throws Exception {
+    // TODO: 데이터 값이 올바르게 나오지 않음
+    Optional<ProductImage> productImage = dao.selectById(1L, session);
+    log.info(productImage.get().toString());
+    Assertions.assertEquals(1L, productImage.get().getProductId());
   }
-
-  @Test
-  void delete() {
-
-  }
-
-  @Test
-  void select() {
-
-  }
-
-  @Test
-  void selectAllByMember() {
-
-  }
-
-  @Test
-  void selectAllDataFromCart() {
-
-  }
-
 }

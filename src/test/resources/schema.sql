@@ -1,499 +1,175 @@
-CREATE TABLE IF NOT EXISTS likes
+create table category
 (
-
-    member_id
-        BIGINT
-            UNSIGNED
-        NOT
-            NULL,
-
-    product_id
-        BIGINT
-            UNSIGNED
-        NOT
-            NULL
+    id        bigint unsigned auto_increment
+        primary key,
+    parent_id bigint unsigned null,
+    name      varchar(20)     not null,
+    level     int unsigned    not null,
+    constraint FK_category_TO_category_1
+        foreign key (parent_id) references category (id)
 );
 
-CREATE TABLE IF NOT EXISTS member
+create table member
 (
-
-    id
-               BIGINT
-                   UNSIGNED
-                               NOT
-                                   NULL,
-
-    email
-               VARCHAR(20)     NOT NULL UNIQUE,
-    password   VARCHAR(20)     NOT NULL,
-    name       VARCHAR(20)     NOT NULL,
-    money      BIGINT UNSIGNED NOT NULL DEFAULT 0,
-    created_at DATETIME        NOT NULL DEFAULT NOW
-        (
-        ),
-    updated_at DATETIME        NOT NULL DEFAULT NOW
-        (
-        )
+    id         bigint unsigned auto_increment
+        primary key,
+    email      varchar(30)                               not null,
+    password   varchar(255)                              not null,
+    name       varchar(20)                               not null,
+    money      bigint unsigned default '0'               not null,
+    created_at datetime        default CURRENT_TIMESTAMP not null,
+    updated_at datetime        default CURRENT_TIMESTAMP not null,
+    constraint email
+        unique (email)
 );
 
-CREATE TABLE IF NOT EXISTS product
+create table address
 (
-
-    id
-                BIGINT
-                    UNSIGNED
-                                NOT
-                                    NULL,
-
-    category_id
-                BIGINT
-                    UNSIGNED
-                                NOT
-                                    NULL,
-
-    name
-                VARCHAR(20)     NOT NULL,
-    description VARCHAR(255)    NULL     DEFAULT NULL,
-    price       BIGINT UNSIGNED NOT NULL,
-    quantity    BIGINT UNSIGNED NOT NULL,
-    code        VARCHAR(255)    NOT NULL UNIQUE,
-    created_at  DATETIME        NOT NULL DEFAULT NOW
-        (
-        ),
-    updated_at  DATETIME        NOT NULL DEFAULT NOW
-        (
-        )
+    id          bigint unsigned auto_increment
+        primary key,
+    member_id   bigint unsigned                      not null,
+    is_default  tinyint(1) default 0                 not null,
+    road_name   varchar(255)                         not null,
+    addr_detail varchar(255)                         not null,
+    zip_code    varchar(10)                          not null,
+    created_at  datetime   default CURRENT_TIMESTAMP not null,
+    updated_at  datetime   default CURRENT_TIMESTAMP not null,
+    constraint FK_member_TO_address_1
+        foreign key (member_id) references member (id)
 );
 
-CREATE TABLE IF NOT EXISTS cart
+create table coupon
 (
-
-    member_id
-        BIGINT
-            UNSIGNED
-        NOT
-            NULL,
-
-    product_id
-        BIGINT
-            UNSIGNED
-        NOT
-            NULL,
-
-    product_quantity
-        INT
-            UNSIGNED
-        NOT
-            NULL
+    id              bigint unsigned auto_increment
+        primary key,
+    member_id       bigint unsigned                       not null,
+    name            varchar(20)                           not null,
+    discount_policy varchar(20)                           not null,
+    discount_value  int unsigned                          not null,
+    status          varchar(20) default 'YET'             not null,
+    created_at      datetime    default CURRENT_TIMESTAMP not null,
+    updated_at      datetime    default CURRENT_TIMESTAMP not null,
+    constraint FK_member_TO_coupon_1
+        foreign key (member_id) references member (id)
 );
 
-CREATE TABLE IF NOT EXISTS orders
+create table encryption
 (
-
-    id
-               BIGINT
-                   UNSIGNED
-                           NOT
-                               NULL,
-
-    member_id
-               BIGINT
-                   UNSIGNED
-                           NOT
-                               NULL,
-
-    status
-               VARCHAR(10) NOT NULL DEFAULT 'PENDING',
-    created_at DATETIME    NOT NULL DEFAULT NOW
-        (
-        ),
-    updated_at DATETIME    NOT NULL DEFAULT NOW
-        (
-        )
+    member_id bigint unsigned not null
+        primary key,
+    salt      varchar(255)    not null,
+    email     varchar(30)     not null,
+    constraint email_UNIQUE
+        unique (email),
+    constraint FK_member_TO_encryption_1
+        foreign key (member_id) references member (id)
 );
 
-CREATE TABLE IF NOT EXISTS product_order
+create table orders
 (
-
-    id
-               BIGINT
-                   UNSIGNED
-                        NOT
-                            NULL,
-
-    product_id
-               BIGINT
-                   UNSIGNED
-                        NOT
-                            NULL,
-
-    order_id
-               BIGINT
-                   UNSIGNED
-                        NOT
-                            NULL,
-
-    price
-               BIGINT
-                   UNSIGNED
-                        NOT
-                            NULL,
-
-    quantity
-               INT
-                   UNSIGNED
-                        NOT
-                            NULL,
-
-    created_at
-               DATETIME
-                        NOT
-                            NULL
-                                 DEFAULT
-                                     NOW
-                                         (
-                                         ),
-    updated_at DATETIME NOT NULL DEFAULT NOW
-        (
-        )
+    id         bigint unsigned auto_increment
+        primary key,
+    member_id  bigint unsigned                       not null,
+    status     varchar(10) default 'PENDING'         not null,
+    created_at datetime    default CURRENT_TIMESTAMP not null,
+    updated_at datetime    default CURRENT_TIMESTAMP not null,
+    constraint FK_member_TO_orders_1
+        foreign key (member_id) references member (id)
 );
 
-CREATE TABLE IF NOT EXISTS category
+create table delivery
 (
-
-    id
-          BIGINT
-              UNSIGNED
-                       NOT
-                           NULL,
-
-    parent_id
-          BIGINT
-              UNSIGNED
-                       NULL,
-
-    name
-          VARCHAR(20)  NOT NULL,
-    level INT UNSIGNED NOT NULL
+    order_id    bigint unsigned                not null
+        primary key,
+    road_name   varchar(255)                   not null,
+    addr_detail varchar(255)                   not null,
+    zip_code    varchar(255)                   not null,
+    status      varchar(255) default 'PENDING' not null,
+    created_at  datetime     default (now())   not null,
+    updated_at  datetime     default (now())   not null,
+    constraint FK_orders_TO_delivery_1
+        foreign key (order_id) references orders (id)
 );
 
-CREATE TABLE IF NOT EXISTS coupon
+create table payments
 (
-
-    id
-                    BIGINT
-                        UNSIGNED
-                                 NOT
-                                     NULL,
-
-    member_id
-                    BIGINT
-                        UNSIGNED
-                                 NOT
-                                     NULL,
-
-    name
-                    VARCHAR(20)  NOT NULL,
-    discount_policy VARCHAR(20)  NOT NULL,
-    discount_value  INT UNSIGNED NOT NULL,
-    status          VARCHAR(20)  NOT NULL DEFAULT 'YET',
-    created_at      DATETIME     NOT NULL DEFAULT NOW
-        (
-        ),
-    updated_at      DATETIME     NOT NULL DEFAULT NOW
-        (
-        )
+    id            bigint unsigned auto_increment
+        primary key,
+    order_id      bigint unsigned                       not null,
+    actual_amount bigint unsigned                       not null,
+    type          varchar(20) default 'CASH'            not null,
+    created_at    datetime    default CURRENT_TIMESTAMP not null,
+    updated_at    datetime    default CURRENT_TIMESTAMP not null,
+    constraint FK_orders_TO_payments_1
+        foreign key (order_id) references orders (id)
 );
 
-CREATE TABLE IF NOT EXISTS address
+create table product
 (
-
-    id
-                BIGINT
-                    UNSIGNED
-                             NOT
-                                 NULL,
-
-    member_id
-                BIGINT
-                    UNSIGNED
-                             NOT
-                                 NULL,
-
-    is_default
-                BOOLEAN
-                             NOT
-                                 NULL
-                                      DEFAULT
-                                          FALSE,
-
-    road_name
-                VARCHAR(255) NOT NULL,
-    addr_detail VARCHAR(255) NOT NULL,
-    zip_code    VARCHAR(10)  NOT NULL,
-    created_at  DATETIME     NOT NULL DEFAULT NOW
-        (
-        ),
-    updated_at  DATETIME     NOT NULL DEFAULT NOW
-        (
-        )
+    id          bigint unsigned auto_increment
+        primary key,
+    category_id bigint unsigned                    not null,
+    name        varchar(20)                        not null,
+    description varchar(255)                       null,
+    price       bigint unsigned                    not null,
+    quantity    bigint unsigned                    not null,
+    code        varchar(255)                       not null,
+    created_at  datetime default CURRENT_TIMESTAMP not null,
+    updated_at  datetime default CURRENT_TIMESTAMP not null,
+    constraint code
+        unique (code),
+    constraint FK_category_TO_product_1
+        foreign key (category_id) references category (id)
 );
 
-CREATE TABLE IF NOT EXISTS product_image
+create table cart
 (
-
-    id
-                 BIGINT
-                     UNSIGNED
-                              NOT
-                                  NULL,
-
-    product_id
-                 BIGINT
-                     UNSIGNED
-                              NOT
-                                  NULL,
-
-    url
-                 VARCHAR(255) NOT NULL,
-    is_thumbnail BOOLEAN      NOT NULL DEFAULT FALSE,
-    created_at   DATETIME     NOT NULL DEFAULT NOW
-        (
-        ),
-    updated_at   DATETIME     NOT NULL DEFAULT NOW
-        (
-        )
+    member_id        bigint unsigned not null,
+    product_id       bigint unsigned not null,
+    product_quantity int unsigned    not null,
+    primary key (member_id, product_id),
+    constraint FK_member_TO_cart_1
+        foreign key (member_id) references member (id),
+    constraint FK_product_TO_cart_1
+        foreign key (product_id) references product (id)
 );
 
-CREATE TABLE IF NOT EXISTS payments
+create table likes
 (
-
-    id
-               BIGINT
-                   UNSIGNED
-                           NOT
-                               NULL,
-
-    order_id
-               BIGINT
-                   UNSIGNED
-                           NOT
-                               NULL,
-
-    actual_amount
-               BIGINT
-                   UNSIGNED
-                           NOT
-                               NULL,
-
-    type
-               VARCHAR(20) NOT NULL DEFAULT 'CASH',
-    created_at DATETIME    NOT NULL DEFAULT NOW
-        (
-        ),
-    updated_at DATETIME    NOT NULL DEFAULT NOW
-        (
-        )
+    member_id  bigint unsigned not null,
+    product_id bigint unsigned not null,
+    primary key (member_id, product_id),
+    constraint FK_member_TO_likes_1
+        foreign key (member_id) references member (id),
+    constraint FK_product_TO_likes_1
+        foreign key (product_id) references product (id)
 );
 
-CREATE TABLE IF NOT EXISTS delivery
+create table product_image
 (
-
-    order_id
-                BIGINT
-                    UNSIGNED
-                             NOT
-                                 NULL,
-
-    road_name
-                VARCHAR(255) NOT NULL,
-    addr_detail VARCHAR(255) NOT NULL,
-    zip_code    VARCHAR(255) NOT NULL,
-    status      VARCHAR(255) NOT NULL DEFAULT 'PENDING',
-    created_at  DATETIME     NOT NULL,
-    updated_at  DATETIME     NOT NULL
+    id           bigint unsigned auto_increment
+        primary key,
+    product_id   bigint unsigned                      not null,
+    url          varchar(255)                         not null,
+    is_thumbnail tinyint(1) default 0                 not null,
+    created_at   datetime   default CURRENT_TIMESTAMP not null,
+    updated_at   datetime   default CURRENT_TIMESTAMP not null,
+    constraint FK_product_TO_product_image_1
+        foreign key (product_id) references product (id)
 );
 
-ALTER TABLE likes
-    ADD CONSTRAINT PK_likes PRIMARY KEY (
-                                         member_id,
-                                         product_id
-        );
-
-ALTER TABLE member
-    ADD CONSTRAINT PK_member PRIMARY KEY (
-                                          id
-        );
-ALTER TABLE member
-    MODIFY id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT;
-
-ALTER TABLE product
-    ADD CONSTRAINT PK_product PRIMARY KEY (
-                                           id
-        );
-ALTER TABLE product
-    MODIFY id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT;
-
-ALTER TABLE cart
-    ADD CONSTRAINT PK_cart PRIMARY KEY (
-                                        member_id,
-                                        product_id
-        );
-
-ALTER TABLE orders
-    ADD CONSTRAINT PK_orders PRIMARY KEY (
-                                          id
-        );
-ALTER TABLE orders
-    MODIFY id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT;
-
-ALTER TABLE product_order
-    ADD CONSTRAINT PK_product_order PRIMARY KEY (
-                                                 id
-        );
-ALTER TABLE product_order
-    MODIFY id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT;
-
-ALTER TABLE category
-    ADD CONSTRAINT PK_category PRIMARY KEY (
-                                            id
-        );
-ALTER TABLE category
-    MODIFY id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT;
-
-ALTER TABLE coupon
-    ADD CONSTRAINT PK_coupon PRIMARY KEY (
-                                          id
-        );
-ALTER TABLE coupon
-    MODIFY id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT;
-
-ALTER TABLE address
-    ADD CONSTRAINT PK_address PRIMARY KEY (
-                                           id
-        );
-ALTER TABLE address
-    MODIFY id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT;
-
-ALTER TABLE product_image
-    ADD CONSTRAINT PK_product_image PRIMARY KEY (
-                                                 id
-        );
-ALTER TABLE product_image
-    MODIFY id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT;
-
-ALTER TABLE payments
-    ADD CONSTRAINT PK_payments PRIMARY KEY (
-                                            id
-        );
-ALTER TABLE payments
-    MODIFY id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT;
-
-ALTER TABLE delivery
-    ADD CONSTRAINT PK_delivery PRIMARY KEY (order_id);
-
-ALTER TABLE likes
-    ADD CONSTRAINT FK_member_TO_likes_1 FOREIGN KEY (member_id)
-        REFERENCES member (id);
-
-ALTER TABLE likes
-    ADD CONSTRAINT FK_product_TO_likes_1 FOREIGN KEY (
-                                                      product_id
-        )
-        REFERENCES product (
-                            id
-            );
-
-ALTER TABLE product
-    ADD CONSTRAINT FK_category_TO_product_1 FOREIGN KEY (
-                                                         category_id
-        )
-        REFERENCES category (
-                             id
-            );
-
-ALTER TABLE cart
-    ADD CONSTRAINT FK_member_TO_cart_1 FOREIGN KEY (
-                                                    member_id
-        )
-        REFERENCES member (
-                           id
-            );
-
-ALTER TABLE cart
-    ADD CONSTRAINT FK_product_TO_cart_1 FOREIGN KEY (
-                                                     product_id
-        )
-        REFERENCES product (
-                            id
-            );
-
-ALTER TABLE orders
-    ADD CONSTRAINT FK_member_TO_orders_1 FOREIGN KEY (
-                                                      member_id
-        )
-        REFERENCES member (
-                           id
-            );
-
-ALTER TABLE product_order
-    ADD CONSTRAINT FK_product_TO_product_order_1 FOREIGN KEY (
-                                                              product_id
-        )
-        REFERENCES product (
-                            id
-            );
-
-ALTER TABLE product_order
-    ADD CONSTRAINT FK_orders_TO_product_order_1 FOREIGN KEY (
-                                                             order_id
-        )
-        REFERENCES orders (
-                           id
-            );
-
-ALTER TABLE category
-    ADD CONSTRAINT FK_category_TO_category_1 FOREIGN KEY (
-                                                          parent_id
-        )
-        REFERENCES category (
-                             id
-            );
-
-ALTER TABLE coupon
-    ADD CONSTRAINT FK_member_TO_coupon_1 FOREIGN KEY (
-                                                      member_id
-        )
-        REFERENCES member (
-                           id
-            );
-
-ALTER TABLE address
-    ADD CONSTRAINT FK_member_TO_address_1 FOREIGN KEY (
-                                                       member_id
-        )
-        REFERENCES member (
-                           id
-            );
-
-ALTER TABLE product_image
-    ADD CONSTRAINT FK_product_TO_product_image_1 FOREIGN KEY (
-                                                              product_id
-        )
-        REFERENCES product (
-                            id
-            );
-
-ALTER TABLE payments
-    ADD CONSTRAINT FK_orders_TO_payments_1 FOREIGN KEY (
-                                                        order_id
-        )
-        REFERENCES orders (id);
-
-ALTER TABLE delivery
-    ADD CONSTRAINT FK_orders_TO_delivery_1 FOREIGN KEY (
-                                                        order_id
-        )
-        REFERENCES orders (
-                           id
-            );
+create table product_order
+(
+    id         bigint unsigned auto_increment
+        primary key,
+    product_id bigint unsigned                    not null,
+    order_id   bigint unsigned                    not null,
+    price      bigint unsigned                    not null,
+    quantity   int unsigned                       not null,
+    created_at datetime default CURRENT_TIMESTAMP not null,
+    updated_at datetime default CURRENT_TIMESTAMP not null,
+    constraint FK_orders_TO_product_order_1
+        foreign key (order_id) references orders (id),
+    constraint FK_product_TO_product_order_1
+        foreign key (product_id) references product (id)
+);

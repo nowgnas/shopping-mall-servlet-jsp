@@ -39,6 +39,8 @@ public enum ErrorCode{
 
   CART_PRODUCT_IS_NOT_EXISTED(HttpServletResponse.SC_NOT_FOUND, "4001", "장바구니에 상품이 존재하지 않습니다."),
   CART_PRODUCT_IS_ALREADY_EXISTED(HttpServletResponse.SC_NOT_ACCEPTABLE, "4002", "장바구니에 해당 상품이 이미 존재합니다."),
+  CART_PRODUCT_IS_OUT_OF_STOCK(HttpServletResponse.SC_BAD_REQUEST,"4003","재고가 존재하지 않습니다."),
+  CART_CAN_NOT_STORE_UNDER_0_VALUE(HttpServletResponse.SC_NOT_ACCEPTABLE, "4004", "0개 이하의 상품을 담을 수 없습니다."),
 
   //주문
   QUANTITY_IS_NOT_SUFFICIENT(400, "3001", "재고가 없습니다."),

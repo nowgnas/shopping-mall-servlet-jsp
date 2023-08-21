@@ -22,6 +22,7 @@
         <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt"/>
     </resultMap>
     <resultMap id="singleProduct" type="productItemQuantity">
+        <id column="id" jdbcType="BIGINT" property="id"/>
         <result column="name" jdbcType="VARCHAR" property="name"/>
         <result column="price" jdbcType="BIGINT" property="price"/>
         <result column="url" jdbcType="VARCHAR" property="url"/>
@@ -30,8 +31,14 @@
         <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt"/>
     </resultMap>
 
+  <select id="select" parameterType="Long" resultType="product">
+    SELECT *
+    FROM product
+    WHERE id = #{id}
+  </select>
+
     <select id="selectone" parameterType="Long" resultMap="singleProduct">
-      SELECT name, quantity, price, url
+      SELECT p.id, p.name, p.quantity, p.price, i.url
       FROM product p
       LEFT JOIN product_image i
       ON p.id = i.product_id

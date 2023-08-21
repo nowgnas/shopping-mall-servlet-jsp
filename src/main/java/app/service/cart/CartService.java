@@ -1,5 +1,7 @@
 package app.service.cart;
 
+import app.dto.cart.AllCartProductInfoDto;
+import app.dto.cart.CartProductDto;
 import app.dto.comp.ProductAndMemberCompositeKey;
 import app.dto.product.ProductItemQuantity;
 import app.entity.Cart;
@@ -8,7 +10,7 @@ import java.util.List;
 
 public interface CartService {
 
-  List<ProductItemQuantity> getCartProductListByMember(ProductAndMemberCompositeKey productAndMemberCompositeKeys)
+  AllCartProductInfoDto getCartProductListByMember(ProductAndMemberCompositeKey productAndMemberCompositeKeys)
       throws Exception;
 
   ErrorCode putItemIntoCart(ProductAndMemberCompositeKey productAndMemberCompositeKey,

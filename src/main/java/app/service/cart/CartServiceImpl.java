@@ -3,6 +3,9 @@ package app.service.cart;
 import app.dao.CartDaoFrame;
 import app.dao.CartDaoFrameImpl;
 import app.dao.product.ProductDao;
+import app.dto.cart.AllCartProductInfoDto;
+import app.dto.cart.CartProductDto;
+import app.dto.cart.CartProductQuantityInfo;
 import app.dto.comp.ProductAndMemberCompositeKey;
 import app.dto.product.ProductItemQuantity;
 import app.entity.Cart;
@@ -10,10 +13,8 @@ import app.entity.Product;
 import app.error.ErrorCode;
 import app.utils.GetSessionFactory;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -34,14 +35,17 @@ public class CartServiceImpl implements CartService {
   }
 
   @Override
-  public List<ProductItemQuantity> getCartProductListByMember(
+  public AllCartProductInfoDto getCartProductListByMember(
       ProductAndMemberCompositeKey productAndMemberCompositeKeys) throws Exception {
     SqlSession session = GetSessionFactory.getInstance().openSession();
     Long memberId = productAndMemberCompositeKeys.getMemberId();
     List<Cart> cartsByMember = cartDaoFrame.getCartProductListByMember(memberId, session);
     List<Long> productIdList = cartsByMember.stream().map(Cart::getProductId)
         .collect(Collectors.toList());
-    return productDao.selectProductQuantity(productIdList, session);
+    List<ProductItemQuantity> productItemQuantity = productDao.selectProductQuantity(productIdList, session);
+
+    return AllCartProductInfoDto.getCustomerViewOfCartInfo(CartProductDto.getProductInfo(productItemQuantity));
+
   }
 
   @Override
@@ -55,25 +59,10 @@ public class CartServiceImpl implements CartService {
   @Override
   public ErrorCode updateQuantityOfCartProduct(
       ProductAndMemberCompositeKey productAndMemberCompositeKey, Long productId,
-      Integer updateQuantity)
+      Integer requestUpdateQuantity)
       throws Exception {
-
-    Long memberId = productAndMemberCompositeKey.getMemberId();
     SqlSession session = GetSessionFactory.getInstance().openSession();
-    List<ProductItemQuantity> productItemQuantities = this.getCartProductListByMember(
-        productAndMemberCompositeKey);
-    productItemQuantities.stream().filter(product -> proproductId)
-
-    //get Cart List from Comp Key
-    //get product Id list using with stream
-    //request List of products id and stock
-
-    //compare the Product Stock with updateQuantity
-    //If violate under the two condition return ErrorCode
-    //or return null;
-
-    //if product.stock - updateQuantity under 0 => return ErrorCode => OutOfStock
-    //if updateQuantity is under 0  => if currentQuantity + updateQuantity under 0 => just remove the product in the cart
+    return null;
   }
 
   @Override

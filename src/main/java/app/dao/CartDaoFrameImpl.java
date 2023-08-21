@@ -35,7 +35,8 @@ public class CartDaoFrameImpl implements CartDaoFrame<ProductAndMemberCompositeK
   @Override
   public Optional<Cart> selectById(ProductAndMemberCompositeKey productAndMemberCompositeKey,
       SqlSession session) throws Exception {
-    Optional<Cart> cartOptional = Optional.ofNullable(session.selectOne("cart.select"));
+    Optional<Cart> cartOptional = Optional.ofNullable(
+        session.selectOne("cart.select", productAndMemberCompositeKey));
     session.close();
     return cartOptional;
   }
