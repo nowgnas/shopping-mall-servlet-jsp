@@ -13,4 +13,12 @@ class MemberValidationTest {
     boolean validEmail = MemberValidation.isValidEmail(inputEmail);
     Assertions.assertTrue(validEmail);
   }
+
+  @Test
+  @DisplayName("이메일 형식이 정규식에 맞지 않는 경우 false를 반환 한다.")
+  void email_validation_fail() throws Exception {
+    String inputEmail = "abc@com";
+    boolean validEmail = MemberValidation.isValidEmail(inputEmail);
+    Assertions.assertFalse(validEmail);
+  }
 }
