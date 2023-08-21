@@ -116,4 +116,13 @@ public interface ProductDaoFrame<K, V extends Product> extends DaoFrame<K, V> {
   ProductDetailForOrder selectProductDetail(Long productId, SqlSession session) throws Exception;
 
   int selectProductQuantity(Long productId, SqlSession session);
+
+  /**
+   * 키워드 기준 상품 검색
+   *
+   * @param keyword 사용자 입력
+   * @param session sql session
+   * @return
+   */
+  List<Product> selectProductsByKeyword(String keyword, SqlSession session);
 }
