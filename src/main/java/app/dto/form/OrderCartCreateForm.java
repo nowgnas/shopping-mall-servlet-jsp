@@ -8,7 +8,7 @@ import lombok.*;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class CartOrderCreateForm {
+public class OrderCartCreateForm {
 
   private String memberName;
   private List<ProductDto> products;
