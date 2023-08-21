@@ -60,7 +60,7 @@ public class ProductDao implements ProductDaoFrame<Long, Product> {
 
   @Override
   public int update(Product product, SqlSession session) throws Exception {
-    return 0;
+    return session.update("product.update", product);
   }
 
   @Override
@@ -78,7 +78,8 @@ public class ProductDao implements ProductDaoFrame<Long, Product> {
    */
   @Override
   public Optional<Product> selectById(Long productId, SqlSession session) throws Exception {
-    Optional<Product> product = session.selectOne("product.select", productId);
+
+    Optional<Product> product = Optional.of(session.selectOne("product.select", productId));
     if (product.isPresent()) return product;
     else throw new CustomException(ErrorCode.ITEM_NOT_FOUND);
   }

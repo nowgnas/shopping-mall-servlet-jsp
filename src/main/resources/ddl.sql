@@ -70,11 +70,14 @@ create table orders
     id         bigint unsigned auto_increment
         primary key,
     member_id  bigint unsigned                       not null,
+    coupon_id  bigint unsigned                       null,
     status     varchar(10) default 'PENDING'         not null,
     created_at datetime    default CURRENT_TIMESTAMP not null,
     updated_at datetime    default CURRENT_TIMESTAMP not null,
     constraint FK_member_TO_orders_1
-        foreign key (member_id) references member (id)
+        foreign key (member_id) references member (id),
+    constraint FK_coupon_TO_orders_1
+        foreign key (coupon_id) references coupon (id)
 );
 
 create table delivery

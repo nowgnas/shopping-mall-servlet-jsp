@@ -23,7 +23,7 @@ public class DeliveryDaoInsertTest {
   void beforeEach() throws Exception {
     session = GetSessionFactory.getInstance().openSession();
     testConfig.init("schema.sql", session);
-    testConfig.init("delivery/init-delivery-data.sql", session);
+    testConfig.init("delivery/init-delivery-insert-data.sql", session);
   }
 
   @AfterEach

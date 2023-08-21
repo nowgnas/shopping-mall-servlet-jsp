@@ -70,17 +70,16 @@
            p.price             price,
            p.category_id       categoryId,
            p.description       description,
-           pi.url              url,
            p.quantity          quantity,
+           pi.url              url,
            CASE
              WHEN l.product_id IS NOT NULL THEN true
              ELSE false END AS isLiked
     FROM product p
-           LEFT JOIN likes l ON p.id = l.product_id
-           LEFT JOIN product_image pi ON p.id = pi.product_id
-    WHERE member_id = #{memberId}
-      AND p.id = #{productId}
-      AND pi.is_thumbnail = false
+           left join likes l on p.id = l.product_id and l.member_id = #{memberId}
+           left join product_image pi on p.id = pi.product_id
+    where p.id = #{productId}
+      and pi.is_thumbnail = false
   </select>
 
   <select id="selectone" parameterType="Long" resultMap="singleProduct">
@@ -183,9 +182,3 @@
       and pi.is_thumbnail = true
   </select>
 </mapper>
-
-
-
-
-
-

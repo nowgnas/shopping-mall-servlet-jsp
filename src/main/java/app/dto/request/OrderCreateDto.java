@@ -1,6 +1,5 @@
 package app.dto.request;
 
-import java.util.List;
 import lombok.*;
 
 @Getter
@@ -8,11 +7,10 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class OrderCreateDto {
 
-  private boolean isCart;
   private Long memberId;
   private Long couponId;
   private AddressDto address;
-  private List<ProductDto> products;
+  private ProductDto product;
   private Long totalPrice;
 
   @Getter

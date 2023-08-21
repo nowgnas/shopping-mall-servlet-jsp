@@ -45,3 +45,16 @@ values (1, 'PENDING'),
        (1, 'PENDING'),
        (1, 'PENDING'),
        (1, 'PENDING');
+
+insert into payments (order_id, actual_amount, type)
+values (1, 28500000, 'CASH');
+
+insert into delivery (order_id, road_name, addr_detail, zip_code)
+values (1, 'road', 'addr detail', 'zip code');
+
+insert into product_order (product_id, order_id, price, quantity)
+values (1, 1, 3000000, 1),
+       (2, 1, 2000000, 2),
+       (3, 1, 1500000, 3),
+       (4, 1, 1400000, 5),
+       (5, 1, 1000000, 10);

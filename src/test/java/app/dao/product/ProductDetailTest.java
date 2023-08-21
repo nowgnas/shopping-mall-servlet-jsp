@@ -26,7 +26,7 @@ public class ProductDetailTest {
     session = GetSessionFactory.getInstance().openSession();
     testConfig.init("schema.sql", session);
     testConfig.init("init-data.sql", session);
-    testConfig.init("product/product-likes.sql", session);
+//    testConfig.init("product/product-likes.sql", session);
     testConfig.init("product/product-image.sql", session);
     testConfig.init("product/product-category.sql", session);
   }
@@ -42,7 +42,7 @@ public class ProductDetailTest {
   void productDetail() {
     ProductDetail detail =
         session.selectOne(
-            "product.select", ProductDetailParameter.builder().productId(4L).memberId(1L).build());
+            "product.select", ProductDetailParameter.builder().productId(2L).memberId(1L).build());
     log.info(detail.toString());
     session.close();
   }

@@ -27,7 +27,7 @@ public class ProductDetailServiceTest {
     session = GetSessionFactory.getInstance().openSession();
     testConfig.init("schema.sql", session);
     testConfig.init("init-data.sql", session);
-    testConfig.init("product/product-likes.sql", session);
+//    testConfig.init("product/product-likes.sql", session);
     testConfig.init("product/product-image.sql", session);
     testConfig.init("product/product-category.sql", session);
   }
@@ -41,12 +41,7 @@ public class ProductDetailServiceTest {
   @Test
   @DisplayName("product service detail test")
   void productDetail() throws Exception {
-    List<Category> category = session.selectList("category.selectall");
-    for (Category c : category) {
-      log.info(c.toString());
-    }
-    // todo: 테스트 실패
-    ProductDetailWithCategory productDetail = service.getProductDetail(1L, 4L);
+    ProductDetailWithCategory productDetail = service.getProductDetail(1L, 2L);
     log.info(productDetail.toString());
   }
 
