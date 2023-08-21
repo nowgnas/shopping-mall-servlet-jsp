@@ -29,4 +29,15 @@ class MemberValidationTest {
     boolean validPassword = MemberValidation.isValidPassword(password);
     Assertions.assertTrue(validPassword);
   }
+
+  @Test
+  @DisplayName("비밀번호 정규식 체크에 실패 한 경우 false를 반환 한다.")
+  void password_validation_fail() throws Exception {
+    String password = "123456789";
+    String password2 = "a123";
+    boolean validPassword = MemberValidation.isValidPassword(password);
+    boolean validPassword2 = MemberValidation.isValidPassword(password2);
+    Assertions.assertFalse(validPassword);
+    Assertions.assertFalse(validPassword2);
+  }
 }
