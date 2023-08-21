@@ -1,6 +1,8 @@
 package web.controller;
 
+import app.dto.request.LoginDto;
 import app.dto.request.MemberRegisterDto;
+import app.dto.response.MemberDetail;
 import app.error.CustomException;
 import app.error.ErrorCode;
 import app.service.member.MemberService;
@@ -12,6 +14,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 @WebServlet({"/member"})
@@ -29,33 +32,37 @@ public class MemberServlet extends HttpServlet {
     String next = "index.jsp";
     String view = request.getParameter("view");
     if (view != null) {
-      build(request, view);
+      next = build(request, view);
     }
 
     RequestDispatcher rd = request.getRequestDispatcher(next);
     rd.forward(request, response);
   }
 
-  private void build(HttpServletRequest request, String view) {
+  private String build(HttpServletRequest request, String view) {
+    String path = "redirect:index.jsp";
     switch (view) {
       case "registerForm":
-        request.setAttribute("center", "registerForm");
-        break;
-      case "loginForm":
-        request.setAttribute("center", "loginForm");
-        break;
+        return registerForm();
       case "register":
-        register(request);
-        request.setAttribute("center", "loginForm");
-        break;
+        return register(request);
+      case "loginForm":
+        return loginForm();
       case "login":
+        login(request);
         break;
       case "logout":
+        logout(request);
         break;
     }
+    return path;
   }
 
-  private void register(HttpServletRequest request) {
+  private String registerForm() {
+    return "forward:member/registerForm.jsp";
+  }
+
+  private String register(HttpServletRequest request) {
 
     String email = request.getParameter("email");
     String password = request.getParameter("password");
@@ -63,22 +70,47 @@ public class MemberServlet extends HttpServlet {
 
     MemberRegisterDto dto = new MemberRegisterDto(email, password, name);
 
-    if(!registerValidationCheck(dto)) {
+    if (!registerValidationCheck(dto)) {
       throw new CustomException(ErrorCode.REGISTER_FAIL);
     }
 
     memberService.register(dto);
-    request.setAttribute("center", "login");
+    return "redirect:member/loginForm.jsp";
   }
 
+  private String loginForm() {
+    return "forward:member/loginForm.jsp";
+  }
+
+  private String login(HttpServletRequest request) {
+    String email = request.getParameter("email");
+    String password = request.getParameter("password");
+
+    LoginDto loginDto = new LoginDto(email, password);
+    MemberDetail loginMember = memberService.login(loginDto);
+
+    HttpSession session = request.getSession();
+    session.setAttribute("loginMember", loginMember);
+    return "redirect:index.jsp";
+  }
+
+  private String logout(HttpServletRequest request) {
+    HttpSession session = request.getSession();
+    session.invalidate();
+    request.setAttribute("center", "index");
+    return "redirect:index.jsp";
+  }
+
+
+
   private boolean registerValidationCheck(MemberRegisterDto dto) {
-    if(!MemberValidation.isValidEmail(dto.getEmail())) {
+    if (!MemberValidation.isValidEmail(dto.getEmail())) {
       return false;
     }
-    if(!MemberValidation.isValidPassword(dto.getPassword())) {
+    if (!MemberValidation.isValidPassword(dto.getPassword())) {
       return false;
     }
-    if(!MemberValidation.isValidName(dto.getName())) {
+    if (!MemberValidation.isValidName(dto.getName())) {
       return false;
     }
     return true;
