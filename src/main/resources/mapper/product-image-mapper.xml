@@ -7,7 +7,7 @@
     <select id="select" parameterType="Long" resultType="productImage">
         SELECT *
         FROM product_image
-        WHERE id = ${id}
+        WHERE product_id = #{id}
     </select>
     <select id="selectall" resultType="productImage">
         SELECT *
