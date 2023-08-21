@@ -14,4 +14,6 @@ public interface MemberDaoFrame<K, V> extends DaoFrame<K, V> {
       throws SQLException;
 
   Optional<Member> selectByEmail(String email, SqlSession session) throws SQLException;
+
+  int countByEmail(String email, SqlSession session) throws SQLException;
 }
