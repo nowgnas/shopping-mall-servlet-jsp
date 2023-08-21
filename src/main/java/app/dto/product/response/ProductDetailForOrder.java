@@ -1,6 +1,5 @@
-package app.dto.product;
+package app.dto.product.response;
 
-import app.entity.BaseEntity;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,10 +12,10 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
-public class ProductListItem extends BaseEntity {
-
+public class ProductDetailForOrder {
+  private Long id;
   private String name;
-  private Long price;
+  private Long quantity;
   private String url;
-  private Boolean isLiked;
+  private Long price;
 }

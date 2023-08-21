@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper
-        PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="product">
     <resultMap id="BaseResultMap" type="product">
         <id column="id" jdbcType="BIGINT" property="id"/>
@@ -17,6 +17,7 @@
         <id column="id" jdbcType="BIGINT" property="id"/>
         <result column="name" jdbcType="VARCHAR" property="name"/>
         <result column="price" jdbcType="BIGINT" property="price"/>
+        <result column="is_liked" jdbcType="BIGINT" property="isLiked"/>
         <result column="url" jdbcType="VARCHAR" property="url"/>
         <result column="created_at" jdbcType="TIMESTAMP" property="createdAt"/>
         <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt"/>
@@ -28,78 +29,106 @@
         <result column="url" jdbcType="VARCHAR" property="url"/>
         <result column="quantity" jdbcType="BIGINT" property="quantity"/>
         <result column="created_at" jdbcType="TIMESTAMP" property="createdAt"/>
-        <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt"/>
+      <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt"/>
     </resultMap>
-    <resultMap id="productOfLike" type="productOfLike">
-        <id column="id" jdbcType="BIGINT" property="id"/>
-        <result column="name" jdbcType="VARCHAR" property="name"/>
-        <result column="price" jdbcType="BIGINT" property="price"/>
-        <result column="url" jdbcType="VARCHAR" property="url"/>
-        <result column="created_at" jdbcType="TIMESTAMP" property="createdAt"/>
-        <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt"/>
-    </resultMap>
+  <resultMap id="productOfLike" type="productOfLike">
+    <id column="id" jdbcType="BIGINT" property="id"/>
+    <result column="name" jdbcType="VARCHAR" property="name"/>
+    <result column="price" jdbcType="BIGINT" property="price"/>
+    <result column="url" jdbcType="VARCHAR" property="url"/>
+    <result column="created_at" jdbcType="TIMESTAMP" property="createdAt"/>
+    <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt"/>
+  </resultMap>
+  <resultMap id="ProductDetailForOrder" type="app.dto.product.response.ProductDetailForOrder">
+    <id column="id" jdbcType="BIGINT" property="id"/>
+    <result column="name" jdbcType="VARCHAR" property="name"/>
+    <result column="price" jdbcType="BIGINT" property="price"/>
+    <result column="url" jdbcType="VARCHAR" property="url"/>
+    <result column="quantity" jdbcType="BIGINT" property="quantity"/>
+  </resultMap>
 
-    <select id="selectProductListItemOfLike" parameterType="Long" resultMap="productOfLike">
-        SELECT p.id, p.name, p.price, i.url
-        FROM product p
-        LEFT JOIN product_image i
-        ON p.id = i.product_id
-        WHERE p.id in
-        <foreach collection="list" item="id" open="(" separator="," close=")">
-            #{id}
-        </foreach>
-        AND is_thumbnail = true
-    </select>
+  <select id="gettotalpage" resultType="int" parameterType="int">
+    SELECT CEIL(COUNT(*) / #{perPage})
+    FROM product;
+  </select>
 
-    <select id="select" parameterType="Long" resultType="product">
-        SELECT id,
-               category_id AS categoryId,
-               name,
-               description,
-               price,
-               quantity,
-               code,
-               created_at  AS createdAt,
-               updated_at  AS updatedAt
-        FROM product
-        WHERE id = #{id}
-    </select>
+  <select id="selectProductListItemOfLike" parameterType="Long" resultMap="productOfLike">
+    SELECT p.id, p.name, p.price, i.url
+    FROM product p
+    LEFT JOIN product_image i
+    ON p.id = i.product_id
+    WHERE p.id in
+    <foreach collection="list" item="id" open="(" separator="," close=")">
+      #{id}
+    </foreach>
+    AND is_thumbnail = true
+  </select>
 
-    <select id="selectone" parameterType="Long" resultMap="singleProduct">
-        SELECT p.id, p.name, p.quantity, p.price, i.url
-        FROM product p
-        LEFT JOIN product_image i
-        ON p.id = i.product_id
-        WHERE p.id in
-        <foreach collection="list" item="id" open="(" separator="," close=")">
-            #{id}
-        </foreach>
-        AND is_thumbnail = true
+  <select id="select" parameterType="app.dto.product.ProductDetailParameter"
+    resultType="app.dto.product.ProductDetail">
+    SELECT p.name              name,
+           p.price             price,
+           p.category_id       categoryId,
+           p.description       description,
+           p.quantity          quantity,
+           pi.url              url,
+           CASE
+             WHEN l.product_id IS NOT NULL THEN true
+             ELSE false END AS isLiked
+    FROM product p
+           left join likes l on p.id = l.product_id and l.member_id = #{memberId}
+           left join product_image pi on p.id = pi.product_id
+    where p.id = #{productId}
+      and pi.is_thumbnail = false
+  </select>
+
+  <select id="selectone" parameterType="Long" resultMap="singleProduct">
+    SELECT p.id, p.name, p.quantity, p.price, i.url
+    FROM product p
+    LEFT JOIN product_image i
+    ON p.id = i.product_id
+    WHERE p.id in
+    <foreach collection="list" item="id" open="(" separator="," close=")">
+      #{id}
+      </foreach>
+      AND is_thumbnail = true
     </select>
     <select id="selectall" resultType="product">
-        SELECT *
-        FROM product
+      SELECT *
+      FROM product
     </select>
-    <select id="sortbypricedesc" resultMap="ListResultMap">
-        SELECT name, price, url
-        FROM product p
-                 LEFT JOIN product_image i
-                           ON p.id = i.product_id
-        ORDER BY price desc
+    <select id="sortbypricedesc" parameterType="hashMap" resultMap="ListResultMap">
+      SELECT p.name,
+             p.price,
+             pi.url,
+             CASE WHEN l.product_id IS NOT NULL THEN true ELSE false END AS is_liked
+      FROM product p
+             LEFT JOIN likes l ON l.product_id = p.id AND l.member_id = #{userId}
+             left join product_image pi on p.id = pi.product_id
+      ORDER BY p.price desc
+        LIMIT #{current}, #{perPage}
     </select>
     <select id="sortbydate" resultMap="ListResultMap">
-        SELECT name, price, url
-        FROM product p
-                 LEFT JOIN product_image i
-                           ON p.id = i.product_id
-        ORDER BY created_at desc
+      SELECT p.name,
+             p.price,
+             pi.url,
+             CASE WHEN l.product_id IS NOT NULL THEN true ELSE false END AS is_liked
+      FROM product p
+             LEFT JOIN likes l ON l.product_id = p.id AND l.member_id = #{userId}
+             left join product_image pi on p.id = pi.product_id
+      ORDER BY p.created_at desc
+        LIMIT #{current}, #{perPage}
     </select>
     <select id="sortbyprice" resultMap="ListResultMap">
-        SELECT name, price, url
-        FROM product p
-                 LEFT JOIN product_image i
-                           ON p.id = i.product_id
-        ORDER BY price
+      SELECT p.name,
+             p.price,
+             pi.url,
+             CASE WHEN l.product_id IS NOT NULL THEN true ELSE false END AS is_liked
+      FROM product p
+             LEFT JOIN likes l ON l.product_id = p.id AND l.member_id = #{userId}
+             left join product_image pi on p.id = pi.product_id
+      ORDER BY p.price
+        LIMIT #{current}, #{perPage}
     </select>
     <insert id="insert" parameterType="product">
         INSERT INTO product (category_id, name, description, price, quantity, code)
@@ -121,10 +150,35 @@
         WHERE id = #{id}
     </delete>
 
+  <select id="get-category" parameterType="Long" resultType="category">
+    SELECT c1.id AS id, c1.parent_id parentId, c1.name name, c1.level level
+    FROM category c1
+    WHERE c1.id = #{id}
+    UNION
+    SELECT distinct c2.id AS id, c2.parent_id parentId, c2.name name, c2.level level
+    FROM category c1
+           JOIN category c2 ON c2.id = c1.parent_id
+    WHERE c1.id = #{id}
+    UNION
+    SELECT c3.id AS id, c3.parent_id parentId, c3.name name, c3.level level
+    FROM category c1
+           JOIN category c2 ON c2.id = c1.parent_id
+           JOIN category c3 ON c3.id = c2.parent_id
+    WHERE c1.id = #{id}
+    ORDER BY level
+  </select>
+
+  <select id="check-qty" parameterType="Long" resultType="int">
+    SELECT quantity
+    FROM product
+    WHERE id = #{id}
+  </select>
+
+  <select id="product-detail-for-order" resultType="Long" resultMap="ProductDetailForOrder">
+    select p.id id, p.name name, p.quantity quantity, p.price price, pi.url url
+    from product p
+           left join product_image pi on p.id = pi.product_id
+    where p.id = #{id}
+      and pi.is_thumbnail = true
+  </select>
 </mapper>
-
-
-
-
-
-

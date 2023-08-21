@@ -70,21 +70,14 @@ create table orders
     id         bigint unsigned auto_increment
         primary key,
     member_id  bigint unsigned                       not null,
-<<<<<<< HEAD
-=======
     coupon_id  bigint unsigned                       null,
->>>>>>> ccc7afa34212046c59933a471b5c1f0b98f3f39c
     status     varchar(10) default 'PENDING'         not null,
     created_at datetime    default CURRENT_TIMESTAMP not null,
     updated_at datetime    default CURRENT_TIMESTAMP not null,
     constraint FK_member_TO_orders_1
-<<<<<<< HEAD
-        foreign key (member_id) references member (id)
-=======
         foreign key (member_id) references member (id),
     constraint FK_coupon_TO_orders_1
         foreign key (coupon_id) references coupon (id)
->>>>>>> ccc7afa34212046c59933a471b5c1f0b98f3f39c
 );
 
 create table delivery
@@ -182,8 +175,4 @@ create table product_order
         foreign key (order_id) references orders (id),
     constraint FK_product_TO_product_order_1
         foreign key (product_id) references product (id)
-<<<<<<< HEAD
 );
-=======
-);
->>>>>>> ccc7afa34212046c59933a471b5c1f0b98f3f39c
