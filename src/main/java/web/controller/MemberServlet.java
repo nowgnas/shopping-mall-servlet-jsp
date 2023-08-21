@@ -1,7 +1,10 @@
 package web.controller;
 
 import app.dto.request.MemberRegisterDto;
+import app.error.CustomException;
+import app.error.ErrorCode;
 import app.service.member.MemberService;
+import web.controller.validation.MemberValidation;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -43,6 +46,7 @@ public class MemberServlet extends HttpServlet {
         break;
       case "register":
         register(request);
+        request.setAttribute("center", "loginForm");
         break;
       case "login":
         break;
@@ -58,7 +62,25 @@ public class MemberServlet extends HttpServlet {
     String name = request.getParameter("name");
 
     MemberRegisterDto dto = new MemberRegisterDto(email, password, name);
+
+    if(!registerValidationCheck(dto)) {
+      throw new CustomException(ErrorCode.REGISTER_FAIL);
+    }
+
     memberService.register(dto);
     request.setAttribute("center", "login");
+  }
+
+  private boolean registerValidationCheck(MemberRegisterDto dto) {
+    if(!MemberValidation.isValidEmail(dto.getEmail())) {
+      return false;
+    }
+    if(!MemberValidation.isValidPassword(dto.getPassword())) {
+      return false;
+    }
+    if(!MemberValidation.isValidName(dto.getName())) {
+      return false;
+    }
+    return true;
   }
 }
