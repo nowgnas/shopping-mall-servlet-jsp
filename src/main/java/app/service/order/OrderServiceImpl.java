@@ -10,6 +10,7 @@ import app.dao.product.ProductDao;
 import app.dao.productorder.ProductOrderDao;
 import app.dto.request.CartOrderCreateDto;
 import app.dto.request.OrderCreateDto;
+import app.dto.response.OrderMemberDetail;
 import app.dto.response.ProductOrderDetailDto;
 import app.dto.response.ProductOrderDto;
 import app.entity.*;
@@ -38,6 +39,24 @@ public class OrderServiceImpl {
   private final MemberDao memberDao = new MemberDao();
   private final ProductOrderDao productOrderDao = new ProductOrderDao();
   private final ProductDao productDao = ProductDao.getInstance();
+
+  // TODO: 상품 주문 폼
+  public OrderMemberDetail getCreateOrderForm(Long memberId) throws Exception {
+    SqlSession session = sessionFactory.openSession();
+    try {
+      return memberDao.selectAddressAndCouponById(memberId, session).orElseThrow(Exception::new);
+    } catch (CustomException ex) {
+      log.error(ex.getMessage());
+      session.rollback();
+      throw new CustomException(ex.getMessage());
+    } catch (Exception ex) {
+      log.error(ex.getMessage());
+      session.rollback();
+      throw new Exception(ex.getMessage());
+    } finally {
+      session.close();
+    }
+  }
 
   // TODO: 상품 주문
   public Order createOrder(OrderCreateDto orderCreateDto) throws Exception {
@@ -181,7 +200,6 @@ public class OrderServiceImpl {
       paymentDao.insert(payment, session);
 
       /* 장바구니에서 상품들 제거 */
-
 
       session.commit();
 

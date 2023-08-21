@@ -1,8 +1,6 @@
-<%@ page import="java.util.List" %>
-<%@ page import="app.enums.CouponStatus" %>
-<%@ page import="app.enums.CouponPolicy" %>
 <%@ page import="app.dto.form.OrderCreateForm" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,15 +13,7 @@
 <h1>상품 주문</h1>
 <form action="/order.bit?view=direct&cmd=create" method="post">
     <h2>회원 이름</h2>
-    <%
-        String memberName = (String) request.getAttribute("memberName");
-        if (memberName != null) {
-    %>
-    <p id="member-name"><%= memberName %>
-    </p>
-    <%
-        }
-    %>
+    <p id="member-name">${createOrderForm.name}</p>
 
     <h2>배송지 입력</h2>
 
@@ -44,44 +34,23 @@
     <input type="text" id="zipcode" name="zipcode" required oninvalid="this.setCustomValidity('우편번호를 입력해주세요.')"
            oninput="this.setCustomValidity('')"><br><br>
 
-    <h2>주문 상품 목록</h2>
+    <h2>주문 상품</h2>
     <ul>
-        <%
-            if (request.getAttribute("products") != null && request.getAttribute("products").getClass().isAssignableFrom(OrderCreateForm.ProductDto.class)) {
-                OrderCreateForm.ProductDto product = (OrderCreateForm.ProductDto) request.getAttribute("product");
-                if (product != null) {
-        %>
         <li class="product-item">
-            <input type="hidden" id="product_id" name="product_id" value="<%= product.getProductId() %>">
-            <img src="<%= product.getImageUrl() %>" alt="상품 이미지">
-            <span class="product-name"><%= product.getName() %></span>
-            <span class="product-price">가격: <%= product.getPrice() %></span>
-            <span class="product-quantity">수량: <%= product.getQuantity() %>개</span>
+            <input type="hidden" id="product_id" name="product_id" value="${productDetail.id}">
+            <img src="${productDetail.thumbnailUrl}" alt="상품 썸네일 이미지">
+            <span class="product-name">${productDetail.name}</span>
+            <span class="product-price">가격: ${productDetail.price}</span>
+            <span class="product-quantity">수량: ${productDetail.quantity}개</span>
         </li>
-        <%
-                }
-            }
-        %>
     </ul>
 
     <label for="coupon">쿠폰 선택</label>
     <select id="coupon" name="coupon">
         <option value="0">적용 안함</option>
-        <%
-            if (request.getAttribute("coupons") != null && request.getAttribute("coupons").getClass().isAssignableFrom(OrderCreateForm.CouponDto.class)) {
-                List<OrderCreateForm.CouponDto> coupons = (List<OrderCreateForm.CouponDto>) request.getAttribute("coupons");
-                for (OrderCreateForm.CouponDto coupon : coupons) {
-                    if (coupon.getStatus().equals(CouponStatus.UNUSED) && coupon.getDiscountPolicy().equals(CouponPolicy.CASH)) {
-
-        %>
-        <option id="<%= coupon.getCouponId() %>" name="<%= coupon.getDiscountPolicy().name() %>"
-                value="<%= coupon.getDiscountValue() %>"><%= coupon.getName() %>>
-        </option>
-        <%
-                    }
-                }
-            }
-        %>
+        <c:forEach var="coupon" items="${createOrderForm.coupons}">
+            <option name="${coupon.discountPolicy}" value="${coupon.discountValue}">${coupon.name}</option>
+        </c:forEach>
     </select>
 
     <br>
@@ -102,6 +71,7 @@
     productItems.forEach(item => {
         const productPrice = parseInt(item.querySelector(".product-price").textContent.split(":")[1]);
         const productQuantity = parseInt(item.querySelector(".product-quantity").textContent.split(":")[1]);
+        console.log(productPrice);
 
         const totalItemPrice = productPrice * productQuantity;
 
@@ -136,7 +106,7 @@
             calculatedTotal -= (calculatedTotal * (couponDiscountValue / 100));
         }
 
-        calculatedTotalElem.textContent = calculatedTotal;
+        calculatedTotalElem.textContent = calculatedTotal < 0 ? 0 : calculatedTotal;
     }
 
     // 초기 총 가격 계산
@@ -148,12 +118,12 @@
     const detailAddressInput = document.getElementById("addr-detail");
     const zipcodeInput = document.getElementById("zipcode");
 
-    setAddressBtn.addEventListener("click", function(event) {
+    setAddressBtn.addEventListener("click", function (event) {
         event.preventDefault();
         // 기본 주소지로 설정
-        const defaultRoadName = "서울특별시 강남구 삼성동 123번지";
-        const defaultAddrDetail = "상세 주소";
-        const defaultZipCode = "12345";
+        const defaultRoadName = '${createOrderForm.address.roadName}';
+        const defaultAddrDetail = '${createOrderForm.address.addrDetail}';
+        const defaultZipCode = '${createOrderForm.address.zipCode}';
 
         addressInput.value = defaultRoadName;
         detailAddressInput.value = defaultAddrDetail;
