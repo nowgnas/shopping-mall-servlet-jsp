@@ -18,4 +18,6 @@ public class ProductItemQuantity {
   private Integer quantity;
   private Long price;
   private String url;
+
+
 }
