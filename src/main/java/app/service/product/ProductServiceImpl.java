@@ -46,8 +46,7 @@ public class ProductServiceImpl implements ProductService {
           dao.selectProductParentCategory(Long.valueOf(productDetail.getCategoryId()), session);
       productDetailWithCategory =
           ProductDetailWithCategory.getProductDetail(categories, productDetail);
-    }
-//    else throw new Exception("상품이 없습니다");
+    } else throw new Exception("상품이 없습니다");
     session.close();
     return productDetailWithCategory;
   }
