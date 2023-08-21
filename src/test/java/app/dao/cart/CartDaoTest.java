@@ -58,14 +58,8 @@ class CartDaoTest {
     Throwable throwable = assertThrows(PersistenceException.class, () -> {
         cartDaoFrame.insert(expectedCart, session);
     });
+    Assertions.assertTrue(throwable.getCause() instanceof JdbcSQLIntegrityConstraintViolationException, "can not insert without member and product");
 
-    Assertions.assertTrue(throwable.getCause(),
-        JdbcSQLIntegrityConstraintViolationException.class);
-    if (throwable.getCause() instanceof JdbcSQLIntegrityConstraintViolationException) {
-        Assertions.assertTrue(true);
-    } else {
-        Assertions.fail("there is no referential problem");
-    }
   }
 
   @Test
