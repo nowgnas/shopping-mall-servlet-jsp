@@ -13,5 +13,4 @@ import lombok.NoArgsConstructor;
 public class ProductAndMemberCompositeKey {
   private Long productId;
   private Long memberId;
-
 }

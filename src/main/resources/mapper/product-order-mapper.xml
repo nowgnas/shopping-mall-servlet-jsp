@@ -12,11 +12,21 @@
     <select id="selectall" resultType="productOrder">
         SELECT *
         FROM product_order
+    </select>
+    <select id="selectAllByOrderId" resultType="productOrder">
+        SELECT id         AS id,
+               product_id AS productId,
+               order_id   AS orderId,
+               price      AS price,
+               quantity   AS quantity,
+               created_at AS createdAt,
+               updated_at AS updatedAt
+        FROM product_order
         WHERE order_id = #{orderId}
     </select>
     <insert id="insert" parameterType="productOrder">
-        INSERT INTO product_order (product_id, order_id, price, quantity, road_name, addr_detail, zip_code)
-        VALUES (#{productId}, #{orderId}, #{price}, #{quantity}, #{roadName}, #{addrDetail}, #{zipCode})
+        INSERT INTO product_order (product_id, order_id, price, quantity)
+        VALUES (#{productId}, #{orderId}, #{price}, #{quantity})
     </insert>
     <delete id="delete" parameterType="Long">
         DELETE

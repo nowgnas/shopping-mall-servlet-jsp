@@ -3,6 +3,7 @@ package app.dao.product;
 import app.dao.DaoFrame;
 import app.dto.product.ProductItemQuantity;
 import app.dto.product.ProductListItem;
+import app.dto.product.ProductListItemOfLike;
 import app.entity.Product;
 import java.util.List;
 import org.apache.ibatis.session.SqlSession;
@@ -48,8 +49,34 @@ public interface ProductDaoFrame<K, V extends Product> extends DaoFrame<K, V> {
   List<ProductItemQuantity> selectProductQuantity(List<Long> productId, SqlSession session);
 
   /**
-   * todo: 찜 목록
+   * todo: 찜 목록 상품 정보
    *
    * <p>parameter: List<productId> | return: product id, name, url, price
+   */
+  List<ProductListItemOfLike> selectProductListItemOfLike(List<Long> productId, SqlSession session)
+      throws Exception;
+
+  /**
+   * todo: 상품 재고 확인
+   *
+   * <p>parameter: List<productId> | return: productId, quantity
+   */
+
+  /**
+   * todo: 주문 화면 폼 - 장바구니
+   *
+   * <p>장바구니 구매 정보
+   */
+
+  /**
+   * todo: 주문 화면 폼 - 바로구매
+   *
+   * <p>바로구매 상품 정보
+   */
+
+  /**
+   * todo: 취소한 상품에 대한 수량 증가
+   *
+   * <p>List<productId, cancel quantity >, return: update log 반환
    */
 }

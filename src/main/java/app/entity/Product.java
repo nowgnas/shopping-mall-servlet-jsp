@@ -15,4 +15,8 @@ public class Product extends BaseEntity {
   @NonNull private Long price;
   @NonNull private Long quantity;
   @NonNull private String code;
+
+  public void updateQuantity(Long quantity) {
+    this.quantity = quantity;
+  }
 }

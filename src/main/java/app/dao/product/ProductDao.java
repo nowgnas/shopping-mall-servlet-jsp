@@ -2,7 +2,10 @@ package app.dao.product;
 
 import app.dto.product.ProductItemQuantity;
 import app.dto.product.ProductListItem;
+import app.dto.product.ProductListItemOfLike;
 import app.entity.Product;
+import app.error.CustomException;
+import app.error.ErrorCode;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
@@ -24,6 +27,16 @@ public class ProductDao implements ProductDaoFrame<Long, Product> {
     return instance;
   }
 
+  @Override
+  public List<ProductListItemOfLike> selectProductListItemOfLike(
+      List<Long> productId, SqlSession session) throws CustomException {
+    List<ProductListItemOfLike> productListItemOfLikes =
+        session.selectList("product.selectProductListItemOfLike", productId);
+    session.close();
+    if (productListItemOfLikes.size() == 0) throw new CustomException(ErrorCode.ITEM_NOT_FOUND);
+    return productListItemOfLikes;
+  }
+
   /**
    * @param productId 상품 id list
    * @param session sql session
@@ -33,6 +46,7 @@ public class ProductDao implements ProductDaoFrame<Long, Product> {
   public List<ProductItemQuantity> selectProductQuantity(List<Long> productId, SqlSession session) {
     List<ProductItemQuantity> product = session.selectList("product.selectone", productId);
     session.close();
+    if (product.size() == 0) throw new CustomException(ErrorCode.ITEM_NOT_FOUND);
     return product;
   }
 
@@ -43,7 +57,7 @@ public class ProductDao implements ProductDaoFrame<Long, Product> {
 
   @Override
   public int update(Product product, SqlSession session) throws Exception {
-    return 0;
+    return session.update("product.update", product);
   }
 
   @Override
@@ -61,9 +75,9 @@ public class ProductDao implements ProductDaoFrame<Long, Product> {
    */
   @Override
   public Optional<Product> selectById(Long productId, SqlSession session) throws Exception {
-    Optional<Product> product = session.selectOne("product.select", productId);
-    session.close();
-    return product;
+    Optional<Product> product = Optional.of(session.selectOne("product.select", productId));
+    if (product.isPresent()) return product;
+    else throw new CustomException(ErrorCode.ITEM_NOT_FOUND);
   }
 
   @Override
@@ -75,6 +89,7 @@ public class ProductDao implements ProductDaoFrame<Long, Product> {
   public List<ProductListItem> selectAllSortByPriceDesc(SqlSession session) throws Exception {
     List<ProductListItem> products = session.selectList("product.sortbypricedesc");
     session.close();
+    if (products.size() == 0) throw new CustomException(ErrorCode.ITEM_NOT_FOUND);
     return products;
   }
 
@@ -82,6 +97,7 @@ public class ProductDao implements ProductDaoFrame<Long, Product> {
   public List<ProductListItem> selectAllSortByPrice(SqlSession session) throws Exception {
     List<ProductListItem> products = session.selectList("product.sortbyprice");
     session.close();
+    if (products.size() == 0) throw new CustomException(ErrorCode.ITEM_NOT_FOUND);
     return products;
   }
 
@@ -89,6 +105,7 @@ public class ProductDao implements ProductDaoFrame<Long, Product> {
   public List<ProductListItem> selectAllSortByDate(SqlSession session) throws Exception {
     List<ProductListItem> products = session.selectList("product.sortbydate");
     session.close();
+    if (products.size() == 0) throw new CustomException(ErrorCode.ITEM_NOT_FOUND);
     return products;
   }
 }
