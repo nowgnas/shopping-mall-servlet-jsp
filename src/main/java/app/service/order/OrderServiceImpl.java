@@ -181,9 +181,14 @@ public class OrderServiceImpl {
                   }
 
                   /* 장바구니에서 상품들 제거 */
-                  int deletedRow = cartDao.deleteById(ProductAndMemberCompositeKey.builder().memberId(memberId)
-                          .productId(product.getId()).build(), session);
-                  if(deletedRow == 0) {
+                  int deletedRow =
+                      cartDao.deleteById(
+                          ProductAndMemberCompositeKey.builder()
+                              .memberId(memberId)
+                              .productId(product.getId())
+                              .build(),
+                          session);
+                  if (deletedRow == 0) {
                     throw new CustomException("장바구니 상품 삭제 오류");
                   }
 
