@@ -5,6 +5,7 @@ import app.dto.product.ProductDetail;
 import app.dto.product.ProductItemQuantity;
 import app.dto.product.ProductListItem;
 import app.dto.product.ProductListItemOfLike;
+import app.dto.product.response.ProductDetailForOrder;
 import app.entity.Category;
 import app.entity.Product;
 import java.util.List;
@@ -104,4 +105,15 @@ public interface ProductDaoFrame<K, V extends Product> extends DaoFrame<K, V> {
    * @return
    */
   List<Category> selectProductParentCategory(Long categoryId, SqlSession session);
+
+  /**
+   * 상품 상세 정보 - 바로 구매 시 넘길 정보
+   *
+   * @param productId
+   * @param session
+   * @return
+   */
+  ProductDetailForOrder selectProductDetail(Long productId, SqlSession session) throws Exception;
+
+  int selectProductQuantity(Long productId, SqlSession session);
 }

@@ -5,6 +5,7 @@ import app.dto.product.ProductDetailParameter;
 import app.dto.product.ProductItemQuantity;
 import app.dto.product.ProductListItem;
 import app.dto.product.ProductListItemOfLike;
+import app.dto.product.response.ProductDetailForOrder;
 import app.entity.Category;
 import app.entity.Product;
 import app.error.CustomException;
@@ -134,5 +135,16 @@ public class ProductDao implements ProductDaoFrame<Long, Product> {
   @Override
   public List<Category> selectProductParentCategory(Long categoryId, SqlSession session) {
     return session.selectList("product.get-category", categoryId);
+  }
+
+  @Override
+  public int selectProductQuantity(Long productId, SqlSession session) {
+    return session.selectOne("product.check-qty", productId);
+  }
+
+  @Override
+  public ProductDetailForOrder selectProductDetail(Long productId, SqlSession session)
+      throws Exception {
+    return session.selectOne("product.product-detail-for-order", productId);
   }
 }

@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.logging.Logger;
 import org.apache.ibatis.session.SqlSession;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -47,5 +48,18 @@ public class ProductDetailServiceTest {
     // todo: 테스트 실패
     ProductDetailWithCategory productDetail = service.getProductDetail(1L, 4L);
     log.info(productDetail.toString());
+  }
+
+  @Test
+  @DisplayName("상품 상세 정보 조회 - 바로구매 시 정보 ")
+  void productOrderDetail() {
+
+    Exception exception =
+        Assertions.assertThrows(
+            Exception.class,
+            () -> {
+              int i = productDao.selectProductQuantity(1L, session);
+              if (i < 3) throw new Exception("수량이 부족합니다");
+            });
   }
 }

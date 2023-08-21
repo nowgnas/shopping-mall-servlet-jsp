@@ -5,6 +5,7 @@ import app.dao.product.ProductDaoFrame;
 import app.dto.paging.Pagination;
 import app.dto.product.ProductDetail;
 import app.dto.product.ProductListItem;
+import app.dto.product.response.ProductDetailForOrder;
 import app.dto.product.response.ProductDetailWithCategory;
 import app.dto.product.response.ProductListWithPagination;
 import app.entity.Category;
@@ -46,6 +47,7 @@ public class ProductServiceImpl implements ProductService {
       productDetailWithCategory =
           ProductDetailWithCategory.getProductDetail(categories, productDetail);
     }
+    session.close();
     return productDetailWithCategory;
   }
 
@@ -81,5 +83,15 @@ public class ProductServiceImpl implements ProductService {
         .item(products)
         .paging(pagination)
         .build();
+  }
+
+  @Override
+  public ProductDetailForOrder getProductDetailForOrder(Long productId, int quantity)
+      throws Exception {
+    int qty = dao.selectProductQuantity(productId, session);
+    if (qty < quantity) throw new Exception("주문 가능한 수량이 부족합니다");
+    ProductDetailForOrder detail = dao.selectProductDetail(productId, session);
+    session.close();
+    return detail;
   }
 }
