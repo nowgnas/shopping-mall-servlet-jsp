@@ -12,7 +12,7 @@ public class MemberRegisterDto {
   private String password;
   private String name;
 
-  public Member toEntity() {
-    return Member.builder().email(email).password(password).name(name).build();
+  public Member toEntity(String hashedPassword) {
+    return Member.builder().email(email).password(hashedPassword).name(name).build();
   }
 }

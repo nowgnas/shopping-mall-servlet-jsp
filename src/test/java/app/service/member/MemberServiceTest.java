@@ -1,6 +1,7 @@
 package app.service.member;
 
 import app.dao.member.MemberDao;
+import app.dto.request.LoginDto;
 import app.dto.request.MemberRegisterDto;
 import app.dto.response.MemberDetail;
 import app.entity.Member;
@@ -114,10 +115,24 @@ class MemberServiceTest {
     Assertions.assertFalse(result);
   }
 
+  @Test
+  @DisplayName("데이터 베이스에 저장된 이메일과 패스워드로 로그인 성공 시 loginMember를 반환한다.")
+  void login_success() throws Exception {
+    // given
+    MemberRegisterDto dto = createMemberRegisterDto();
+    memberService.register(dto);
+
+    LoginDto loginDto = new LoginDto(dto.getEmail(), dto.getPassword());
+    // when
+    MemberDetail loginMember = memberService.login(loginDto);
+    // then
+    Assertions.assertEquals(dto.getEmail(), loginMember.getEmail());
+  }
+
   private MemberRegisterDto createMemberRegisterDto() {
-    String email = "abc@naver.com";
-    String password = "123123";
-    String name = "홍길동";
+    String email = "user01@naver.com";
+    String password = "user1234";
+    String name = "비트롯데";
     return new MemberRegisterDto(email, password, name);
   }
 }

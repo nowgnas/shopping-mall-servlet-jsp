@@ -33,13 +33,15 @@ public class MemberService {
   public void register(MemberRegisterDto dto) {
     SqlSession sqlSession = sessionFactory.openSession();
     try {
-      Member member = dto.toEntity();
-      memberDao.insert(member, sqlSession);
-
       String salt = createSalt();
+      String hashedPassword = createHashedPassword(dto.getPassword(), salt);
+
+      Member member = dto.toEntity(hashedPassword);
+      memberDao.insert(member, sqlSession);
 
       Encryption encryption = Encryption.from(member, salt);
       encryptionDao.insert(encryption, sqlSession);
+
       sqlSession.commit();
 
     } catch (PersistenceException e) {
@@ -48,7 +50,7 @@ public class MemberService {
       throw new CustomException(ErrorCode.EMAIL_IS_NOT_DUPLICATE);
     } catch (Exception e) {
       sqlSession.rollback();
-      //      e.printStackTrace();
+      e.printStackTrace();
       throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
     } finally {
       sqlSession.close();
@@ -59,8 +61,7 @@ public class MemberService {
     SqlSession sqlSession = sessionFactory.openSession();
     MemberDetail loginMember = null;
     try {
-
-      String hashedPassword = createHashedPassword(dto, sqlSession);
+      String hashedPassword = getHashedPassword(dto, sqlSession);
       dto.setPassword(hashedPassword);
 
       Member member =
@@ -71,6 +72,9 @@ public class MemberService {
       loginMember = MemberDetail.of(member);
 
     } catch (SQLException e) {
+      e.printStackTrace();
+
+    } catch (Exception e) {
       e.printStackTrace();
     } finally {
       sqlSession.close();
@@ -108,9 +112,17 @@ public class MemberService {
     return result == 0 ? true : false;
   }
 
-  private String createHashedPassword(LoginDto dto, SqlSession sqlSession) throws SQLException {
-    Encryption encryption = encryptionDao.selectByEmail(dto.getEmail(), sqlSession).get();
-    return new String(CipherUtil.getSHA256(dto.getPassword(), encryption.getSalt()));
+  private String getHashedPassword(LoginDto dto, SqlSession sqlSession) throws SQLException {
+    Encryption encryption =
+        encryptionDao
+            .selectByEmail(dto.getEmail(), sqlSession)
+            .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+    String hashedPassword = createHashedPassword(dto.getPassword(), encryption.getSalt());
+    return hashedPassword;
+  }
+
+  private String createHashedPassword(String password, String salt) throws SQLException {
+    return new String(CipherUtil.getSHA256(password, salt));
   }
 
   private String createSalt() throws NoSuchAlgorithmException {
