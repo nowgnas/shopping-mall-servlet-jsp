@@ -36,18 +36,18 @@ public class MainServlet extends HttpServlet {
   }
 
   private void build(HttpServletRequest request, String view) {
-    if (view.equals("register")) {
-      request.setAttribute("center", "register");
-      request.setAttribute("navi", Navi.register);
-    } else if (view.equals("login")) {
-      request.setAttribute("center", "login");
-      request.setAttribute("navi", Navi.login);
-    } else if (view.equals("custadd")) {
-      request.setAttribute("center", "app/cust/register");
-    } else if (view.equals("productadd")) {
-      request.setAttribute("center", "product/register");
-    } else if (view.equals("chart")) {
-      request.setAttribute("center", "chart/chart");
-    }
+//    if (view.equals("register")) {
+//      request.setAttribute("center", "register");
+//      request.setAttribute("navi", Navi.register);
+//    } else if (view.equals("login")) {
+//      request.setAttribute("center", "login");
+//      request.setAttribute("navi", Navi.login);
+//    } else if (view.equals("custadd")) {
+//      request.setAttribute("center", "app/cust/register");
+//    } else if (view.equals("productadd")) {
+//      request.setAttribute("center", "product/register");
+//    } else if (view.equals("chart")) {
+//      request.setAttribute("center", "chart/chart");
+//    }
   }
 }

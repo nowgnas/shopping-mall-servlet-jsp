@@ -6,9 +6,10 @@ import app.dto.response.MemberDetail;
 import app.error.CustomException;
 import app.error.ErrorCode;
 import app.service.member.MemberService;
+import app.utils.HttpUtil;
 import web.controller.validation.MemberValidation;
+import web.dispatcher.Navi;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -35,8 +36,13 @@ public class MemberServlet extends HttpServlet {
       next = build(request, view);
     }
 
-    RequestDispatcher rd = request.getRequestDispatcher(next);
-    rd.forward(request, response);
+    String path = next.substring(next.indexOf(":") + 1);
+
+    if (path.startsWith("forward:")) {
+      HttpUtil.forward(request, response, path);
+    } else {
+      HttpUtil.redirect(response, path);
+    }
   }
 
   private String build(HttpServletRequest request, String view) {
@@ -59,7 +65,7 @@ public class MemberServlet extends HttpServlet {
   }
 
   private String registerForm() {
-    return "forward:member/registerForm.jsp";
+    return Navi.FORWARD_REGISTER_FORM;
   }
 
   private String register(HttpServletRequest request) {
@@ -75,11 +81,12 @@ public class MemberServlet extends HttpServlet {
     }
 
     memberService.register(dto);
-    return "redirect:member/loginForm.jsp";
+
+    return Navi.REDIRECT_LOGIN_FORM;
   }
 
   private String loginForm() {
-    return "forward:member/loginForm.jsp";
+    return Navi.FORWARD_LOGIN_FORM;
   }
 
   private String login(HttpServletRequest request) {
@@ -91,17 +98,15 @@ public class MemberServlet extends HttpServlet {
 
     HttpSession session = request.getSession();
     session.setAttribute("loginMember", loginMember);
-    return "redirect:index.jsp";
+    return Navi.REDIRECT_MAIN;
   }
 
   private String logout(HttpServletRequest request) {
     HttpSession session = request.getSession();
     session.invalidate();
     request.setAttribute("center", "index");
-    return "redirect:index.jsp";
+    return Navi.REDIRECT_MAIN;
   }
-
-
 
   private boolean registerValidationCheck(MemberRegisterDto dto) {
     if (!MemberValidation.isValidEmail(dto.getEmail())) {
