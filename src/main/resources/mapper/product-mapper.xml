@@ -41,7 +41,7 @@
   </resultMap>
 
   <select id="gettotalpage" resultType="int" parameterType="int">
-    SELECT CEIL(COUNT(*) / #{perPage})1
+    SELECT CEIL(COUNT(*) / #{perPage})
     FROM product;
   </select>
 

@@ -1,8 +1,9 @@
 package app.dao.product;
 
-import app.dto.product.ProductDetail;
-import app.dto.product.ProductDetailParameter;
+import app.dto.product.response.ProductDetailWithCategory;
 import app.entity.Category;
+import app.service.product.ProductService;
+import app.service.product.ProductServiceImpl;
 import app.utils.GetSessionFactory;
 import config.TestConfig;
 import java.util.List;
@@ -13,9 +14,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-public class ProductDetailTest {
+public class ProductDetailServiceTest {
   private final TestConfig testConfig = new TestConfig();
   ProductDao productDao = ProductDao.getInstance();
+  ProductService service = ProductServiceImpl.getInstance();
   Logger log = Logger.getLogger("hello");
   SqlSession session;
 
@@ -36,19 +38,14 @@ public class ProductDetailTest {
   }
 
   @Test
-  @DisplayName("select product detail")
-  void productDetail() {
-    ProductDetail detail =
-        session.selectOne(
-            "product.select", ProductDetailParameter.builder().productId(4L).memberId(1L).build());
-    log.info(detail.toString());
-    session.close();
-  }
-
-  @Test
-  @DisplayName("select product's category")
-  void productCategory() {
-    List<Category> categories = session.selectList("product.get-category", 7L);
-    log.info(categories.toString());
+  @DisplayName("product service detail test")
+  void productDetail() throws Exception {
+    List<Category> category = session.selectList("category.selectall");
+    for (Category c : category) {
+      log.info(c.toString());
+    }
+    // todo: 테스트 실패
+    ProductDetailWithCategory productDetail = service.getProductDetail(1L, 4L);
+    log.info(productDetail.toString());
   }
 }

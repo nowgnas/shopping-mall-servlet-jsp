@@ -100,8 +100,8 @@ public interface ProductDaoFrame<K, V extends Product> extends DaoFrame<K, V> {
   /**
    * 상품 카테고리 - 상세 정보를 위함
    *
-   * @param productId 상품 정보
+   * @param categoryId 상품 정보
    * @return
    */
-  List<Category> selectProductParentCategory(Long productId,SqlSession session);
+  List<Category> selectProductParentCategory(Long categoryId, SqlSession session);
 }

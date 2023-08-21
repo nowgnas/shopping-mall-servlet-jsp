@@ -127,12 +127,12 @@ public class ProductDao implements ProductDaoFrame<Long, Product> {
   /**
    * 상품 카테고리 정보
    *
-   * @param productId 상품 정보
+   * @param categoryId 상품 정보
    * @param session
    * @return
    */
   @Override
-  public List<Category> selectProductParentCategory(Long productId, SqlSession session) {
-    return session.selectList("product.get-category", productId);
+  public List<Category> selectProductParentCategory(Long categoryId, SqlSession session) {
+    return session.selectList("product.get-category", categoryId);
   }
 }
