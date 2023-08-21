@@ -1,29 +1,24 @@
 package web.controller;
 
-import app.dao.member.MemberDao;
-import app.dao.product.ProductDao;
 import app.dto.form.OrderCreateForm;
 import app.dto.request.CartOrderCreateDto;
 import app.dto.request.OrderCreateDto;
 import app.dto.response.MemberDetail;
-import app.dto.response.OrderMemberDetail;
 import app.dto.response.ProductOrderDetailDto;
 import app.dto.response.ProductOrderDto;
 import app.entity.Order;
 import app.service.order.OrderServiceImpl;
 import app.utils.HttpUtil;
-import web.dispatcher.Navi;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import web.dispatcher.Navi;
 
 /** Servlet implementation class CustServlet */
 @WebServlet({"/order"})
@@ -43,12 +38,12 @@ public class OrderServlet extends HttpServlet {
 
     HttpSession session = request.getSession();
     MemberDetail loginMember = (MemberDetail) session.getAttribute("loginMember");
-//    Long memberId = loginMember.getId();
+    //    Long memberId = loginMember.getId();
     memberId = 6L;
     /* 로그인이 되어있지 않다면 메인으로 리다이렉트 */
-//    if(memberId == null) {
-//
-//    }
+    //    if(memberId == null) {
+    //
+    //    }
 
     String viewName = Navi.FORWARD_MAIN;
 
@@ -65,7 +60,8 @@ public class OrderServlet extends HttpServlet {
     }
   }
 
-  private String build(HttpServletRequest request, HttpServletResponse response, String view, String cmd) {
+  private String build(
+      HttpServletRequest request, HttpServletResponse response, String view, String cmd) {
     if (view.equals("direct") && cmd.equals("form")) {
       return getCreateOrderForm(request, response);
     } else if (view.equals("direct") && cmd.equals("create")) {
@@ -116,16 +112,16 @@ public class OrderServlet extends HttpServlet {
       Long totalPrice = Long.parseLong(request.getParameter("totalPrice"));
 
       OrderCreateDto orderCreateDto =
-              new OrderCreateDto(
-                      memberId,
-                      couponId,
-                      new OrderCreateDto.AddressDto(roadName, addrDetail, zipCode),
-                      new OrderCreateDto.ProductDto(productId, quantity),
-                      totalPrice);
+          new OrderCreateDto(
+              memberId,
+              couponId,
+              new OrderCreateDto.AddressDto(roadName, addrDetail, zipCode),
+              new OrderCreateDto.ProductDto(productId, quantity),
+              totalPrice);
 
       Order order = orderService.createOrder(orderCreateDto);
       ProductOrderDetailDto productOrderDetail =
-              orderService.getOrderDetailsForMemberAndOrderId(order.getId(), memberId);
+          orderService.getOrderDetailsForMemberAndOrderId(order.getId(), memberId);
       request.setAttribute("productOrderDetail", productOrderDetail);
       return String.format(Navi.REDIRECT_ORDER_DETAIL, order.getId());
     } catch (Exception e) {
@@ -141,7 +137,7 @@ public class OrderServlet extends HttpServlet {
       /* 장바구니에 담긴 상품 정보들을 가져옴 */
 
       return Navi.FORWARD_ORDER_CART_FORM;
-    } catch(Exception e) {
+    } catch (Exception e) {
       return Navi.REDIRECT_MAIN;
     }
   }
@@ -156,16 +152,16 @@ public class OrderServlet extends HttpServlet {
       Long totalPrice = Long.parseLong(request.getParameter("totalPrice"));
 
       CartOrderCreateDto cartOrderCreateDto =
-              new CartOrderCreateDto(
-                      memberId,
-                      couponId,
-                      new CartOrderCreateDto.AddressDto(roadName, addrDetail, zipCode),
-                      new ArrayList<>(),
-                      totalPrice);
+          new CartOrderCreateDto(
+              memberId,
+              couponId,
+              new CartOrderCreateDto.AddressDto(roadName, addrDetail, zipCode),
+              new ArrayList<>(),
+              totalPrice);
 
       Order order = orderService.createCartOrder(cartOrderCreateDto);
       ProductOrderDetailDto orderDetails =
-              orderService.getOrderDetailsForMemberAndOrderId(order.getId(), memberId);
+          orderService.getOrderDetailsForMemberAndOrderId(order.getId(), memberId);
       request.setAttribute("orderDetails", orderDetails);
       return String.format(Navi.REDIRECT_ORDER_DETAIL, order.getId());
     } catch (Exception e) {
@@ -185,7 +181,8 @@ public class OrderServlet extends HttpServlet {
 
   private String getProductOrders(HttpServletRequest request, HttpServletResponse response) {
     try {
-      List<ProductOrderDto> productOrders = orderService.getProductOrdersForMemberCurrentYear(memberId);
+      List<ProductOrderDto> productOrders =
+          orderService.getProductOrdersForMemberCurrentYear(memberId);
       request.setAttribute("productOrders", productOrders);
       return Navi.FORWARD_ORDER_LIST;
     } catch (Exception e) {
@@ -196,7 +193,8 @@ public class OrderServlet extends HttpServlet {
   private String getProductOrderDetail(HttpServletRequest request, HttpServletResponse response) {
     try {
       Long orderId = Long.parseLong(request.getParameter("orderId"));
-      ProductOrderDetailDto productOrderDetail = orderService.getOrderDetailsForMemberAndOrderId(orderId, memberId);
+      ProductOrderDetailDto productOrderDetail =
+          orderService.getOrderDetailsForMemberAndOrderId(orderId, memberId);
       request.setAttribute("productOrderDetail", productOrderDetail);
       return Navi.FORWARD_ORDER_DETAIL;
     } catch (Exception e) {
