@@ -1,5 +1,6 @@
 package web.controller;
 
+import app.dto.form.OrderCreateForm;
 import app.dto.request.CartOrderCreateDto;
 import app.dto.request.OrderCreateDto;
 import app.dto.response.MemberDetail;
@@ -41,7 +42,7 @@ public class OrderServlet extends HttpServlet {
     MemberDetail loginMember = (MemberDetail) session.getAttribute("loginMember");
 //    Long memberId = loginMember.getId();
 
-    String viewName = Navi.REDIRECT_MAIN;
+    String viewName = Navi.FORWARD_MAIN;
 
     if (view != null && cmd != null) {
       viewName = build(request, view, cmd, 6L);
@@ -61,8 +62,9 @@ public class OrderServlet extends HttpServlet {
     if (view.equals("cart") && cmd.equals("form")) {
 
       try {
-        OrderMemberDetail createCartOrderForm = orderService.getCreateOrderForm(memberId);
-        request.setAttribute("createCartOrderForm", createCartOrderForm);
+        Long productId = Long.parseLong(request.getParameter("product_id"));
+//        OrderMemberDetail createCartOrderForm = orderService.getCreateOrderForm(memberId, productId);
+//        request.setAttribute("createCartOrderForm", createCartOrderForm);
         return Navi.FORWARD_ORDER_CART_FORM;
       } catch(Exception e) {
         throw new RuntimeException(e);
@@ -100,7 +102,11 @@ public class OrderServlet extends HttpServlet {
     } else if (view.equals("direct") && cmd.equals("form")) {
 
       try {
-        OrderMemberDetail createOrderForm = orderService.getCreateOrderForm(memberId);
+//        Long productId = Long.parseLong(request.getParameter("productId"));
+//        Long quantity = Long.parseLong(request.getParameter("quantity"));
+        Long productId = 1L;
+        Long quantity = 1L;
+        OrderCreateForm createOrderForm = orderService.getCreateOrderForm(memberId, productId, quantity);
         request.setAttribute("createOrderForm", createOrderForm);
         return Navi.FORWARD_ORDER_FORM;
       } catch(Exception e) {
@@ -141,7 +147,7 @@ public class OrderServlet extends HttpServlet {
     } else if (view.equals("detail") && cmd.equals("get")) {
 
       try {
-        Long orderId = Long.parseLong(request.getParameter("order_id"));
+        Long orderId = Long.parseLong(request.getParameter("orderId"));
         ProductOrderDetailDto productOrderDetail = orderService.getOrderDetailsForMemberAndOrderId(orderId, memberId);
         request.setAttribute("productOrderDetail", productOrderDetail);
         return Navi.FORWARD_ORDER_DETAIL;
@@ -162,7 +168,7 @@ public class OrderServlet extends HttpServlet {
     } else if (view.equals("detail") && cmd.equals("delete")) {
 
       try {
-        Long orderId = Long.parseLong(request.getParameter("order_id"));
+        Long orderId = Long.parseLong(request.getParameter("orderId"));
         orderService.cancelOrder(orderId);
         return String.format(Navi.REDIRECT_ORDER_DETAIL, orderId);
       } catch (Exception e) {

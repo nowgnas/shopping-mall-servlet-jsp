@@ -13,7 +13,7 @@
 <h1>상품 주문</h1>
 <form action="/order.bit?view=direct&cmd=create" method="post">
     <h2>회원 이름</h2>
-    <p id="member-name">${createOrderForm.name}</p>
+    <p id="member-name">${createOrderForm.memberName}</p>
 
     <h2>배송지 입력</h2>
 
@@ -22,26 +22,26 @@
     <br/>
     <br/>
 
-    <label for="road-name">도로명 주소</label>
-    <input type="text" id="road-name" name="road-name" required oninvalid="this.setCustomValidity('도로명 주소를 입력해주세요.')"
+    <label for="roadName">도로명 주소</label>
+    <input type="text" id="roadName" name="roadName" required oninvalid="this.setCustomValidity('도로명 주소를 입력해주세요.')"
            oninput="this.setCustomValidity('')"><br><br>
 
-    <label for="addr-detail">상세 주소</label>
-    <input type="text" id="addr-detail" name="addr-detail" required
+    <label for="addrDetail">상세 주소</label>
+    <input type="text" id="addrDetail" name="addrDetail" required
            oninvalid="this.setCustomValidity('상세 주소를 입력해주세요.')" oninput="this.setCustomValidity('')"><br><br>
 
-    <label for="zipcode">우편번호</label>
-    <input type="text" id="zipcode" name="zipcode" required oninvalid="this.setCustomValidity('우편번호를 입력해주세요.')"
+    <label for="zipCode">우편번호</label>
+    <input type="text" id="zipCode" name="zipCode" required oninvalid="this.setCustomValidity('우편번호를 입력해주세요.')"
            oninput="this.setCustomValidity('')"><br><br>
 
     <h2>주문 상품</h2>
     <ul>
         <li class="product-item">
-            <input type="hidden" id="product_id" name="product_id" value="${productDetail.id}">
-            <img src="${productDetail.thumbnailUrl}" alt="상품 썸네일 이미지">
-            <span class="product-name">${productDetail.name}</span>
-            <span class="product-price">가격: ${productDetail.price}</span>
-            <span class="product-quantity">수량: ${productDetail.quantity}개</span>
+            <input type="hidden" id="productId" name="productId" value="${createOrderForm.product.productId}">
+            <img src="${createOrderForm.product.imageUrl}" alt="상품 썸네일 이미지">
+            <span class="product-name">${createOrderForm.product.name}</span>
+            <span class="product-price">가격: ${createOrderForm.product.price}</span>
+            <span class="product-quantity">수량: ${createOrderForm.product.quantity}개</span>
         </li>
     </ul>
 
@@ -114,16 +114,16 @@
 </script>
 <script>
     const setAddressBtn = document.getElementById("set-address-btn");
-    const addressInput = document.getElementById("road-name");
-    const detailAddressInput = document.getElementById("addr-detail");
-    const zipcodeInput = document.getElementById("zipcode");
+    const addressInput = document.getElementById("roadName");
+    const detailAddressInput = document.getElementById("addrDetail");
+    const zipcodeInput = document.getElementById("zipCode");
 
     setAddressBtn.addEventListener("click", function (event) {
         event.preventDefault();
         // 기본 주소지로 설정
-        const defaultRoadName = '${createOrderForm.address.roadName}';
-        const defaultAddrDetail = '${createOrderForm.address.addrDetail}';
-        const defaultZipCode = '${createOrderForm.address.zipCode}';
+        const defaultRoadName = '${createOrderForm.defaultAddress.roadName}';
+        const defaultAddrDetail = '${createOrderForm.defaultAddress.addrDetail}';
+        const defaultZipCode = '${createOrderForm.defaultAddress.zipCode}';
 
         addressInput.value = defaultRoadName;
         detailAddressInput.value = defaultAddrDetail;
