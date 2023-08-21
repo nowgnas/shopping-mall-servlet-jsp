@@ -3,7 +3,9 @@ package app.service.product;
 import app.dto.product.response.ProductDetailForOrder;
 import app.dto.product.response.ProductDetailWithCategory;
 import app.dto.product.response.ProductListWithPagination;
+import app.dto.product.response.ProductSearchByKeyword;
 import app.enums.SortOption;
+import java.util.List;
 
 public interface ProductService {
 
@@ -21,4 +23,6 @@ public interface ProductService {
    * @throws Exception
    */
   ProductDetailForOrder getProductDetailForOrder(Long productId, int quantity) throws Exception;
+
+  List<ProductSearchByKeyword> getProductsByKeyword(String keyword) throws Exception;
 }
