@@ -1,9 +1,7 @@
 package app.dao.delivery;
 
-import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
 import app.entity.Delivery;
+import app.enums.DeliveryStatus;
 import app.error.ErrorCode;
 import config.TestConfig;
 import org.apache.ibatis.session.SqlSession;
@@ -13,7 +11,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import utils.GetSessionFactory;
 
-public class DeliveryDaoInsertTest {
+import static org.junit.jupiter.api.Assertions.*;
+
+public class DeliveryDaoUpdateTest {
 
   private DeliveryDao deliveryDao = new DeliveryDao();
   private SqlSession session;
@@ -23,7 +23,7 @@ public class DeliveryDaoInsertTest {
   void beforeEach() throws Exception {
     session = GetSessionFactory.getInstance().openSession();
     testConfig.init("schema.sql", session);
-    testConfig.init("delivery/init-delivery-insert-data.sql", session);
+    testConfig.init("delivery/init-delivery-data.sql", session);
   }
 
   @AfterEach
@@ -33,44 +33,29 @@ public class DeliveryDaoInsertTest {
   }
 
   @Test
-  @DisplayName("배송지 생성 테스트 - 정상 처리")
-  void insert() throws Exception {
+  @DisplayName("배송 상태 수정 테스트 - 배송 취소")
+  void update() throws Exception {
     // given
-    Delivery delivery =
+    Long orderId = 1L;
+    Delivery updatedDelivery =
         Delivery.builder()
-            .orderId(1L)
+            .orderId(orderId)
             .roadName("도로명 주소")
             .addrDetail("상세 주소")
             .zipCode("12345")
+            .status(DeliveryStatus.CANCELED.name())
             .build();
 
     // when
-    int insertedRow = deliveryDao.insert(delivery, session);
+    int updatedRow = deliveryDao.update(updatedDelivery, session);
     session.commit();
-    session.close();
 
     // then
-    assertSame(1, insertedRow);
-  }
+    Delivery findDelivery = deliveryDao.selectById(orderId, session).get();
+    assertSame(1, updatedRow);
+    assertEquals(DeliveryStatus.CANCELED.name(), findDelivery.getStatus());
+    assertTrue(findDelivery.getUpdatedAt().isAfter(findDelivery.getCreatedAt()));
 
-  @Test
-  @DisplayName("배송지 생성 테스트 - 존재하지 않는 주문")
-  void insertEx1() throws Exception {
-    // given
-    Delivery delivery =
-        Delivery.builder()
-            .orderId(10000L)
-            .roadName("도로명 주소")
-            .addrDetail("상세 주소")
-            .zipCode("12345")
-            .build();
-
-    // when, then
-    assertThrows(
-        Exception.class,
-        () -> deliveryDao.insert(delivery, session),
-        ErrorCode.CANNOT_INSERT_DELIVERY.getMessage());
-    session.commit();
     session.close();
   }
 }

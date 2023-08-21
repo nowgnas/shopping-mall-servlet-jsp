@@ -20,7 +20,13 @@ public enum ErrorCode {
   CANNOT_DELETE_ORDER(SC_BAD_REQUEST, "ERR-ORDER-004", "해당 주문을 삭제할 수 없습니다."),
   CANNOT_INSERT_PRODUCT_ORDER(SC_BAD_REQUEST, "ERR-PRODUCT_ORDER-001", "해당 주문 상품을 생성할 수 없습니다."),
   CANNOT_INSERT_DELIVERY(SC_BAD_REQUEST, "ERR-DELIVERY-001", "해당 배송지를 생성할 수 없습니다."),
+  CANNOT_UPDATE_DELIVERY(SC_BAD_REQUEST, "ERR-DELIVERY-002", "해당 배송지를 수정할 수 없습니다."),
+  CANNOT_FIND_DELIVERY(SC_BAD_REQUEST, "ERR-DELIVERY-003", "해당 배송지를 찾을 수 없습니다."),
+  CANNOT_UPDATE_COUPON(SC_BAD_REQUEST, "ERR-COUPON-001", "해당 쿠폰을 수정할 수 없습니다."),
+  CANNOT_FIND_COUPON(SC_BAD_REQUEST, "ERR-COUPON-002", "해당 쿠폰을 찾을 수 없습니다."),
   CANNOT_INSERT_PAYMENT(SC_BAD_REQUEST, "ERR-PAYMENT-001", "해당 결제 정보를 생성할 수 없습니다."),
+  MEMBER_NOT_FOUND(SC_NOT_FOUND, "0000", "해당 아이디의 회원은 존재 하지 않습니다."),
+  CANNOT_FIND_PAYMENT(SC_BAD_REQUEST, "ERR-PAYMENT-002", "해당 결제 정보를 찾을 수 없습니다."),
   EMAIL_IS_NOT_INVALID(SC_BAD_REQUEST, "0000", "유효한 이메일이 아닙니다."),
   PASSWORD_IS_NOT_INVALID(
       SC_BAD_REQUEST, "0000", "비밀번호는 영문, 숫자 형식으로 최소 8자 ~ 최대 16자 사이로 입력해야 합니다."),

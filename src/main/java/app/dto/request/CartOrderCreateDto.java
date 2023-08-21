@@ -1,16 +1,17 @@
 package app.dto.request;
 
+import java.util.List;
 import lombok.*;
 
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class OrderCreateDto {
-
+public class CartOrderCreateDto {
+  
   private Long memberId;
   private Long couponId;
   private AddressDto address;
-  private ProductDto product;
+  private List<ProductDto> products;
   private Long totalPrice;
 
   @Getter

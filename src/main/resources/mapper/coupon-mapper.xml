@@ -4,7 +4,18 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="coupon">
 
-    <select id="select" parameterType="Long" resultType="coupon">
+    <resultMap id="BaseResultMap" type="coupon">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="member_id" jdbcType="BIGINT" property="memberId"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="status" jdbcType="VARCHAR" property="status"/>
+        <result column="discount_policy" jdbcType="VARCHAR" property="discountPolicy"/>
+        <result column="discount_value" jdbcType="INTEGER" property="discountValue"/>
+        <result column="created_at" jdbcType="TIMESTAMP" property="createdAt"/>
+        <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt"/>
+    </resultMap>
+
+    <select id="select" parameterType="Long" resultMap="BaseResultMap">
         SELECT *
         FROM coupon
         WHERE id = #{id}
@@ -22,7 +33,14 @@
         SET name            = #{name},
             discount_policy = #{discountPolicy},
             discount_value  = #{discountValue},
-            status          = #{status}
+            status          = #{status},
+            updated_at      = now()
+        WHERE id = #{id}
+    </update>
+    <update id="updateStatus" parameterType="coupon">
+        UPDATE coupon
+        SET status     = #{status},
+            updated_at = now()
         WHERE id = #{id}
     </update>
     <delete id="delete" parameterType="Long">
