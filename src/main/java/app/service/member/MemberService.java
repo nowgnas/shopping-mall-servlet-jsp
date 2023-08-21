@@ -105,7 +105,7 @@ public class MemberService {
     } finally {
       sqlSession.close();
     }
-    return result == 1 ? true : false;
+    return result == 0 ? true : false;
   }
 
   private String createHashedPassword(LoginDto dto, SqlSession sqlSession) throws SQLException {

@@ -92,6 +92,17 @@ class MemberServiceTest {
     Assertions.assertEquals(expectedMessage, customException.getMessage());
   }
 
+  @Test
+  @DisplayName("이메일 중복검사 성공 시 true를 반환한다.")
+  void email_duplicate_success() throws Exception {
+    // given
+    String email = "testSuccess@naver.com";
+    // when
+    boolean result = memberService.isDuplicatedEmail(email);
+    // then
+    Assertions.assertTrue(result);
+  }
+
   private MemberRegisterDto createMemberRegisterDto() {
     String email = "abc@naver.com";
     String password = "123123";
