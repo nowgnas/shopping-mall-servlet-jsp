@@ -83,7 +83,7 @@
         FROM member
     </select>
 
-    <select id="countByEmail" parameterType="String" resultType="Long">
+    <select id="countByEmail" parameterType="String" resultType="int">
         SELECT count(id)
         FROM member
         WHERE email = #{email}
