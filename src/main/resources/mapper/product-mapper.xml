@@ -195,4 +195,11 @@
     where p.id = #{id}
       and pi.is_thumbnail = true
   </select>
+
+  <select id="searchByWord" parameterType="String" resultType="product">
+    SELECT *
+    FROM product
+    WHERE name LIKE '%' || #{keyword} || '%'
+    ORDER BY name
+  </select>
 </mapper>

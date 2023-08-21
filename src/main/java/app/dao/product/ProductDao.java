@@ -148,4 +148,9 @@ public class ProductDao implements ProductDaoFrame<Long, Product> {
       throws Exception {
     return session.selectOne("product.product-detail-for-order", productId);
   }
+
+  @Override
+  public List<Product> selectProductsByKeyword(String keyword, SqlSession session) {
+    return session.selectList("product.searchByWord", keyword);
+  }
 }
