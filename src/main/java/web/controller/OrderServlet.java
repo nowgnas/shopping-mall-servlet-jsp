@@ -8,6 +8,9 @@ import app.dto.response.ProductOrderDetailDto;
 import app.dto.response.ProductOrderDto;
 import app.entity.Order;
 import app.service.order.OrderServiceImpl;
+import app.utils.HttpUtil;
+import web.dispatcher.Navi;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,25 +41,35 @@ public class OrderServlet extends HttpServlet {
     MemberDetail loginMember = (MemberDetail) session.getAttribute("loginMember");
 //    Long memberId = loginMember.getId();
 
-    String viewName = "index.jsp";
+    String viewName = Navi.REDIRECT_MAIN;
+
     if (view != null && cmd != null) {
       viewName = build(request, view, cmd, 6L);
     }
 
-    RequestDispatcher rd = request.getRequestDispatcher(viewName);
-    rd.forward(request, response);
+    String path = viewName.substring(viewName.indexOf(":") + 1);
+
+    if (viewName.startsWith("forward:")) {
+      HttpUtil.forward(request, response, path);
+    } else {
+      HttpUtil.redirect(response, path);
+    }
   }
 
   private String build(HttpServletRequest request, String view, String cmd, Long memberId) {
+
     if (view.equals("cart") && cmd.equals("form")) {
+
       try {
         OrderMemberDetail createCartOrderForm = orderService.getCreateOrderForm(memberId);
         request.setAttribute("createCartOrderForm", createCartOrderForm);
-        return "templates/order/orderCartForm.jsp";
+        return Navi.FORWARD_ORDER_CART_FORM;
       } catch(Exception e) {
         throw new RuntimeException(e);
       }
+
     } else if (view.equals("cart") && cmd.equals("create")) {
+
       Long couponId = Long.parseLong(request.getParameter("coupon_id"));
       String roadName = request.getParameter("road_name");
       String addrDetail = request.getParameter("addr_detail");
@@ -79,19 +92,23 @@ public class OrderServlet extends HttpServlet {
         ProductOrderDetailDto orderDetails =
             orderService.getOrderDetailsForMemberAndOrderId(order.getId(), memberId);
         request.setAttribute("orderDetails", orderDetails);
-        return "templates/order/orderDetail.jsp";
+        return String.format(Navi.REDIRECT_ORDER_DETAIL, order.getId());
       } catch (Exception e) {
         throw new RuntimeException(e);
       }
+
     } else if (view.equals("direct") && cmd.equals("form")) {
+
       try {
         OrderMemberDetail createOrderForm = orderService.getCreateOrderForm(memberId);
         request.setAttribute("createOrderForm", createOrderForm);
-        return "templates/order/orderForm.jsp";
+        return Navi.FORWARD_ORDER_FORM;
       } catch(Exception e) {
         throw new RuntimeException(e);
       }
+
     } else if (view.equals("direct") && cmd.equals("create")) {
+
       Long couponId = Long.parseLong(request.getParameter("coupon_id"));
       Long productId = Long.parseLong(request.getParameter("product_id"));
       Long quantity = Long.parseLong(request.getParameter("quantity"));
@@ -116,28 +133,44 @@ public class OrderServlet extends HttpServlet {
         ProductOrderDetailDto productOrderDetail =
             orderService.getOrderDetailsForMemberAndOrderId(order.getId(), memberId);
         request.setAttribute("productOrderDetail", productOrderDetail);
-        return "templates/order/orderDetail.jsp";
+        return String.format(Navi.REDIRECT_ORDER_DETAIL, order.getId());
+
       } catch (Exception e) {
         throw new RuntimeException(e);
       }
     } else if (view.equals("detail") && cmd.equals("get")) {
+
       try {
-        ProductOrderDetailDto productOrderDetail = orderService.getOrderDetailsForMemberAndOrderId(1L, memberId);
+        Long orderId = Long.parseLong(request.getParameter("order_id"));
+        ProductOrderDetailDto productOrderDetail = orderService.getOrderDetailsForMemberAndOrderId(orderId, memberId);
         request.setAttribute("productOrderDetail", productOrderDetail);
+        return Navi.FORWARD_ORDER_DETAIL;
       } catch (Exception e) {
         request.setAttribute("error", "system");
       }
-      return "templates/order/orderDetail.jsp";
+
     } else if (view.equals("list") && cmd.equals("get")) {
+
       try {
         List<ProductOrderDto> productOrders = orderService.getProductOrdersForMemberCurrentYear(memberId);
         request.setAttribute("productOrders", productOrders);
+        return Navi.FORWARD_ORDER_LIST;
       } catch (Exception e) {
         request.setAttribute("error", "system");
       }
-      return "templates/order/orderList.jsp";
+
+    } else if (view.equals("detail") && cmd.equals("delete")) {
+
+      try {
+        Long orderId = Long.parseLong(request.getParameter("order_id"));
+        orderService.cancelOrder(orderId);
+        return String.format(Navi.REDIRECT_ORDER_DETAIL, orderId);
+      } catch (Exception e) {
+        request.setAttribute("error", "system");
+      }
+
     }
 
-    return "templates/order/orderList.jsp";
+    return "index.jsp";
   }
 }

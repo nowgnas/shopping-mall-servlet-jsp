@@ -14,20 +14,20 @@
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
 
     <!-- Bootstrap -->
-    <link type="text/css" rel="stylesheet" href="css/bootstrap.min.css"/>
+    <link type="text/css" rel="stylesheet" href="../css/bootstrap.min.css"/>
 
     <!-- Slick -->
-    <link type="text/css" rel="stylesheet" href="css/slick.css"/>
-    <link type="text/css" rel="stylesheet" href="css/slick-theme.css"/>
+    <link type="text/css" rel="stylesheet" href="../css/slick.css"/>
+    <link type="text/css" rel="stylesheet" href="../css/slick-theme.css"/>
 
     <!-- nouislider -->
-    <link type="text/css" rel="stylesheet" href="css/nouislider.min.css"/>
+    <link type="text/css" rel="stylesheet" href="../css/nouislider.min.css"/>
 
     <!-- Font Awesome Icon -->
-    <link rel="stylesheet" href="css/font-awesome.min.css">
+    <link rel="stylesheet" href="../css/font-awesome.min.css">
 
     <!-- Custom stlylesheet -->
-    <link type="text/css" rel="stylesheet" href="css/style.css"/>
+    <link type="text/css" rel="stylesheet" href="../css/style.css"/>
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -64,7 +64,7 @@
                 <div class="col-md-3">
                     <div class="header-logo">
                         <a href="#" class="logo">
-                            <img src="img/logo.png" alt="">
+                            <img src="../img/logo.png" alt="">
                         </a>
                     </div>
                 </div>
@@ -74,12 +74,7 @@
                 <div class="col-md-6">
                     <div class="header-search">
                         <form>
-                            <select class="input-select">
-                                <option value="0">카테고리 선택</option>
-                                <option value="1">카테고리 01</option>
-                                <option value="1">카테고리 02</option>
-                            </select>
-                            <input class="input" placeholder="상품 검색">
+                            <input class="input-search" placeholder="상품 검색">
                             <button class="search-btn">검색</button>
                         </form>
                     </div>
@@ -110,7 +105,7 @@
                                 <div class="cart-list">
                                     <div class="product-widget">
                                         <div class="product-img">
-                                            <img src="img/product01.png" alt="">
+                                            <img src="../img/product01.png" alt="">
                                         </div>
                                         <div class="product-body">
                                             <h3 class="product-name"><a href="#">product name goes here</a></h3>
@@ -121,7 +116,7 @@
 
                                     <div class="product-widget">
                                         <div class="product-img">
-                                            <img src="img/product02.png" alt="">
+                                            <img src="../img/product02.png" alt="">
                                         </div>
                                         <div class="product-body">
                                             <h3 class="product-name"><a href="#">product name goes here</a></h3>
@@ -141,6 +136,13 @@
                             </div>
                         </div>
                         <!-- /Cart -->
+
+                        <div>
+                            <a href="/order.bit?view=list&cmd=get">
+                                <i class="fa fa-list"></i>
+                                <span>주문 조회</span>
+                            </a>
+                        </div>
 
                         <!-- Menu Toogle -->
                         <div class="menu-toggle">
@@ -194,7 +196,7 @@
             <div class="col-md-4 col-xs-6">
                 <div class="shop">
                     <div class="shop-img">
-                        <img src="img/shop01.png" alt="">
+                        <img src="../img/shop01.png" alt="">
                     </div>
                     <div class="shop-body">
                         <h3>컴퓨터<br>카테고리</h3>
@@ -208,7 +210,7 @@
             <div class="col-md-4 col-xs-6">
                 <div class="shop">
                     <div class="shop-img">
-                        <img src="img/shop03.png" alt="">
+                        <img src="../img/shop03.png" alt="">
                     </div>
                     <div class="shop-body">
                         <h3>가전제품<br>카테고리</h3>
@@ -222,7 +224,7 @@
             <div class="col-md-4 col-xs-6">
                 <div class="shop">
                     <div class="shop-img">
-                        <img src="img/shop02.png" alt="">
+                        <img src="../img/shop02.png" alt="">
                     </div>
                     <div class="shop-body">
                         <h3>휴대폰<br>카테고리</h3>
@@ -414,12 +416,12 @@
 <!-- /FOOTER -->
 
 <!-- jQuery Plugins -->
-<script src="js/jquery.min.js"></script>
-<script src="js/bootstrap.min.js"></script>
-<script src="js/slick.min.js"></script>
-<script src="js/nouislider.min.js"></script>
-<script src="js/jquery.zoom.min.js"></script>
-<script src="js/main.js"></script>
+<script src="../js/jquery.min.js"></script>
+<script src="../js/bootstrap.min.js"></script>
+<script src="../js/slick.min.js"></script>
+<script src="../js/nouislider.min.js"></script>
+<script src="../js/jquery.zoom.min.js"></script>
+<script src="../js/main.js"></script>
 
 </body>
 </html>
