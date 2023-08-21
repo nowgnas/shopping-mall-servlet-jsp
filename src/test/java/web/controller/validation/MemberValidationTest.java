@@ -51,4 +51,15 @@ class MemberValidationTest {
     Assertions.assertTrue(validName);
     Assertions.assertTrue(validName2);
   }
+
+  @Test
+  @DisplayName("이름 정규식 체크에 실패한 경우 false를 반환 한다.")
+  void name_validation_fail() throws Exception {
+    String name = "김";
+    String name2 = "가나다라마바사아자차카타파하가나다라마바사";
+    boolean validName = MemberValidation.isValidName(name);
+    boolean validName2 = MemberValidation.isValidName(name2);
+    Assertions.assertFalse(validName);
+    Assertions.assertFalse(validName2);
+  }
 }
