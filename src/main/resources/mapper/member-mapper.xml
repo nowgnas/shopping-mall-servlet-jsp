@@ -26,6 +26,7 @@
             <result property="zipCode" column="zip_code"/>
         </association>
         <collection property="coupons" ofType="app.dto.response.CouponDetail">
+            <result property="id" column="id"/>
             <result property="name" column="coupon_name"/>
             <result property="discountPolicy" column="discount_policy"/>
             <result property="discountValue" column="discount_value"/>
