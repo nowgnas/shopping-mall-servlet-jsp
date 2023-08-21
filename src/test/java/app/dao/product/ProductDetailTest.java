@@ -42,7 +42,7 @@ public class ProductDetailTest {
   void productDetail() {
     ProductDetail detail =
         session.selectOne(
-            "product.select", ProductDetailParameter.builder().productId(2L).memberId(1L).build());
+            "product.selectDetail", ProductDetailParameter.builder().productId(2L).memberId(1L).build());
     log.info(detail.toString());
     session.close();
   }

@@ -64,7 +64,21 @@
     AND is_thumbnail = true
   </select>
 
-  <select id="select" parameterType="app.dto.product.ProductDetailParameter"
+  <select id="select" parameterType="Long" resultType="product">
+        SELECT id,
+               category_id AS categoryId,
+               name,
+               description,
+               price,
+               quantity,
+               code,
+               created_at  AS createdAt,
+               updated_at  AS updatedAt
+        FROM product
+        WHERE id = #{id}
+    </select>
+
+  <select id="selectDetail" parameterType="app.dto.product.ProductDetailParameter"
     resultType="app.dto.product.ProductDetail">
     SELECT p.name              name,
            p.price             price,
