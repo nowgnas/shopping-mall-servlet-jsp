@@ -1,5 +1,6 @@
-package app.dto.product;
+package app.dto.category;
 
+import java.util.Map;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,12 +13,6 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
-public class ProductDetail {
-  private String name;
-  private Long price;
-  private Integer categoryId;
-  private String description;
-  private String url;
-  private Long quantity;
-  private Boolean isLiked;
+public class ProductCategory {
+  private Map<Integer, String> categoryList;
 }

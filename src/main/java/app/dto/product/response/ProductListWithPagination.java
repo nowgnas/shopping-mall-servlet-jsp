@@ -15,11 +15,11 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
-public class ProductListWithPagination<K extends List<ProductListItem>, V extends Pagination> {
-  K item;
-  V paging;
+public class ProductListWithPagination {
+  private List<ProductListItem> item;
+  private Pagination paging;
 
-  public static ProductListWithPagination<List<ProductListItem>, Pagination> makeListWithPaging(
+  public static ProductListWithPagination makeListWithPaging(
       List<ProductListItem> item, Pagination pagination, int totalPages) {
     Pagination paging =
         Pagination.builder()
