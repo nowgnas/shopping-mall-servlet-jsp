@@ -122,7 +122,7 @@ public class ProductDao implements ProductDaoFrame<Long, Product> {
   public ProductDetail selectProductDetailWithCategory(
       Long memberId, Long productId, SqlSession session) {
     return session.selectOne(
-        "product.select",
+        "product.selectDetail",
         ProductDetailParameter.builder().productId(productId).memberId(memberId).build());
   }
 
