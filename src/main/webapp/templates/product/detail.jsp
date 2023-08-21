@@ -11,29 +11,49 @@
 <head>
     <meta charset="UTF-8">
     <title>Product Details</title>
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
-<h1>Product Details</h1>
+<div class="container">
+    <h1 class="mt-4">Product Details</h1>
 
-<div>
-    <img src="${product.image}" alt="Product Image" width="200" height="200">
+    <div class="row mt-4">
+        <div class="col-md-4">
+            <img src="${product.image}" alt="Product Image" class="img-fluid">
+        </div>
+
+        <div class="col-md-8">
+            <h2>${product.name}</h2>
+            <p class="lead">Price: $${product.price}</p>
+
+            <form action="/buy" method="post">
+                <div class="form-group">
+                    <label for="quantity">Quantity:</label>
+                    <input type="number" id="quantity" name="quantity" value="1" min="1"
+                           class="form-control">
+                    <input type="hidden" name="productId" value="${product.id}">
+                </div>
+                <button type="submit" class="btn btn-primary">Buy</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <h3>Categories: ${product.categories}</h3>
+            <p>Description: ${product.description}</p>
+
+            <p>Likes: ${product.likes}</p>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <a href="/home" class="btn btn-secondary">Back to Home</a>
+        </div>
+    </div>
 </div>
-
-<h2>${product.name}</h2>
-<p>Price: $${product.price}</p>
-
-<form action="/buy" method="post">
-    <label for="quantity">Quantity:</label>
-    <input type="number" id="quantity" name="quantity" value="1" min="1">
-    <input type="hidden" name="productId" value="${product.id}">
-    <button type="submit">Buy</button>
-</form>
-
-<p>Categories: ${product.categories}</p>
-<p>Description: ${product.description}</p>
-
-<p>Likes: ${product.likes}</p>
-
-<a href="/home">Back to Home</a>
 </body>
 </html>
+

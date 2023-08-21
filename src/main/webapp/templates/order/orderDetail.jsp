@@ -17,24 +17,43 @@
     <div class="order-info">
         <h2>주문 정보</h2>
         <p>주문 번호: ${productOrderDetail.orderId}</p>
-        <p>주문 상태: ${productOrderDetail.orderStatus}</p>
+        <p>주문 상태: ${productOrderDetail.orderStatus.getMessage()}</p>
         <p>주문 날짜: ${productOrderDetail.orderDate}</p>
-        <!-- 회원 이름, 배송지, 결제 수단, 총 상품 가격, 총 결제 금액 등을 출력해주세요 -->
         <p>회원 이름: ${productOrderDetail.memberName}</p>
-        <p>배송지: ${productOrderDetail.address.roadName} ${productOrderDetail.address.addrDetail} ${productOrderDetail.address.zipCode}</p>
-        <p>결제 수단: ${productOrderDetail.payment.paymentType}</p>
-        <p>총 상품 가격: ${productOrderDetail.totalPrice}원</p>
-        <p>할인 금액: ${productOrderDetail.discountPrice}원</p>
+        <p>
+            배송지: ${productOrderDetail.delivery.roadName} ${productOrderDetail.delivery.addrDetail} ${productOrderDetail.delivery.zipCode}</p>
+        <p>배송 상태: ${productOrderDetail.delivery.deliveryStatus.getMessage()}</p>
+        <p>결제 수단: ${productOrderDetail.payment.paymentType.getMessage()}</p>
+        <p>총 상품 가격: ${productOrderDetail.getTotalPrice()}원</p>
+        <p>할인 금액: ${productOrderDetail.getDiscountPrice()}원</p>
         <p>총 결제 금액: ${productOrderDetail.payment.actualAmount}원</p>
-        <!-- 쿠폰 정보를 출력해주세요 -->
-        <p>쿠폰 이름: ${productOrderDetail.coupon.couponName}</p>
-        <p>쿠폰 상태: ${productOrderDetail.coupon.couponStatus}</p>
+        <c:choose>
+            <c:when test="${productOrderDetail.coupon eq null}">
+                <p>적용 쿠폰: 없음</p>
+            </c:when>
+            <c:otherwise>
+                <p>적용 쿠폰: ${productOrderDetail.coupon.couponName}</p>
+            </c:otherwise>
+        </c:choose>
+        <c:choose>
+            <c:when test="${productOrderDetail.delivery.deliveryStatus.name() eq 'CANCELED' || productOrderDetail.delivery.deliveryStatus.name() eq 'PROCESSING'}">
+                <button type="button" disabled>
+                    주문 취소
+                </button>
+            </c:when>
+            <c:otherwise>
+                <button type="button"
+                        onclick="location.href='/order.bit?view=detail&cmd=delete&order_id=${productOrderDetail.orderId}'">
+                    주문 취소
+                </button>
+            </c:otherwise>
+        </c:choose>
     </div>
 
     <h2>상품 목록</h2>
     <table>
         <tr>
-            <th>상품 썸네일</th>
+            <th>상품 이미지</th>
             <th>상품 이름</th>
             <th>가격</th>
             <th>수량</th>

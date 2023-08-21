@@ -123,6 +123,14 @@ ul, ol {
   width: 100%;
 }
 
+.input-search {
+  height: 40px;
+  padding: 0px 15px;
+  border: 1px solid #E4E7ED;
+  background-color: #FFF;
+  width: 70%;
+}
+
 textarea.input {
   padding: 15px;
   min-height: 90px;
@@ -469,7 +477,7 @@ textarea.input {
   position: relative;
 }
 
-.header-search form .input-select {
+.header-search form .input-select .input-search {
   margin-right: -4px;
   border-radius: 40px 0px 0px 40px;
 }
@@ -509,7 +517,7 @@ textarea.input {
 .header-ctn>div>a {
   display: block;
   position: relative;
-  width: 90px;
+  width: 70px;
   text-align: center;
   color: #FFF;
 }
@@ -1522,7 +1530,7 @@ textarea.input {
   margin-bottom: 0px;
 }
 
-.product-details .product-options .input-select {
+.product-details .product-options .input-select .input-search {
   width: 90px;
 }
 
