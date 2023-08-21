@@ -21,4 +21,12 @@ class MemberValidationTest {
     boolean validEmail = MemberValidation.isValidEmail(inputEmail);
     Assertions.assertFalse(validEmail);
   }
+
+  @Test
+  @DisplayName("비밀번호 정규식 체크에 성공한 경우 true를 반환 한다.")
+  void password_validation_success() throws Exception {
+    String password = "a1234567";
+    boolean validPassword = MemberValidation.isValidPassword(password);
+    Assertions.assertTrue(validPassword);
+  }
 }
