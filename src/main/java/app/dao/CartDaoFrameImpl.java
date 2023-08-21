@@ -11,47 +11,34 @@ public class CartDaoFrameImpl implements CartDaoFrame<ProductAndMemberCompositeK
 
   @Override
   public int insert(Cart cart, SqlSession session) throws Exception {
-    int returnValue = session.insert("cart.insert", cart);
-    session.close();
-    return returnValue;
+    return session.insert("cart.insert", cart);
   }
 
   @Override
   public int update(Cart cart, SqlSession session) throws Exception {
-
-    int returnValue = session.update("cart.update", cart);
-    session.close();
-    return returnValue;
+    return session.update("cart.update", cart);
   }
 
   @Override
   public int deleteById(ProductAndMemberCompositeKey productAndMemberCompositeKey,
       SqlSession session) throws Exception {
-    int returnValue = session.delete("cart.delete", productAndMemberCompositeKey);
-    session.close();
-    return returnValue;
+    return session.delete("cart.delete", productAndMemberCompositeKey);
   }
 
   @Override
   public Optional<Cart> selectById(ProductAndMemberCompositeKey productAndMemberCompositeKey,
       SqlSession session) throws Exception {
-    Optional<Cart> cartOptional = Optional.ofNullable(
+    return Optional.ofNullable(
         session.selectOne("cart.select", productAndMemberCompositeKey));
-    session.close();
-    return cartOptional;
   }
 
   @Override
   public List<Cart> selectAll(SqlSession session) throws Exception {
-    List<Cart> cartList = session.selectList("select-all");
-    session.close();
-    return cartList;
+    return session.selectList("select-all");
   }
 
   @Override
   public List<Cart> getCartProductListByMember(Long memberId, SqlSession session) {
-    List<Cart> cartList = session.selectList("select-all-by-member");
-    session.close();
-    return cartList;
+    return session.selectList("select-all-by-member");
   }
 }

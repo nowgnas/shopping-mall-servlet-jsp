@@ -33,7 +33,7 @@ class CartDaoTest {
     testConfig.init("schema.sql", session);
   }
 
-  void getInitDataWithoutData() throws Exception {
+  void getInitDataWithoutCartData() throws Exception {
     testConfig.init("init-data.sql", session);
   }
 
@@ -44,7 +44,7 @@ class CartDaoTest {
   @DisplayName("멤버와 제품이 존재할 때 카트 데이터 넣기")
   @Test
   void insertCart_WhenThereIsMemberAndProduct_CartIsInserted() throws Exception {
-    getInitDataWithoutData();
+    getInitDataWithoutCartData();
     Cart expectedCart = new Cart(1L, 1L, 1);
     int expectedValue = cartDaoFrame.insert(expectedCart, session);
     Assertions.assertEquals(expectedValue, 1);
@@ -54,24 +54,22 @@ class CartDaoTest {
   @Test
   void insertCart_WhenThereIsNotMemberAndProduct_SqlExceptionIsCatched() throws Exception {
    Cart expectedCart = new Cart(1L, 1L, 1);
-
     Throwable throwable = assertThrows(PersistenceException.class, () -> {
         cartDaoFrame.insert(expectedCart, session);
     });
     Assertions.assertTrue(throwable.getCause() instanceof JdbcSQLIntegrityConstraintViolationException, "can not insert without member and product");
-
   }
 
   @Test
-  void deleteCart_WhenThereIsNotCart_SqlExceptionIsCathed() {
+  void deleteCart_WhenThereIsNotCart_SqlExceptionIsCathed() throws Exception {
 
   }
 
   @Test
   void deleteCart_WhenThereIsCart_CartIsDeleted() throws Exception {
-
-    int deleted = cartDaoFrame.deleteById(new ProductAndMemberCompositeKey(1L, 1L), session);
-    System.out.println(deleted);
+    getInitDataWithoutCartData();
+    getCartInitData();
+    cartDaoFrame.deleteById(new ProductAndMemberCompositeKey(1L, 1L), session);
   }
 
   @Test
