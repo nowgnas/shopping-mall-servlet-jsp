@@ -95,6 +95,19 @@ public class MemberService {
     return memberDetail;
   }
 
+  public boolean isDuplicatedEmail(String email) {
+    SqlSession sqlSession = sessionFactory.openSession();
+    int result = 0;
+    try {
+      result = memberDao.countByEmail(email, sqlSession);
+    } catch (SQLException e) {
+      e.printStackTrace();
+    } finally {
+      sqlSession.close();
+    }
+    return result == 1 ? true : false;
+  }
+
   private String createHashedPassword(LoginDto dto, SqlSession sqlSession) throws SQLException {
     Encryption encryption = encryptionDao.selectByEmail(dto.getEmail(), sqlSession).get();
     return new String(CipherUtil.getSHA256(dto.getPassword(), encryption.getSalt()));
