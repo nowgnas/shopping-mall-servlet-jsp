@@ -145,6 +145,7 @@ class CartDaoTest {
     getCartInitData();
     List<CartAndProductDto> cartAndProductListDto = cartDaoFrame.getAllCartsAndAllProductsByMember(
         1L, session);
+    System.out.println(cartAndProductListDto.get(0).toString());
     Assertions.assertNotNull(cartAndProductListDto);
   }
 

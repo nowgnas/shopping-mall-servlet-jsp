@@ -1,15 +1,11 @@
 package app.service.cart;
 
 import app.dao.CartDaoFrame;
-import app.dao.CartDaoFrameImpl;
 import app.dao.DaoFrame;
-import app.dao.member.MemberDao;
 import app.dao.member.MemberDaoFrame;
 import app.dao.product.ProductDao;
 import app.dto.cart.AllCartProductInfoDto;
-import app.dto.cart.ProductInCartDto;
 import app.dto.comp.ProductAndMemberCompositeKey;
-import app.dto.product.ProductItemQuantity;
 import app.entity.Cart;
 
 import app.entity.Member;
@@ -19,10 +15,7 @@ import app.error.exception.cart.OutOfStockException;
 import app.error.exception.member.MemberNotFoundException;
 import app.error.exception.product.ProductNotFoundException;
 import app.utils.GetSessionFactory;
-import java.util.List;
-import java.util.stream.Collectors;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.apache.ibatis.session.SqlSession;
