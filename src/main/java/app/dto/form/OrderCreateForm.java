@@ -59,7 +59,7 @@ public class OrderCreateForm {
     private Long id;
     private String name;
     private String discountPolicy;
-    private String discountValue;
+    private Integer discountValue;
     private String status;
   }
 

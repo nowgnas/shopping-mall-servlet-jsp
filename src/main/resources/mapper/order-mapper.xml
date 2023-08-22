@@ -123,12 +123,13 @@
           AND o.id = #{orderId}
     </select>
     <insert id="insert" parameterType="order" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO orders (member_id, status)
-        VALUES (#{memberId}, #{status})
+        INSERT INTO orders (member_id, coupon_id, status)
+        VALUES (#{memberId}, #{couponId}, #{status})
     </insert>
     <update id="update" parameterType="order" useGeneratedKeys="true" keyProperty="id">
         UPDATE orders
         SET member_id  = #{memberId},
+            coupon_id  = #{couponId},
             status     = #{status},
             updated_at = now()
         WHERE id = #{id}

@@ -9,11 +9,12 @@ import app.dao.order.OrderDao;
 import app.dao.payment.PaymentDao;
 import app.dao.product.ProductDao;
 import app.dao.productorder.ProductOrderDao;
+import app.dto.cart.CartAndProductDto;
 import app.dto.comp.ProductAndMemberCompositeKey;
 import app.dto.form.OrderCartCreateForm;
 import app.dto.form.OrderCreateForm;
 import app.dto.product.response.ProductDetailForOrder;
-import app.dto.request.CartOrderCreateDto;
+import app.dto.request.OrderCartCreateDto;
 import app.dto.request.OrderCreateDto;
 import app.dto.response.OrderMemberDetail;
 import app.dto.response.ProductOrderDetailDto;
@@ -27,17 +28,14 @@ import app.utils.GetSessionFactory;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.log4j.Logger;
-import org.modelmapper.ModelMapper;
 
 public class OrderServiceImpl {
 
   private Logger log = Logger.getLogger("order");
-  private final ModelMapper mapper = new ModelMapper();
   private final SqlSessionFactory sessionFactory = GetSessionFactory.getInstance();
   private final OrderDao orderDao = new OrderDao();
   private final DeliveryDao deliveryDao = new DeliveryDao();
@@ -141,8 +139,9 @@ public class OrderServiceImpl {
       OrderMemberDetail orderMemberDetail =
           memberDao.selectAddressAndCouponById(memberId, session).orElseThrow(Exception::new);
       /* 회원으로 장바구니에 들어있는 상품들 모두 조회 */
+      List<CartAndProductDto> cartAndProductDtos = cartDao.getAllCartsAndAllProductsByMember(memberId, session);
 
-      return null;
+      return OrderCartCreateForm.of(orderMemberDetail, cartAndProductDtos);
     } catch (CustomException ex) {
       log.error(ex.getMessage());
       session.rollback();
@@ -157,12 +156,14 @@ public class OrderServiceImpl {
   }
 
   // TODO: 장바구니 상품 주문
-  public Order createCartOrder(CartOrderCreateDto cartOrderCreateDto) throws Exception {
+  public Order createCartOrder(OrderCartCreateDto orderCartCreateDto) throws Exception {
     SqlSession session = sessionFactory.openSession();
     try {
-      Long memberId = cartOrderCreateDto.getMemberId();
+      Long memberId = orderCartCreateDto.getMemberId();
+      List<CartAndProductDto> cartAndProductDtos = cartDao.getAllCartsAndAllProductsByMember(memberId, session);
+      orderCartCreateDto.setProducts(cartAndProductDtos);
       /* 상품 재고 확인 1. 없다면 구매 불가 2. 있다면 재고 차감 */
-      cartOrderCreateDto
+      orderCartCreateDto
           .getProducts()
           .forEach(
               p -> {
@@ -195,19 +196,19 @@ public class OrderServiceImpl {
       /* 회원의 잔액 확인 1. 총 상품 가격보다 잔액이 적다면 구매 불가 2. 잔액이 충분하다면 회원의 잔액에서 차감 */
       Member member =
           memberDao
-              .selectById(cartOrderCreateDto.getMemberId(), session)
+              .selectById(orderCartCreateDto.getMemberId(), session)
               .orElseThrow(Exception::new);
-      validateEnoughMoney(member.getMoney(), cartOrderCreateDto.getTotalPrice());
-      member.updateMoney(member.getMoney() - cartOrderCreateDto.getTotalPrice());
+      validateEnoughMoney(member.getMoney(), orderCartCreateDto.getTotalPrice());
+      member.updateMoney(member.getMoney() - orderCartCreateDto.getTotalPrice());
       if (memberDao.update(member, session) == 0) {
         throw new CustomException("회원 잔고 업데이트 오류");
       }
 
       /* 회원이 쿠폰을 썼는지 확인 1. 쿠폰을 적용했다면 회원의 쿠폰 정보 '사용됨' 상태로 바꿈 2. 쿠폰을 적용하지 않았다면 패스 */
-      if (isCouponUsed(cartOrderCreateDto.getCouponId())) {
+      if (isCouponUsed(orderCartCreateDto.getCouponId())) {
         Coupon coupon =
             couponDao
-                .selectById(cartOrderCreateDto.getCouponId(), session)
+                .selectById(orderCartCreateDto.getCouponId(), session)
                 .orElseThrow(Exception::new);
         coupon.updateStatus(CouponStatus.USED.name());
         if (couponDao.update(coupon, session) == 0) {
@@ -216,27 +217,22 @@ public class OrderServiceImpl {
       }
 
       /* 상품 주문 orders, product_order, payment, delivery 생성 */
-      Order order = Order.builder().memberId(memberId).status(OrderStatus.PENDING.name()).build();
+      Order order = orderCartCreateDto.toOrderEntity();
       orderDao.insert(order, session);
 
-      // TODO: productOrder
+      List<ProductOrder> productOrders = orderCartCreateDto.toProductOrderEntities(order.getId());
+      productOrders.forEach(po -> {
+        try {
+          productOrderDao.insert(po, session);
+        } catch (Exception e) {
+          throw new RuntimeException(e);
+        }
+      });
 
-      Delivery delivery =
-          Delivery.builder()
-              .orderId(order.getId())
-              .roadName(cartOrderCreateDto.getAddress().getRoadName())
-              .addrDetail(cartOrderCreateDto.getAddress().getAddrDetail())
-              .zipCode(cartOrderCreateDto.getAddress().getZipCode())
-              .status(DeliveryStatus.PENDING.name())
-              .build();
+      Delivery delivery = orderCartCreateDto.toDeliveryEntity(order.getId());
       deliveryDao.insert(delivery, session);
 
-      Payment payment =
-          Payment.builder()
-              .orderId(order.getId())
-              .type(PaymentType.CASH.name())
-              .actualAmount(cartOrderCreateDto.getTotalPrice())
-              .build();
+      Payment payment = orderCartCreateDto.toPaymentEntity(order.getId());
       paymentDao.insert(payment, session);
 
       session.commit();
