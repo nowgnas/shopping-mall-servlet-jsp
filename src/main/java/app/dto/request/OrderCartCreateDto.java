@@ -1,5 +1,9 @@
 package app.dto.request;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import app.dto.cart.CartAndProductDto;
 import app.entity.Delivery;
 import app.entity.Order;
 import app.entity.Payment;
@@ -12,17 +16,30 @@ import lombok.*;
 @Getter
 @Builder
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
-public class OrderCreateDto {
+public class OrderCartCreateDto {
 
   private Long memberId;
   private Long couponId;
   private String roadName;
   private String addrDetail;
   private String zipCode;
-  private Long productId;
-  private Long price;
-  private Long quantity;
+  private List<ProductDto> products;
   private Long totalPrice;
+
+  public void setProducts(List<CartAndProductDto> cartAndProductDtos) {
+    products =
+        cartAndProductDtos.stream()
+            .map(cp -> new ProductDto(cp.getProductId(), cp.getPrice(), cp.getCartProductQuantity()))
+            .collect(Collectors.toList());
+  }
+
+  @Getter
+  @AllArgsConstructor(access = AccessLevel.PROTECTED)
+  public static class ProductDto {
+    private Long productId;
+    private Long price;
+    private Long quantity;
+  }
 
   public Order toOrderEntity() {
     return Order.builder()
@@ -32,13 +49,17 @@ public class OrderCreateDto {
         .build();
   }
 
-  public ProductOrder toProductOrderEntity(Long orderId) {
-    return ProductOrder.builder()
-        .orderId(orderId)
-        .productId(productId)
-        .price(price)
-        .quantity(quantity)
-        .build();
+  public List<ProductOrder> toProductOrderEntities(Long orderId) {
+    return products.stream()
+        .map(
+            p ->
+                ProductOrder.builder()
+                    .orderId(orderId)
+                    .productId(p.productId)
+                    .price(p.price)
+                    .quantity(p.quantity)
+                    .build())
+        .collect(Collectors.toList());
   }
 
   public Delivery toDeliveryEntity(Long orderId) {

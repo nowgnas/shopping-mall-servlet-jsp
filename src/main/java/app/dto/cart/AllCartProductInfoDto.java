@@ -12,7 +12,7 @@ import lombok.ToString;
 @ToString
 public class AllCartProductInfoDto {
 
-  private List<CartProductDto> cartProductDtoList;
+  private List<ProductInCartDto> cartProductDtoList;
   private Long totalPrice;
 
   private AllCartProductInfoDto() {
@@ -20,9 +20,9 @@ public class AllCartProductInfoDto {
   }
 
   public static AllCartProductInfoDto getCustomerViewOfCartInfo(
-      List<CartProductDto> cartProductDtoList) {
+      List<ProductInCartDto> cartProductDtoList) {
     Long totalProductPriceInCart = 0L;
-    for (CartProductDto cartProduct : cartProductDtoList) {
+    for (ProductInCartDto cartProduct : cartProductDtoList) {
       totalProductPriceInCart += cartProduct.getPrice();
     }
     return AllCartProductInfoDto.builder().cartProductDtoList(cartProductDtoList)

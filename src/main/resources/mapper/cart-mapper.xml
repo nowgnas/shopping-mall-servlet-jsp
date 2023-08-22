@@ -11,18 +11,40 @@
           javaType="Integer"/>
     </resultMap>
 
+<resultMap id="CartAndProductResultMap" type="app.dto.cart.CartAndProductDto">
+    <id property="productId" column="id" />
+    <result property="cartProductQuantity" column="product_quantity" />
+    <result property="categoryId" column="category_id" />
+    <result property="name" column="name" />
+    <result property="description" column="description" />
+    <result property="price" column="price" />
+    <result property="productQuantity" column="quantity" />
+    <result property="code" column="code" />
+    <result property="createdAt" column="created_at" />
+    <result property="updatedAt" column="updated_at" />
+</resultMap>
+
+
+
     <select id="select" parameterType="app.dto.comp.ProductAndMemberCompositeKey" resultMap="cart">
         SELECT *
         FROM cart
         WHERE member_id = #{memberId}
         and product_id = #{productId}
     </select>
-    <select id="select-all-by-member" resultType="cart">
+    <select id="select-all-by-member" parameterType="Long" resultMap="cart">
         SELECT *
         FROM cart
         WHERE member_id = #{memberId}
     </select>
-    <select id="select-all" resultType="cart">
+    <select id="select-all-cart-and-product-by-member" parameterType="Long"
+        resultMap="CartAndProductResultMap">
+    SELECT cart.product_quantity, product.*
+    FROM cart
+    INNER JOIN product ON cart.product_id = product.id
+    WHERE member_id = #{memberId}
+</select>
+    <select id="select-all" resultMap="cart">
         SELECT *
         FROM cart
     </select>
@@ -30,17 +52,15 @@
         INSERT INTO cart (member_id, product_id, product_quantity)
         VALUES (#{memberId}, #{productId}, #{productQuantity})
     </insert>
-    <update id="update" parameterType="cart">
+    <update id="update" parameterType="app.dto.comp.ProductAndMemberCompositeKey">
         UPDATE cart
         SET product_quantity = #{productQuantity}
-        WHERE member_id = #{memberId}, product_id = #{productId}
     </update>
     <delete id="delete" parameterType="app.dto.comp.ProductAndMemberCompositeKey">
         DELETE
         FROM cart
         WHERE member_id = #{memberId}
         and product_id = #{productId}
-
     </delete>
 
 </mapper>
