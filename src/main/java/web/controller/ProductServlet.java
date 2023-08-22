@@ -46,7 +46,7 @@ public class ProductServlet extends HttpServlet {
   private String build(HttpServletRequest request, String view) {
     String path = "redirect:index.jsp";
     switch (view) {
-      case "detail":
+      case "shop-detail":
         return productDetail();
     }
     return path;
