@@ -1,12 +1,3 @@
-/*  ---------------------------------------------------
-    Template Name: Male Fashion
-    Description: Male Fashion - ecommerce teplate
-    Author: Colorib
-    Author URI: https://www.colorib.com/
-    Version: 1.0
-    Created: Colorib
----------------------------------------------------------  */
-
 'use strict';
 
 (function ($) {
@@ -131,7 +122,6 @@
     var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
     var yyyy = today.getFullYear();
 
-    if(mm == 12) {
     if (mm == 12) {
         mm = '01';
         yyyy = yyyy + 1;
