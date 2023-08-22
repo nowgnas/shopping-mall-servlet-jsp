@@ -11,7 +11,18 @@
           javaType="Integer"/>
     </resultMap>
 
-
+<resultMap id="CartAndProductResultMap" type="app.dto.cart.CartAndProductDto">
+    <id property="productId" column="id" />
+    <result property="productQuantity" column="product_quantity" />
+    <result property="categoryId" column="category_id" />
+    <result property="name" column="name" />
+    <result property="description" column="description" />
+    <result property="price" column="price" />
+    <result property="quantity" column="quantity" />
+    <result property="code" column="code" />
+    <result property="cartCreatedAt" column="cart_created_at" />
+    <result property="productCreatedAt" column="created_at" />
+</resultMap>
 
 
 
@@ -27,12 +38,12 @@
         WHERE member_id = #{memberId}
     </select>
     <select id="select-all-cart-and-product-by-member" parameterType="Long"
-      resultType="app.dto.cart.CartAndProductDto">
-        SELECT cart.product_quantity,product.*
-        FROM cart
-        INNER JOIN product ON cart.product_id = product.id
-        WHERE member_id = #{memberId}
-    </select>
+        resultMap="CartAndProductResultMap">
+    SELECT cart.product_quantity, product.*
+    FROM cart
+    INNER JOIN product ON cart.product_id = product.id
+    WHERE member_id = #{memberId}
+</select>
     <select id="select-all" resultMap="cart">
         SELECT *
         FROM cart

@@ -5,13 +5,11 @@ import app.dao.CartDaoFrameImpl;
 import app.dao.DaoFrame;
 import app.dao.member.MemberDao;
 import app.dao.member.MemberDaoFrame;
-import app.dao.product.ProductDao;
 import app.dto.comp.ProductAndMemberCompositeKey;
 import app.entity.Cart;
 import app.entity.Member;
 import app.error.ErrorCode;
 import app.error.exception.cart.OutOfStockException;
-import app.error.exception.cart.ProductIsNotExistedInCartException;
 import app.error.exception.member.MemberNotFoundException;
 import app.error.exception.product.ProductNotFoundException;
 import app.utils.GetSessionFactory;
@@ -69,7 +67,7 @@ class AddCartServiceTest {
   @Test
   void insert_WhenProductIsNotExisted_ThrowProductException_CathAnError() throws Exception {
     insertDataWithoutProduct();
-    Cart expected = new Cart(1L, 1L, 1);
+    Cart expected = new Cart(1L, 10L, 1);
     Assertions.assertThrowsExactly(ProductNotFoundException.class, () -> {
       cartService.putItemIntoCart(new ProductAndMemberCompositeKey(1L, 1L), 1);
     });
