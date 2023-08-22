@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProductAndMemberCompositeKey {
-  private Long memberId;
   private Long productId;
+  private Long memberId;
 }

@@ -51,7 +51,7 @@ class LikesDaoTest {
   @DisplayName("delete test")
   @Test
   void deleteById() throws Exception {
-    int res = likesDao.deleteById(new ProductAndMemberCompositeKey(1L, 2L), session);
+    int res = likesDao.deleteById(new ProductAndMemberCompositeKey(2L, 1L), session);
     session.commit();
 
     assertTrue(res == 1);
@@ -66,7 +66,7 @@ class LikesDaoTest {
     session.commit();
 
     Likes ouputLikes = likesDao.selectById(
-            new ProductAndMemberCompositeKey(1L, 3L)
+            new ProductAndMemberCompositeKey(3L, 1L)
             , session)
         .get();
 
