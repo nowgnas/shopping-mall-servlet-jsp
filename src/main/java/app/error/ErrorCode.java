@@ -22,6 +22,7 @@ public enum ErrorCode{
   CART_PRODUCT_IS_ALREADY_EXISTED(HttpServletResponse.SC_NOT_ACCEPTABLE, "4002", "장바구니에 해당 상품이 이미 존재합니다."),
   CART_PRODUCT_IS_OUT_OF_STOCK(HttpServletResponse.SC_BAD_REQUEST,"4003","재고가 존재하지 않습니다."),
   CART_CAN_NOT_STORE_UNDER_0_VALUE(HttpServletResponse.SC_NOT_ACCEPTABLE, "4004", "0개 이하의 상품을 담을 수 없습니다."),
+  CART_CAN_NOT_STORE_MORE_THAN_QUANTITY(HttpServletResponse.SC_NOT_ACCEPTABLE, "4005", "재고 보다 많은 상품을 담을 수 없습니다."),
 
 
   INTERNAL_SERVER_ERROR(SC_INTERNAL_SERVER_ERROR, "ERR-SERVER-001", "시스템 오류"),
@@ -42,11 +43,7 @@ public enum ErrorCode{
   CANNOT_INSERT_PAYMENT(SC_BAD_REQUEST, "ERR-PAYMENT-001", "해당 결제 정보를 생성할 수 없습니다."),
   MEMBER_NOT_FOUND(SC_NOT_FOUND, "0000", "해당 아이디의 회원은 존재 하지 않습니다."),
   CANNOT_FIND_PAYMENT(SC_BAD_REQUEST, "ERR-PAYMENT-002", "해당 결제 정보를 찾을 수 없습니다."),
-  EMAIL_IS_NOT_INVALID(SC_BAD_REQUEST, "0000", "유효한 이메일이 아닙니다."),
-  PASSWORD_IS_NOT_INVALID(
-      SC_BAD_REQUEST, "0000", "비밀번호는 영문, 숫자 형식으로 최소 8자 ~ 최대 16자 사이로 입력해야 합니다."),
-  NAME_IS_NOT_INVALID(
-      HttpServletResponse.SC_BAD_REQUEST, "0000", "이름은 최소 1자에서 최대 20자로 입력할 수 있습니다."),
+  REGISTER_FAIL(SC_BAD_REQUEST, "0000", "회원 가입에 실패 했습니다"),
   EMAIL_IS_NOT_DUPLICATE(HttpServletResponse.SC_BAD_REQUEST, "0000", "가입 된 이메일 입니다."),
   ITEM_NOT_FOUND(SC_BAD_REQUEST, "ERR-PRODUCT-001", "아이템이 존재하지 않습니다"),
   LOGIN_FAIL(HttpServletResponse.SC_BAD_REQUEST, "0000", "아이디나 비밀번호가 일치하지 않습니다."),

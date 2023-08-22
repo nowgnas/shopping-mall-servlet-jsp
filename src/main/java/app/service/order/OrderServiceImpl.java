@@ -9,8 +9,12 @@ import app.dao.order.OrderDao;
 import app.dao.payment.PaymentDao;
 import app.dao.product.ProductDao;
 import app.dao.productorder.ProductOrderDao;
+import app.dto.cart.CartAndProductDto;
 import app.dto.comp.ProductAndMemberCompositeKey;
-import app.dto.request.CartOrderCreateDto;
+import app.dto.form.OrderCartCreateForm;
+import app.dto.form.OrderCreateForm;
+import app.dto.product.response.ProductDetailForOrder;
+import app.dto.request.OrderCartCreateDto;
 import app.dto.request.OrderCreateDto;
 import app.dto.response.OrderMemberDetail;
 import app.dto.response.ProductOrderDetailDto;
@@ -24,15 +28,14 @@ import app.utils.GetSessionFactory;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.log4j.Logger;
-import org.modelmapper.ModelMapper;
 
 public class OrderServiceImpl {
 
   private Logger log = Logger.getLogger("order");
-  private final ModelMapper mapper = new ModelMapper();
   private final SqlSessionFactory sessionFactory = GetSessionFactory.getInstance();
   private final OrderDao orderDao = new OrderDao();
   private final DeliveryDao deliveryDao = new DeliveryDao();
@@ -44,10 +47,14 @@ public class OrderServiceImpl {
   private final CartDaoFrameImpl cartDao = new CartDaoFrameImpl();
 
   // TODO: 상품 주문 폼
-  public OrderMemberDetail getCreateOrderForm(Long memberId) throws Exception {
+  public OrderCreateForm getCreateOrderForm(Long memberId, Long productId) throws Exception {
     SqlSession session = sessionFactory.openSession();
     try {
-      return memberDao.selectAddressAndCouponById(memberId, session).orElseThrow(Exception::new);
+      ProductDetailForOrder productDetail = productDao.selectProductDetail(productId, session);
+      OrderMemberDetail orderMemberDetail =
+          memberDao.selectAddressAndCouponById(memberId, session).orElseThrow(Exception::new);
+
+      return OrderCreateForm.of(orderMemberDetail, productDetail);
     } catch (CustomException ex) {
       log.error(ex.getMessage());
       session.rollback();
@@ -65,16 +72,15 @@ public class OrderServiceImpl {
   public Order createOrder(OrderCreateDto orderCreateDto) throws Exception {
     SqlSession session = sessionFactory.openSession();
     try {
-      Long memberId = orderCreateDto.getMemberId();
       /* 상품 재고 확인 1. 없다면 구매 불가 2. 있다면 재고 차감 */
       Product product =
           productDao
-              .selectById(orderCreateDto.getProduct().getProductId(), session)
+              .selectById(orderCreateDto.getProductId(), session)
               .orElseThrow(Exception::new);
-      validateEnoughStockQuantity(product.getQuantity(), orderCreateDto.getProduct().getQuantity());
-      product.updateQuantity(product.getQuantity() - orderCreateDto.getProduct().getQuantity());
+      validateEnoughStockQuantity(product.getQuantity(), orderCreateDto.getQuantity());
+      product.updateQuantity(product.getQuantity() - orderCreateDto.getQuantity());
       if (productDao.update(product, session) == 0) {
-        throw new CustomException("상품 수량 업데이트 오류");
+        throw new Exception("상품 수량 업데이트 오류");
       }
 
       /* 회원의 잔액 확인 1. 총 상품 가격보다 잔액이 적다면 구매 불가 2. 잔액이 충분하다면 회원의 잔액에서 차감 */
@@ -83,7 +89,7 @@ public class OrderServiceImpl {
       validateEnoughMoney(member.getMoney(), orderCreateDto.getTotalPrice());
       member.updateMoney(member.getMoney() - orderCreateDto.getTotalPrice());
       if (memberDao.update(member, session) == 0) {
-        throw new CustomException("회원 잔고 업데이트 오류");
+        throw new Exception("회원 잔고 업데이트 오류");
       }
 
       /* 회원이 쿠폰을 썼는지 확인 1. 쿠폰을 적용했다면 회원의 쿠폰 정보 '사용됨' 상태로 바꿈 2. 쿠폰을 적용하지 않았다면 패스 */
@@ -92,30 +98,21 @@ public class OrderServiceImpl {
             couponDao.selectById(orderCreateDto.getCouponId(), session).orElseThrow(Exception::new);
         coupon.updateStatus(CouponStatus.USED.name());
         if (couponDao.update(coupon, session) == 0) {
-          throw new CustomException("쿠폰 상태 업데이트 오류");
+          throw new Exception("쿠폰 상태 업데이트 오류");
         }
       }
 
-      /* 상품 주문 orders, product_order, payment, delivery 생성 */
-      Order order = Order.builder().memberId(memberId).status(OrderStatus.PENDING.name()).build();
+      /* 상품 주문 Order, ProductOrder, Payment, Delivery 생성 */
+      Order order = orderCreateDto.toOrderEntity();
       orderDao.insert(order, session);
 
-      Delivery delivery =
-          Delivery.builder()
-              .orderId(order.getId())
-              .roadName(orderCreateDto.getAddress().getRoadName())
-              .addrDetail(orderCreateDto.getAddress().getAddrDetail())
-              .zipCode(orderCreateDto.getAddress().getZipCode())
-              .status(DeliveryStatus.PENDING.name())
-              .build();
+      ProductOrder productOrder = orderCreateDto.toProductOrderEntity(order.getId());
+      productOrderDao.insert(productOrder, session);
+
+      Delivery delivery = orderCreateDto.toDeliveryEntity(order.getId());
       deliveryDao.insert(delivery, session);
 
-      Payment payment =
-          Payment.builder()
-              .orderId(order.getId())
-              .type(PaymentType.CASH.name())
-              .actualAmount(orderCreateDto.getTotalPrice())
-              .build();
+      Payment payment = orderCreateDto.toPaymentEntity(order.getId());
       paymentDao.insert(payment, session);
 
       session.commit();
@@ -134,13 +131,39 @@ public class OrderServiceImpl {
     }
   }
 
-  // TODO: 장바구니 상품 주문
-  public Order createCartOrder(CartOrderCreateDto cartOrderCreateDto) throws Exception {
+  // TODO: 장바구니 상품 주문 폼
+  public OrderCartCreateForm getCreateCartOrderForm(Long memberId) throws Exception {
     SqlSession session = sessionFactory.openSession();
     try {
-      Long memberId = cartOrderCreateDto.getMemberId();
+      /* 회원 정보 조회 */
+      OrderMemberDetail orderMemberDetail =
+          memberDao.selectAddressAndCouponById(memberId, session).orElseThrow(Exception::new);
+      /* 회원으로 장바구니에 들어있는 상품들 모두 조회 */
+      List<CartAndProductDto> cartAndProductDtos = cartDao.getAllCartsAndAllProductsByMember(memberId, session);
+
+      return OrderCartCreateForm.of(orderMemberDetail, cartAndProductDtos);
+    } catch (CustomException ex) {
+      log.error(ex.getMessage());
+      session.rollback();
+      throw new CustomException(ex.getMessage());
+    } catch (Exception ex) {
+      log.error(ex.getMessage());
+      session.rollback();
+      throw new Exception(ex.getMessage());
+    } finally {
+      session.close();
+    }
+  }
+
+  // TODO: 장바구니 상품 주문
+  public Order createCartOrder(OrderCartCreateDto orderCartCreateDto) throws Exception {
+    SqlSession session = sessionFactory.openSession();
+    try {
+      Long memberId = orderCartCreateDto.getMemberId();
+      List<CartAndProductDto> cartAndProductDtos = cartDao.getAllCartsAndAllProductsByMember(memberId, session);
+      orderCartCreateDto.setProducts(cartAndProductDtos);
       /* 상품 재고 확인 1. 없다면 구매 불가 2. 있다면 재고 차감 */
-      cartOrderCreateDto
+      orderCartCreateDto
           .getProducts()
           .forEach(
               p -> {
@@ -154,9 +177,14 @@ public class OrderServiceImpl {
                   }
 
                   /* 장바구니에서 상품들 제거 */
-                  int deletedRow = cartDao.deleteById(ProductAndMemberCompositeKey.builder().memberId(memberId)
-                          .productId(product.getId()).build(), session);
-                  if(deletedRow == 0) {
+                  int deletedRow =
+                      cartDao.deleteById(
+                          ProductAndMemberCompositeKey.builder()
+                              .memberId(memberId)
+                              .productId(product.getId())
+                              .build(),
+                          session);
+                  if (deletedRow == 0) {
                     throw new CustomException("장바구니 상품 삭제 오류");
                   }
 
@@ -168,19 +196,19 @@ public class OrderServiceImpl {
       /* 회원의 잔액 확인 1. 총 상품 가격보다 잔액이 적다면 구매 불가 2. 잔액이 충분하다면 회원의 잔액에서 차감 */
       Member member =
           memberDao
-              .selectById(cartOrderCreateDto.getMemberId(), session)
+              .selectById(orderCartCreateDto.getMemberId(), session)
               .orElseThrow(Exception::new);
-      validateEnoughMoney(member.getMoney(), cartOrderCreateDto.getTotalPrice());
-      member.updateMoney(member.getMoney() - cartOrderCreateDto.getTotalPrice());
+      validateEnoughMoney(member.getMoney(), orderCartCreateDto.getTotalPrice());
+      member.updateMoney(member.getMoney() - orderCartCreateDto.getTotalPrice());
       if (memberDao.update(member, session) == 0) {
         throw new CustomException("회원 잔고 업데이트 오류");
       }
 
       /* 회원이 쿠폰을 썼는지 확인 1. 쿠폰을 적용했다면 회원의 쿠폰 정보 '사용됨' 상태로 바꿈 2. 쿠폰을 적용하지 않았다면 패스 */
-      if (isCouponUsed(cartOrderCreateDto.getCouponId())) {
+      if (isCouponUsed(orderCartCreateDto.getCouponId())) {
         Coupon coupon =
             couponDao
-                .selectById(cartOrderCreateDto.getCouponId(), session)
+                .selectById(orderCartCreateDto.getCouponId(), session)
                 .orElseThrow(Exception::new);
         coupon.updateStatus(CouponStatus.USED.name());
         if (couponDao.update(coupon, session) == 0) {
@@ -189,25 +217,22 @@ public class OrderServiceImpl {
       }
 
       /* 상품 주문 orders, product_order, payment, delivery 생성 */
-      Order order = Order.builder().memberId(memberId).status(OrderStatus.PENDING.name()).build();
+      Order order = orderCartCreateDto.toOrderEntity();
       orderDao.insert(order, session);
 
-      Delivery delivery =
-          Delivery.builder()
-              .orderId(order.getId())
-              .roadName(cartOrderCreateDto.getAddress().getRoadName())
-              .addrDetail(cartOrderCreateDto.getAddress().getAddrDetail())
-              .zipCode(cartOrderCreateDto.getAddress().getZipCode())
-              .status(DeliveryStatus.PENDING.name())
-              .build();
+      List<ProductOrder> productOrders = orderCartCreateDto.toProductOrderEntities(order.getId());
+      productOrders.forEach(po -> {
+        try {
+          productOrderDao.insert(po, session);
+        } catch (Exception e) {
+          throw new RuntimeException(e);
+        }
+      });
+
+      Delivery delivery = orderCartCreateDto.toDeliveryEntity(order.getId());
       deliveryDao.insert(delivery, session);
 
-      Payment payment =
-          Payment.builder()
-              .orderId(order.getId())
-              .type(PaymentType.CASH.name())
-              .actualAmount(cartOrderCreateDto.getTotalPrice())
-              .build();
+      Payment payment = orderCartCreateDto.toPaymentEntity(order.getId());
       paymentDao.insert(payment, session);
 
       session.commit();
@@ -244,6 +269,9 @@ public class OrderServiceImpl {
     try {
       /* 주문 정보 정보를 취소 상태로 바꿈 */
       Order order = orderDao.selectById(orderId, session).orElseThrow(Exception::new);
+      if (order.getStatus().equals(OrderStatus.CANCELED.name())) {
+        throw new Exception("이미 취소된 주문입니다.");
+      }
       order.updateStatus(OrderStatus.CANCELED.name());
       if (orderDao.update(order, session) == 0) {
         throw new CustomException("주문 상태 업데이트 오류");
@@ -251,9 +279,13 @@ public class OrderServiceImpl {
 
       /* 배송 상태를 확인 1. 배송중이면 취소 불가 2. 배송중이 아니라면 배송 정보를 취소 상태로 바꾼다 */
       Delivery delivery = deliveryDao.selectById(orderId, session).orElseThrow(Exception::new);
+      if (delivery.getStatus().equals(DeliveryStatus.CANCELED.name())) {
+        throw new Exception("이미 취소된 배송입니다.");
+      }
       if (isDeliveryProcessing(delivery.getStatus())) {
         throw new Exception("이미 배송중인 주문은 취소가 불가능합니다.");
       }
+
       // 배송중이 아니라면 배송 취소상태로 변경
       delivery.updateStatus(DeliveryStatus.CANCELED.name());
       if (deliveryDao.update(delivery, session) == 0) {
