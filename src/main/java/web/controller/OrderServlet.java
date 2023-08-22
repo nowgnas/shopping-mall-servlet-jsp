@@ -84,17 +84,18 @@ public class OrderServlet extends HttpServlet {
   // TODO: 상품 주문 폼
   private String getCreateOrderForm(HttpServletRequest request, HttpServletResponse response) {
     try {
-      //        Long productId = Long.parseLong(request.getParameter("productId"));
-      //        Long quantity = Long.parseLong(request.getParameter("quantity"));
+      //      Long productId = Long.parseLong(request.getParameter("productId"));
+      //      Long quantity = Long.parseLong(request.getParameter("quantity"));
       Long productId = 1L;
       Long quantity = 1L;
+      ;
       OrderCreateForm createOrderForm = orderService.getCreateOrderForm(memberId, productId);
       request.setAttribute("memberName", createOrderForm.getMemberName());
       request.setAttribute("defaultAddress", createOrderForm.getDefaultAddress());
       request.setAttribute("product", createOrderForm.getProduct());
       request.setAttribute("productQuantity", quantity);
       request.setAttribute("coupons", createOrderForm.getCoupons());
-      return Navi.FORWARD_ORDER_FORM;
+      return "forward:templates/order/orderForm.jsp";
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
@@ -103,22 +104,30 @@ public class OrderServlet extends HttpServlet {
   // TODO: 상품 주문
   private String createOrder(HttpServletRequest request, HttpServletResponse response) {
     try {
-      Long couponId = Long.parseLong(request.getParameter("couponId"));
+      Long couponId =
+          Long.parseLong(request.getParameter("couponId")) == 0
+              ? null
+              : Long.parseLong(request.getParameter("couponId"));
       Long productId = Long.parseLong(request.getParameter("productId"));
-      Long quantity = Long.parseLong(request.getParameter("quantity"));
+      Long price = Long.parseLong(request.getParameter("productPrice"));
+      Long quantity = Long.parseLong(request.getParameter("productQuantity"));
       String roadName = request.getParameter("roadName");
       String addrDetail = request.getParameter("addrDetail");
       String zipCode = request.getParameter("zipCode");
       Long totalPrice = Long.parseLong(request.getParameter("totalPrice"));
 
       OrderCreateDto orderCreateDto =
-          new OrderCreateDto(
-              memberId,
-              couponId,
-              new OrderCreateDto.AddressDto(roadName, addrDetail, zipCode),
-              new OrderCreateDto.ProductDto(productId, quantity),
-              totalPrice);
-
+          OrderCreateDto.builder()
+              .memberId(memberId)
+              .couponId(couponId)
+              .roadName(roadName)
+              .addrDetail(addrDetail)
+              .zipCode(zipCode)
+              .productId(productId)
+              .price(price)
+              .quantity(quantity)
+              .totalPrice(totalPrice)
+              .build();
       Order order = orderService.createOrder(orderCreateDto);
       ProductOrderDetailDto productOrderDetail =
           orderService.getOrderDetailsForMemberAndOrderId(order.getId(), memberId);

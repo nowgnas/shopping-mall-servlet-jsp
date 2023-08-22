@@ -47,7 +47,7 @@ public class OrderCreateForm {
 
   @Getter
   @AllArgsConstructor(access = AccessLevel.PROTECTED)
-  private static class AddressDto {
+  public static class AddressDto {
     private String roadName;
     private String addrDetail;
     private String zipCode;
@@ -55,7 +55,7 @@ public class OrderCreateForm {
 
   @Getter
   @AllArgsConstructor(access = AccessLevel.PROTECTED)
-  private static class CouponDto {
+  public static class CouponDto {
     private Long id;
     private String name;
     private String discountPolicy;
@@ -65,7 +65,7 @@ public class OrderCreateForm {
 
   @Getter
   @AllArgsConstructor(access = AccessLevel.PROTECTED)
-  private static class ProductDto {
+  public static class ProductDto {
     private Long id;
     private String name;
     private Long price;
