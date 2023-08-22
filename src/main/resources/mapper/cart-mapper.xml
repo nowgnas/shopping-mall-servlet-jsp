@@ -13,12 +13,12 @@
 
 <resultMap id="CartAndProductResultMap" type="app.dto.cart.CartAndProductDto">
     <id property="productId" column="id" />
-    <result property="productQuantity" column="product_quantity" />
+    <result property="cartProductQuantity" column="product_quantity" />
     <result property="categoryId" column="category_id" />
     <result property="name" column="name" />
     <result property="description" column="description" />
     <result property="price" column="price" />
-    <result property="quantity" column="quantity" />
+    <result property="productQuantity" column="quantity" />
     <result property="code" column="code" />
     <result property="cartCreatedAt" column="cart_created_at" />
     <result property="productCreatedAt" column="created_at" />
