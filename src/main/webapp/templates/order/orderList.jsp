@@ -26,7 +26,7 @@
             <fmt:parseDate pattern="yyyy-MM-dd'T'HH:mm" value="${productOrder.orderDate}" var="parsedOrderDate"/>
             <td><fmt:formatDate pattern="yyyy.MM.dd HH:mm" value="${parsedOrderDate}"/></td>
             <td>
-                <button type="button" onclick="location.href='/order.bit?view=detail&cmd=get&order_id=${productOrder.orderId}'">
+                <button type="button" onclick="location.href='/order.bit?view=detail&cmd=get&orderId=${productOrder.orderId}'">
                     주문 상세
                 </button>
             </td>
