@@ -1,7 +1,8 @@
 package web.controller;
 
+import app.dto.form.OrderCartCreateForm;
 import app.dto.form.OrderCreateForm;
-import app.dto.request.CartOrderCreateDto;
+import app.dto.request.OrderCartCreateDto;
 import app.dto.request.OrderCreateDto;
 import app.dto.response.MemberDetail;
 import app.dto.response.ProductOrderDetailDto;
@@ -142,9 +143,12 @@ public class OrderServlet extends HttpServlet {
   // TODO: 장바구니 상품 주문 폼
   private String getCreateCartOrderForm(HttpServletRequest request, HttpServletResponse response) {
     try {
-      /* 회원의 기본 주소지, 보유한 쿠폰 정보들을 가져옴 */
 
-      /* 장바구니에 담긴 상품 정보들을 가져옴 */
+      OrderCartCreateForm createCartOrderForm = orderService.getCreateCartOrderForm(memberId);
+      request.setAttribute("memberName", createCartOrderForm.getMemberName());
+      request.setAttribute("defaultAddress", createCartOrderForm.getDefaultAddress());
+      request.setAttribute("products", createCartOrderForm.getProducts());
+      request.setAttribute("coupons", createCartOrderForm.getCoupons());
 
       return Navi.FORWARD_ORDER_CART_FORM;
     } catch (Exception e) {
@@ -155,21 +159,26 @@ public class OrderServlet extends HttpServlet {
   // TODO: 장바구니 상품 주문
   private String createCartOrder(HttpServletRequest request, HttpServletResponse response) {
     try {
-      Long couponId = Long.parseLong(request.getParameter("couponId"));
+      Long couponId =
+          Long.parseLong(request.getParameter("couponId")) == 0
+              ? null
+              : Long.parseLong(request.getParameter("couponId"));
       String roadName = request.getParameter("roadName");
       String addrDetail = request.getParameter("addrDetail");
       String zipCode = request.getParameter("zipCode");
       Long totalPrice = Long.parseLong(request.getParameter("totalPrice"));
 
-      CartOrderCreateDto cartOrderCreateDto =
-          new CartOrderCreateDto(
-              memberId,
-              couponId,
-              new CartOrderCreateDto.AddressDto(roadName, addrDetail, zipCode),
-              new ArrayList<>(),
-              totalPrice);
+      OrderCartCreateDto orderCartCreateDto =
+          OrderCartCreateDto.builder()
+              .memberId(memberId)
+              .couponId(couponId)
+              .roadName(roadName)
+              .addrDetail(addrDetail)
+              .zipCode(zipCode)
+              .totalPrice(totalPrice)
+              .build();
 
-      Order order = orderService.createCartOrder(cartOrderCreateDto);
+      Order order = orderService.createCartOrder(orderCartCreateDto);
       ProductOrderDetailDto orderDetails =
           orderService.getOrderDetailsForMemberAndOrderId(order.getId(), memberId);
       request.setAttribute("orderDetails", orderDetails);

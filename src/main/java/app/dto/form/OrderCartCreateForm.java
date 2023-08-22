@@ -1,13 +1,16 @@
 package app.dto.form;
 
-import app.enums.CouponPolicy;
-import app.enums.CouponStatus;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import app.dto.cart.CartAndProductDto;
+import app.dto.product.response.ProductDetailForOrder;
+import app.dto.response.OrderMemberDetail;
 import lombok.*;
 
 @Getter
+@Builder
 @AllArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class OrderCartCreateForm {
 
   private String memberName;
@@ -15,35 +18,57 @@ public class OrderCartCreateForm {
   private AddressDto defaultAddress;
   private List<CouponDto> coupons;
 
+  public static OrderCartCreateForm of(
+      OrderMemberDetail orderMemberDetail, List<CartAndProductDto> cartAndProductDtos) {
+    return OrderCartCreateForm.builder()
+        .memberName(orderMemberDetail.getName())
+        .products(
+            cartAndProductDtos.stream()
+                .map(cp -> new ProductDto(cp.getProductId(), cp.getName(), cp.getPrice(), cp.getCartProductQuantity()))
+                .collect(Collectors.toList()))
+        .defaultAddress(
+            new OrderCartCreateForm.AddressDto(
+                orderMemberDetail.getAddress().getRoadName(),
+                orderMemberDetail.getAddress().getAddrDetail(),
+                orderMemberDetail.getAddress().getZipCode()))
+        .coupons(
+            orderMemberDetail.getCoupons().stream()
+                .map(
+                    c ->
+                        new OrderCartCreateForm.CouponDto(
+                            c.getId(),
+                            c.getName(),
+                            c.getDiscountPolicy(),
+                            c.getDiscountValue(),
+                            c.getStatus()))
+                .collect(Collectors.toList()))
+        .build();
+  }
+
   @Getter
-  @AllArgsConstructor
-  @NoArgsConstructor(access = AccessLevel.PROTECTED)
+  @AllArgsConstructor(access = AccessLevel.PROTECTED)
   public static class AddressDto {
-    private Long addressId;
     private String roadName;
     private String addrDetail;
     private String zipCode;
   }
 
   @Getter
-  @AllArgsConstructor
-  @NoArgsConstructor(access = AccessLevel.PROTECTED)
+  @AllArgsConstructor(access = AccessLevel.PROTECTED)
   public static class CouponDto {
-    private Long couponId;
+    private Long id;
     private String name;
-    private CouponPolicy discountPolicy;
+    private String discountPolicy;
     private Integer discountValue;
-    private CouponStatus status;
+    private String status;
   }
 
   @Getter
-  @AllArgsConstructor
-  @NoArgsConstructor(access = AccessLevel.PROTECTED)
+  @AllArgsConstructor(access = AccessLevel.PROTECTED)
   public static class ProductDto {
-    private Long productId;
+    private Long id;
     private String name;
-    private String imageUrl;
-    private String price;
+    private Long price;
     private Long quantity;
   }
 }
