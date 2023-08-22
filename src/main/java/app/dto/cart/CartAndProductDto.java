@@ -20,13 +20,13 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CartAndProductDto {
-    private Integer productQuantity;
+    private Integer cartProductQuantity;
     private Long productId;
     private Long categoryId;
     private String name;
     private String description;
     private Long price;
-    private Long quantity;
+    private Long productQuantity;
     private String code;
     private LocalDateTime cartCreatedAt;
     private LocalDateTime productCreatedAt;
