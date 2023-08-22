@@ -1,5 +1,6 @@
 package web.controller;
 
+import app.dto.product.response.ProductDetailWithCategory;
 import app.service.product.ProductService;
 import app.service.product.ProductServiceImpl;
 import app.utils.HttpUtil;
@@ -23,7 +24,6 @@ public class ProductServlet extends HttpServlet {
   protected void service(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
     String view = request.getParameter("view");
-    System.out.println(view + "---- view");
     String cmd = request.getParameter("cmd");
 
     //    HttpSession session = request.getSession();
@@ -32,27 +32,32 @@ public class ProductServlet extends HttpServlet {
 
     String viewName = "index.jsp";
     if (view != null) {
-      viewName = build(request, view);
+      try {
+        viewName = build(request, view);
+      } catch (Exception e) {
+        throw new RuntimeException(e);
+      }
     }
     String path = viewName.substring(viewName.indexOf(":") + 1);
 
-    if (path.startsWith("forward:")) {
+    if (viewName.startsWith("forward:")) {
       HttpUtil.forward(request, response, path);
     } else {
       HttpUtil.redirect(response, path);
     }
   }
 
-  private String build(HttpServletRequest request, String view) {
+  private String build(HttpServletRequest request, String view) throws Exception {
     String path = "redirect:index.jsp";
-    switch (view) {
-      case "shop-detail":
-        return productDetail();
+    if (view.equals("shop-detail")) {
+      ProductDetailWithCategory productDetail = service.getProductDetail(6L, 1L);
+      request.setAttribute("productDetail", productDetail);
+      return productDetail();
     }
     return path;
   }
 
   private String productDetail() {
-    return Navi.REDIRECT_DETAIL;
+    return Navi.FORWARD_DETAIL;
   }
 }
