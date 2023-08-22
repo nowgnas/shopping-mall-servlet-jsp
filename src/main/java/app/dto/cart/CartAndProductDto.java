@@ -20,7 +20,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CartAndProductDto {
-    private Integer cartProductQuantity;
+    private Long cartProductQuantity;
     private Long productId;
     private Long categoryId;
     private String name;
