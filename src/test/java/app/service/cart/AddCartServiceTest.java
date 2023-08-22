@@ -55,7 +55,7 @@ class AddCartServiceTest {
   @Test
   void insert_WhenUserIsNotExisted_ThrowMemberNotFoundException_CatchAnError() throws Exception {
     insertProductData();
-    Cart expected = new Cart(1L, 1L, 1);
+    Cart expected = new Cart(1L, 1L, 1L);
     Assertions.assertThrowsExactly(MemberNotFoundException.class, () -> {
       memberDao.selectById(1L, session).orElseThrow(() -> new MemberNotFoundException(
           ErrorCode.MEMBER_NOT_FOUND));
@@ -67,9 +67,9 @@ class AddCartServiceTest {
   @Test
   void insert_WhenProductIsNotExisted_ThrowProductException_CathAnError() throws Exception {
     insertDataWithoutProduct();
-    Cart expected = new Cart(1L, 10L, 1);
+    Cart expected = new Cart(1L, 10L, 1L);
     Assertions.assertThrowsExactly(ProductNotFoundException.class, () -> {
-      cartService.putItemIntoCart(new ProductAndMemberCompositeKey(1L, 1L), 1);
+      cartService.putItemIntoCart(new ProductAndMemberCompositeKey(1L, 1L), 1L);
     });
   }
 
@@ -78,7 +78,7 @@ class AddCartServiceTest {
   void insert_WhenQuantityIsBiggerThanRequestQuantity_Fail() throws Exception {
     ProductAndMemberCompositeKey compKey = new ProductAndMemberCompositeKey(1L, 1L);
     Assertions.assertThrows(OutOfStockException.class, () -> {
-      cartService.putItemIntoCart(compKey, 5);
+      cartService.putItemIntoCart(compKey, 5L);
     });
   }
 
@@ -86,7 +86,7 @@ class AddCartServiceTest {
   @Test
   void insert_WhenQuantityIsLessThanRequestQuantity_Added() throws Exception {
     ProductAndMemberCompositeKey compKey = new ProductAndMemberCompositeKey(1L, 1L);
-    cartService.putItemIntoCart(compKey, 1);
+    cartService.putItemIntoCart(compKey, 1L);
     Optional<Cart> actual = cartDaoFrame.selectById(compKey, session);
     Assertions.assertDoesNotThrow((Executable) actual::get, "inserted the cart as user want");
   }

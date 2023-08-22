@@ -43,7 +43,7 @@ public class CartServiceImpl implements CartService {
 
   @Override
   public void putItemIntoCart(ProductAndMemberCompositeKey productAndMemberCompositeKey,
-      Integer quantity) throws Exception {
+      Long quantity) throws Exception {
     SqlSession session = GetSessionFactory.getInstance().openSession();
     Long memberId = productAndMemberCompositeKey.getMemberId();
     Long productId = productAndMemberCompositeKey.getProductId();
@@ -64,7 +64,7 @@ public class CartServiceImpl implements CartService {
   @Override
   public void updateQuantityOfCartProduct(
       ProductAndMemberCompositeKey productAndMemberCompositeKey, Long productId,
-      Integer requestUpdateQuantity)
+      Long requestUpdateQuantity)
       throws Exception {
   }
 

@@ -14,11 +14,11 @@ public class Cart {
   @NonNull
   private Long productId;
   @NonNull
-  private Integer productQuantity;
+  private Long productQuantity;
 
 
   public static Cart CartCompKeyBuilder(ProductAndMemberCompositeKey productAndMemberCompositeKey,
-      Integer productQuantity) {
+      Long productQuantity) {
     return new Cart(productAndMemberCompositeKey.getMemberId(),
         productAndMemberCompositeKey.getProductId(), productQuantity);
 
