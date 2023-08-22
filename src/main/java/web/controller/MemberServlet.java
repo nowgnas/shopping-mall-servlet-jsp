@@ -38,7 +38,7 @@ public class MemberServlet extends HttpServlet {
 
     String path = next.substring(next.indexOf(":") + 1);
 
-    if (path.startsWith("forward:")) {
+    if (next.startsWith("forward:")) {
       HttpUtil.forward(request, response, path);
     } else {
       HttpUtil.redirect(response, path);
@@ -46,7 +46,7 @@ public class MemberServlet extends HttpServlet {
   }
 
   private String build(HttpServletRequest request, String view) {
-    String path = "redirect:index.jsp";
+    String path = Navi.FORWARD_MAIN;
     switch (view) {
       case "registerForm":
         return registerForm();
