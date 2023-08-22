@@ -46,7 +46,7 @@ public class MemberServlet extends HttpServlet {
   }
 
   private String build(HttpServletRequest request, String view) {
-    String path = "redirect:index.jsp";
+    String path = Navi.FORWARD_MAIN;
     switch (view) {
       case "registerForm":
         return registerForm();
