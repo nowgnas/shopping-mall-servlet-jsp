@@ -19,7 +19,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.modelmapper.internal.util.Assert;
 
 class CartDaoTest {
 
@@ -45,15 +44,15 @@ class CartDaoTest {
   @Test
   void insertCart_WhenThereIsMemberAndProduct_CartIsInserted() throws Exception {
     getInitDataWithoutCartData();
-    Cart expectedCart = new Cart(1L, 1L, 1);
+    Cart expectedCart = new Cart(1L, 1L, 1L);
     int expectedValue = cartDaoFrame.insert(expectedCart, session);
-    Assertions.assertEquals(expectedValue, 1);
+    Assertions.assertEquals(expectedValue, 1L);
   }
 
   @DisplayName("멤버와 제품이 존재하지 않을 때 카트 데이터 넣기")
   @Test
   void insertCart_WhenThereIsNotMemberAndProduct_SqlExceptionIsCatched() throws Exception {
-    Cart expectedCart = new Cart(1L, 1L, 1);
+    Cart expectedCart = new Cart(1L, 1L, 1L);
     Throwable throwable = assertThrows(PersistenceException.class, () -> {
       cartDaoFrame.insert(expectedCart, session);
     });
@@ -120,7 +119,7 @@ class CartDaoTest {
   void updateCartQuantity_WhenCartIsExisted_UpdateTheCartQuantity() throws Exception {
     getInitDataWithoutCartData();
     getCartInitData();
-    Cart expected = new Cart(1L, 1L, 2);
+    Cart expected = new Cart(1L, 1L, 2L);
     cartDaoFrame.update(expected, session);
     Optional<Cart> actual = cartDaoFrame.selectById(new ProductAndMemberCompositeKey(1L, 1L),
         session);
@@ -131,7 +130,7 @@ class CartDaoTest {
   @Test
   void updateCartQuantity_WhenCartIsNotExisted_Catch() throws Exception {
     getInitDataWithoutCartData();
-    Cart expected = new Cart(1L, 1L, 2);
+    Cart expected = new Cart(1L, 1L, 2L);
     cartDaoFrame.update(expected, session);
     Optional<Cart> actual = cartDaoFrame.selectById(new ProductAndMemberCompositeKey(1L, 1L),
         session);
