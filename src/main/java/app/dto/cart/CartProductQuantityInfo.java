@@ -1,7 +1,6 @@
 package app.dto.cart;
 
 import app.dto.product.ProductItemQuantity;
-import app.entity.Cart;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
