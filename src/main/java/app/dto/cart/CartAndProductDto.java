@@ -28,7 +28,7 @@ public class CartAndProductDto {
     private Long price;
     private Long productQuantity;
     private String code;
-    private LocalDateTime cartCreatedAt;
-    private LocalDateTime productCreatedAt;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
 }

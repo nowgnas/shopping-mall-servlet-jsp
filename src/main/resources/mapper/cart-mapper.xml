@@ -20,8 +20,8 @@
     <result property="price" column="price" />
     <result property="productQuantity" column="quantity" />
     <result property="code" column="code" />
-    <result property="cartCreatedAt" column="cart_created_at" />
-    <result property="productCreatedAt" column="created_at" />
+    <result property="createdAt" column="created_at" />
+    <result property="updatedAt" column="updated_at" />
 </resultMap>
 
 
