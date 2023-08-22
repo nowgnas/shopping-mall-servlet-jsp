@@ -43,7 +43,7 @@
             </c:when>
             <c:otherwise>
                 <button type="button"
-                        onclick="location.href='/order.bit?view=detail&cmd=delete&order_id=${productOrderDetail.orderId}'">
+                        onclick="location.href='/order.bit?view=detail&cmd=delete&orderId=${productOrderDetail.orderId}'">
                     주문 취소
                 </button>
             </c:otherwise>

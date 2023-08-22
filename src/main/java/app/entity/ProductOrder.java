@@ -12,5 +12,5 @@ public class ProductOrder extends BaseEntity {
   @NonNull private Long productId;
   @NonNull private Long orderId;
   @NonNull private Long price;
-  @NonNull private Integer quantity;
+  @NonNull private Long quantity;
 }
