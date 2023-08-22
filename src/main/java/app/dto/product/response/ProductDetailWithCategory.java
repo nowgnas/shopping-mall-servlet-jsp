@@ -23,7 +23,6 @@ public class ProductDetailWithCategory {
   private ProductDetail detail;
 
   public static ProductDetailWithCategory getProductDetail(
-      // todo: 상세 정보에서 카테고리를 담을 때 개수가 3개가 보장되도록 구성하면 너무 고정적임
       List<Category> categories, ProductDetail detail) {
     Map<Integer, String> category = new HashMap<>();
     int idx = 1;

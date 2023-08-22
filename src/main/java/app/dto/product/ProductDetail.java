@@ -20,4 +20,5 @@ public class ProductDetail {
   private String url;
   private Long quantity;
   private Boolean isLiked;
+  private String code;
 }

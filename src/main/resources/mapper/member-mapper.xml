@@ -83,6 +83,12 @@
         FROM member
     </select>
 
+    <select id="countByEmail" parameterType="String" resultType="int">
+        SELECT count(id)
+        FROM member
+        WHERE email = #{email}
+    </select>
+
     <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="member">
         INSERT INTO member (email, password, name, money)
         VALUES (#{email}, #{password}, #{name}, #{money})
