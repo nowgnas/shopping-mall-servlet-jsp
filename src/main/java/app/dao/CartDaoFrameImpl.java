@@ -1,5 +1,6 @@
 package app.dao;
 
+import app.dto.cart.CartAndProductDto;
 import app.dto.comp.ProductAndMemberCompositeKey;
 import app.entity.Cart;
 import java.util.List;
@@ -39,5 +40,11 @@ public class CartDaoFrameImpl implements CartDaoFrame<ProductAndMemberCompositeK
   @Override
   public List<Cart> getCartProductListByMember(Long memberId, SqlSession session) {
     return session.selectList("select-all-by-member", memberId);
-}
+  }
+
+  @Override
+  public List<CartAndProductDto> getAllCartsAndAllProductsByMember(Long memberId,
+      SqlSession session) {
+    return session.selectList("select-all-cart-and-product-by-member", memberId);
+  }
 }

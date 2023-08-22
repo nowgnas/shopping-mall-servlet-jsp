@@ -4,23 +4,21 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import app.dao.CartDaoFrame;
 import app.dao.CartDaoFrameImpl;
+import app.dto.cart.CartAndProductDto;
 import app.dto.comp.ProductAndMemberCompositeKey;
 import app.entity.Cart;
 import app.utils.GetSessionFactory;
 import config.TestConfig;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.apache.ibatis.session.SqlSession;
 import org.h2.jdbc.JdbcSQLIntegrityConstraintViolationException;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.function.Executable;
 import org.modelmapper.internal.util.Assert;
 
 class CartDaoTest {
@@ -140,7 +138,15 @@ class CartDaoTest {
     Assertions.assertThrowsExactly(NoSuchElementException.class, actual::get);
   }
 
-
+  @DisplayName("멤버의 아이디로 카트의 존재하는 제품의 entity와 cart의 entity 얻기")
+  @Test
+  void getAllCartAndProductByMember_WhenThereIsProductsByMemberId_getList() throws Exception {
+    getInitDataWithoutCartData();
+    getCartInitData();
+    List<CartAndProductDto> cartAndProductListDto = cartDaoFrame.getAllCartsAndAllProductsByMember(
+        1L, session);
+    Assertions.assertNotNull(cartAndProductListDto);
+  }
 
 
 }

@@ -9,6 +9,8 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Cart {
 
+
+
   @NonNull
   private Long memberId;
   @NonNull

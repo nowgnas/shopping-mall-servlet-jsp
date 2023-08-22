@@ -1,10 +1,8 @@
 package app.error;
 
 
- public abstract class CustomException extends RuntimeException {
-  protected CustomException(String message) {
-    super(message);
+ public class CustomException extends RuntimeException {
+  public CustomException(ErrorCode errorCode) {
+    super(errorCode.getMessage());
   }
-
-  public abstract int getStatusCode();
 }

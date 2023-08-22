@@ -1,12 +1,7 @@
 package app.service.cart;
 
 import app.dto.cart.AllCartProductInfoDto;
-import app.dto.cart.CartProductDto;
 import app.dto.comp.ProductAndMemberCompositeKey;
-import app.dto.product.ProductItemQuantity;
-import app.entity.Cart;
-import app.error.ErrorCode;
-import java.util.List;
 
 public interface CartService {
 

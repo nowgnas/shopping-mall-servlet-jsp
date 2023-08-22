@@ -4,17 +4,13 @@ import app.dao.CartDaoFrame;
 import app.dao.CartDaoFrameImpl;
 import app.dao.product.ProductDao;
 import app.dto.cart.AllCartProductInfoDto;
-import app.dto.cart.CartProductDto;
+import app.dto.cart.ProductInCartDto;
 import app.dto.comp.ProductAndMemberCompositeKey;
 import app.dto.product.ProductItemQuantity;
 import app.entity.Cart;
-import app.entity.Member;
-import app.entity.Product;
-import app.error.exception.cart.OutOfStockException;
-import app.error.exception.product.ProductNotFoundException;
+
 import app.utils.GetSessionFactory;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -46,19 +42,19 @@ public class CartServiceImpl implements CartService {
         .collect(Collectors.toList());
     List<ProductItemQuantity> productItemQuantity = productDao.selectProductQuantity(productIdList, session);
 
-    return AllCartProductInfoDto.getCustomerViewOfCartInfo(CartProductDto.getProductInfo(productItemQuantity));
+    return AllCartProductInfoDto.getCustomerViewOfCartInfo(ProductInCartDto.getProductInfo(productItemQuantity));
 
   }
 
   @Override
   public void putItemIntoCart(ProductAndMemberCompositeKey productAndMemberCompositeKey,
       Integer quantity) throws Exception {
-    SqlSession session  =GetSessionFactory.getInstance().openSession();
-    Product product = productDao.selectById(productAndMemberCompositeKey.getProductId(),session).orElseThrow(ProductNotFoundException::new);
-    int inserted = cartDaoFrame.insert(Cart.CartCompKeyBuilder(productAndMemberCompositeKey, quantity),session);
-    if(inserted==0){
-      throw new OutOfStockException();
-    }
+//    SqlSession session  =GetSessionFactory.getInstance().openSession();
+//    Product product = productDao.selectById(productAndMemberCompositeKey.getProductId(),session).orElseThrow(ProductNotFoundException::new);
+//    int inserted = cartDaoFrame.insert(Cart.CartCompKeyBuilder(productAndMemberCompositeKey, quantity),session);
+//    if(inserted==0){
+//      throw new OutOfStockException(ErrorCdoe);
+//    }
   }
 
   @Override
