@@ -1,5 +1,5 @@
 insert into member (email, password, name, money)
-values ('test@naver.com', 'test123', 'test', 2000000);
+values ('test@naver.com', '�n�rʹ�qk=il�9q�f J�6~l�%H6^J�', 'test', 2000000);
 
 insert into address (member_id, is_default, road_name, addr_detail, zip_code)
 values (1, true, '경기도 안양시 동안구 관악대로 135', '삼성래미안 000동 000호', '13922'),
