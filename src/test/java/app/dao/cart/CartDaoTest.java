@@ -114,7 +114,7 @@ class CartDaoTest {
   void getAllCartByMemberId_WhenThereIsNotCartByMemberId_CatchSqlException() throws Exception {
     getInitDataWithoutCartData();
     List<Cart> cartList = cartDaoFrame.getCartProductListByMember(1L, session);
-    Assertions.assertTrue(cartList.size() == 0);
+    Assertions.assertEquals(0, cartList.size());
   }
 
   @DisplayName("카트의 row가 존재할 때 카트의 재고 업데이트하기")
@@ -135,9 +135,7 @@ class CartDaoTest {
      Cart expected = new Cart(1L,1L,2);
     cartDaoFrame.update(expected,session);
     Optional<Cart> actual = cartDaoFrame.selectById(new ProductAndMemberCompositeKey(1L,1L),session);
-    Assertions.assertThrowsExactly(NoSuchElementException.class, ()->{
-      actual.get();
-    });
+    Assertions.assertThrowsExactly(NoSuchElementException.class, actual::get);
   }
 
 

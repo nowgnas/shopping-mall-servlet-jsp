@@ -13,14 +13,14 @@ public interface CartService {
   AllCartProductInfoDto getCartProductListByMember(ProductAndMemberCompositeKey productAndMemberCompositeKeys)
       throws Exception;
 
-  ErrorCode putItemIntoCart(ProductAndMemberCompositeKey productAndMemberCompositeKey,
+  void putItemIntoCart(ProductAndMemberCompositeKey productAndMemberCompositeKey,
       Integer quantity)
       throws Exception;
 
-  ErrorCode updateQuantityOfCartProduct(ProductAndMemberCompositeKey productAndMemberCompositeKey,
+  void updateQuantityOfCartProduct(ProductAndMemberCompositeKey productAndMemberCompositeKey,
       Long productId, Integer updateQuantity) throws Exception;
 
-  ErrorCode delete(ProductAndMemberCompositeKey productAndMemberCompositeKeyList) throws Exception;
+  void delete(ProductAndMemberCompositeKey productAndMemberCompositeKeyList) throws Exception;
 
 
 }
