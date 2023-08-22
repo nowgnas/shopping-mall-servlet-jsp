@@ -9,11 +9,11 @@ public interface CartService {
       throws Exception;
 
   void putItemIntoCart(ProductAndMemberCompositeKey productAndMemberCompositeKey,
-      Integer quantity)
+      Long quantity)
       throws Exception;
 
   void updateQuantityOfCartProduct(ProductAndMemberCompositeKey productAndMemberCompositeKey,
-      Long productId, Integer updateQuantity) throws Exception;
+      Long productId, Long updateQuantity) throws Exception;
 
   void delete(ProductAndMemberCompositeKey productAndMemberCompositeKeyList) throws Exception;
 
