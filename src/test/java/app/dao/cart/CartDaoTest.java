@@ -9,6 +9,8 @@ import app.entity.Cart;
 import app.utils.GetSessionFactory;
 import config.TestConfig;
 import java.sql.SQLException;
+import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.apache.ibatis.session.SqlSession;
@@ -50,58 +52,95 @@ class CartDaoTest {
     Assertions.assertEquals(expectedValue, 1);
   }
 
-
+  @DisplayName("멤버와 제품이 존재하지 않을 때 카트 데이터 넣기")
   @Test
   void insertCart_WhenThereIsNotMemberAndProduct_SqlExceptionIsCatched() throws Exception {
-   Cart expectedCart = new Cart(1L, 1L, 1);
+    Cart expectedCart = new Cart(1L, 1L, 1);
     Throwable throwable = assertThrows(PersistenceException.class, () -> {
-        cartDaoFrame.insert(expectedCart, session);
+      cartDaoFrame.insert(expectedCart, session);
     });
     Assertions.assertTrue(throwable.getCause() instanceof JdbcSQLIntegrityConstraintViolationException, "can not insert without member and product");
   }
 
+  @DisplayName("멤버와 제품이 존재하지 않을 때 카트 데이터 삭제하기")
   @Test
-  void deleteCart_WhenThereIsNotCart_SqlExceptionIsCathed() throws Exception {
-
+  void deleteCart_WhenThereIsNotCart_return0() throws Exception {
+    getInitDataWithoutCartData();
+    Assertions.assertEquals(
+        cartDaoFrame.deleteById(new ProductAndMemberCompositeKey(1L, 1L), session), 0);
   }
 
+  @DisplayName("멤버와 제품이 존재할 때 카트 데이터 삭제하기")
   @Test
-  void deleteCart_WhenThereIsCart_CartIsDeleted() throws Exception {
+  void deleteCart_WhenThereIsCart_return1() throws Exception {
     getInitDataWithoutCartData();
     getCartInitData();
-    cartDaoFrame.deleteById(new ProductAndMemberCompositeKey(1L, 1L), session);
+    Assertions.assertEquals(
+        cartDaoFrame.deleteById(new ProductAndMemberCompositeKey(1L, 1L), session), 1);
   }
 
+  @DisplayName("멤버와 제품이 존재할 때 단일 카트 조회하기")
   @Test
-  void getOneCart_WhenThereIsCartByExistedMemberIdAndProductId_GetCart() {
-
-
+  void getOneCart_WhenThereIsCartByExistedMemberIdAndProductId_GetCart() throws Exception {
+    getInitDataWithoutCartData();
+    getCartInitData();
+    Assertions.assertNotNull(
+        cartDaoFrame.selectById(new ProductAndMemberCompositeKey(1L, 1L), session).get());
   }
 
+  @DisplayName("멤버와 제품이 존재하지 않을 때 단일 카트 조회하기")
   @Test
-  void getOneCart_WhenThereIsNotMemberIdOrProductId_CatchSqlException() {
+  void getOneCart_WhenThereIsNotMemberIdOrProductId_False() throws Exception {
+    getInitDataWithoutCartData();
+    Assertions.assertThrowsExactly(NoSuchElementException.class, () -> {
+      cartDaoFrame.selectById(new ProductAndMemberCompositeKey(1L, 1L),
+          session).get();
+    });
 
   }
 
+  @DisplayName("멤버와 제품이 존재할 때 리스트 카트 조회하기")
   @Test
-  void getAllCartByMemberId_WhenGetExistMemberId_CartList() {
+  void getAllCartByMemberId_WhenThereIsExistMemberIdAndProduct_CartList() throws Exception {
+    getInitDataWithoutCartData();
+    getCartInitData();
+    List<Cart> cartList = cartDaoFrame.getCartProductListByMember(1L, session);
+    Assertions.assertTrue(cartList.size() > 0);
 
   }
 
+  @DisplayName("멤버와 제품이 존재하지 않을 때 리스트 카트 조회하기")
   @Test
-  void getAllCartByMemberId_WhenThereIsNotCartByMemberId_CatchSqlException() {
-
+  void getAllCartByMemberId_WhenThereIsNotCartByMemberId_CatchSqlException() throws Exception {
+    getInitDataWithoutCartData();
+    List<Cart> cartList = cartDaoFrame.getCartProductListByMember(1L, session);
+    Assertions.assertEquals(0, cartList.size());
   }
 
+  @DisplayName("카트의 row가 존재할 때 카트의 재고 업데이트하기")
   @Test
-  void updateCartQuantity_WhenCartIsExisted_UpdateTheCartQuantity() {
-
+  void updateCartQuantity_WhenCartIsExisted_UpdateTheCartQuantity() throws Exception {
+    getInitDataWithoutCartData();
+    getCartInitData();
+    Cart expected = new Cart(1L, 1L, 2);
+    cartDaoFrame.update(expected, session);
+    Optional<Cart> actual = cartDaoFrame.selectById(new ProductAndMemberCompositeKey(1L, 1L),
+        session);
+    Assertions.assertSame(expected.getProductQuantity(), actual.get().getProductQuantity());
   }
 
+  @DisplayName("카트의 row가 존재하지 않을 때 카트의 재고 업데이트하기")
   @Test
-  void updateCartQuantity_WhenCartIsNotExisted_Catch() {
-
+  void updateCartQuantity_WhenCartIsNotExisted_Catch() throws Exception {
+    getInitDataWithoutCartData();
+    Cart expected = new Cart(1L, 1L, 2);
+    cartDaoFrame.update(expected, session);
+    Optional<Cart> actual = cartDaoFrame.selectById(new ProductAndMemberCompositeKey(1L, 1L),
+        session);
+    Assertions.assertThrowsExactly(NoSuchElementException.class, actual::get);
   }
+
+
 
 
 }

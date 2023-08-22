@@ -5,14 +5,16 @@ import app.dao.CartDaoFrameImpl;
 import app.dao.product.ProductDao;
 import app.dto.cart.AllCartProductInfoDto;
 import app.dto.cart.CartProductDto;
-import app.dto.cart.CartProductQuantityInfo;
 import app.dto.comp.ProductAndMemberCompositeKey;
 import app.dto.product.ProductItemQuantity;
 import app.entity.Cart;
+import app.entity.Member;
 import app.entity.Product;
-import app.error.ErrorCode;
+import app.error.exception.cart.OutOfStockException;
+import app.error.exception.product.ProductNotFoundException;
 import app.utils.GetSessionFactory;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -49,31 +51,32 @@ public class CartServiceImpl implements CartService {
   }
 
   @Override
-  public ErrorCode putItemIntoCart(ProductAndMemberCompositeKey productAndMemberCompositeKey,
+  public void putItemIntoCart(ProductAndMemberCompositeKey productAndMemberCompositeKey,
       Integer quantity) throws Exception {
-    int count = cartDaoFrame.insert(Cart.CartCompKeyBuilder(productAndMemberCompositeKey, quantity),
-        GetSessionFactory.getInstance().openSession());
-        return count > 0 ? ErrorCode.valueOfCode("4002") : null;
+    SqlSession session  =GetSessionFactory.getInstance().openSession();
+    Product product = productDao.selectById(productAndMemberCompositeKey.getProductId(),session).orElseThrow(ProductNotFoundException::new);
+    int inserted = cartDaoFrame.insert(Cart.CartCompKeyBuilder(productAndMemberCompositeKey, quantity),session);
+    if(inserted==0){
+      throw new OutOfStockException();
+    }
   }
 
   @Override
-  public ErrorCode updateQuantityOfCartProduct(
+  public void updateQuantityOfCartProduct(
       ProductAndMemberCompositeKey productAndMemberCompositeKey, Long productId,
       Integer requestUpdateQuantity)
       throws Exception {
     SqlSession session = GetSessionFactory.getInstance().openSession();
-    return null;
   }
 
   @Override
-  public ErrorCode delete(ProductAndMemberCompositeKey productAndMemberCompositeKey)
+  public void delete(ProductAndMemberCompositeKey productAndMemberCompositeKey)
       throws Exception {
 
     int count = cartDaoFrame.deleteById(productAndMemberCompositeKey,
         GetSessionFactory.getInstance()
             .openSession());
 
-    return count > 0 ? ErrorCode.valueOfCode("4001") : null;
 
   }
 }
