@@ -88,14 +88,15 @@ public class OrderServlet extends HttpServlet {
       //      Long quantity = Long.parseLong(request.getParameter("quantity"));
       Long productId = 1L;
       Long quantity = 1L;
-      ;
+
       OrderCreateForm createOrderForm = orderService.getCreateOrderForm(memberId, productId);
       request.setAttribute("memberName", createOrderForm.getMemberName());
       request.setAttribute("defaultAddress", createOrderForm.getDefaultAddress());
       request.setAttribute("product", createOrderForm.getProduct());
       request.setAttribute("productQuantity", quantity);
       request.setAttribute("coupons", createOrderForm.getCoupons());
-      return "forward:templates/order/orderForm.jsp";
+
+      return Navi.FORWARD_ORDER_FORM;
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
