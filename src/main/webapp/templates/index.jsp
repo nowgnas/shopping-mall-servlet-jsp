@@ -1,7 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
-<!DOCTYPE html>
 <html lang="zxx">
 
 <head>
@@ -17,8 +16,9 @@
           rel="stylesheet">
 
     <!-- Css Styles -->
+    <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.3.1/css/all.css'>
+    <%--    <link rel="stylesheet" href="css/font-awesome.min.css" type="text/css">--%>
     <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css">
-    <link rel="stylesheet" href="css/font-awesome.min.css" type="text/css">
     <link rel="stylesheet" href="css/elegant-icons.css" type="text/css">
     <link rel="stylesheet" href="css/magnific-popup.css" type="text/css">
     <link rel="stylesheet" href="css/nice-select.css" type="text/css">
@@ -26,7 +26,48 @@
     <link rel="stylesheet" href="css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="css/style.css" type="text/css">
 </head>
+<style>
+    .container {
+        padding: 2rem 0rem;
+    }
 
+    @media (min-width: 576px) {
+        .modal-dialog {
+            max-width: 400px;
+        }
+
+        .modal-dialog .modal-content {
+            padding: 1rem;
+        }
+    }
+
+    .modal-header .close {
+        margin-top: -1.5rem;
+    }
+
+    .form-title {
+        margin: -2rem 0rem 2rem;
+    }
+
+    .btn-round {
+        border-radius: 3rem;
+    }
+
+    .delimiter {
+        padding: 1rem;
+    }
+
+    .social-buttons .btn {
+        margin: 0 0.5rem 1rem;
+    }
+
+    .signup-section {
+        padding: 0.3rem 0rem;
+    }
+</style>
+<script>
+
+</script>
 <body>
 <!-- Page Preloder -->
 <div id="preloder">
@@ -76,7 +117,7 @@
                 <div class="col-lg-6 col-md-5">
                     <div class="header__top__right">
                         <div class="header__top__links">
-                            <a href="#">Sign in</a>
+                            <a href="#" data-toggle="modal" data-target="#loginModal">Sign in</a>
                             <a href="#">FAQs</a>
                         </div>
                         <div class="header__top__hover">
@@ -109,7 +150,7 @@
                                 <li><a href="./about.html">About Us</a></li>
                                 <li><a href="./shop-details.html">Shop Details</a></li>
                                 <li><a href="./shopping-cart.html">Shopping Cart</a></li>
-                                <li><a href="./checkout.html">Check Out</a></li>
+                                <li><a href="/order.bit?view=direct&cmd=form">Check Out</a></li>
                                 <li><a href="./blog-details.html">Blog Details</a></li>
                             </ul>
                         </li>
@@ -131,6 +172,57 @@
     </div>
 </header>
 <!-- Header Section End -->
+
+<!-- login madal -->
+<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header border-bottom-0">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-title text-center">
+                    <h4>Login</h4>
+                </div>
+                <div class="d-flex flex-column text-center">
+                    <form id="loginForm" method="POST" action="member.bit?view=login">
+                        <div class="form-group">
+                            <input type="email" class="form-control" name="email" id="email"
+                                   placeholder="Your email address...">
+                        </div>
+                        <div class="form-group">
+                            <input type="password" class="form-control" name="password" id="password"
+                                   placeholder="Your password...">
+                        </div>
+                        <button type="button" class="btn btn-info btn-block btn-round" id="loginbtn">Login</button>
+                    </form>
+
+                    <div class="text-center text-muted delimiter">or use a social network</div>
+                    <div class="d-flex justify-content-center social-buttons">
+                        <button type="button" class="btn btn-secondary btn-round" data-toggle="tooltip"
+                                data-placement="top" title="Twitter">
+                            <i class="fab fa-twitter"></i>
+                        </button>
+                        <button type="button" class="btn btn-secondary btn-round" data-toggle="tooltip"
+                                data-placement="top" title="Facebook">
+                            <i class="fab fa-facebook"></i>
+                        </button>
+                        <button type="button" class="btn btn-secondary btn-round" data-toggle="tooltip"
+                                data-placement="top" title="Linkedin">
+                            <i class="fab fa-linkedin"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer d-flex justify-content-center">
+                <div class="signup-section">Not a member yet? <a href="#a" class="text-info"> Sign Up</a>.</div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- Hero Section Begin -->
 <section class="hero">
@@ -522,7 +614,7 @@
         <div class="row">
             <div class="col-lg-3">
                 <div class="categories__text">
-                    <h2>Clothings Hot <br /> <span>Shoe Collection</span> <br /> Accessories</h2>
+                    <h2>Clothings Hot <br/> <span>Shoe Collection</span> <br/> Accessories</h2>
                 </div>
             </div>
             <div class="col-lg-4">
@@ -693,9 +785,11 @@
                     <p>Copyright ©
                         <script>
                             document.write(new Date().getFullYear());
-                        </script>2020
+                        </script>
+                        2020
                         All rights reserved | This template is made with <i class="fa fa-heart-o"
-                                                                            aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+                                                                            aria-hidden="true"></i> by <a
+                                href="https://colorlib.com" target="_blank">Colorlib</a>
                     </p>
                     <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
                 </div>
@@ -717,6 +811,7 @@
 <!-- Search End -->
 
 <!-- Js Plugins -->
+<script src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js'></script>
 <script src="js/jquery-3.3.1.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
 <script src="js/jquery.nice-select.min.js"></script>
@@ -727,6 +822,7 @@
 <script src="js/mixitup.min.js"></script>
 <script src="js/owl.carousel.min.js"></script>
 <script src="js/main.js"></script>
+
 </body>
 
 </html>

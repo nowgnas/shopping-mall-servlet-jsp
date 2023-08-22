@@ -56,15 +56,17 @@ public class OrderServiceTest {
   @DisplayName("상품 주문 바로 구매(쿠폰 미적용) - 정상 처리")
   void createOrderWithoutCoupon() throws Exception {
     // given
-    Long memberId = 1L;
-    Long productId = 1L;
-    Long quantity = 1L;
-    OrderCreateDto.AddressDto address =
-        new OrderCreateDto.AddressDto("상품 주문 테스트 도로명 주소", "상품 주문 테스트", "상품 주문 테스트");
-    OrderCreateDto.ProductDto product = new OrderCreateDto.ProductDto(productId, quantity);
-    Long totalPrice = 3000000L * quantity;
-    OrderCreateDto orderCreateDto =
-        new OrderCreateDto(memberId, null, address, product, totalPrice);
+    OrderCreateDto orderCreateDto = OrderCreateDto.builder()
+            .memberId(1L)
+            .roadName("상품 주문 테스트 도로명 주소")
+            .addrDetail("상품 주문 테스트")
+            .zipCode("상품 주문 테스트")
+            .productId(1L)
+            .price(3000000L)
+            .quantity(1L)
+            .couponId(null)
+            .totalPrice(3000000L)
+            .build();
 
     // when
     Order order = orderService.createOrder(orderCreateDto);
@@ -72,7 +74,7 @@ public class OrderServiceTest {
     /* then 1. 상품의 재고가 주문한 개수만큼 감소 2. 회원의 잔고가 총 주문 금액만큼 감소 4. 주문 생성 */
     Product findProduct =
         productDao
-            .selectById(orderCreateDto.getProduct().getProductId(), session)
+            .selectById(orderCreateDto.getProductId(), session)
             .orElseThrow(Exception::new);
     assertSame(1L, findProduct.getQuantity());
     Member member =
@@ -86,16 +88,17 @@ public class OrderServiceTest {
   @DisplayName("상품 주문 바로 구매 - 비정상 처리(상품 재고 부족)")
   void createOrderWithoutCouponEx1() throws Exception {
     // given
-    Long memberId = 1L;
-    Long productId = 1L;
-    Long quantity = 3L;
-
-    OrderCreateDto.AddressDto address =
-        new OrderCreateDto.AddressDto("상품 주문 테스트 도로명 주소", "상품 주문 테스트", "상품 주문 테스트");
-    OrderCreateDto.ProductDto product = new OrderCreateDto.ProductDto(productId, quantity);
-    Long totalPrice = 9000000L * quantity;
-    OrderCreateDto orderCreateDto =
-        new OrderCreateDto(memberId, null, address, product, totalPrice);
+    OrderCreateDto orderCreateDto = OrderCreateDto.builder()
+            .memberId(1L)
+            .roadName("상품 주문 테스트 도로명 주소")
+            .addrDetail("상품 주문 테스트")
+            .zipCode("상품 주문 테스트")
+            .productId(1L)
+            .price(3000000L)
+            .quantity(3L)
+            .couponId(null)
+            .totalPrice(9000000L)
+            .build();
 
     /* when, then 1. 상품의 재고가 감소되지 않아야함 2. 회원의 잔고가 감소되지 않아야함 4. 주문 생성 처리 X */
     assertThrows(
@@ -107,7 +110,7 @@ public class OrderServiceTest {
         "상품의 재고가 부족합니다.");
     Product findProduct =
         productDao
-            .selectById(orderCreateDto.getProduct().getProductId(), session)
+            .selectById(orderCreateDto.getProductId(), session)
             .orElseThrow(Exception::new);
     assertSame(2L, findProduct.getQuantity());
     Member member =
@@ -119,16 +122,17 @@ public class OrderServiceTest {
   @DisplayName("상품 주문 바로 구매 - 비정상 처리(회원 잔고 부족)")
   void createOrderWithoutCouponEx2() throws Exception {
     // given
-    Long memberId = 1L;
-    Long productId = 2L;
-    Long quantity = 4L;
-
-    OrderCreateDto.AddressDto address =
-        new OrderCreateDto.AddressDto("상품 주문 테스트 도로명 주소", "상품 주문 테스트", "상품 주문 테스트");
-    OrderCreateDto.ProductDto product = new OrderCreateDto.ProductDto(productId, quantity);
-    Long totalPrice = 2000000L * quantity;
-    OrderCreateDto orderCreateDto =
-        new OrderCreateDto(memberId, null, address, product, totalPrice);
+    OrderCreateDto orderCreateDto = OrderCreateDto.builder()
+            .memberId(1L)
+            .roadName("상품 주문 테스트 도로명 주소")
+            .addrDetail("상품 주문 테스트")
+            .zipCode("상품 주문 테스트")
+            .productId(2L)
+            .price(2000000L)
+            .quantity(4L)
+            .couponId(null)
+            .totalPrice(8000000L)
+            .build();
 
     /* when, then 1. 상품의 재고가 감소되지 않아야함 2. 회원의 잔고가 감소되지 않아야함 4. 주문 생성 처리 X */
     assertThrows(
@@ -140,7 +144,7 @@ public class OrderServiceTest {
         "회원의 잔고가 부족합니다.");
     Product findProduct =
         productDao
-            .selectById(orderCreateDto.getProduct().getProductId(), session)
+            .selectById(orderCreateDto.getProductId(), session)
             .orElseThrow(Exception::new);
     assertSame(10L, findProduct.getQuantity());
     Member member =
@@ -152,18 +156,17 @@ public class OrderServiceTest {
   @DisplayName("상품 주문 바로 구매(쿠폰 적용) - 정상 처리")
   void createOrderWithCoupon() throws Exception {
     // given
-    Long memberId = 1L;
-    Long productId = 1L;
-    Long quantity = 1L;
-    Long couponId = 1L;
-    Long discountValue = 5000L;
-
-    OrderCreateDto.AddressDto address =
-        new OrderCreateDto.AddressDto("상품 주문 테스트 도로명 주소", "상품 주문 테스트", "상품 주문 테스트");
-    OrderCreateDto.ProductDto product = new OrderCreateDto.ProductDto(productId, quantity);
-    Long totalPrice = 3000000L * quantity - discountValue;
-    OrderCreateDto orderCreateDto =
-        new OrderCreateDto(memberId, couponId, address, product, totalPrice);
+    OrderCreateDto orderCreateDto = OrderCreateDto.builder()
+            .memberId(1L)
+            .roadName("상품 주문 테스트 도로명 주소")
+            .addrDetail("상품 주문 테스트")
+            .zipCode("상품 주문 테스트")
+            .productId(1L)
+            .price(2000000L)
+            .quantity(1L)
+            .couponId(1L)
+            .totalPrice(2995000L)
+            .build();
 
     // when
     Order order = orderService.createOrder(orderCreateDto);
@@ -171,13 +174,13 @@ public class OrderServiceTest {
     /* then 1. 상품의 재고가 주문한 개수만큼 감소 2. 회원의 잔고가 총 주문 금액만큼 감소 3. 쿠폰 상태 '사용됨'으로 처리 4. 주문 생성 */
     Product findProduct =
         productDao
-            .selectById(orderCreateDto.getProduct().getProductId(), session)
+            .selectById(orderCreateDto.getProductId(), session)
             .orElseThrow(Exception::new);
     assertSame(1L, findProduct.getQuantity());
     Member member =
         memberDao.selectById(orderCreateDto.getMemberId(), session).orElseThrow(Exception::new);
     assertEquals(3005000L, (long) member.getMoney());
-    Coupon coupon = couponDao.selectById(couponId, session).orElseThrow(Exception::new);
+    Coupon coupon = couponDao.selectById(1L, session).orElseThrow(Exception::new);
     assertEquals(CouponStatus.USED.name(), coupon.getStatus());
     assertNotNull(order.getId());
     assertEquals(OrderStatus.PENDING.name(), order.getStatus());
