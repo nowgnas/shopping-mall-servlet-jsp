@@ -30,7 +30,7 @@ public class MemberServlet extends HttpServlet {
 
   protected void service(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
-    String next = "index.jsp";
+    String next = Navi.REDIRECT_MAIN;
     String view = request.getParameter("view");
     if (view != null) {
       next = build(request, view);
@@ -38,7 +38,7 @@ public class MemberServlet extends HttpServlet {
 
     String path = next.substring(next.indexOf(":") + 1);
 
-    if (path.startsWith("forward:")) {
+    if (next.startsWith("forward:")) {
       HttpUtil.forward(request, response, path);
     } else {
       HttpUtil.redirect(response, path);
@@ -46,7 +46,7 @@ public class MemberServlet extends HttpServlet {
   }
 
   private String build(HttpServletRequest request, String view) {
-    String path = "redirect:index.jsp";
+    String path = Navi.FORWARD_MAIN;
     switch (view) {
       case "registerForm":
         return registerForm();
@@ -55,11 +55,9 @@ public class MemberServlet extends HttpServlet {
       case "loginForm":
         return loginForm();
       case "login":
-        login(request);
-        break;
+        return login(request);
       case "logout":
-        logout(request);
-        break;
+        return logout(request);
     }
     return path;
   }
