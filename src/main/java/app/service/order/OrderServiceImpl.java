@@ -54,27 +54,8 @@ public class OrderServiceImpl {
       ProductDetailForOrder productDetail = productDao.selectProductDetail(productId, session);
       OrderMemberDetail orderMemberDetail =
           memberDao.selectAddressAndCouponById(memberId, session).orElseThrow(Exception::new);
-      return new OrderCreateForm(
-          orderMemberDetail.getName(),
-          new OrderCreateForm.ProductDto(
-              productDetail.getId(),
-              productDetail.getName(),
-              productDetail.getUrl(),
-              productDetail.getPrice()),
-          new OrderCreateForm.AddressDto(
-              orderMemberDetail.getAddress().getRoadName(),
-              orderMemberDetail.getAddress().getAddrDetail(),
-              orderMemberDetail.getAddress().getZipCode()),
-          orderMemberDetail.getCoupons().stream()
-              .map(
-                  c ->
-                      new OrderCreateForm.CouponDto(
-                          c.getId(),
-                          c.getName(),
-                          c.getDiscountPolicy(),
-                          c.getDiscountValue(),
-                          c.getStatus()))
-              .collect(Collectors.toList()));
+
+      return OrderCreateForm.of(orderMemberDetail, productDetail);
     } catch (CustomException ex) {
       log.error(ex.getMessage());
       session.rollback();
