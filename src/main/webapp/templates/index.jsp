@@ -17,7 +17,7 @@
 
     <!-- Css Styles -->
     <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.3.1/css/all.css'>
-<%--    <link rel="stylesheet" href="css/font-awesome.min.css" type="text/css">--%>
+    <%--    <link rel="stylesheet" href="css/font-awesome.min.css" type="text/css">--%>
     <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css">
     <link rel="stylesheet" href="css/elegant-icons.css" type="text/css">
     <link rel="stylesheet" href="css/magnific-popup.css" type="text/css">
@@ -79,7 +79,7 @@
 <div class="offcanvas-menu-wrapper">
     <div class="offcanvas__option">
         <div class="offcanvas__links">
-            <a href="#" >Sign in</a>
+            <a href="#">Sign in</a>
             <a href="#">FAQs</a>
         </div>
         <div class="offcanvas__top__hover">
@@ -117,7 +117,7 @@
                 <div class="col-lg-6 col-md-5">
                     <div class="header__top__right">
                         <div class="header__top__links">
-                            <a href="#" data-toggle="modal" data-target="#loginModal" >Sign in</a>
+                            <a href="#" data-toggle="modal" data-target="#loginModal">Sign in</a>
                             <a href="#">FAQs</a>
                         </div>
                         <div class="header__top__hover">
@@ -190,10 +190,12 @@
                 <div class="d-flex flex-column text-center">
                     <form id="loginForm" method="POST" action="member.bit?view=login">
                         <div class="form-group">
-                            <input type="email" class="form-control" name="email" id="email" placeholder="Your email address...">
+                            <input type="email" class="form-control" name="email" id="email"
+                                   placeholder="Your email address...">
                         </div>
                         <div class="form-group">
-                            <input type="password" class="form-control" name="password" id="password" placeholder="Your password...">
+                            <input type="password" class="form-control" name="password" id="password"
+                                   placeholder="Your password...">
                         </div>
                         <button type="button" class="btn btn-info btn-block btn-round" id="loginbtn">Login</button>
                     </form>
