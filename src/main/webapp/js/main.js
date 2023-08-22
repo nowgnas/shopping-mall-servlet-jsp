@@ -131,7 +131,7 @@
     var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
     var yyyy = today.getFullYear();
 
-    if(mm == 12) {
+    if (mm == 12) {
         mm = '01';
         yyyy = yyyy + 1;
     } else {
@@ -212,5 +212,31 @@
             }
         });
     });
+
+    $('#loginbtn').on('click', function (e) {
+        e.preventDefault();
+        const id = $('#email').val();
+        const password = $('#password').val();
+
+        if(id == "") {
+            alert("id를 입력해주세요.");
+            return;
+        }
+        if(password == "") {
+            alert("password를 입력해주세요.");
+            return;
+        }
+
+        $('#loginForm').submit();
+
+
+    });
+
+    // $(document).ready(function () {
+    //     $('#loginModal').modal('show');
+    //     $(function () {
+    //         $('[data-toggle="tooltip"]').tooltip()
+    //     })
+    // });
 
 })(jQuery);
