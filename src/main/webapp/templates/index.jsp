@@ -117,7 +117,12 @@
                 <div class="col-lg-6 col-md-5">
                     <div class="header__top__right">
                         <div class="header__top__links">
-                            <a href="#" data-toggle="modal" data-target="#loginModal">Sign in</a>
+                            <c:if test="${ empty loginMember }">
+                                <a href="#" data-toggle="modal" data-target="#loginModal">Sign in</a>
+                            </c:if>
+                            <c:if test="${ !empty loginMember }">
+                                <a href="member.bit?view=logout" target="_parent">logout</a>
+                            </c:if>
                             <a href="#">FAQs</a>
                         </div>
                         <div class="header__top__hover">
@@ -150,7 +155,7 @@
                                 <li><a href="./about.html">About Us</a></li>
                                 <li><a href="./shop-details.html">Shop Details</a></li>
                                 <li><a href="./shopping-cart.html">Shopping Cart</a></li>
-                                <li><a href="/order.bit?view=direct&cmd=form">Check Out</a></li>
+                                <li><a href="./checkout.html">Check Out</a></li>
                                 <li><a href="./blog-details.html">Blog Details</a></li>
                             </ul>
                         </li>
