@@ -33,7 +33,7 @@ public class ProductLikesService implements LikesService {
     List<ProductListItemOfLike> memberLikesList;
     try {
       session = GetSessionFactory.getInstance().openSession();
-      List<Long> productIdList = likesDao.selectAll(memberId, session);
+      List<Long> productIdList = likesDao.selectAllProduct(memberId, session);
       memberLikesList = productDao.selectProductListItemOfLike(productIdList, session);
     } catch (Exception e) {
 

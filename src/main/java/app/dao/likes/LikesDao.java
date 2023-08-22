@@ -5,6 +5,9 @@ import app.entity.Likes;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
+
+import app.error.CustomException;
+import app.error.ErrorCode;
 import org.apache.ibatis.session.SqlSession;
 
 public class LikesDao implements LikesDaoFrame<ProductAndMemberCompositeKey, Likes> {
@@ -39,7 +42,9 @@ public class LikesDao implements LikesDaoFrame<ProductAndMemberCompositeKey, Lik
   @Override
   public Optional<Likes> selectById(ProductAndMemberCompositeKey productAndMemberCompositeKey,
       SqlSession session) throws SQLException {
-    return Optional.ofNullable(session.selectOne("likes.select", productAndMemberCompositeKey));
+    Likes likes = session.selectOne("likes.select", productAndMemberCompositeKey);
+    if (likes == null) throw new CustomException(ErrorCode.ITEM_NOT_FOUND);
+    return Optional.ofNullable(likes);
   }
 
   @Override
@@ -48,7 +53,9 @@ public class LikesDao implements LikesDaoFrame<ProductAndMemberCompositeKey, Lik
   }
 
   @Override
-  public List<Long> selectAll(Long memberId, SqlSession session) throws SQLException {
-    return session.selectList("likes.selectall", memberId);
+  public List<Long> selectAllProduct(Long memberId, SqlSession session) throws SQLException {
+    List<Long> productIdList = session.selectList("likes.selectall", memberId);
+    if (productIdList.isEmpty()) throw new CustomException(ErrorCode.ITEM_NOT_FOUND);
+    return productIdList;
   }
 }

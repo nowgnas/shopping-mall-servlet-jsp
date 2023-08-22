@@ -72,22 +72,26 @@ class LikesDaoTest {
 
     assertEquals(inputLikes.getMemberId(), ouputLikes.getMemberId());
     assertEquals(inputLikes.getProductId(), ouputLikes.getProductId());
-//    Likes likes = likesDao.selectById(new ProductAndMemberCompositeKey(1L, 2L), session).get();
 //    log.info("[select test] member id : " + likes.getMemberId());
 //    log.info("[select test] product id : " + likes.getProductId());
   }
 
-//  @DisplayName("select all test")
-//  @Test
-//  void selectAll() throws Exception {
-//    likesDao.insert(new Likes(1L, 3L), session);
-//    likesDao.insert(new Likes(1L, 4L), session);
-//    session.commit();
-//
-//    List<Likes> list = likesDao.selectAll(1L, session);
-//    for (Likes likes : list) {
-//      assertEquals(likes.getMemberId(), 1L);
-////      log.info("[select all test] product id : " + likes.getProductId());
-//    }
-//  }
+  @DisplayName("select all test")
+  @Test
+  void selectAll() throws Exception {
+
+    // basic init Likes(1L, 2L)
+    likesDao.insert(new Likes(1L, 3L), session);
+    likesDao.insert(new Likes(1L, 4L), session);
+    session.commit();
+
+    List<Long> list = likesDao.selectAllProduct(1L, session);
+    long idx = 2L;
+
+    // total 3 rows
+    for (Long productId : list) {
+      assertEquals(productId, idx++);
+//      log.info("[select all test] product id : " + productId);
+    }
+  }
 }
