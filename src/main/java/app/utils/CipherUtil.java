@@ -46,8 +46,6 @@ public class CipherUtil {
       md.update(source.getBytes());
       md.update(salt.getBytes());
       byteData = md.digest();
-      System.out.println(
-          "원문: " + source + " SHA-256: " + byteData.length + "," + byteArrayToHex(byteData));
     } catch (NoSuchAlgorithmException e) {
       e.printStackTrace();
     }

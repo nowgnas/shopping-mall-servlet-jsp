@@ -1,7 +1,7 @@
 package app.service.order;
 
 import app.dto.OrderProcessDto;
-import app.error.ErrorCode;
+import app.exception.ErrorCode;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.AccessLevel;
@@ -22,9 +22,6 @@ public class BuyProductInCartChecker implements BuyableChecker {
   public Map<ErrorCode, Boolean> process(OrderProcessDto orderProcessDto) {
     if (!this.isAffordable(orderProcessDto)) {
       errorMessageBooleanMap.put(ErrorCode.CUSTOMER_IS_NOT_AFFORDABLE, Boolean.FALSE);
-    }
-    if (!this.isDeliverable(orderProcessDto)) {
-      errorMessageBooleanMap.put(ErrorCode.ADDRESS_IS_UNAVAILABLE, Boolean.FALSE);
     }
     if (!this.isQuantitySufficient(orderProcessDto)) {
       errorMessageBooleanMap.put(ErrorCode.QUANTITY_IS_NOT_SUFFICIENT, Boolean.FALSE);

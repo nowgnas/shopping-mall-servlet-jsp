@@ -1,12 +1,9 @@
 package app.dao.productorder;
 
-import static app.error.ErrorCode.*;
-
-import app.dao.exception.CustomException;
 import app.entity.ProductOrder;
 import java.util.List;
 import java.util.Optional;
-import org.apache.ibatis.exceptions.PersistenceException;
+
 import org.apache.ibatis.session.SqlSession;
 import org.apache.log4j.Logger;
 
@@ -16,23 +13,7 @@ public class ProductOrderDao implements ProductOrderDaoFrame<Long, ProductOrder>
 
   @Override
   public int insert(ProductOrder productOrder, SqlSession session) throws Exception {
-    int insertedRow;
-    try {
-      insertedRow = session.insert("productOrder.insert", productOrder);
-      if (insertedRow != 1) {
-        String errorMessage = CANNOT_INSERT_PRODUCT_ORDER.getMessage();
-        log.error(errorMessage);
-        throw new CustomException(errorMessage);
-      }
-    } catch (PersistenceException ex) {
-      log.error(ex.getMessage());
-      throw new PersistenceException(CANNOT_INSERT_PRODUCT_ORDER.getMessage());
-    } catch (Exception ex) {
-      log.error(ex.getMessage());
-      throw new Exception(INTERNAL_SERVER_ERROR.getMessage());
-    }
-
-    return insertedRow;
+    return session.insert("productOrder.insert", productOrder);
   }
 
   @Override
@@ -53,5 +34,10 @@ public class ProductOrderDao implements ProductOrderDaoFrame<Long, ProductOrder>
   @Override
   public List<ProductOrder> selectAll(SqlSession session) throws Exception {
     return null;
+  }
+
+  @Override
+  public List<ProductOrder> selectAllByOrderId(Long orderId, SqlSession session) {
+    return session.selectList("productOrder.selectAllByOrderId", orderId);
   }
 }

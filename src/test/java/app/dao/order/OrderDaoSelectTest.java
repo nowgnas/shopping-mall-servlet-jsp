@@ -50,6 +50,7 @@ public class OrderDaoSelectTest {
 
     // then
     assertNotNull(optionalOrder.orElse(null));
+    assertSame(optionalOrder.get().getId(), orderId);
   }
 
   @Test

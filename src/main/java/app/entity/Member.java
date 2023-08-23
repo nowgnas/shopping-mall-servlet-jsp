@@ -13,4 +13,8 @@ public class Member extends BaseEntity {
   @NonNull private String password;
   @NonNull private String name;
   @Builder.Default private Long money = 0L;
+
+  public void updateMoney(Long money) {
+    this.money = money;
+  }
 }

@@ -47,8 +47,16 @@ public class MemberDao implements MemberDaoFrame<Long, Member> {
     return Optional.ofNullable(session.selectOne("member.selectByEmail", email));
   }
 
+  @Override
+  public int countByEmail(String email, SqlSession session) throws SQLException{
+
+    return session.selectOne("member.countByEmail", email);
+  }
+
   public Optional<OrderMemberDetail> selectAddressAndCouponById(Long id, SqlSession session)
       throws SQLException {
     return Optional.ofNullable(session.selectOne("member.selectAddressAndCouponById", id));
   }
+
+
 }

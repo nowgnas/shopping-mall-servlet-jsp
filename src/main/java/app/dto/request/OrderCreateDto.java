@@ -1,34 +1,61 @@
 package app.dto.request;
 
-import java.util.List;
+import app.entity.Delivery;
+import app.entity.Order;
+import app.entity.Payment;
+import app.entity.ProductOrder;
+import app.enums.DeliveryStatus;
+import app.enums.OrderStatus;
+import app.enums.PaymentType;
 import lombok.*;
 
 @Getter
-@AllArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class OrderCreateDto {
 
-  private boolean isCart;
   private Long memberId;
   private Long couponId;
-  private AddressDto address;
-  private List<ProductDto> products;
+  private String roadName;
+  private String addrDetail;
+  private String zipCode;
+  private Long productId;
+  private Long price;
+  private Long quantity;
   private Long totalPrice;
 
-  @Getter
-  @AllArgsConstructor
-  @NoArgsConstructor(access = AccessLevel.PROTECTED)
-  public static class AddressDto {
-    private String roadName;
-    private String addrDetail;
-    private String zipCode;
+  public Order toOrderEntity() {
+    return Order.builder()
+        .memberId(memberId)
+        .couponId(couponId)
+        .status(OrderStatus.PENDING.name())
+        .build();
   }
 
-  @Getter
-  @AllArgsConstructor
-  @NoArgsConstructor(access = AccessLevel.PROTECTED)
-  public static class ProductDto {
-    private Long productId;
-    private Long quantity;
+  public ProductOrder toProductOrderEntity(Long orderId) {
+    return ProductOrder.builder()
+        .orderId(orderId)
+        .productId(productId)
+        .price(price)
+        .quantity(quantity)
+        .build();
+  }
+
+  public Delivery toDeliveryEntity(Long orderId) {
+    return Delivery.builder()
+        .orderId(orderId)
+        .roadName(roadName)
+        .addrDetail(addrDetail)
+        .zipCode(zipCode)
+        .status(DeliveryStatus.PENDING.name())
+        .build();
+  }
+
+  public Payment toPaymentEntity(Long orderId) {
+    return Payment.builder()
+        .orderId(orderId)
+        .type(PaymentType.CASH.name())
+        .actualAmount(totalPrice)
+        .build();
   }
 }

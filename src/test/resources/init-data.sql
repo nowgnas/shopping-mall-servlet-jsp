@@ -1,5 +1,5 @@
 insert into member (email, password, name, money)
-values ('test@naver.com', 'test123', 'test', 2000000);
+values ('test@naver.com', '�n�rʹ�qk=il�9q�f J�6~l�%H6^J�', 'test', 2000000);
 
 insert into address (member_id, is_default, road_name, addr_detail, zip_code)
 values (1, true, '경기도 안양시 동안구 관악대로 135', '삼성래미안 000동 000호', '13922'),
@@ -39,10 +39,7 @@ values (4, '맥북 프로 16', '맥북 프로 16 상세정보', 3000000, 2, 'PRO
        (13, '삼성 냉장고', '삼성 냉장고 상세정보', 1800000, 80, 'PRODUCT-007'),
        (14, '웅진 코웨이 정수기', '웅진 코웨이 정수기 상세정보', 500000, 90, 'PRODUCT-008');
 
+
 insert into likes (member_id, product_id)
 values (1, 2);
 
-insert into product_image (product_id, url, is_thumbnail)
-values (2, 'img_1', 1),
-       (3, 'img_2', 1),
-       (4, 'img_3', 1);

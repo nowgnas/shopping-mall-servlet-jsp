@@ -22,18 +22,23 @@
         <result property="orderStatus" column="orderStatus"/>
         <result property="orderDate" column="orderDate"/>
         <result property="memberName" column="memberName"/>
-        <association property="address" javaType="app.dto.response.ProductOrderDetailDto$DeliveryDto">
+        <association property="delivery" javaType="app.dto.response.ProductOrderDetailDto$DeliveryDto">
             <result property="roadName" column="roadName"/>
             <result property="addrDetail" column="addrDetail"/>
             <result property="zipCode" column="zipCode"/>
+            <result property="deliveryStatus" column="deliveryStatus"/>
         </association>
         <association property="payment" javaType="app.dto.response.ProductOrderDetailDto$PaymentDto">
             <result property="paymentType" column="paymentType"/>
             <result property="actualAmount" column="actualAmount"/>
         </association>
+        <association property="coupon" javaType="app.dto.response.ProductOrderDetailDto$CouponDto">
+            <result property="couponName" column="couponName"/>
+            <result property="couponStatus" column="couponStatus"/>
+        </association>
         <collection property="products" ofType="app.dto.response.ProductOrderDetailDto$ProductDto">
             <result property="productId" column="productId"/>
-            <result property="name" column="productName"/>
+            <result property="productName" column="productName"/>
             <result property="thumbnailUrl" column="thumbnailUrl"/>
             <result property="price" column="productPrice"/>
             <result property="quantity" column="productQuantity"/>
@@ -41,7 +46,12 @@
     </resultMap>
 
     <select id="select" parameterType="Long" resultType="order">
-        SELECT *
+        SELECT id         AS id,
+               member_id  AS memberId,
+               coupon_id  AS couponId,
+               status     AS status,
+               created_at AS createdAt,
+               updated_at AS updatedAt
         FROM orders
         WHERE id = #{id}
     </select>
@@ -50,20 +60,20 @@
         FROM orders
     </select>
     <select id="selectProductOrdersForMemberCurrentYear" parameterType="Long" resultMap="ProductOrderDto">
-        SELECT o.id                                       AS orderId,
-               o.status                                   AS orderStatus,
-               o.created_at                               AS orderDate,
-               p.id                                       AS productId,
-               p.name                                     AS productName,
+        SELECT o.id                                                       AS orderId,
+               o.status                                                   AS orderStatus,
+               o.created_at                                               AS orderDate,
+               p.id                                                       AS productId,
+               p.name                                                     AS productName,
                COALESCE((SELECT CASE
                                     WHEN pi.id IS NOT NULL AND pi.is_thumbnail = true THEN pi.url
-                                    WHEN pi.id IS NULL THEN 'https://default.com'
+                                    WHEN pi.id IS NULL THEN 'https://random.imagecdn.app/500/150'
                                     END
                          FROM product_image pi
                          WHERE p.id = pi.product_id
-                         LIMIT 1), 'https://default.com') AS thumbnailUrl,
-               p.price                                    AS productPrice,
-               po.quantity                                AS productQuantity
+                         LIMIT 1), 'https://random.imagecdn.app/500/150') AS thumbnailUrl,
+               p.price                                                    AS productPrice,
+               po.quantity                                                AS productQuantity
         FROM orders o
                  INNER JOIN product_order po on o.id = po.order_id
                  INNER JOIN product p on p.id = po.product_id
@@ -78,26 +88,29 @@
     </parameterMap>
     <select id="selectOrderDetailsForMemberAndOrderId" parameterMap="orderIdAndMemberIdParameterMap"
             resultMap="ProductOrderDetailDto">
-        SELECT o.id                                       AS orderId,
-               o.status                                   AS orderStatus,
-               o.created_at                               AS orderDate,
-               p.id                                       AS productId,
-               p.name                                     AS productName,
+        SELECT o.id                                                       AS orderId,
+               o.status                                                   AS orderStatus,
+               o.created_at                                               AS orderDate,
+               p.id                                                       AS productId,
+               p.name                                                     AS productName,
                COALESCE((SELECT CASE
                                     WHEN pi.id IS NOT NULL AND pi.is_thumbnail = true THEN pi.url
-                                    WHEN pi.id IS NULL THEN 'https://default.com'
+                                    WHEN pi.id IS NULL THEN 'https://random.imagecdn.app/500/150'
                                     END
                          FROM product_image pi
                          WHERE p.id = pi.product_id
-                         LIMIT 1), 'https://default.com') AS thumbnailUrl,
-               p.price                                    AS productPrice,
-               po.quantity                                AS productQuantity,
-               m.name                                     AS memberName,
-               d.road_name                                AS roadName,
-               d.addr_detail                              AS addrDetail,
-               d.zip_code                                 AS zipCode,
-               pm.type                                    AS paymentType,
-               pm.actual_amount                           AS actualAmount
+                         LIMIT 1), 'https://random.imagecdn.app/500/150') AS thumbnailUrl,
+               p.price                                                    AS productPrice,
+               po.quantity                                                AS productQuantity,
+               m.name                                                     AS memberName,
+               d.road_name                                                AS roadName,
+               d.addr_detail                                              AS addrDetail,
+               d.zip_code                                                 AS zipCode,
+               d.status                                                   AS deliveryStatus,
+               pm.type                                                    AS paymentType,
+               pm.actual_amount                                           AS actualAmount,
+               c.name                                                     AS couponName,
+               c.status                                                   AS couponStatus
         FROM orders o
                  INNER JOIN member m on o.member_id = m.id
                  INNER JOIN product_order po on o.id = po.order_id
@@ -105,16 +118,18 @@
                  INNER JOIN payments pm on o.id = pm.order_id
                  INNER JOIN product p on p.id = po.product_id
                  LEFT JOIN product_image pi on p.id = pi.product_id
+                 LEFT JOIN coupon c on o.coupon_id = c.id
         WHERE o.member_id = #{memberId}
           AND o.id = #{orderId}
     </select>
     <insert id="insert" parameterType="order" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO orders (member_id, status)
-        VALUES (#{memberId}, #{status})
+        INSERT INTO orders (member_id, coupon_id, status)
+        VALUES (#{memberId}, #{couponId}, #{status})
     </insert>
     <update id="update" parameterType="order" useGeneratedKeys="true" keyProperty="id">
         UPDATE orders
         SET member_id  = #{memberId},
+            coupon_id  = #{couponId},
             status     = #{status},
             updated_at = now()
         WHERE id = #{id}

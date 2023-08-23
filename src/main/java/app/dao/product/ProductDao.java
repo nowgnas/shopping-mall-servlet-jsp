@@ -1,12 +1,17 @@
 package app.dao.product;
 
+import app.dto.product.ProductDetail;
+import app.dto.product.ProductDetailParameter;
 import app.dto.product.ProductItemQuantity;
 import app.dto.product.ProductListItem;
 import app.dto.product.ProductListItemOfLike;
+import app.dto.product.response.ProductDetailForOrder;
+import app.entity.Category;
 import app.entity.Product;
-import app.error.CustomException;
-import app.error.ErrorCode;
+import app.exception.CustomException;
+import app.exception.ErrorCode;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.logging.Logger;
 import org.apache.ibatis.session.SqlSession;
@@ -32,7 +37,6 @@ public class ProductDao implements ProductDaoFrame<Long, Product> {
       List<Long> productId, SqlSession session) throws CustomException {
     List<ProductListItemOfLike> productListItemOfLikes =
         session.selectList("product.selectProductListItemOfLike", productId);
-    session.close();
     if (productListItemOfLikes.size() == 0) throw new CustomException(ErrorCode.ITEM_NOT_FOUND);
     return productListItemOfLikes;
   }
@@ -45,7 +49,6 @@ public class ProductDao implements ProductDaoFrame<Long, Product> {
   @Override
   public List<ProductItemQuantity> selectProductQuantity(List<Long> productId, SqlSession session) {
     List<ProductItemQuantity> product = session.selectList("product.selectone", productId);
-    session.close();
     if (product.size() == 0) throw new CustomException(ErrorCode.ITEM_NOT_FOUND);
     return product;
   }
@@ -57,7 +60,7 @@ public class ProductDao implements ProductDaoFrame<Long, Product> {
 
   @Override
   public int update(Product product, SqlSession session) throws Exception {
-    return 0;
+    return session.update("product.update", product);
   }
 
   @Override
@@ -75,8 +78,8 @@ public class ProductDao implements ProductDaoFrame<Long, Product> {
    */
   @Override
   public Optional<Product> selectById(Long productId, SqlSession session) throws Exception {
-    Optional<Product> product = session.selectOne("product.select", productId);
-    session.close();
+
+    Optional<Product> product = Optional.of(session.selectOne("product.select", productId));
     if (product.isPresent()) return product;
     else throw new CustomException(ErrorCode.ITEM_NOT_FOUND);
   }
@@ -87,26 +90,67 @@ public class ProductDao implements ProductDaoFrame<Long, Product> {
   }
 
   @Override
-  public List<ProductListItem> selectAllSortByPriceDesc(SqlSession session) throws Exception {
-    List<ProductListItem> products = session.selectList("product.sortbypricedesc");
-    session.close();
+  public List<ProductListItem> selectAllSortByPriceDesc(Map<String, Object> map, SqlSession session)
+      throws Exception {
+    List<ProductListItem> products = session.selectList("product.sortbypricedesc", map);
     if (products.size() == 0) throw new CustomException(ErrorCode.ITEM_NOT_FOUND);
     return products;
   }
 
   @Override
-  public List<ProductListItem> selectAllSortByPrice(SqlSession session) throws Exception {
+  public List<ProductListItem> selectAllSortByPrice(Map<String, Object> map, SqlSession session)
+      throws Exception {
     List<ProductListItem> products = session.selectList("product.sortbyprice");
-    session.close();
     if (products.size() == 0) throw new CustomException(ErrorCode.ITEM_NOT_FOUND);
     return products;
   }
 
   @Override
-  public List<ProductListItem> selectAllSortByDate(SqlSession session) throws Exception {
+  public List<ProductListItem> selectAllSortByDate(Map<String, Object> map, SqlSession session)
+      throws Exception {
     List<ProductListItem> products = session.selectList("product.sortbydate");
-    session.close();
     if (products.size() == 0) throw new CustomException(ErrorCode.ITEM_NOT_FOUND);
     return products;
+  }
+
+  @Override
+  public int getTotalPage(SqlSession session) {
+    return session.selectOne("product.gettotalpage", 10);
+  }
+
+  @Override
+  public ProductDetail selectProductDetailWithCategory(
+      Long memberId, Long productId, SqlSession session) {
+    return session.selectOne(
+        "product.selectDetail",
+        ProductDetailParameter.builder().productId(productId).memberId(memberId).build());
+  }
+
+  /**
+   * 상품 카테고리 정보
+   *
+   * @param categoryId 상품 정보
+   * @param session
+   * @return
+   */
+  @Override
+  public List<Category> selectProductParentCategory(Long categoryId, SqlSession session) {
+    return session.selectList("product.get-category", categoryId);
+  }
+
+  @Override
+  public int selectProductQuantity(Long productId, SqlSession session) {
+    return session.selectOne("product.check-qty", productId);
+  }
+
+  @Override
+  public ProductDetailForOrder selectProductDetail(Long productId, SqlSession session)
+      throws Exception {
+    return session.selectOne("product.product-detail-for-order", productId);
+  }
+
+  @Override
+  public List<Product> selectProductsByKeyword(String keyword, SqlSession session) {
+    return session.selectList("product.searchByWord", keyword);
   }
 }

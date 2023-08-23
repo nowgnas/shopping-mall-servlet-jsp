@@ -13,6 +13,10 @@ public class Coupon extends BaseEntity {
   @NonNull private Long memberId;
   @NonNull private String name;
   @NonNull private String discountPolicy;
-  @NonNull private String discountValue;
+  @NonNull private Integer discountValue;
   @Builder.Default private String status = CouponStatus.UNUSED.name();
+
+  public void updateStatus(String status) {
+    this.status = status;
+  }
 }

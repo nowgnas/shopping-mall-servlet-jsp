@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import app.entity.Delivery;
-import app.error.ErrorCode;
+import app.exception.ErrorCode;
 import config.TestConfig;
 import org.apache.ibatis.session.SqlSession;
 import org.junit.jupiter.api.AfterEach;
@@ -23,7 +23,7 @@ public class DeliveryDaoInsertTest {
   void beforeEach() throws Exception {
     session = GetSessionFactory.getInstance().openSession();
     testConfig.init("schema.sql", session);
-    testConfig.init("delivery/init-delivery-data.sql", session);
+    testConfig.init("delivery/init-delivery-insert-data.sql", session);
   }
 
   @AfterEach

@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import app.entity.ProductOrder;
-import app.error.ErrorCode;
+import app.exception.ErrorCode;
 import config.TestConfig;
 import org.apache.ibatis.session.SqlSession;
 import org.junit.jupiter.api.AfterEach;
@@ -37,7 +37,7 @@ public class ProductOrderDaoInsertTest {
   void insert() throws Exception {
     // given
     ProductOrder productOrder =
-        ProductOrder.builder().orderId(1L).productId(1L).price(2000000L).quantity(2).build();
+        ProductOrder.builder().orderId(1L).productId(1L).price(2000000L).quantity(2L).build();
 
     // when
     int insertedRow = productOrderDao.insert(productOrder, session);
@@ -53,7 +53,7 @@ public class ProductOrderDaoInsertTest {
   void insertEx1() throws Exception {
     // given
     ProductOrder productOrder =
-        ProductOrder.builder().orderId(10000L).productId(1L).price(2000000L).quantity(2).build();
+        ProductOrder.builder().orderId(10000L).productId(1L).price(2000000L).quantity(2L).build();
 
     // when, then
     assertThrows(

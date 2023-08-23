@@ -3,6 +3,7 @@ package web.controller;
 import app.entity.Address;
 import app.entity.Cart;
 import app.entity.Product;
+import app.utils.HttpUtil;
 import web.dispatcher.Navi;
 
 import javax.servlet.RequestDispatcher;
@@ -24,30 +25,35 @@ public class MainServlet extends HttpServlet {
 
   protected void service(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
-    String next = "index.jsp";
+    String next = Navi.FORWARD_MAIN;
     String view = request.getParameter("view");
-
     if (view != null) {
-      build(request, view);
+      next = build(request, view);
     }
 
-    RequestDispatcher rd = request.getRequestDispatcher(next);
-    rd.forward(request, response);
+    String path = next.substring(next.indexOf(":") + 1);
+
+    if (next.startsWith("forward:")) {
+      HttpUtil.forward(request, response, path);
+    } else {
+      HttpUtil.redirect(response, path);
+    }
   }
 
-  private void build(HttpServletRequest request, String view) {
-    if (view.equals("register")) {
-      request.setAttribute("center", "register");
-      request.setAttribute("navi", Navi.register);
-    } else if (view.equals("login")) {
-      request.setAttribute("center", "login");
-      request.setAttribute("navi", Navi.login);
-    } else if (view.equals("custadd")) {
-      request.setAttribute("center", "app/cust/register");
-    } else if (view.equals("productadd")) {
-      request.setAttribute("center", "product/register");
-    } else if (view.equals("chart")) {
-      request.setAttribute("center", "chart/chart");
-    }
+  private String build(HttpServletRequest request, String view) {
+//    if (view.equals("register")) {
+//      request.setAttribute("center", "register");
+//      request.setAttribute("navi", Navi.register);
+//    } else if (view.equals("login")) {
+//      request.setAttribute("center", "login");
+//      request.setAttribute("navi", Navi.login);
+//    } else if (view.equals("custadd")) {
+//      request.setAttribute("center", "app/cust/register");
+//    } else if (view.equals("productadd")) {
+//      request.setAttribute("center", "product/register");
+//    } else if (view.equals("chart")) {
+//      request.setAttribute("center", "chart/chart");
+//    }
+    return null;
   }
 }
