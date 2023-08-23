@@ -1,7 +1,7 @@
-package app.error.exception.member;
+package app.exception.member;
 
-import app.error.CustomException;
-import app.error.ErrorCode;
+import app.exception.CustomException;
+import app.exception.ErrorCode;
 
 public class MemberNotFoundException extends CustomException {
 
