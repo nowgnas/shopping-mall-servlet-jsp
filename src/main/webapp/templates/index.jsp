@@ -26,45 +26,7 @@
     <link rel="stylesheet" href="css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="css/style.css" type="text/css">
 </head>
-<style>
-    .container {
-        padding: 2rem 0rem;
-    }
 
-    @media (min-width: 576px) {
-        .modal-dialog {
-            max-width: 400px;
-        }
-
-        .modal-dialog .modal-content {
-            padding: 1rem;
-        }
-    }
-
-    .modal-header .close {
-        margin-top: -1.5rem;
-    }
-
-    .form-title {
-        margin: -2rem 0rem 2rem;
-    }
-
-    .btn-round {
-        border-radius: 3rem;
-    }
-
-    .delimiter {
-        padding: 1rem;
-    }
-
-    .social-buttons .btn {
-        margin: 0 0.5rem 1rem;
-    }
-
-    .signup-section {
-        padding: 0.3rem 0rem;
-    }
-</style>
 <script>
 
 </script>
