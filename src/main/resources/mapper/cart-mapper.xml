@@ -62,6 +62,13 @@
         WHERE member_id = #{memberId}
         and product_id = #{productId}
     </delete>
+    <delete id="bulkDelete" parameterType="app.dto.comp.ProductAndMemberCompositeKey">
+        DELETE FROM cart
+        WHERE (member_id, product_id) IN
+        <foreach collection="list" item="productAndMemberCompositeKey" separator="," open="(" close=")">
+            (#{productAndMemberCompositeKey.memberId}, #{productAndMemberCompositeKey.productId})
+        </foreach>
+    </delete>
 
 </mapper>
 
