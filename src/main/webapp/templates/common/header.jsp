@@ -75,7 +75,7 @@
         <div class="row">
             <div class="col-lg-3 col-md-3">
                 <div class="header__logo">
-                    <a href="./index.html"><img src="img/logo.png" alt=""></a>
+                    <a href="/"><img src="img/logo.png" alt=""></a>
                 </div>
             </div>
             <div class="col-lg-6 col-md-6">
@@ -111,3 +111,5 @@
         <div class="canvas__open"><i class="fa fa-bars"></i></div>
     </div>
 </header>
+
+<script src="js/header.js"></script>
