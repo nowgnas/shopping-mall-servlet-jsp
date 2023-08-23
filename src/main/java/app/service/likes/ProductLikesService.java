@@ -6,11 +6,10 @@ import app.dao.likes.LikesDaoFrame;
 import app.dto.comp.ProductAndMemberCompositeKey;
 import app.entity.Likes;
 import app.entity.Product;
-import app.error.CustomException;
-import app.error.ErrorCode;
+import app.exception.CustomException;
+import app.exception.ErrorCode;
 import app.utils.GetSessionFactory;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import org.apache.ibatis.session.SqlSession;
 

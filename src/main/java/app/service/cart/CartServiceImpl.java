@@ -10,10 +10,10 @@ import app.entity.Cart;
 
 import app.entity.Member;
 import app.entity.Product;
-import app.error.ErrorCode;
-import app.error.exception.cart.OutOfStockException;
-import app.error.exception.member.MemberNotFoundException;
-import app.error.exception.product.ProductNotFoundException;
+import app.exception.ErrorCode;
+import app.exception.cart.OutOfStockException;
+import app.exception.member.MemberNotFoundException;
+import app.exception.product.ProductNotFoundException;
 import app.utils.GetSessionFactory;
 import lombok.AccessLevel;
 import lombok.Getter;

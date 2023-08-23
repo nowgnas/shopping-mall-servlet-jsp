@@ -1,7 +1,7 @@
 package app.service.order;
 
 import app.dto.OrderProcessDto;
-import app.error.ErrorCode;
+import app.exception.ErrorCode;
 import java.util.Map;
 import java.util.Optional;
 
