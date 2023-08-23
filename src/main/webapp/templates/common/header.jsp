@@ -5,6 +5,7 @@
   Time: 오후 5:26
   To change this template use File | Settings | File Templates.
 --%>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!-- Offcanvas Menu Begin -->
 <div class="offcanvas-menu-overlay"></div>
@@ -92,7 +93,9 @@
                             </ul>
                         </li>
                         <li><a href="./blog.html">Blog</a></li>
-                        <li><a href="./contact.html">Contacts</a></li>
+                        <c:if test="${ !empty loginMember }">
+                            <li><a href="/order.bit?view=list&cmd=get">주문 조회</a></li>
+                        </c:if>
                     </ul>
                 </nav>
             </div>
