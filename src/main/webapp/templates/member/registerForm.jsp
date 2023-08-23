@@ -69,7 +69,7 @@
                         <div class="invalid-feedback">
                             이메일을 입력해주세요.
                         </div>
-                        <span id="vaildEmail"></span>
+                        <span class="valid" id="vaildEmail"></span>
                     </div>
 
                     <div class="mb-3">
@@ -79,15 +79,16 @@
                         <div class="invalid-feedback">
                             비밀번호를 입력해주세요.
                         </div>
-                        <span id="vaildPassword"></span>
+                        <span class="valid" id="vaildPassword"></span>
                     </div>
 
                     <div class="mb-3">
-                        <label for="password2">비밀번호 재 입력</label>
-                        <input type="password" class="form-control" id="password2" placeholder="비밀번호 재 입력" required>
+                        <label for="password2">비밀번호 확인</label>
+                        <input type="password" class="form-control" id="password2" placeholder="비밀번호 확인" required>
                         <div class="invalid-feedback">
-                            비밀번호가 다릅니다.
+                            비밀번호를 입력해주세요.
                         </div>
+                        <span class="valid" id="vaildPassword2"></span>
                     </div>
 
 
