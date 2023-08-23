@@ -37,7 +37,6 @@ public class MemberServlet extends HttpServlet {
     }
 
     String path = next.substring(next.indexOf(":") + 1);
-
     if (next.startsWith("forward:")) {
       HttpUtil.forward(request, response, path);
     } else {
