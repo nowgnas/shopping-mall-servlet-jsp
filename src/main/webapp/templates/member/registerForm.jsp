@@ -61,11 +61,11 @@
         <div class="input-form-backgroud row">
             <div class="input-form col-md-12 mx-auto">
                 <h4 class="mb-3">Register</h4>
-                <form class="validation-form" novalidate>
+                <form method="POST" action="member.bit?view=register" class="validation-form" novalidate>
 
                     <div class="mb-3">
-                        <label for="email">이메일</label>
-                        <input type="email" class="form-control" id="email" placeholder="you@example.com" required>
+                        <label for="registerEmail">이메일</label>
+                        <input type="email" class="form-control" name="registerEmail" id="registerEmail" placeholder="you@example.com" required>
                         <div class="invalid-feedback">
                             이메일을 입력해주세요.
                         </div>
@@ -73,8 +73,8 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="password">비밀번호</label>
-                        <input type="password" class="form-control" id="password" placeholder="영문, 숫자 형식으로 8~20자"
+                        <label for="registerPassword">비밀번호</label>
+                        <input type="password" class="form-control" name="registerPassword" id="registerPassword" placeholder="영문, 숫자 형식으로 8~20자"
                                required>
                         <div class="invalid-feedback">
                             비밀번호를 입력해주세요.
@@ -83,8 +83,8 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="password2">비밀번호 확인</label>
-                        <input type="password" class="form-control" id="password2" placeholder="비밀번호 확인" required>
+                        <label for="registerPassword">비밀번호 확인</label>
+                        <input type="password" class="form-control" id="registerPassword2" placeholder="비밀번호 확인" required>
                         <div class="invalid-feedback">
                             비밀번호를 입력해주세요.
                         </div>
@@ -93,11 +93,12 @@
 
 
                     <div class="mb-3">
-                        <label for="name">이름</label>
-                        <input type="name" class="form-control" id="name" placeholder="홍길동" required>
+                        <label for="registerName">이름</label>
+                        <input type="name" class="form-control" name="registerName" id="registerName" placeholder="홍길동" required>
                         <div class="invalid-feedback">
                             이름을 입력해주세요.
                         </div>
+                        <span class="valid" id="validName"></span>
                     </div>
 
                     <hr class="mb-4">

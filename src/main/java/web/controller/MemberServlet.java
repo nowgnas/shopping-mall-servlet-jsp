@@ -67,9 +67,9 @@ public class MemberServlet extends HttpServlet {
 
   private String register(HttpServletRequest request) {
 
-    String email = request.getParameter("email");
-    String password = request.getParameter("password");
-    String name = request.getParameter("name");
+    String email = request.getParameter("registerEmail");
+    String password = request.getParameter("registerPassword");
+    String name = request.getParameter("registerName");
 
     MemberRegisterDto dto = new MemberRegisterDto(email, password, name);
 
@@ -79,7 +79,7 @@ public class MemberServlet extends HttpServlet {
 
     memberService.register(dto);
 
-    return Navi.REDIRECT_LOGIN_FORM;
+    return Navi.REDIRECT_MAIN;
   }
 
   private String loginForm() {

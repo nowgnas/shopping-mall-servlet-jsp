@@ -8,7 +8,6 @@
 
     $('.validation-form').on('submit', function (event) {
         const forms = $('.validation-form');
-        const validList = $('.valid');
         Array.prototype.filter.call(forms, (form) => {
             if (form.checkValidity() === false) {
                 event.preventDefault();
@@ -16,6 +15,7 @@
             }
             form.classList.add('was-validated');
         }, false);
+
         if (!checkValid()) {
             alert("입력값을 확인해주세요.");
             return;
@@ -23,8 +23,8 @@
     });
 
 
-    $("#email").on("focusout", function () {
-        let email = $("#email").val();
+    $("#registerEmail").on("focusout", function () {
+        let email = $("#registerEmail").val();
         if (!emailCheck(email)) {
             $("#vaildEmail").text("이메일 형식이 아닙니다.").css("color", "red");
             return;
@@ -34,10 +34,10 @@
         }, function (isValidEmail) {
             if (isValidEmail) {
                 $("#vaildEmail").text("사용할 수 있는 아이디 입니다.").css("color", "green");
-                $("#txtBox").removeAttr("disabled");
+                emailFlag = true;
             } else {
                 $("#vaildEmail").text("이미 존재하는 이메일 입니다.").css("color", "red");
-                $("#register-btn").attr("disabled", true);
+                emailFlag = false;
             }
         })
             .fail(function (err) {
@@ -45,25 +45,39 @@
             });
     });
 
-    $("#password").on("focusout", function () {
-        let password = $("#password").val();
+    $("#registerPassword").on("focusout", function () {
+        let password = $("#registerPassword").val();
         if (!passwordCheck(password)) {
             $("#vaildPassword").text("비밀번호는 영문, 숫자 형식으로 8~20자 입력해야 합니다.").css("color", "red");
-            return;
+            passwordFlag = false;
         }
         $("#vaildPassword").text("유효한 비밀번호 입니다.").css("color", "green");
+        passwordFlag = true;
     });
 
-    $("#password2").on("focusout", function () {
-        let password = $("#password").val()
-        let password2 = $("#password2").val();
+    $("#registerPassword2").on("focusout", function () {
+        let password = $("#registerPassword").val()
+        let password2 = $("#registerPassword2").val();
 
         if ((password2 != "" && password2 != "undefined") && password === password2) {
             $("#vaildPassword2").text("비밀번호가 일치합니다.").css("color", "green");
+            rePasswordFlag = true;
         } else {
             $("#vaildPassword2").text("비밀번호가 일치하지 않습니다.").css("color", "red");
+            rePasswordFlag = false;
         }
+    });
 
+    $("#registerName").on("focusout", function () {
+        let name = $("#registerName").val()
+
+        if ((name != "" && name != "undefined") && name.length > 1) {
+            $("#validName").text("");
+            nameFlag = true;
+        } else {
+            $("#validName").text("2자 이상 입력 해주세요.").css("color", "red");
+            nameFlag = false;
+        }
     });
 
 
