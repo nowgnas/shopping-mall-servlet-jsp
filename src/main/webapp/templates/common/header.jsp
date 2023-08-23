@@ -8,6 +8,45 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!-- Offcanvas Menu Begin -->
+<style>
+    .container {
+        padding: 2rem 0rem;
+    }
+
+    @media (min-width: 576px) {
+        .modal-dialog {
+            max-width: 400px;
+        }
+
+        .modal-dialog .modal-content {
+            padding: 1rem;
+        }
+    }
+
+    .modal-header .close {
+        margin-top: -1.5rem;
+    }
+
+    .form-title {
+        margin: -2rem 0rem 2rem;
+    }
+
+    .btn-round {
+        border-radius: 3rem;
+    }
+
+    .delimiter {
+        padding: 1rem;
+    }
+
+    .social-buttons .btn {
+        margin: 0 0.5rem 1rem;
+    }
+
+    .signup-section {
+        padding: 0.3rem 0rem;
+    }
+</style>
 <div class="offcanvas-menu-overlay"></div>
 <div class="offcanvas-menu-wrapper">
     <div class="offcanvas__option">
