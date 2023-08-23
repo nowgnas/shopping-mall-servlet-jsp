@@ -125,11 +125,13 @@
                         <li>결제 종류 <span>${payment.paymentType.getMessage()}</span></li>
                     </ul>
                     <c:choose>
-                        <c:when test="${delivery.deliveryStatus.name() eq 'CANCELED' || delivery.deliveryStatus.name() eq 'PROCESSING'}">
+                        <c:when test="${delivery.deliveryStatus.name() eq 'PROCESSING'}">
                             <a id="orderCancelLink" class="primary-btn" disabled>주문 취소 불가</a>
                         </c:when>
+                        <c:when test="${delivery.deliveryStatus.name() eq 'CANCELED'}">
+                        </c:when>
                         <c:otherwise>
-                            <a id="orderCancelLink" href="#" class="primary-btn" onclick="location.href='/order.bit?view=detail&cmd=delete&orderId=${productOrderDetail.orderId}'">주문 취소</a>
+                            <a id="orderCancelLink"  href="#" class="primary-btn">주문 취소</a>
                         </c:otherwise>
                     </c:choose>
                 </div>
@@ -165,6 +167,49 @@
 <script src="js/mixitup.min.js"></script>
 <script src="js/owl.carousel.min.js"></script>
 <script src="js/main.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    $('#orderCancelLink').on('click', function () {
+        Swal.fire({
+            title: '정말로 취소하시겠습니까?',
+            text: "한번 취소하면 되돌릴 수 없습니다.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: '예',
+            cancelButtonText: '아니오'
+        }).then((result) => {
+            if (result.isConfirmed) {
+
+
+                $.ajax({
+                    type: "GET",
+                    url: "/order.bit?view=detail&cmd=delete&orderId=${productOrderDetail.orderId}",
+                    dataType: "text",
+                    contentType : "application/x-www-form-urlencoded;charset=UTF-8",
+                    error: function() {
+                        Swal.fire(
+                            '주문 취소 에러',
+                            '해당 주문이 취소되지 않았습니다.',
+                            'error'
+                        )
+                    },
+                    success: function(data) {
+                        Swal.fire(
+                            '주문 취소 완료',
+                            '해당 주문이 취소되었습니다.',
+                            'success'
+                        )
+                    }
+                });
+            }
+        });
+    });
+
+</script>
 
 </body>
 
