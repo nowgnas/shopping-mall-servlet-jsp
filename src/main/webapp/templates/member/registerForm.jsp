@@ -79,6 +79,7 @@
                         <div class="invalid-feedback">
                             비밀번호를 입력해주세요.
                         </div>
+                        <span id="vaildPassword"></span>
                     </div>
 
                     <div class="mb-3">

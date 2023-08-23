@@ -34,7 +34,15 @@
             .fail(function (err) {
                 console.log(err);
             });
+    });
 
+    $("#password").on("focusout", function () {
+        let password = $("#password").val();
+        if(!password_check(password)) {
+            $("#vaildPassword").text("비밀번호는 영문, 숫자 형식으로 8~20자 입력해야 합니다.").css("color", "red");
+            return;
+        }
+        $("#vaildPassword").text("유효한 비밀번호 입니다.").css("color", "green");
     });
 
 
@@ -43,6 +51,11 @@
 
         return (email != '' && email != 'undefined' && regex.test(email));
 
+    }
+
+    function password_check(password) {
+        let regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d~!@#$%^&*()+|=]{8,16}$/;
+        return (password != '' && password != 'undefined' && regex.test(password));
     }
 
 
