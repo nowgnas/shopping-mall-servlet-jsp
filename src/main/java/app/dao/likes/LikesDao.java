@@ -6,8 +6,8 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
-import app.error.CustomException;
-import app.error.ErrorCode;
+import app.exception.CustomException;
+import app.exception.ErrorCode;
 import org.apache.ibatis.session.SqlSession;
 
 public class LikesDao implements LikesDaoFrame<ProductAndMemberCompositeKey, Likes> {
@@ -43,7 +43,6 @@ public class LikesDao implements LikesDaoFrame<ProductAndMemberCompositeKey, Lik
   public Optional<Likes> selectById(ProductAndMemberCompositeKey productAndMemberCompositeKey,
       SqlSession session) throws SQLException {
     Likes likes = session.selectOne("likes.select", productAndMemberCompositeKey);
-    if (likes == null) throw new CustomException(ErrorCode.ITEM_NOT_FOUND);
     return Optional.ofNullable(likes);
   }
 

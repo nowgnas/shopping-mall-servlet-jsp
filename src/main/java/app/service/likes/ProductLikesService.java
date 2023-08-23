@@ -10,16 +10,16 @@ import app.entity.Likes;
 import app.entity.Product;
 import app.exception.CustomException;
 import app.exception.ErrorCode;
+import app.exception.likes.LikesEntityNotFoundException;
 import app.utils.GetSessionFactory;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.logging.Logger;
 
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 
 public class ProductLikesService implements LikesService {
-  private Logger log = Logger.getLogger("Likes Service");
+
   private final LikesDaoFrame<ProductAndMemberCompositeKey, Likes> likesDao;
   private final ProductDaoFrame<Long, Product> productDao;
   private final SqlSessionFactory sessionFactory = GetSessionFactory.getInstance();
@@ -31,21 +31,23 @@ public class ProductLikesService implements LikesService {
   }
 
   /**
-   * 회원의 찜한 상품 목록 불러오기
-   * @param memberId
-   * @return
+   * 회원의 찜한 상품 목록 반환
+   * @param memberId 회원 id
+   * @return 리스트 : 상품 id, 이름, 가격, 이미지경로
    */
   @Override
-  public List<ProductListItemOfLike> getMemberLikes(Long memberId) {
+  public List<ProductListItemOfLike> getMemberLikes(Long memberId) throws Exception {
     List<ProductListItemOfLike> memberLikesList;
     try {
       session = sessionFactory.openSession();
       List<Long> productIdList = likesDao.selectAllProduct(memberId, session);
       memberLikesList = productDao.selectProductListItemOfLike(productIdList, session);
-    } catch (Exception e) {
-
+    } catch (LikesEntityNotFoundException e) {
       e.printStackTrace();
-      throw new CustomException(ErrorCode.PRODUCT_IS_NOT_VALID);
+      throw e;
+    } catch (Exception e) {
+      e.printStackTrace();
+      throw new Exception(e.getMessage());
     }
     finally {
       session.close();
@@ -53,28 +55,35 @@ public class ProductLikesService implements LikesService {
     return memberLikesList;
   }
 
+  /**
+   * 회원의 상품 찜 여부 반환
+   * @param productAndMemberCompositeKey 상품 id, 회원 id로 이루어진 복합키
+   * @return true(찜 O), false(찜 X)
+   * @throws Exception
+   */
   @Override
-  public boolean getMemberProductLikes(ProductAndMemberCompositeKey productAndMemberCompositeKey) {
+  public boolean getMemberProductLikes(ProductAndMemberCompositeKey productAndMemberCompositeKey) throws Exception {
     Likes likes = null;
     try {
       session = sessionFactory.openSession();
       likes = likesDao.selectById(productAndMemberCompositeKey, session).orElse(null);
-    } catch (SQLException e) {
-
-      e.printStackTrace();
-      throw new CustomException(ErrorCode.PRODUCT_IS_NOT_VALID);
+      return likes != null;
     } catch (Exception e) {
-      //
-
+      e.printStackTrace();
+      throw new Exception(e.getMessage());
     } finally {
       session.close();
     }
-
-    return likes != null;
   }
 
+  /**
+   * 회원이 지정한 상품 찜 추가
+   * @param productAndMemberCompositeKey 상품 id, 회원 id로 이루어진 복합키
+   * @return res : 추가된 찜 갯수
+   * @throws Exception
+   */
   @Override
-  public int addLikes(ProductAndMemberCompositeKey productAndMemberCompositeKey) {
+  public int addLikes(ProductAndMemberCompositeKey productAndMemberCompositeKey) throws Exception {
     int res = 0;
     try {
       session = sessionFactory.openSession();
@@ -100,8 +109,14 @@ public class ProductLikesService implements LikesService {
     return res;
   }
 
+  /**
+   * 회원이 지정한 상품 찜 삭제
+   * @param productAndMemberCompositeKey 상품 id, 회원 id로 이루어진 복합키
+   * @return res : 삭제된 찜 갯수
+   * @throws Exception
+   */
   @Override
-  public int removeLikes(ProductAndMemberCompositeKey productAndMemberCompositeKey) {
+  public int removeLikes(ProductAndMemberCompositeKey productAndMemberCompositeKey) throws Exception {
     int res = 0;
     try {
       session = sessionFactory.openSession();
@@ -120,8 +135,14 @@ public class ProductLikesService implements LikesService {
     return res;
   }
 
+  /**
+   * 회원의 찜 벌크 삭제
+   * @param keyList 리스트 : 상품 id, 회원 id로 이루어진 복합키
+   * @return res : 삭제된 찜 갯수
+   * @throws Exception
+   */
   @Override
-  public int removeSomeLikes(List<ProductAndMemberCompositeKey> keyList) {
+  public int removeSomeLikes(List<ProductAndMemberCompositeKey> keyList) throws Exception {
     int res = 0;
     try {
       session = sessionFactory.openSession();
