@@ -28,9 +28,15 @@ public class OrderCreateForm {
                 productDetail.getUrl()))
         .defaultAddress(
             new AddressDto(
-                orderMemberDetail.getAddress().getRoadName(),
-                orderMemberDetail.getAddress().getAddrDetail(),
-                orderMemberDetail.getAddress().getZipCode()))
+                orderMemberDetail.getAddress() == null
+                    ? null
+                    : orderMemberDetail.getAddress().getRoadName(),
+                orderMemberDetail.getAddress() == null
+                    ? null
+                    : orderMemberDetail.getAddress().getAddrDetail(),
+                orderMemberDetail.getAddress() == null
+                    ? null
+                    : orderMemberDetail.getAddress().getZipCode()))
         .coupons(
             orderMemberDetail.getCoupons().stream()
                 .map(

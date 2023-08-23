@@ -214,6 +214,9 @@ public class OrderServlet extends HttpServlet {
       Long orderId = Long.parseLong(request.getParameter("orderId"));
       ProductOrderDetailDto productOrderDetail =
           orderService.getOrderDetailsForMemberAndOrderId(orderId, memberId);
+      request.setAttribute("products", productOrderDetail.getProducts());
+      request.setAttribute("payment", productOrderDetail.getPayment());
+      request.setAttribute("delivery", productOrderDetail.getDelivery());
       request.setAttribute("productOrderDetail", productOrderDetail);
       return Navi.FORWARD_ORDER_DETAIL;
     } catch (Exception e) {
