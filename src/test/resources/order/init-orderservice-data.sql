@@ -66,3 +66,7 @@ values (1, 1, 3000000, 1),
        (3, 1, 1500000, 3),
        (4, 1, 1400000, 5),
        (5, 1, 1000000, 10);
+
+insert into cart (member_id, product_id, product_quantity) values (1, 6, 5);
+insert into cart (member_id, product_id, product_quantity) values (1, 7, 5);
+insert into cart (member_id, product_id, product_quantity) values (1, 8, 5);
