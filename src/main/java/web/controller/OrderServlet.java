@@ -74,7 +74,7 @@ public class OrderServlet extends HttpServlet {
       return deleteOrder(request, response);
     }
 
-    return Navi.FORWARD_MAIN;
+    return Navi.REDIRECT_MAIN;
   }
 
   // TODO: 상품 주문 폼
@@ -94,7 +94,7 @@ public class OrderServlet extends HttpServlet {
 
       return Navi.FORWARD_ORDER_FORM;
     } catch (Exception e) {
-      throw new RuntimeException(e);
+      return Navi.REDIRECT_MAIN;
     }
   }
 
