@@ -39,16 +39,11 @@ public class OrderServlet extends HttpServlet {
 
     HttpSession session = request.getSession();
     MemberDetail loginMember = (MemberDetail) session.getAttribute("loginMember");
-    //    Long memberId = loginMember.getId();
-    memberId = 6L;
-    /* 로그인이 되어있지 않다면 메인으로 리다이렉트 */
-    //    if(memberId == null) {
-    //
-    //    }
 
-    String viewName = Navi.FORWARD_MAIN;
+    String viewName = Navi.REDIRECT_MAIN;
 
-    if (view != null && cmd != null) {
+    if (loginMember != null && view != null && cmd != null) {
+      memberId = loginMember.getId();
       viewName = build(request, response, view, cmd);
     }
 
