@@ -1,5 +1,7 @@
 package web.controller;
 
+import app.service.member.MemberService;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -10,10 +12,11 @@ import java.io.IOException;
 @WebServlet({"/rest"})
 public class RestServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
+    private MemberService memberService;
 
     public RestServlet() {
         super();
-        // TODO Auto-generated constructor stub
+        memberService = new MemberService();
     }
 
 
@@ -36,7 +39,16 @@ public class RestServlet extends HttpServlet {
     private Object build(HttpServletRequest request,
                          String cmd){
         Object result = null;
+        switch(cmd) {
+            case "loginCheck":
+                return loginCheck(request);
+        }
 
         return result;
+    }
+
+    private Object loginCheck(HttpServletRequest request) {
+        String email = request.getParameter("email");
+        return memberService.isDuplicatedEmail(email);
     }
 }

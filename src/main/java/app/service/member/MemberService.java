@@ -98,7 +98,7 @@ public class MemberService {
     return memberDetail;
   }
 
-  public boolean isDuplicatedEmail(String email) {
+  public Boolean isDuplicatedEmail(String email) {
     SqlSession sqlSession = sessionFactory.openSession();
     int result = 0;
     try {

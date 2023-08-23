@@ -69,6 +69,7 @@
                         <div class="invalid-feedback">
                             이메일을 입력해주세요.
                         </div>
+                        <span id="vaildEmail"></span>
                     </div>
 
                     <div class="mb-3">

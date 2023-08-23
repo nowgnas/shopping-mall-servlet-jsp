@@ -4,14 +4,6 @@
     /*------------------
         Accordin Active
     --------------------*/
-    $('.collapse').on('shown.bs.collapse', function () {
-        $(this).prev().addClass('active');
-    });
-
-    $('.collapse').on('hidden.bs.collapse', function () {
-        $(this).prev().removeClass('active');
-    });
-
     //Canvas Menu
     $(".canvas__open").on('click', function () {
         $(".offcanvas-menu-wrapper").addClass("active");
@@ -29,11 +21,11 @@
         const id = $('#email').val();
         const password = $('#password').val();
 
-        if(id == "") {
+        if (id == "") {
             alert("id를 입력해주세요.");
             return;
         }
-        if(password == "") {
+        if (password == "") {
             alert("password를 입력해주세요.");
             return;
         }
