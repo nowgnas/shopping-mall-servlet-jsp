@@ -4,39 +4,31 @@ import app.dto.order.form.OrderCartCreateForm;
 import app.dto.order.form.OrderCreateForm;
 import app.dto.order.request.OrderCartCreateDto;
 import app.dto.order.request.OrderCreateDto;
+import app.dto.response.MemberDetail;
 import app.dto.order.response.ProductOrderDetailDto;
 import app.dto.order.response.ProductOrderDto;
-import app.dto.response.MemberDetail;
 import app.entity.Order;
 import app.exception.DomainException;
 import app.service.order.OrderService;
-import app.utils.HttpUtil;
+import web.ControllerFrame;
 import web.dispatcher.Navi;
 
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
 import java.util.List;
 
-/**
- * Servlet implementation class CustServlet
- */
-@WebServlet({"/order"})
-public class OrderServlet extends HttpServlet {
+public class OrderController implements ControllerFrame {
 
   private final OrderService orderService = new OrderService();
   private Long memberId;
 
-  public OrderServlet() {
+  public OrderController() {
     super();
   }
 
-  protected void service(HttpServletRequest request, HttpServletResponse response)
-      throws ServletException, IOException {
+  @Override
+  public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
     String view = request.getParameter("view");
     String cmd = request.getParameter("cmd");
 
@@ -54,13 +46,7 @@ public class OrderServlet extends HttpServlet {
       viewName = build(request, response, view, cmd);
     }
 
-    String path = viewName.substring(viewName.indexOf(":") + 1);
-
-    if (viewName.startsWith("forward:")) {
-      HttpUtil.forward(request, response, path);
-    } else {
-      HttpUtil.redirect(response, path);
-    }
+    return viewName;
   }
 
   private String build(

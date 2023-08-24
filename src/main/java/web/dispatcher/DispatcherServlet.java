@@ -5,6 +5,7 @@ import org.apache.log4j.Logger;
 import web.ControllerFrame;
 import web.controller.MainController;
 import web.controller.MemberController;
+import web.controller.OrderController;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -25,6 +26,7 @@ public class DispatcherServlet extends HttpServlet {
     super();
     controllerMapper.put("main", new MainController());
     controllerMapper.put("member", new MemberController());
+    controllerMapper.put("order", new OrderController());
   }
 
   protected void service(HttpServletRequest request, HttpServletResponse response)
