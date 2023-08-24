@@ -2,7 +2,7 @@ package app.dao.likes;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import app.dto.comp.ProductAndMemberCompositeKey;
+import app.entity.ProductAndMemberCompositeKey;
 import app.entity.Likes;
 import config.TestConfig;
 import java.util.List;

@@ -1,19 +1,37 @@
 package app.service.order;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import app.dao.cart.CartDao;
+import app.dao.cart.CartDaoFrame;
 import app.dao.coupon.CouponDao;
 import app.dao.delivery.DeliveryDao;
 import app.dao.member.MemberDao;
 import app.dao.order.OrderDao;
 import app.dao.product.ProductDao;
 import app.dao.productorder.ProductOrderDao;
-import app.dto.request.OrderCreateDto;
-import app.dto.response.ProductOrderDetailDto;
-import app.dto.response.ProductOrderDto;
-import app.entity.*;
+import app.entity.Cart;
+import app.entity.Coupon;
+import app.entity.Delivery;
+import app.entity.Member;
+import app.entity.Order;
+import app.entity.Product;
+import app.entity.ProductAndMemberCompositeKey;
+import app.entity.ProductOrder;
+import app.dto.order.request.OrderCartCreateDto;
+import app.dto.order.request.OrderCreateDto;
+import app.dto.order.response.ProductOrderDetailDto;
+import app.dto.order.response.ProductOrderDto;
 import app.enums.CouponStatus;
 import app.enums.DeliveryStatus;
 import app.enums.OrderStatus;
 import config.TestConfig;
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.ibatis.session.SqlSession;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,21 +39,18 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import utils.GetSessionFactory;
 
-import java.util.*;
-
-import static org.junit.jupiter.api.Assertions.*;
-
 public class OrderServiceTest {
 
   private SqlSession session;
   private final TestConfig testConfig = new TestConfig();
-  private OrderServiceImpl orderService;
+  private OrderService orderService;
   private final OrderDao orderDao = new OrderDao();
   private final DeliveryDao deliveryDao = new DeliveryDao();
   private final CouponDao couponDao = new CouponDao();
   private final MemberDao memberDao = new MemberDao();
   private final ProductOrderDao productOrderDao = new ProductOrderDao();
   private final ProductDao productDao = ProductDao.getInstance();
+  private final CartDaoFrame<ProductAndMemberCompositeKey,Cart> carDao = new CartDao();
 
   @BeforeEach
   void beforeEach() throws Exception {
@@ -43,7 +58,7 @@ public class OrderServiceTest {
     testConfig.init("schema.sql", session);
     testConfig.init("order/init-orderservice-data.sql", session);
 
-    orderService = new OrderServiceImpl();
+    orderService = new OrderService();
   }
 
   @AfterEach
@@ -56,7 +71,8 @@ public class OrderServiceTest {
   @DisplayName("상품 주문 바로 구매(쿠폰 미적용) - 정상 처리")
   void createOrderWithoutCoupon() throws Exception {
     // given
-    OrderCreateDto orderCreateDto = OrderCreateDto.builder()
+    OrderCreateDto orderCreateDto =
+        OrderCreateDto.builder()
             .memberId(1L)
             .roadName("상품 주문 테스트 도로명 주소")
             .addrDetail("상품 주문 테스트")
@@ -73,9 +89,7 @@ public class OrderServiceTest {
 
     /* then 1. 상품의 재고가 주문한 개수만큼 감소 2. 회원의 잔고가 총 주문 금액만큼 감소 4. 주문 생성 */
     Product findProduct =
-        productDao
-            .selectById(orderCreateDto.getProductId(), session)
-            .orElseThrow(Exception::new);
+        productDao.selectById(orderCreateDto.getProductId(), session).orElseThrow(Exception::new);
     assertSame(1L, findProduct.getQuantity());
     Member member =
         memberDao.selectById(orderCreateDto.getMemberId(), session).orElseThrow(Exception::new);
@@ -88,7 +102,8 @@ public class OrderServiceTest {
   @DisplayName("상품 주문 바로 구매 - 비정상 처리(상품 재고 부족)")
   void createOrderWithoutCouponEx1() throws Exception {
     // given
-    OrderCreateDto orderCreateDto = OrderCreateDto.builder()
+    OrderCreateDto orderCreateDto =
+        OrderCreateDto.builder()
             .memberId(1L)
             .roadName("상품 주문 테스트 도로명 주소")
             .addrDetail("상품 주문 테스트")
@@ -109,9 +124,7 @@ public class OrderServiceTest {
         },
         "상품의 재고가 부족합니다.");
     Product findProduct =
-        productDao
-            .selectById(orderCreateDto.getProductId(), session)
-            .orElseThrow(Exception::new);
+        productDao.selectById(orderCreateDto.getProductId(), session).orElseThrow(Exception::new);
     assertSame(2L, findProduct.getQuantity());
     Member member =
         memberDao.selectById(orderCreateDto.getMemberId(), session).orElseThrow(Exception::new);
@@ -122,7 +135,8 @@ public class OrderServiceTest {
   @DisplayName("상품 주문 바로 구매 - 비정상 처리(회원 잔고 부족)")
   void createOrderWithoutCouponEx2() throws Exception {
     // given
-    OrderCreateDto orderCreateDto = OrderCreateDto.builder()
+    OrderCreateDto orderCreateDto =
+        OrderCreateDto.builder()
             .memberId(1L)
             .roadName("상품 주문 테스트 도로명 주소")
             .addrDetail("상품 주문 테스트")
@@ -143,9 +157,7 @@ public class OrderServiceTest {
         },
         "회원의 잔고가 부족합니다.");
     Product findProduct =
-        productDao
-            .selectById(orderCreateDto.getProductId(), session)
-            .orElseThrow(Exception::new);
+        productDao.selectById(orderCreateDto.getProductId(), session).orElseThrow(Exception::new);
     assertSame(10L, findProduct.getQuantity());
     Member member =
         memberDao.selectById(orderCreateDto.getMemberId(), session).orElseThrow(Exception::new);
@@ -156,7 +168,8 @@ public class OrderServiceTest {
   @DisplayName("상품 주문 바로 구매(쿠폰 적용) - 정상 처리")
   void createOrderWithCoupon() throws Exception {
     // given
-    OrderCreateDto orderCreateDto = OrderCreateDto.builder()
+    OrderCreateDto orderCreateDto =
+        OrderCreateDto.builder()
             .memberId(1L)
             .roadName("상품 주문 테스트 도로명 주소")
             .addrDetail("상품 주문 테스트")
@@ -173,9 +186,7 @@ public class OrderServiceTest {
 
     /* then 1. 상품의 재고가 주문한 개수만큼 감소 2. 회원의 잔고가 총 주문 금액만큼 감소 3. 쿠폰 상태 '사용됨'으로 처리 4. 주문 생성 */
     Product findProduct =
-        productDao
-            .selectById(orderCreateDto.getProductId(), session)
-            .orElseThrow(Exception::new);
+        productDao.selectById(orderCreateDto.getProductId(), session).orElseThrow(Exception::new);
     assertSame(1L, findProduct.getQuantity());
     Member member =
         memberDao.selectById(orderCreateDto.getMemberId(), session).orElseThrow(Exception::new);
@@ -186,40 +197,49 @@ public class OrderServiceTest {
     assertEquals(OrderStatus.PENDING.name(), order.getStatus());
   }
 
-  //  @Test
-  //  @DisplayName("장바구니 상품 주문(쿠폰 미적용) - 정상 처리")
-  //  void createCartOrderWithoutCoupon() throws Exception {
-  //    // given
-  //    Long memberId = 1L;
-  //
-  //    CartOrderCreateDto.AddressDto address =
-  //        new CartOrderCreateDto.AddressDto("상품 주문 테스트 도로명 주소", "상품 주문 테스트", "상품 주문 테스트");
-  //    List<CartOrderCreateDto.ProductDto> products = new ArrayList<>();
-  //    products.add(new CartOrderCreateDto.ProductDto(5L, 1L));
-  //    products.add(new CartOrderCreateDto.ProductDto(6L, 2L));
-  //    products.add(new CartOrderCreateDto.ProductDto(8L, 1L));
-  //    Long totalPrice = 1000000L * 1L + 600000L * 2L + 500000L * 1L;
-  //    CartOrderCreateDto cartOrderCreateDto =
-  //        new CartOrderCreateDto(memberId, null, address, products, totalPrice);
-  //
-  //    // when
-  //    Order order = orderService.createCartOrder(cartOrderCreateDto);
-  //
-  //    /* then 1. 상품들의 재고가 주문한 개수만큼 감소 2. 회원의 잔고가 총 주문 금액만큼 감소 3. 주문 생성 4. 주문한 상품들이 장바구니에 있으면 제거 */
-  //    Product findProduct1 = productDao.selectById(5L, session).orElseThrow(Exception::new);
-  //    assertSame(49L, findProduct1.getQuantity());
-  //    Product findProduct2 = productDao.selectById(6L, session).orElseThrow(Exception::new);
-  //    assertSame(98L, findProduct2.getQuantity());
-  //    Product findProduct3 = productDao.selectById(8L, session).orElseThrow(Exception::new);
-  //    assertSame(89L, findProduct3.getQuantity());
-  //
-  //    Member member =
-  //        memberDao.selectById(cartOrderCreateDto.getMemberId(),
-  // session).orElseThrow(Exception::new);
-  //    assertEquals(3300000L, (long) member.getMoney());
-  //    assertNotNull(order.getId());
-  //    assertEquals(order.getStatus(), OrderStatus.PENDING.name());
-  //  }
+  @Test
+  @DisplayName("장바구니 상품 주문(쿠폰 미적용) - 정상 처리")
+  void createCartOrderWithoutCoupon() throws Exception {
+    // given
+    Long memberId = 1L;
+
+    List<OrderCartCreateDto.ProductDto> products = new ArrayList<>();
+    products.add(new OrderCartCreateDto.ProductDto(6L, 1L, 5L));
+    products.add(new OrderCartCreateDto.ProductDto(7L, 2L, 5L));
+    products.add(new OrderCartCreateDto.ProductDto(8L, 1L, 5L));
+    OrderCartCreateDto orderCartCreateDto = OrderCartCreateDto.builder()
+            .memberId(1L)
+            .couponId(null)
+            .roadName("상품 주문 테스트 도로명 주소")
+            .addrDetail("상품 주문 테스트")
+            .zipCode("상품 주문 테스트")
+            .products(products)
+            .totalPrice(1000000L * 1L + 600000L * 2L + 500000L * 1L)
+            .build();
+
+    // when
+    Order order = orderService.createCartOrder(orderCartCreateDto);
+
+    /* then 1. 상품들의 재고가 주문한 개수만큼 감소 2. 회원의 잔고가 총 주문 금액만큼 감소 3. 주문 생성 4. 주문한 상품들이 장바구니에 있으면 제거 */
+    Product findProduct1 = productDao.selectById(6L, session).orElseThrow(Exception::new);
+    assertSame(95L, findProduct1.getQuantity());
+    Product findProduct2 = productDao.selectById(7L, session).orElseThrow(Exception::new);
+    assertSame(75L, findProduct2.getQuantity());
+    Product findProduct3 = productDao.selectById(8L, session).orElseThrow(Exception::new);
+    assertSame(85L, findProduct3.getQuantity());
+
+    List<Cart> carts = carDao.getCartProductListByMember(memberId, session);
+    assertSame(0, carts.size());
+
+    Member member =
+        memberDao.selectById(orderCartCreateDto.getMemberId(), session).orElseThrow(Exception::new);
+    assertEquals(3300000L, (long) member.getMoney());
+    assertNotNull(order.getId());
+    assertEquals(order.getStatus(), OrderStatus.PENDING.name());
+
+    List<ProductOrder> productOrders = productOrderDao.selectAllByOrderId(order.getId(), session);
+    assertSame(3, productOrders.size());
+  }
 
   @Test
   @DisplayName("상품 주문 취소 - 정상 처리")

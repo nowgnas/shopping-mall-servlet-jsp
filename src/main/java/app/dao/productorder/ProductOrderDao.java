@@ -1,11 +1,11 @@
 package app.dao.productorder;
 
 import app.entity.ProductOrder;
-import java.util.List;
-import java.util.Optional;
-
 import org.apache.ibatis.session.SqlSession;
 import org.apache.log4j.Logger;
+
+import java.util.List;
+import java.util.Optional;
 
 public class ProductOrderDao implements ProductOrderDaoFrame<Long, ProductOrder> {
 
@@ -37,7 +37,12 @@ public class ProductOrderDao implements ProductOrderDaoFrame<Long, ProductOrder>
   }
 
   @Override
-  public List<ProductOrder> selectAllByOrderId(Long orderId, SqlSession session) {
+  public List<ProductOrder> selectAllByOrderId(Long orderId, SqlSession session) throws Exception {
     return session.selectList("productOrder.selectAllByOrderId", orderId);
+  }
+
+  @Override
+  public int bulkInsert(List<ProductOrder> productOrders, SqlSession session) throws Exception {
+    return session.insert("productOrder.bulkInsert", productOrders);
   }
 }

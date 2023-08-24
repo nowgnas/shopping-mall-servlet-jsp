@@ -15,25 +15,26 @@ import app.enums.SortOption;
 import app.exception.CustomException;
 import app.exception.ErrorCode;
 import app.utils.GetSessionFactory;
+import org.apache.ibatis.session.SqlSession;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import org.apache.ibatis.session.SqlSession;
 
 public class ProductServiceImpl implements ProductService {
+  private static ProductServiceImpl instance;
   private ProductDaoFrame dao;
   private SqlSession session;
-  private static ProductServiceImpl instance;
-
-  public static ProductServiceImpl getInstance() {
-    if (instance == null) return new ProductServiceImpl();
-    return instance;
-  }
 
   public ProductServiceImpl() {
     this.dao = ProductDao.getInstance();
     this.session = GetSessionFactory.getInstance().openSession();
+  }
+
+  public static ProductServiceImpl getInstance() {
+    if (instance == null) return new ProductServiceImpl();
+    return instance;
   }
 
   @Override

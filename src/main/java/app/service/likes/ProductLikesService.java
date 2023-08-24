@@ -4,18 +4,18 @@ import app.dao.likes.LikesDao;
 import app.dao.likes.LikesDaoFrame;
 import app.dao.product.ProductDao;
 import app.dao.product.ProductDaoFrame;
-import app.dto.comp.ProductAndMemberCompositeKey;
 import app.dto.product.ProductListItemOfLike;
 import app.entity.Likes;
 import app.entity.Product;
+import app.entity.ProductAndMemberCompositeKey;
 import app.exception.CustomException;
 import app.exception.ErrorCode;
 import app.exception.likes.LikesEntityNotFoundException;
 import app.utils.GetSessionFactory;
+import org.apache.ibatis.session.SqlSession;
+
 import java.sql.SQLException;
 import java.util.List;
-
-import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 
 public class ProductLikesService implements LikesService {
@@ -155,7 +155,7 @@ public class ProductLikesService implements LikesService {
       session.rollback();
       e.printStackTrace();
       throw new CustomException(ErrorCode.PRODUCT_IS_NOT_VALID);
-    }catch (Exception e) {
+    } catch (Exception e) {
       session.rollback();
     } finally {
       session.close();

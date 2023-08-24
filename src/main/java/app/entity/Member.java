@@ -1,6 +1,11 @@
 package app.entity;
 
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 @Getter
 @Builder
@@ -9,10 +14,14 @@ import lombok.*;
 public class Member extends BaseEntity {
 
   private Long id;
-  @NonNull private String email;
-  @NonNull private String password;
-  @NonNull private String name;
-  @Builder.Default private Long money = 0L;
+  @NonNull
+  private String email;
+  @NonNull
+  private String password;
+  @NonNull
+  private String name;
+  @Builder.Default
+  private Long money = 0L;
 
   public void updateMoney(Long money) {
     this.money = money;

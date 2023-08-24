@@ -2,7 +2,7 @@ package app.service.likes;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import app.dto.comp.ProductAndMemberCompositeKey;
+import app.entity.ProductAndMemberCompositeKey;
 import app.dto.product.ProductListItemOfLike;
 import config.TestConfig;
 import java.util.List;

@@ -1,11 +1,6 @@
 package app.dto.product;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 @Getter
 @Builder
@@ -13,6 +8,7 @@ import lombok.ToString;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
 public class ProductDetail {
+
   private String name;
   private Long price;
   private Integer categoryId;
@@ -20,4 +16,5 @@ public class ProductDetail {
   private String url;
   private Long quantity;
   private Boolean isLiked;
+  private String code;
 }

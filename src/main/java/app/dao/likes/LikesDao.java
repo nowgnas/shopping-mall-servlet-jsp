@@ -1,7 +1,7 @@
 package app.dao.likes;
 
-import app.dto.comp.ProductAndMemberCompositeKey;
 import app.entity.Likes;
+import app.entity.ProductAndMemberCompositeKey;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;

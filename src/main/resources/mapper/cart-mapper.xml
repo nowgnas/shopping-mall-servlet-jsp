@@ -8,7 +8,7 @@
         <result column="member_id" property="memberId" jdbcType="BIGINT" javaType="Long"/>
         <result column="product_id" property="productId" jdbcType="BIGINT" javaType="Long"/>
         <result column="product_quantity" property="productQuantity" jdbcType="BIGINT"
-          javaType="Integer"/>
+          javaType="Long"/>
     </resultMap>
 
 <resultMap id="CartAndProductResultMap" type="app.dto.cart.CartAndProductDto">
@@ -26,7 +26,7 @@
 
 
 
-    <select id="select" parameterType="app.dto.comp.ProductAndMemberCompositeKey" resultMap="cart">
+    <select id="select" parameterType="app.entity.ProductAndMemberCompositeKey" resultMap="cart">
         SELECT *
         FROM cart
         WHERE member_id = #{memberId}
@@ -52,15 +52,22 @@
         INSERT INTO cart (member_id, product_id, product_quantity)
         VALUES (#{memberId}, #{productId}, #{productQuantity})
     </insert>
-    <update id="update" parameterType="app.dto.comp.ProductAndMemberCompositeKey">
+    <update id="update" parameterType="app.entity.ProductAndMemberCompositeKey">
         UPDATE cart
         SET product_quantity = #{productQuantity}
     </update>
-    <delete id="delete" parameterType="app.dto.comp.ProductAndMemberCompositeKey">
+    <delete id="delete" parameterType="app.entity.ProductAndMemberCompositeKey">
         DELETE
         FROM cart
         WHERE member_id = #{memberId}
         and product_id = #{productId}
+    </delete>
+    <delete id="bulkDelete" parameterType="app.entity.ProductAndMemberCompositeKey">
+        DELETE FROM cart
+        WHERE (member_id, product_id) IN
+        <foreach collection="list" item="productAndMemberCompositeKey" separator="," open="(" close=")">
+            (#{productAndMemberCompositeKey.memberId}, #{productAndMemberCompositeKey.productId})
+        </foreach>
     </delete>
 
 </mapper>

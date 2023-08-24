@@ -1,6 +1,11 @@
 package app.entity;
 
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 @Getter
 @Builder
@@ -8,6 +13,8 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Likes {
 
-  @NonNull private Long memberId;
-  @NonNull private Long productId;
+  @NonNull
+  private Long memberId;
+  @NonNull
+  private Long productId;
 }

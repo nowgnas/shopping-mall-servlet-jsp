@@ -1,24 +1,21 @@
 package app.dao.product;
 
-import app.dto.product.ProductDetail;
-import app.dto.product.ProductDetailParameter;
-import app.dto.product.ProductItemQuantity;
-import app.dto.product.ProductListItem;
-import app.dto.product.ProductListItemOfLike;
+import app.dto.product.*;
 import app.dto.product.response.ProductDetailForOrder;
 import app.entity.Category;
 import app.entity.Product;
 import app.exception.CustomException;
 import app.exception.ErrorCode;
+import org.apache.ibatis.session.SqlSession;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.logging.Logger;
-import org.apache.ibatis.session.SqlSession;
 
 public class ProductDao implements ProductDaoFrame<Long, Product> {
-  private Logger log = Logger.getLogger("order");
   private static ProductDao instance;
+  private Logger log = Logger.getLogger("order");
 
   private ProductDao() {}
 
@@ -78,10 +75,7 @@ public class ProductDao implements ProductDaoFrame<Long, Product> {
    */
   @Override
   public Optional<Product> selectById(Long productId, SqlSession session) throws Exception {
-
-    Optional<Product> product = Optional.of(session.selectOne("product.select", productId));
-    if (product.isPresent()) return product;
-    else throw new CustomException(ErrorCode.ITEM_NOT_FOUND);
+    return Optional.ofNullable(session.selectOne("product.select", productId));
   }
 
   @Override
