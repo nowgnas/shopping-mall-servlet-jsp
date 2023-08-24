@@ -1,7 +1,7 @@
 package app.dao.order;
 
-import app.dto.response.ProductOrderDetailDto;
-import app.dto.response.ProductOrderDto;
+import app.dto.order.response.ProductOrderDetailDto;
+import app.dto.order.response.ProductOrderDto;
 import app.entity.Order;
 import java.util.List;
 import java.util.Map;

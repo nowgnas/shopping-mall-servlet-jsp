@@ -1,4 +1,4 @@
-package app.dto.request;
+package app.dto.order.request;
 
 import java.util.List;
 import lombok.*;
