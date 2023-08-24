@@ -1,6 +1,6 @@
 package app.service.order;
 
-import app.dao.CartDaoFrameImpl;
+import app.dao.cart.CartDaoImpl;
 import app.dao.coupon.CouponDao;
 import app.dao.delivery.DeliveryDao;
 import app.dao.member.MemberDao;
@@ -9,7 +9,7 @@ import app.dao.payment.PaymentDao;
 import app.dao.product.ProductDao;
 import app.dao.productorder.ProductOrderDao;
 import app.dto.cart.CartAndProductDto;
-import app.dto.comp.ProductAndMemberCompositeKey;
+import app.entity.ProductAndMemberCompositeKey;
 import app.dto.form.OrderCartCreateForm;
 import app.dto.form.OrderCreateForm;
 import app.dto.product.response.ProductDetailForOrder;
@@ -35,7 +35,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.IntStream;
 
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -52,7 +51,7 @@ public class OrderServiceImpl {
   private final MemberDao memberDao = new MemberDao();
   private final ProductOrderDao productOrderDao = new ProductOrderDao();
   private final ProductDao productDao = ProductDao.getInstance();
-  private final CartDaoFrameImpl cartDao = new CartDaoFrameImpl();
+  private final CartDaoImpl cartDao = new CartDaoImpl();
 
   /* 상품 주문 폼 */
   public OrderCreateForm getCreateOrderForm(Long memberId, Long productId) throws Exception {

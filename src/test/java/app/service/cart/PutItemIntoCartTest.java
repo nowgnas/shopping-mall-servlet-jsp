@@ -1,25 +1,26 @@
 package app.service.cart;
 
-import app.dao.CartDaoFrame;
-import app.dao.CartDaoFrameImpl;
+import app.dao.cart.CartDao;
+import app.dao.cart.CartDaoImpl;
 import app.dao.member.MemberDao;
 import app.dao.member.MemberDaoFrame;
-import app.dto.comp.ProductAndMemberCompositeKey;
+import app.entity.ProductAndMemberCompositeKey;
 import app.entity.Cart;
 import app.entity.Member;
 import app.entity.Product;
+import app.exception.cart.OutOfStockException;
+import app.exception.member.MemberNotFoundException;
+import app.exception.product.ProductNotFoundException;
 import app.service.checker.CartExistCheckerService;
 import app.service.checker.EntityExistCheckerService;
 import app.service.checker.MemberExistCheckerService;
 import app.service.checker.ProductExistCheckerService;
 import app.service.product.StockCheckerService;
 import app.service.product.StockCheckerServiceImpl;
-import app.exception.cart.OutOfStockException;
-import app.exception.member.MemberNotFoundException;
-import app.exception.product.ProductNotFoundException;
 import app.utils.GetSessionFactory;
 import config.TestConfig;
 import org.apache.ibatis.session.SqlSession;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -28,15 +29,16 @@ import org.junit.jupiter.api.Test;
 class PutItemIntoCartTest {
 
   private final TestConfig testConfig = new TestConfig();
-  private final CartDaoFrame<ProductAndMemberCompositeKey, Cart> cartDaoFrame = new CartDaoFrameImpl();
+  private final CartDao<ProductAndMemberCompositeKey, Cart> cartDao = new CartDaoImpl();
   private final MemberDaoFrame<Long, Member> memberDao = new MemberDao();
   private final EntityExistCheckerService<Long, Member> memberExistCheckerService = new MemberExistCheckerService(
       memberDao);
   private final EntityExistCheckerService<Long, Product> productExistCheckerService = new ProductExistCheckerService();
   private final EntityExistCheckerService<ProductAndMemberCompositeKey, Cart> cartExistCheckerService = new CartExistCheckerService();
-  private final UpdateCartService updateCartService = new UpdateCartServiceImpl(cartDaoFrame,new DeleteCartWhenRestOfQuantityUnder0(cartDaoFrame));
+  private final UpdateCartService updateCartService = new UpdateCartServiceImpl(
+      cartDao,new DeleteCartWhenRestOfQuantityUnder0(cartDao));
   private final StockCheckerService stockCheckerService = new StockCheckerServiceImpl();
-  private final CartService cartService = new CartServiceImpl(cartDaoFrame, memberDao,
+  private final CartService cartService = new CartServiceImpl(cartDao, memberDao,
       memberExistCheckerService, productExistCheckerService, cartExistCheckerService,
       stockCheckerService,updateCartService);
   private SqlSession session;
@@ -83,6 +85,12 @@ class PutItemIntoCartTest {
     });
   }
 
+  @AfterEach
+  void afterEach() throws Exception {
+    session = GetSessionFactory.getInstance().openSession();
+    testConfig.init("clear-data.sql", session);
+  }
+
   @DisplayName("재고보다 적은 제품의 수량을 장바구니에 담는 경우의 테스트")
   @Test
   void insert_WhenQuantityIsLessThanRequestQuantity_Added() throws Exception {
@@ -91,7 +99,6 @@ class PutItemIntoCartTest {
     Assertions.assertDoesNotThrow(() -> cartService.putItemIntoCart(compKey, 1L),
         "inserted the cart as user want");
   }
-
 
 
 }

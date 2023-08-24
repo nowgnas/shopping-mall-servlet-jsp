@@ -1,15 +1,16 @@
 package app.service.cart;
-import app.dao.CartDaoFrame;
-import app.dao.DaoFrame;
+
+import app.dao.cart.CartDao;
+import app.dao.cart.DaoFrame;
 import app.dao.product.ProductDao;
 import app.dto.cart.AllCartProductInfoDto;
 import app.dto.cart.ProductInCartDto;
-import app.dto.comp.ProductAndMemberCompositeKey;
+import app.entity.ProductAndMemberCompositeKey;
 import app.dto.product.ProductItemQuantity;
 import app.entity.Cart;
-
 import app.entity.Member;
 import app.entity.Product;
+import app.exception.member.MemberNotFoundException;
 import app.service.checker.EntityExistCheckerService;
 import app.service.product.StockCheckerService;
 import app.utils.GetSessionFactory;
@@ -27,7 +28,7 @@ import org.apache.ibatis.session.SqlSession;
 @AllArgsConstructor
 public class CartServiceImpl implements CartService {
 
-  private CartDaoFrame<ProductAndMemberCompositeKey, Cart> cartDao;
+  private CartDao<ProductAndMemberCompositeKey, Cart> cartDao;
   private DaoFrame<Long, Member> memberDao;
   private final ProductDao productDao = ProductDao.getInstance();
   private EntityExistCheckerService<Long, Member> memberExistCheckerService;
@@ -37,17 +38,19 @@ public class CartServiceImpl implements CartService {
   private UpdateCartService updateCartService;
 
 
-
   @Override
   public AllCartProductInfoDto getCartProductListByMember(
-      Long memberId) throws Exception {
+      Long memberId) throws Exception, MemberNotFoundException {
     SqlSession session = GetSessionFactory.getInstance().openSession();
-      //MemberNotFoundException
+    //MemberNotFoundException
     memberExistCheckerService.isExisted(memberDao, memberId, session).getId();
-    List<Cart> cartList = cartDao.getCartProductListByMember(memberId,session);
-    List<Long> productIdList = cartList.stream().map(p -> p.getProductId()).collect(Collectors.toList());
-    List<ProductItemQuantity> allProductInfo = productDao.selectProductQuantity(productIdList,session);
-    return AllCartProductInfoDto.getCustomerViewOfCartInfo(ProductInCartDto.getProductInfo(allProductInfo));
+    List<Cart> cartList = cartDao.getCartProductListByMember(memberId, session);
+    List<Long> productIdList = cartList.stream().map(p -> p.getProductId())
+        .collect(Collectors.toList());
+    List<ProductItemQuantity> allProductInfo = productDao.selectProductQuantity(productIdList,
+        session);
+    return AllCartProductInfoDto.getCustomerViewOfCartInfo(
+        ProductInCartDto.getProductInfo(allProductInfo));
   }
 
   @Override

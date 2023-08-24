@@ -2,10 +2,8 @@ package app.dao.cart;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import app.dao.CartDaoFrame;
-import app.dao.CartDaoFrameImpl;
 import app.dto.cart.CartAndProductDto;
-import app.dto.comp.ProductAndMemberCompositeKey;
+import app.entity.ProductAndMemberCompositeKey;
 import app.entity.Cart;
 import app.utils.GetSessionFactory;
 import config.TestConfig;
@@ -15,6 +13,7 @@ import java.util.Optional;
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.apache.ibatis.session.SqlSession;
 import org.h2.jdbc.JdbcSQLIntegrityConstraintViolationException;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -23,13 +22,19 @@ import org.junit.jupiter.api.Test;
 class CartDaoTest {
 
   private final TestConfig testConfig = new TestConfig();
-  CartDaoFrame<ProductAndMemberCompositeKey, Cart> cartDaoFrame = new CartDaoFrameImpl();
+  CartDao<ProductAndMemberCompositeKey, Cart> cartDao = new CartDaoImpl();
   SqlSession session;
 
   @BeforeEach
   void beforeEach() throws Exception {
     session = GetSessionFactory.getInstance().openSession();
     testConfig.init("schema.sql", session);
+  }
+
+  @AfterEach
+  void afterEach() throws Exception {
+    session = GetSessionFactory.getInstance().openSession();
+    testConfig.init("clear-data.sql", session);
   }
 
   void getInitDataWithoutCartData() throws Exception {
@@ -45,7 +50,7 @@ class CartDaoTest {
   void insertCart_WhenThereIsMemberAndProduct_CartIsInserted() throws Exception {
     getInitDataWithoutCartData();
     Cart expectedCart = new Cart(1L, 1L, 1L);
-    int expectedValue = cartDaoFrame.insert(expectedCart, session);
+    int expectedValue = cartDao.insert(expectedCart, session);
     Assertions.assertEquals(expectedValue, 1L);
   }
 
@@ -54,7 +59,7 @@ class CartDaoTest {
   void insertCart_WhenThereIsNotMemberAndProduct_SqlExceptionIsCatched() throws Exception {
     Cart expectedCart = new Cart(1L, 1L, 1L);
     Throwable throwable = assertThrows(PersistenceException.class, () -> {
-      cartDaoFrame.insert(expectedCart, session);
+      cartDao.insert(expectedCart, session);
     });
     Assertions.assertTrue(throwable.getCause() instanceof JdbcSQLIntegrityConstraintViolationException, "can not insert without member and product");
   }
@@ -64,7 +69,7 @@ class CartDaoTest {
   void deleteCart_WhenThereIsNotCart_return0() throws Exception {
     getInitDataWithoutCartData();
     Assertions.assertEquals(
-        cartDaoFrame.deleteById(new ProductAndMemberCompositeKey(1L, 1L), session), 0);
+        cartDao.deleteById(new ProductAndMemberCompositeKey(1L, 1L), session), 0);
   }
 
   @DisplayName("멤버와 제품이 존재할 때 카트 데이터 삭제하기")
@@ -73,7 +78,7 @@ class CartDaoTest {
     getInitDataWithoutCartData();
     getCartInitData();
     Assertions.assertEquals(
-        cartDaoFrame.deleteById(new ProductAndMemberCompositeKey(1L, 1L), session), 1);
+        cartDao.deleteById(new ProductAndMemberCompositeKey(1L, 1L), session), 1);
   }
 
   @DisplayName("멤버와 제품이 존재할 때 단일 카트 조회하기")
@@ -82,7 +87,7 @@ class CartDaoTest {
     getInitDataWithoutCartData();
     getCartInitData();
     Assertions.assertNotNull(
-        cartDaoFrame.selectById(new ProductAndMemberCompositeKey(1L, 1L), session).get());
+        cartDao.selectById(new ProductAndMemberCompositeKey(1L, 1L), session).get());
   }
 
   @DisplayName("멤버와 제품이 존재하지 않을 때 단일 카트 조회하기")
@@ -90,7 +95,7 @@ class CartDaoTest {
   void getOneCart_WhenThereIsNotMemberIdOrProductId_False() throws Exception {
     getInitDataWithoutCartData();
     Assertions.assertThrowsExactly(NoSuchElementException.class, () -> {
-      cartDaoFrame.selectById(new ProductAndMemberCompositeKey(1L, 1L),
+      cartDao.selectById(new ProductAndMemberCompositeKey(1L, 1L),
           session).get();
     });
 
@@ -101,7 +106,7 @@ class CartDaoTest {
   void getAllCartByMemberId_WhenThereIsExistMemberIdAndProduct_CartList() throws Exception {
     getInitDataWithoutCartData();
     getCartInitData();
-    List<Cart> cartList = cartDaoFrame.getCartProductListByMember(1L, session);
+    List<Cart> cartList = cartDao.getCartProductListByMember(1L, session);
     Assertions.assertTrue(cartList.size() > 0);
 
   }
@@ -110,7 +115,7 @@ class CartDaoTest {
   @Test
   void getAllCartByMemberId_WhenThereIsNotCartByMemberId_CatchSqlException() throws Exception {
     getInitDataWithoutCartData();
-    List<Cart> cartList = cartDaoFrame.getCartProductListByMember(1L, session);
+    List<Cart> cartList = cartDao.getCartProductListByMember(1L, session);
     Assertions.assertEquals(0, cartList.size());
   }
 
@@ -120,8 +125,8 @@ class CartDaoTest {
     getInitDataWithoutCartData();
     getCartInitData();
     Cart expected = new Cart(1L, 1L, 2L);
-    cartDaoFrame.update(expected, session);
-    Optional<Cart> actual = cartDaoFrame.selectById(new ProductAndMemberCompositeKey(1L, 1L),
+    cartDao.update(expected, session);
+    Optional<Cart> actual = cartDao.selectById(new ProductAndMemberCompositeKey(1L, 1L),
         session);
     Assertions.assertSame(expected.getProductQuantity(), actual.get().getProductQuantity());
   }
@@ -131,8 +136,8 @@ class CartDaoTest {
   void updateCartQuantity_WhenCartIsNotExisted_Catch() throws Exception {
     getInitDataWithoutCartData();
     Cart expected = new Cart(1L, 1L, 2L);
-    cartDaoFrame.update(expected, session);
-    Optional<Cart> actual = cartDaoFrame.selectById(new ProductAndMemberCompositeKey(1L, 1L),
+    cartDao.update(expected, session);
+    Optional<Cart> actual = cartDao.selectById(new ProductAndMemberCompositeKey(1L, 1L),
         session);
     Assertions.assertThrowsExactly(NoSuchElementException.class, actual::get);
   }
@@ -142,7 +147,7 @@ class CartDaoTest {
   void getAllCartAndProductByMember_WhenThereIsProductsByMemberId_getList() throws Exception {
     getInitDataWithoutCartData();
     getCartInitData();
-    List<CartAndProductDto> cartAndProductListDto = cartDaoFrame.getAllCartsAndAllProductsByMember(
+    List<CartAndProductDto> cartAndProductListDto = cartDao.getAllCartsAndAllProductsByMember(
         1L, session);
     System.out.println(cartAndProductListDto.get(0).toString());
     Assertions.assertNotNull(cartAndProductListDto);

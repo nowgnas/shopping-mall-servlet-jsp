@@ -1,25 +1,35 @@
 package app.service.order;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import app.dao.CartDaoFrameImpl;
+import app.dao.cart.CartDaoImpl;
 import app.dao.coupon.CouponDao;
 import app.dao.delivery.DeliveryDao;
 import app.dao.member.MemberDao;
 import app.dao.order.OrderDao;
 import app.dao.product.ProductDao;
 import app.dao.productorder.ProductOrderDao;
-import app.dto.cart.CartAndProductDto;
 import app.dto.request.OrderCartCreateDto;
 import app.dto.request.OrderCreateDto;
 import app.dto.response.ProductOrderDetailDto;
 import app.dto.response.ProductOrderDto;
-import app.entity.*;
+import app.entity.Cart;
+import app.entity.Coupon;
+import app.entity.Delivery;
+import app.entity.Member;
+import app.entity.Order;
+import app.entity.Product;
+import app.entity.ProductOrder;
 import app.enums.CouponStatus;
 import app.enums.DeliveryStatus;
 import app.enums.OrderStatus;
 import config.TestConfig;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.ibatis.session.SqlSession;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,7 +48,7 @@ public class OrderServiceTest {
   private final MemberDao memberDao = new MemberDao();
   private final ProductOrderDao productOrderDao = new ProductOrderDao();
   private final ProductDao productDao = ProductDao.getInstance();
-  private final CartDaoFrameImpl carDao = new CartDaoFrameImpl();
+  private final CartDaoImpl carDao = new CartDaoImpl();
 
   @BeforeEach
   void beforeEach() throws Exception {

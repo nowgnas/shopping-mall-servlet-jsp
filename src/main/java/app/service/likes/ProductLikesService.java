@@ -1,9 +1,9 @@
 package app.service.likes;
 
-import app.dao.DaoFrame;
+import app.dao.cart.DaoFrame;
 import app.dao.likes.LikesDao;
 import app.dao.likes.LikesDaoFrame;
-import app.dto.comp.ProductAndMemberCompositeKey;
+import app.entity.ProductAndMemberCompositeKey;
 import app.entity.Likes;
 import app.entity.Product;
 import app.exception.CustomException;

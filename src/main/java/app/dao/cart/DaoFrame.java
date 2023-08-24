@@ -1,4 +1,4 @@
-package app.dao;
+package app.dao.cart;
 
 import org.apache.ibatis.session.SqlSession;
 

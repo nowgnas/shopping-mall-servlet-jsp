@@ -1,7 +1,7 @@
 package app.service.cart;
 
-import app.dao.CartDaoFrame;
-import app.dto.comp.ProductAndMemberCompositeKey;
+import app.dao.cart.CartDao;
+import app.entity.ProductAndMemberCompositeKey;
 import app.entity.Cart;
 import app.exception.ErrorCode;
 import app.exception.cart.OutOfStockException;
@@ -11,7 +11,7 @@ import org.apache.ibatis.session.SqlSession;
 @AllArgsConstructor
 public class UpdateCartServiceImpl implements UpdateCartService {
 
-  private CartDaoFrame<ProductAndMemberCompositeKey, Cart> cartDao;
+  private CartDao<ProductAndMemberCompositeKey, Cart> cartDao;
   private CartProductDeletePolicy cartProductDeletePolicy;
 
 

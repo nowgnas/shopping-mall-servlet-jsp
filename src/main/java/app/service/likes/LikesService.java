@@ -1,6 +1,6 @@
 package app.service.likes;
 
-import app.dto.comp.ProductAndMemberCompositeKey;
+import app.entity.ProductAndMemberCompositeKey;
 import java.util.List;
 
 public interface LikesService {

@@ -1,6 +1,6 @@
 package app.dao.product;
 
-import app.dao.DaoFrame;
+import app.dao.cart.DaoFrame;
 import app.dto.product.ProductDetail;
 import app.dto.product.ProductItemQuantity;
 import app.dto.product.ProductListItem;

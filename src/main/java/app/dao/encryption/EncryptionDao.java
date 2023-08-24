@@ -1,6 +1,6 @@
 package app.dao.encryption;
 
-import app.dao.DaoFrame;
+import app.dao.cart.DaoFrame;
 import app.entity.Encryption;
 import org.apache.ibatis.session.SqlSession;
 

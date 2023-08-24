@@ -1,6 +1,6 @@
 package app.service.checker;
 
-import app.dao.DaoFrame;
+import app.dao.cart.DaoFrame;
 import org.apache.ibatis.session.SqlSession;
 
 public interface EntityExistCheckerService<K,V> {

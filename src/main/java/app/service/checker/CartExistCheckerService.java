@@ -1,6 +1,6 @@
 package app.service.checker;
-import app.dao.DaoFrame;
-import app.dto.comp.ProductAndMemberCompositeKey;
+import app.dao.cart.DaoFrame;
+import app.entity.ProductAndMemberCompositeKey;
 import app.entity.Cart;
 import app.exception.ErrorCode;
 import lombok.AllArgsConstructor;

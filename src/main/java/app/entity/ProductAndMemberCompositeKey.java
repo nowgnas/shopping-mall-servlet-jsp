@@ -1,4 +1,4 @@
-package app.dto.comp;
+package app.entity;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
