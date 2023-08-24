@@ -96,17 +96,16 @@
       and pi.is_thumbnail = false
   </select>
 
-  <select id="selectone" parameterType="Long" resultMap="singleProduct">
-    SELECT p.id, p.name, p.quantity, p.price, i.url
-    FROM product p
-    LEFT JOIN product_image i
-    ON p.id = i.product_id
-    WHERE p.id in
-    <foreach collection="list" item="id" open="(" separator="," close=")">
-      #{id}
-      </foreach>
-      AND is_thumbnail = true
-    </select>
+<select id="selectone" parameterType="java.util.List" resultMap="singleProduct">
+  SELECT p.id, p.name, p.quantity, p.price, i.url
+  FROM product p
+  LEFT JOIN product_image i ON p.id = i.product_id
+  WHERE p.id IN
+  <foreach collection="list" item="id" open="(" separator="," close=")">
+    #{id}
+  </foreach>
+  AND i.is_thumbnail = true <!-- Make sure this matches your actual column name -->
+</select>
     <select id="selectall" resultType="product">
       SELECT *
       FROM product
