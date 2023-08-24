@@ -47,10 +47,11 @@
     });
 
     $("#registerPassword").on("focusout", function () {
-        let password = $("#registerPassword").val();
-        if (!passwordCheck(password)) {
+        let registerPassword = $("#registerPassword").val();
+        if (!passwordCheck(registerPassword)) {
             $("#vaildPassword").text("비밀번호는 영문, 숫자 형식으로 8~20자 입력해야 합니다.").css("color", "red");
             passwordFlag = false;
+            return;
         }
         $("#vaildPassword").text("유효한 비밀번호 입니다.").css("color", "green");
         passwordFlag = true;
@@ -59,7 +60,7 @@
     $("#registerPassword2").on("focusout", function () {
         let password = $("#registerPassword").val()
         let password2 = $("#registerPassword2").val();
-
+        console.log("asdasd")
         if ((password2 != "" && password2 != "undefined") && password === password2) {
             $("#vaildPassword2").text("비밀번호가 일치합니다.").css("color", "green");
             rePasswordFlag = true;
@@ -85,13 +86,13 @@
     function emailCheck(email) {
         let regex = new RegExp("([!#-'*+/-9=?A-Z^-~-]+(\.[!#-'*+/-9=?A-Z^-~-]+)*|\"\(\[\]!#-[^-~ \t]|(\\[\t -~]))+\")@([!#-'*+/-9=?A-Z^-~-]+(\.[!#-'*+/-9=?A-Z^-~-]+)*|\[[\t -Z^-~]*])");
 
-        return (email != '' && email != 'undefined' && regex.test(email));
+        return (email != '' && email != 'undefined') && regex.test(email);
 
     }
 
     function passwordCheck(password) {
         let regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d~!@#$%^&*()+|=]{8,16}$/;
-        return (password != '' && password != 'undefined' && regex.test(password));
+        return (password != '' && password != 'undefined') && regex.test(password);
     }
 
     function checkValid() {
