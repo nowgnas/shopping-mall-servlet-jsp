@@ -47,4 +47,9 @@ public class CartDaoFrameImpl implements CartDaoFrame<ProductAndMemberCompositeK
       SqlSession session) {
     return session.selectList("select-all-cart-and-product-by-member", memberId);
   }
+
+  @Override
+  public int bulkDelete(List<ProductAndMemberCompositeKey> productAndMemberCompositeKeys, SqlSession session) {
+    return session.delete("cart.bulkDelete", productAndMemberCompositeKeys);
+  }
 }
