@@ -13,6 +13,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import utils.GetSessionFactory;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ProductOrderDaoInsertTest {
 
   private ProductOrderDao productOrderDao = new ProductOrderDao();
@@ -60,6 +63,28 @@ public class ProductOrderDaoInsertTest {
         Exception.class,
         () -> productOrderDao.insert(productOrder, session),
         ErrorCode.CANNOT_INSERT_PRODUCT_ORDER.getMessage());
+    session.commit();
+    session.close();
+  }
+
+  @Test
+  @DisplayName("주문 상품 모두 생성 테스트 - 정상 처리")
+  void bulkInsert() throws Exception {
+    // given
+    List<ProductOrder> productOrders = new ArrayList<>();
+    ProductOrder productOrder1 =
+            ProductOrder.builder().orderId(1L).productId(1L).price(3000000L).quantity(1L).build();
+    ProductOrder productOrder2 =
+            ProductOrder.builder().orderId(1L).productId(2L).price(2000000L).quantity(2L).build();
+    ProductOrder productOrder3 =
+            ProductOrder.builder().orderId(1L).productId(3L).price(1500000L).quantity(2L).build();
+    productOrders.add(productOrder1);
+    productOrders.add(productOrder2);
+    productOrders.add(productOrder3);
+
+    // when, then
+    int insertedRow = productOrderDao.bulkInsert(productOrders, session);
+    assertSame(3, insertedRow);
     session.commit();
     session.close();
   }

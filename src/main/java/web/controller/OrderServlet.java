@@ -42,7 +42,7 @@ public class OrderServlet extends HttpServlet {
 
     String viewName = Navi.REDIRECT_MAIN;
 
-    if(loginMember == null) {
+    if (loginMember == null) {
       viewName = Navi.REDIRECT_MAIN;
     }
 
@@ -84,10 +84,8 @@ public class OrderServlet extends HttpServlet {
   // TODO: 상품 주문 폼
   private String getCreateOrderForm(HttpServletRequest request, HttpServletResponse response) {
     try {
-      //      Long productId = Long.parseLong(request.getParameter("productId"));
-      //      Long quantity = Long.parseLong(request.getParameter("quantity"));
-      Long productId = 1L;
-      Long quantity = 1L;
+      Long productId = Long.parseLong(request.getParameter("productId"));
+      Long quantity = Long.parseLong(request.getParameter("quantity"));
 
       OrderCreateForm createOrderForm = orderService.getCreateOrderForm(memberId, productId);
       request.setAttribute("memberName", createOrderForm.getMemberName());

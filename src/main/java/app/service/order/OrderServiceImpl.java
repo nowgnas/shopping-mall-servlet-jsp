@@ -30,9 +30,13 @@ import app.exception.order.*;
 import app.exception.payment.PaymentEntityNotFoundException;
 import app.exception.product.ProductEntityNotFoundException;
 import app.utils.GetSessionFactory;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.IntStream;
+
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.log4j.Logger;
@@ -177,6 +181,7 @@ public class OrderServiceImpl {
           cartDao.getAllCartsAndAllProductsByMember(memberId, session);
       orderCartCreateDto.setProducts(cartAndProductDtos);
       /* 상품 재고 확인 1. 없다면 구매 불가 2. 있다면 재고 차감 */
+      List<ProductAndMemberCompositeKey> productAndMemberCompositeKeys = new ArrayList<>();
       orderCartCreateDto
           .getProducts()
           .forEach(
@@ -192,22 +197,21 @@ public class OrderServiceImpl {
                     throw new OrderProductUpdateStockQuantityException();
                   }
 
-                  /* 장바구니에서 상품들 제거 */
-                  int deletedRow =
-                      cartDao.deleteById(
-                          ProductAndMemberCompositeKey.builder()
-                              .memberId(memberId)
-                              .productId(product.getId())
-                              .build(),
-                          session);
-                  if (deletedRow == 0) {
-                    throw new OrderCartDeleteException();
-                  }
+                  productAndMemberCompositeKeys.add(ProductAndMemberCompositeKey.builder()
+                          .memberId(memberId)
+                          .productId(product.getId())
+                          .build());
 
                 } catch (Exception e) {
                   throw new RuntimeException(e);
                 }
               });
+
+      /* 장바구니 벌크 삭제 */
+      int deletedRow = cartDao.bulkDelete(productAndMemberCompositeKeys, session);
+      if(deletedRow != productAndMemberCompositeKeys.size()) {
+        throw new OrderCartDeleteException();
+      }
 
       /* 회원의 잔액 확인 1. 총 상품 가격보다 잔액이 적다면 구매 불가 2. 잔액이 충분하다면 회원의 잔액에서 차감 */
       Member member =
@@ -237,14 +241,7 @@ public class OrderServiceImpl {
       orderDao.insert(order, session);
 
       List<ProductOrder> productOrders = orderCartCreateDto.toProductOrderEntities(order.getId());
-      productOrders.forEach(
-          po -> {
-            try {
-              productOrderDao.insert(po, session);
-            } catch (Exception e) {
-              throw new RuntimeException(e);
-            }
-          });
+      productOrderDao.bulkInsert(productOrders, session);
 
       Delivery delivery = orderCartCreateDto.toDeliveryEntity(order.getId());
       deliveryDao.insert(delivery, session);

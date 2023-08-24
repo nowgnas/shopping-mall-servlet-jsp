@@ -43,3 +43,6 @@ values (4, '맥북 프로 16', '맥북 프로 16 상세정보', 3000000, 2, 'PRO
 insert into likes (member_id, product_id)
 values (1, 2);
 
+INSERT INTO cart VALUES ( 1,1,1);
+INSERT INTO cart VALUES ( 1,2,2);
+
