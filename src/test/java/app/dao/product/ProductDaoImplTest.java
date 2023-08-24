@@ -52,6 +52,7 @@ class ProductDaoImplTest {
     List<Long> lst = Arrays.asList(1L, 2L, 3L);
     List<ProductItemQuantity> product = productDao.selectProductQuantity(lst, session);
     System.out.println(product.toString());
+    Assertions.assertEquals(lst.size(), product.size());
   }
 
   @Test
