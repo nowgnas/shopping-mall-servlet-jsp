@@ -9,6 +9,7 @@ import app.dto.order.response.ProductOrderDetailDto;
 import app.dto.order.response.ProductOrderDto;
 import app.entity.Order;
 import app.exception.DomainException;
+import app.exception.order.OrderProductNotEnoughStockQuantityException;
 import app.service.order.OrderService;
 import web.ControllerFrame;
 import web.dispatcher.Navi;
@@ -77,6 +78,9 @@ public class OrderController implements ControllerFrame {
       Long quantity = Long.parseLong(request.getParameter("quantity"));
 
       OrderCreateForm createOrderForm = orderService.getCreateOrderForm(memberId, productId);
+      if (createOrderForm.getProduct().getQuantity() - quantity < 0) {
+        throw new OrderProductNotEnoughStockQuantityException();
+      }
       request.setAttribute("memberName", createOrderForm.getMemberName());
       request.setAttribute("defaultAddress", createOrderForm.getDefaultAddress());
       request.setAttribute("product", createOrderForm.getProduct());

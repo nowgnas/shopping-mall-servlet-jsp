@@ -1,6 +1,5 @@
 package app.service.order;
 
-
 import app.dao.cart.CartDao;
 import app.dao.cart.CartDaoFrame;
 import app.dao.coupon.CouponDao;
@@ -31,6 +30,7 @@ import app.entity.ProductOrder;
 import app.enums.CouponStatus;
 import app.enums.DeliveryStatus;
 import app.enums.OrderStatus;
+import app.exception.DomainException;
 import app.exception.EntityNotFoundException;
 import app.exception.coupon.CouponEntityNotFoundException;
 import app.exception.delivery.DeliveryEntityNotFoundException;
@@ -90,7 +90,7 @@ public class OrderService {
               .orElseThrow(MemberEntityNotFoundException::new);
 
       return OrderCreateForm.of(orderMemberDetail, productDetail);
-    } catch (EntityNotFoundException ex) {
+    } catch (DomainException ex) {
       log.error(ex.getMessage());
       session.rollback();
       throw ex;
@@ -157,7 +157,7 @@ public class OrderService {
       session.commit();
 
       return order;
-    } catch (EntityNotFoundException ex) {
+    } catch (DomainException ex) {
       log.error(ex.getMessage());
       session.rollback();
       throw ex;
@@ -182,9 +182,11 @@ public class OrderService {
       /* 회원으로 장바구니에 들어있는 상품들 모두 조회 */
       List<CartAndProductDto> cartAndProductDtos =
           cartDaoFrame.getAllCartsAndAllProductsByMember(memberId, session);
+      cartAndProductDtos.forEach(
+          cp -> validateEnoughStockQuantity(cp.getProductQuantity(), cp.getCartProductQuantity()));
 
       return OrderCartCreateForm.of(orderMemberDetail, cartAndProductDtos);
-    } catch (EntityNotFoundException ex) {
+    } catch (DomainException ex) {
       log.error(ex.getMessage());
       session.rollback();
       throw ex;
@@ -222,10 +224,11 @@ public class OrderService {
                     throw new OrderProductUpdateStockQuantityException();
                   }
 
-                  productAndMemberCompositeKeys.add(ProductAndMemberCompositeKey.builder()
-                      .memberId(memberId)
-                      .productId(product.getId())
-                      .build());
+                  productAndMemberCompositeKeys.add(
+                      ProductAndMemberCompositeKey.builder()
+                          .memberId(memberId)
+                          .productId(product.getId())
+                          .build());
 
                 } catch (Exception e) {
                   throw new RuntimeException(e);
@@ -277,7 +280,7 @@ public class OrderService {
       session.commit();
 
       return order;
-    } catch (EntityNotFoundException ex) {
+    } catch (DomainException ex) {
       log.error(ex.getMessage());
       session.rollback();
       throw ex;
@@ -380,7 +383,7 @@ public class OrderService {
           });
 
       session.commit();
-    } catch (EntityNotFoundException ex) {
+    } catch (DomainException ex) {
       log.error(ex.getMessage());
       session.rollback();
       throw ex;
@@ -400,6 +403,9 @@ public class OrderService {
     List<ProductOrderDto> productOrderDtos;
     try {
       productOrderDtos = orderDao.selectProductOrdersForMemberCurrentYear(memberId, session);
+    } catch (DomainException ex) {
+      log.error(ex.getMessage());
+      throw ex;
     } catch (Exception ex) {
       log.error(ex.getMessage());
       throw new Exception(ex.getMessage());
@@ -423,7 +429,7 @@ public class OrderService {
           orderDao
               .selectOrderDetailsForMemberAndOrderId(orderIdAndMemberIdParameterMap, session)
               .orElseThrow(OrderEntityNotFoundException::new);
-    } catch (EntityNotFoundException ex) {
+    } catch (DomainException ex) {
       log.error(ex.getMessage());
       throw ex;
     } catch (Exception ex) {
