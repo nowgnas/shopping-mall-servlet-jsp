@@ -1,7 +1,7 @@
 package app.utils;
 
 import app.dto.OrderProcessDto;
-import app.error.ErrorCode;
+import app.exception.ErrorCode;
 import app.service.order.OrderProcessableChecker;
 import java.util.Map;
 import lombok.AccessLevel;

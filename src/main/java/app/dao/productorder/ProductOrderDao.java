@@ -1,12 +1,9 @@
 package app.dao.productorder;
 
-import static app.error.ErrorCode.*;
-
-import app.dao.exception.CustomException;
 import app.entity.ProductOrder;
 import java.util.List;
 import java.util.Optional;
-import org.apache.ibatis.exceptions.PersistenceException;
+
 import org.apache.ibatis.session.SqlSession;
 import org.apache.log4j.Logger;
 

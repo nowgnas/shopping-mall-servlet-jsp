@@ -1,4 +1,4 @@
-package app.error;
+package app.exception;
 
 import java.util.Arrays;
 import javax.servlet.http.HttpServletResponse;
