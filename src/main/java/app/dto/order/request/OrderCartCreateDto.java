@@ -8,12 +8,13 @@ import app.entity.ProductOrder;
 import app.enums.DeliveryStatus;
 import app.enums.OrderStatus;
 import app.enums.PaymentType;
-import java.util.List;
-import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Builder
@@ -78,7 +79,6 @@ public class OrderCartCreateDto {
   @Getter
   @AllArgsConstructor
   public static class ProductDto {
-
     private Long productId;
     private Long price;
     private Long quantity;

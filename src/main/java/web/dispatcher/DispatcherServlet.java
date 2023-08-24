@@ -1,22 +1,34 @@
 package web.dispatcher;
 
-import java.io.IOException;
-import javax.servlet.RequestDispatcher;
+import app.utils.HttpUtil;
+import org.apache.log4j.Logger;
+import web.ControllerFrame;
+import web.RestControllerFrame;
+import web.controller.*;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.apache.log4j.Logger;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 @WebServlet({"/DispatcherServlet", "/web/dispatcher", "*.bit"})
 public class DispatcherServlet extends HttpServlet {
-
   private static final long serialVersionUID = 1L;
+  private Map<String, ControllerFrame> controllerMapper = new HashMap<>();
+  private Map<String, RestControllerFrame> restControllerMapper = new HashMap<>();
   private Logger work_log = Logger.getLogger("work");
 
   public DispatcherServlet() {
     super();
+    controllerMapper.put("main", new MainController());
+    controllerMapper.put("member", new MemberController());
+    controllerMapper.put("order", new OrderController());
+    controllerMapper.put("product", new ProductController());
+    restControllerMapper.put("rest", new RestController());
   }
 
   protected void service(HttpServletRequest request, HttpServletResponse response)
@@ -27,11 +39,30 @@ public class DispatcherServlet extends HttpServlet {
     work_log.debug(path);
     path = path.substring(1, path.lastIndexOf("."));
     work_log.debug(path);
-    String next = "main.jsp";
-    if (path != null) {
-      next = path;
+    String next = Navi.REDIRECT_MAIN;
+    try {
+      if (controllerMapper.containsKey(path)) {
+        ControllerFrame controller = controllerMapper.get(path);
+        next = controller.execute(request, response);
+
+        String resultPath = next.substring(next.indexOf(":") + 1);
+
+        if (next.startsWith("forward:")) {
+          HttpUtil.forward(request, response, resultPath);
+        } else {
+          HttpUtil.redirect(response, resultPath);
+        }
+      }
+      if (restControllerMapper.containsKey(path)) {
+        RestControllerFrame restController = restControllerMapper.get(path);
+        Object result = restController.execute(request, response);
+
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("text/json;charset=UTF-8");
+        response.getWriter().print(result);
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
     }
-    RequestDispatcher rd = request.getRequestDispatcher(next);
-    rd.forward(request, response);
   }
 }

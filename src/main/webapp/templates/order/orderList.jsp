@@ -69,9 +69,10 @@
                             <tr>
                                 <fmt:parseDate pattern="yyyy-MM-dd'T'HH:mm" value="${productOrder.orderDate}"
                                                var="parsedOrderDate"/>
-                                <th><fmt:formatDate pattern="yyyy.MM.dd HH:mm" value="${parsedOrderDate}"/> 주문 </th>
+                                <th><fmt:formatDate pattern="yyyy.MM.dd HH:mm" value="${parsedOrderDate}"/> 주문</th>
                                 <th>${productOrder.orderStatus.getMessage()}</th>
-                                <th><a href="/order.bit?view=detail&cmd=get&orderId=${productOrder.orderId}" class="primary-btn">상세 보기</a></th>
+                                <th><a href="/order.bit?view=detail&cmd=get&orderId=${productOrder.orderId}"
+                                       class="primary-btn">상세 보기</a></th>
                             </tr>
                             </thead>
                             <tbody>

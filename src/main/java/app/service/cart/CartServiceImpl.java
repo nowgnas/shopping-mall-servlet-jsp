@@ -1,7 +1,7 @@
 package app.service.cart;
 
 import app.dao.cart.CartDaoFrame;
-import app.dao.cart.DaoFrame;
+import app.dao.DaoFrame;
 import app.dao.product.ProductDao;
 import app.dto.cart.AllCartProductInfoDto;
 import app.dto.cart.ProductInCartDto;

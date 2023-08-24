@@ -1,6 +1,6 @@
 package app.dao.encryption;
 
-import app.dao.cart.DaoFrame;
+import app.dao.DaoFrame;
 import app.entity.Encryption;
 import java.sql.SQLException;
 import java.util.List;

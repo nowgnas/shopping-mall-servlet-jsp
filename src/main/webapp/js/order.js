@@ -1,7 +1,7 @@
 'use strict';
 
 (function ($) {
-    
+
 })(jQuery);
 
 function open_delivery(roadName, addrDetail, zipCode, deliveryStatus) {

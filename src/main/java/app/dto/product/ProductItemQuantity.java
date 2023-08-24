@@ -1,11 +1,6 @@
 package app.dto.product;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 @Getter
 @Builder
@@ -19,6 +14,4 @@ public class ProductItemQuantity {
   private Integer quantity;
   private Long price;
   private String url;
-
-
 }

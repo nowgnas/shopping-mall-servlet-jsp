@@ -1,6 +1,6 @@
 package app.dao.coupon;
 
-import app.dao.cart.DaoFrame;
+import app.dao.DaoFrame;
 import app.entity.Coupon;
 import org.apache.ibatis.session.SqlSession;
 

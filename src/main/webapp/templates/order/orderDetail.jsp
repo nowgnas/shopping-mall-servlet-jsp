@@ -139,7 +139,7 @@
                         <c:when test="${delivery.deliveryStatus.name() eq 'CANCELED'}">
                         </c:when>
                         <c:otherwise>
-                            <a id="orderCancelLink"  href="#" class="primary-btn">주문 취소</a>
+                            <a id="orderCancelLink" href="#" class="primary-btn">주문 취소</a>
                         </c:otherwise>
                     </c:choose>
                 </div>
@@ -199,15 +199,15 @@
                     type: "GET",
                     url: "/order.bit?view=detail&cmd=delete&orderId=${productOrderDetail.orderId}",
                     dataType: "text",
-                    contentType : "application/x-www-form-urlencoded;charset=UTF-8",
-                    error: function() {
+                    contentType: "application/x-www-form-urlencoded;charset=UTF-8",
+                    error: function () {
                         Swal.fire(
                             '주문 취소 에러',
                             '해당 주문이 취소되지 않았습니다.',
                             'error'
                         )
                     },
-                    success: function(data) {
+                    success: function (data) {
                         Swal.fire(
                             '주문 취소 완료',
                             '해당 주문이 취소되었습니다.',

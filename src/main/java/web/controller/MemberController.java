@@ -6,42 +6,31 @@ import app.dto.response.MemberDetail;
 import app.exception.CustomException;
 import app.exception.ErrorCode;
 import app.service.member.MemberService;
-import app.utils.HttpUtil;
-import java.io.IOException;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import web.ControllerFrame;
 import web.controller.validation.MemberValidation;
 import web.dispatcher.Navi;
 
-@WebServlet({"/member"})
-public class MemberServlet extends HttpServlet {
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
-  private static final long serialVersionUID = 1L;
+public class MemberController implements ControllerFrame {
+
   private final MemberService memberService;
 
-  public MemberServlet() {
+  public MemberController() {
     super();
     memberService = new MemberService();
   }
 
-  protected void service(HttpServletRequest request, HttpServletResponse response)
-      throws ServletException, IOException {
+  @Override
+  public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
     String next = Navi.REDIRECT_MAIN;
     String view = request.getParameter("view");
     if (view != null) {
       next = build(request, view);
     }
-
-    String path = next.substring(next.indexOf(":") + 1);
-    if (next.startsWith("forward:")) {
-      HttpUtil.forward(request, response, path);
-    } else {
-      HttpUtil.redirect(response, path);
-    }
+    return next;
   }
 
   private String build(HttpServletRequest request, String view) {

@@ -1,6 +1,6 @@
 package app.dao.member;
 
-import app.dao.cart.DaoFrame;
+import app.dao.DaoFrame;
 import app.dto.request.LoginDto;
 import app.entity.Member;
 import java.sql.SQLException;

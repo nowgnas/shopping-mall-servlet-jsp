@@ -56,6 +56,4 @@ public class MemberDao implements MemberDaoFrame<Long, Member> {
       throws SQLException {
     return Optional.ofNullable(session.selectOne("member.selectAddressAndCouponById", id));
   }
-
-
 }

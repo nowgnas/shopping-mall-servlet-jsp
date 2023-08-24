@@ -1,10 +1,11 @@
 package app.dto.order.request;
 
-import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Getter
 @AllArgsConstructor
@@ -21,7 +22,6 @@ public class OrderCancelDto {
   @AllArgsConstructor
   @NoArgsConstructor(access = AccessLevel.PROTECTED)
   public static class DeliveryDto {
-
     private String roadName;
     private String addrDetail;
     private String zipCode;
@@ -31,7 +31,6 @@ public class OrderCancelDto {
   @AllArgsConstructor
   @NoArgsConstructor(access = AccessLevel.PROTECTED)
   public static class PaymentDto {
-
     private Long paymentId;
     private Long actualAmount;
   }
@@ -40,7 +39,6 @@ public class OrderCancelDto {
   @AllArgsConstructor
   @NoArgsConstructor(access = AccessLevel.PROTECTED)
   public static class ProductDto {
-
     private Long productId;
     private Long quantity;
   }
