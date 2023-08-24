@@ -9,7 +9,6 @@ import app.dao.member.MemberDao;
 import app.dao.order.OrderDao;
 import app.dao.product.ProductDao;
 import app.dao.productorder.ProductOrderDao;
-import app.dto.cart.CartAndProductDto;
 import app.dto.request.OrderCartCreateDto;
 import app.dto.request.OrderCreateDto;
 import app.dto.response.ProductOrderDetailDto;
@@ -31,7 +30,7 @@ public class OrderServiceTest {
 
   private SqlSession session;
   private final TestConfig testConfig = new TestConfig();
-  private OrderServiceImpl orderService;
+  private OrderService orderService;
   private final OrderDao orderDao = new OrderDao();
   private final DeliveryDao deliveryDao = new DeliveryDao();
   private final CouponDao couponDao = new CouponDao();
@@ -46,7 +45,7 @@ public class OrderServiceTest {
     testConfig.init("schema.sql", session);
     testConfig.init("order/init-orderservice-data.sql", session);
 
-    orderService = new OrderServiceImpl();
+    orderService = new OrderService();
   }
 
   @AfterEach

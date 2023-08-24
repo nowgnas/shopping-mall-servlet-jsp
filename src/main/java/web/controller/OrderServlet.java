@@ -9,7 +9,7 @@ import app.dto.response.ProductOrderDetailDto;
 import app.dto.response.ProductOrderDto;
 import app.entity.Order;
 import app.exception.DomainException;
-import app.service.order.OrderServiceImpl;
+import app.service.order.OrderService;
 import app.utils.HttpUtil;
 import java.io.IOException;
 import java.util.List;
@@ -26,7 +26,7 @@ import web.dispatcher.Navi;
 public class OrderServlet extends HttpServlet {
 
   private Long memberId;
-  private final OrderServiceImpl orderService = new OrderServiceImpl();
+  private final OrderService orderService = new OrderService();
 
   public OrderServlet() {
     super();
