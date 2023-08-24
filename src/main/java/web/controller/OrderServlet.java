@@ -1,15 +1,15 @@
 package web.controller;
 
-import app.dto.form.OrderCartCreateForm;
-import app.dto.form.OrderCreateForm;
-import app.dto.request.OrderCartCreateDto;
-import app.dto.request.OrderCreateDto;
+import app.dto.order.form.OrderCartCreateForm;
+import app.dto.order.form.OrderCreateForm;
+import app.dto.order.request.OrderCartCreateDto;
+import app.dto.order.request.OrderCreateDto;
 import app.dto.response.MemberDetail;
-import app.dto.response.ProductOrderDetailDto;
-import app.dto.response.ProductOrderDto;
+import app.dto.order.response.ProductOrderDetailDto;
+import app.dto.order.response.ProductOrderDto;
 import app.entity.Order;
 import app.exception.DomainException;
-import app.service.order.OrderServiceImpl;
+import app.service.order.OrderService;
 import app.utils.HttpUtil;
 import java.io.IOException;
 import java.util.List;
@@ -26,7 +26,7 @@ import web.dispatcher.Navi;
 public class OrderServlet extends HttpServlet {
 
   private Long memberId;
-  private final OrderServiceImpl orderService = new OrderServiceImpl();
+  private final OrderService orderService = new OrderService();
 
   public OrderServlet() {
     super();

@@ -43,57 +43,57 @@ class DeleteCartProductService {
       stockCheckerService, updateCartService);
   private SqlSession session;
 
-  @DisplayName("init data")
-  @BeforeEach
-  void beforeEach() throws Exception {
-    session = GetSessionFactory.getInstance().openSession();
-    testConfig.init("schema.sql", session);
-    testConfig.init("init-data.sql", session);
-  }
 
-  @AfterEach
+    @DisplayName("init data")
+    @BeforeEach
+    void beforeEach() throws Exception {
+        session = GetSessionFactory.getInstance().openSession();
+        testConfig.init("schema.sql", session);
+        testConfig.init("init-data.sql", session);
+    }
+    @AfterEach
   void afterEach() throws Exception {
     session = GetSessionFactory.getInstance().openSession();
     testConfig.init("clear-data.sql", session);
   }
 
-  @DisplayName("멤버가 존재 하지 않을 때 카트 상품 삭제")
-  @Test
-  void deleteCartProduct_MemberIsNotExisted_CatchMemberNotFoundException() {
-    Assertions.assertThrowsExactly(MemberNotFoundException.class,
-        () -> cartService.delete(new ProductAndMemberCompositeKey(1L, 100L), 2L));
-  }
+    @DisplayName("멤버가 존재 하지 않을 때 카트 상품 삭제")
+    @Test
+    void deleteCartProduct_MemberIsNotExisted_CatchMemberNotFoundException() {
+        Assertions.assertThrowsExactly(MemberNotFoundException.class,
+                () -> cartService.delete(new ProductAndMemberCompositeKey(1L, 100L), 2L));
+    }
 
-  @DisplayName("상품이 존재 하지 않을 때 카트 상품 삭제")
-  @Test
-  void deleteCartProduct_ProductIsNotExisted_CatchProductNotFoundException() {
-    Assertions.assertThrowsExactly(ProductNotFoundException.class,
-        () -> cartService.delete(new ProductAndMemberCompositeKey(1000L, 1L), 1L));
+    @DisplayName("상품이 존재 하지 않을 때 카트 상품 삭제")
+    @Test
+    void deleteCartProduct_ProductIsNotExisted_CatchProductNotFoundException() {
+        Assertions.assertThrowsExactly(ProductNotFoundException.class,
+                () -> cartService.delete(new ProductAndMemberCompositeKey(1000L, 1L), 1L));
 
 
-  }
+    }
 
-  @DisplayName("멤버와 상품이 존재 하지 않을 때 카트 상품 삭제")
-  @Test
-  void deleteCartProduct_MemberAndProductAreNotExisted_CatchMemberNotFoundException() {
-    Assertions.assertThrowsExactly(MemberNotFoundException.class,
-        () -> cartService.delete(new ProductAndMemberCompositeKey(1000L, 10000L), 1L));
-  }
+    @DisplayName("멤버와 상품이 존재 하지 않을 때 카트 상품 삭제")
+    @Test
+    void deleteCartProduct_MemberAndProductAreNotExisted_CatchMemberNotFoundException() {
+        Assertions.assertThrowsExactly(MemberNotFoundException.class,
+                () -> cartService.delete(new ProductAndMemberCompositeKey(1000L, 10000L), 1L));
+    }
 
     @DisplayName("카트가 존재하지 않을 때")
-  @Test
-  void deleteCartProduct_CartIsNotExisted_CatchProductNotFoundException() {
-    Assertions.assertThrowsExactly(
-        CartNotFoundException.class,
-        () -> cartService.delete(new ProductAndMemberCompositeKey(4L, 1L), 1L));
-  }
+    @Test
+    void deleteCartProduct_CartIsNotExisted_CatchProductNotFoundException() {
+        Assertions.assertThrowsExactly(
+                CartNotFoundException.class,
+                () -> cartService.delete(new ProductAndMemberCompositeKey(4L, 1L), 1L));
+    }
 
-  //카트가 존재할 때 카트 삭제
+    //카트가 존재할 때 카트 삭제
     @DisplayName("카트가 존재할 때 카트 삭제")
-  @Test
-  void deleteCartProduct_CartIsExisted_DeleteCart() {
-    Assertions.assertDoesNotThrow(
-        () -> cartService.delete(new ProductAndMemberCompositeKey(1L, 1L), 1L));
-  }
+    @Test
+    void deleteCartProduct_CartIsExisted_DeleteCart() {
+        Assertions.assertDoesNotThrow(
+                () -> cartService.delete(new ProductAndMemberCompositeKey(1L, 1L), 1L));
+    }
 
 }
