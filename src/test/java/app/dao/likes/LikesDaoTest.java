@@ -16,6 +16,7 @@ import org.junit.jupiter.api.Test;
 import utils.GetSessionFactory;
 
 class LikesDaoTest {
+
   private Logger log = Logger.getLogger("LikesDaoTest");
   private SqlSessionFactory sessionFactory = GetSessionFactory.getInstance();
   private SqlSession session;
@@ -24,7 +25,6 @@ class LikesDaoTest {
 
   @BeforeEach
   void beforeEach() throws Exception {
-//    log.info("before");
     likesDao = LikesDao.getInstance();
     session = sessionFactory.openSession();
     testConfig.init("schema.sql", session);
@@ -33,15 +33,20 @@ class LikesDaoTest {
 
   @AfterEach
   void afterEach() throws Exception {
-//    log.info("after");
-    session = GetSessionFactory.getInstance().openSession();
+    session = sessionFactory.openSession();
     testConfig.init("clear-data.sql", session);
   }
 
   @DisplayName("insert test")
   @Test
   void insert() throws Exception {
-    int res = likesDao.insert(new Likes(1L, 1L), session);
+    int res = likesDao.insert(
+        Likes.builder()
+            .memberId(1L)
+            .productId(1L)
+            .build()
+        , session
+    );
     session.commit();
 
     assertTrue(res == 1);
@@ -51,7 +56,13 @@ class LikesDaoTest {
   @DisplayName("delete test")
   @Test
   void deleteById() throws Exception {
-    int res = likesDao.deleteById(new ProductAndMemberCompositeKey(2L, 1L), session);
+    int res = likesDao.deleteById(
+        ProductAndMemberCompositeKey.builder()
+            .memberId(1L)
+            .productId(2L)
+            .build()
+        , session
+    );
     session.commit();
 
     assertTrue(res == 1);
@@ -61,12 +72,19 @@ class LikesDaoTest {
   @DisplayName("select test")
   @Test
   void selectById() throws Exception {
-    Likes inputLikes = new Likes(1L, 3L);
+    Likes inputLikes = Likes.builder()
+        .memberId(1L)
+        .productId(3L)
+        .build();
+
     likesDao.insert(inputLikes, session);
     session.commit();
 
     Likes ouputLikes = likesDao.selectById(
-            new ProductAndMemberCompositeKey(3L, 1L)
+            ProductAndMemberCompositeKey.builder()
+                .memberId(1L)
+                .productId(3L)
+                .build()
             , session)
         .get();
 
@@ -81,8 +99,21 @@ class LikesDaoTest {
   void selectAll() throws Exception {
 
     // basic init Likes(1L, 2L)
-    likesDao.insert(new Likes(1L, 3L), session);
-    likesDao.insert(new Likes(1L, 4L), session);
+
+    likesDao.insert(
+        Likes.builder()
+            .memberId(1L)
+            .productId(3L)
+            .build()
+        , session);
+
+    likesDao.insert(
+        Likes.builder()
+            .memberId(1L)
+            .productId(4L)
+            .build()
+        , session);
+
     session.commit();
 
     List<Long> list = likesDao.selectAllProduct(1L, session);
