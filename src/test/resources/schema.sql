@@ -129,7 +129,7 @@ create table cart
 (
     member_id        bigint unsigned not null,
     product_id       bigint unsigned not null,
-    product_quantity int unsigned    not null,
+    product_quantity bigint unsigned not null,
     primary key (member_id, product_id),
     constraint FK_member_TO_cart_1
         foreign key (member_id) references member (id),
