@@ -24,6 +24,8 @@
     <link rel="stylesheet" href="../../css/owl.carousel.min.css" type="text/css">
     <link rel="stylesheet" href="../../css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="../../css/style.css" type="text/css">
+
+
 </head>
 
 <body>
@@ -160,13 +162,17 @@
                         <%-- todo: product name --%>
                         <h4>${productDetail.detail.name}</h4>
                         <%-- todo: price --%>
-                        <h3>&#8361;<p id="unitPrice">${productDetail.detail.price}</p></h3>
+                        <div class="row">
+                            <div class="col-md">&#8361;</div>
+                            <div class="col-md" id="unitPrice">${productDetail.detail.price}</div>
+                        </div>
                         <%-- todo: description --%>
                         <p>${productDetail.detail.code}</p>
                         <div class="product__details__cart__option">
                             <div class="input-group">
-                                <input type="text" class="form-control text-center"
-                                       id="quantity-input" value="1">
+                                <input type="text" name="quantity-input"
+                                       class="form-control text-center"
+                                       id="quantity-input">
                                 <div class="input-group-append">
                                     <button class="btn btn-outline-secondary" type="button"
                                             id="increase-btn">+
@@ -190,10 +196,10 @@
                                 <a href="#"><span>&#9829;</span>add to wishlist</a>
                             </c:if>
                         </div>
-                        <a href="#" class="btn btn-outline-success">buy<a/>
-                            <div>
-                                PRODUCT CODE: ${productDetail.detail.description}
-                            </div>
+                        <a id="order-link" href="" class="btn btn-outline-success">buy</a>
+                        <div>
+                            PRODUCT CODE: ${productDetail.detail.description}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -294,25 +300,15 @@
 <script src="../../js/mixitup.min.js"></script>
 <script src="../../js/owl.carousel.min.js"></script>
 <script src="../../js/main.js"></script>
+
 <script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const quantityInput = document.getElementById('quantity');
-    const incrementButton = document.getElementById('increment');
-    const decrementButton = document.getElementById('decrement');
-
-    incrementButton.addEventListener('click', function () {
-      let currentValue = parseInt(quantityInput.value);
-      quantityInput.value = currentValue + 1;
-    });
-
-    decrementButton.addEventListener('click', function () {
-      let currentValue = parseInt(quantityInput.value);
-      if (currentValue > 1) {
-        quantityInput.value = currentValue - 1;
-      }
-    });
-  });
+  // Set the default value when the page loads
+  window.onload = function () {
+    var quantityInput = document.getElementById("quantity-input");
+    quantityInput.value = "1"; // Set the default value
+  };
 </script>
+
 
 <script>
   var unitPrice = parseFloat(document.getElementById("unitPrice").textContent);
@@ -347,6 +343,43 @@
 
   // Initial total price calculation
   updateTotalPrice();
+</script>
+<script>
+  function addToCart(productId, memberId) {
+    alert("add to cart");
+    $.ajax({
+      type: "POST",
+      url: "/product.bit?",
+      data: {
+        productId: productId,
+        memberId: memberId
+      },
+      success: function (response) {
+        // Handle success, if needed
+        console.log("Item added to cart.");
+      },
+      error: function (xhr, status, error) {
+        // Handle error, if needed
+        console.error("Error adding item to cart:", error);
+      }
+    })
+  }
+</script>
+
+<%--get product quantity--%>
+<script>
+  function getQuantity() {
+    var editableDiv = document.getElementById("quantity-input");
+    console.log(editableDiv.value);
+    return parseInt(editableDiv.value);
+  }
+
+  // Update the href attribute of the link
+  var orderLink = document.getElementById("order-link");
+  orderLink.addEventListener('click', () => {
+    orderLink.href = "/order.bit?view=direct&cmd=form&productId=${productDetail.detail.id}&quantity="
+      + getQuantity();
+  });
 </script>
 </body>
 

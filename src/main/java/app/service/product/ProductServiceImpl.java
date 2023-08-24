@@ -49,7 +49,7 @@ public class ProductServiceImpl implements ProductService {
       productDetailWithCategory =
           ProductDetailWithCategory.getProductDetail(categories, productDetail);
     } else throw new Exception("상품이 없습니다");
-    session.close();
+//    session.close();
     return productDetailWithCategory;
   }
 
