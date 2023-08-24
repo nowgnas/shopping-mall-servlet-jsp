@@ -34,7 +34,7 @@ public class OrderCartCreateDto {
   }
 
   @Getter
-  @AllArgsConstructor(access = AccessLevel.PROTECTED)
+  @AllArgsConstructor
   public static class ProductDto {
     private Long productId;
     private Long price;
