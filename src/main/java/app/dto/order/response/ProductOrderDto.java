@@ -1,4 +1,4 @@
-package app.dto.response;
+package app.dto.order.response;
 
 import java.time.LocalDateTime;
 import java.util.List;

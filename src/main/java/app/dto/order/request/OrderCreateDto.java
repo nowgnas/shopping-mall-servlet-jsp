@@ -1,4 +1,4 @@
-package app.dto.request;
+package app.dto.order.request;
 
 import app.entity.Delivery;
 import app.entity.Order;

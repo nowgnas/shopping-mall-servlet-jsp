@@ -1,47 +1,40 @@
-package app.dto.form;
+package app.dto.order.form;
 
-import app.dto.product.response.ProductDetailForOrder;
-import app.dto.response.OrderMemberDetail;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import app.dto.cart.CartAndProductDto;
+import app.dto.response.OrderMemberDetail;
 import lombok.*;
 
 @Getter
 @Builder
 @AllArgsConstructor
-public class OrderCreateForm {
+public class OrderCartCreateForm {
 
   private String memberName;
-  private ProductDto product;
+  private List<ProductDto> products;
   private AddressDto defaultAddress;
   private List<CouponDto> coupons;
 
-  public static OrderCreateForm of(
-      OrderMemberDetail orderMemberDetail, ProductDetailForOrder productDetail) {
-    return OrderCreateForm.builder()
+  public static OrderCartCreateForm of(
+      OrderMemberDetail orderMemberDetail, List<CartAndProductDto> cartAndProductDtos) {
+    return OrderCartCreateForm.builder()
         .memberName(orderMemberDetail.getName())
-        .product(
-            new ProductDto(
-                productDetail.getId(),
-                productDetail.getName(),
-                productDetail.getPrice(),
-                productDetail.getUrl()))
+        .products(
+            cartAndProductDtos.stream()
+                .map(cp -> new ProductDto(cp.getProductId(), cp.getName(), cp.getPrice(), cp.getCartProductQuantity()))
+                .collect(Collectors.toList()))
         .defaultAddress(
-            new AddressDto(
-                orderMemberDetail.getAddress() == null
-                    ? null
-                    : orderMemberDetail.getAddress().getRoadName(),
-                orderMemberDetail.getAddress() == null
-                    ? null
-                    : orderMemberDetail.getAddress().getAddrDetail(),
-                orderMemberDetail.getAddress() == null
-                    ? null
-                    : orderMemberDetail.getAddress().getZipCode()))
+            new OrderCartCreateForm.AddressDto(
+                orderMemberDetail.getAddress().getRoadName(),
+                orderMemberDetail.getAddress().getAddrDetail(),
+                orderMemberDetail.getAddress().getZipCode()))
         .coupons(
             orderMemberDetail.getCoupons().stream()
                 .map(
                     c ->
-                        new CouponDto(
+                        new OrderCartCreateForm.CouponDto(
                             c.getId(),
                             c.getName(),
                             c.getDiscountPolicy(),
@@ -75,6 +68,6 @@ public class OrderCreateForm {
     private Long id;
     private String name;
     private Long price;
-    private String thumbnailUrl;
+    private Long quantity;
   }
 }
