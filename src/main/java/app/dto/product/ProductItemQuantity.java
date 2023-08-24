@@ -13,6 +13,7 @@ import lombok.ToString;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
 public class ProductItemQuantity {
+
   private Long id;
   private String name;
   private Integer quantity;

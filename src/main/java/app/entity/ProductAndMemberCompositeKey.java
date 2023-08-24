@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ProductAndMemberCompositeKey {
+
   private Long productId;
   private Long memberId;
 }

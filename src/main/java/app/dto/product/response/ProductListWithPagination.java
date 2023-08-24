@@ -16,6 +16,7 @@ import lombok.ToString;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
 public class ProductListWithPagination {
+
   private List<ProductListItem> item;
   private Pagination paging;
 

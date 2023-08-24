@@ -19,10 +19,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-class CartDaoTest {
+class CartDaoFrameTest {
 
   private final TestConfig testConfig = new TestConfig();
-  CartDao<ProductAndMemberCompositeKey, Cart> cartDao = new CartDaoImpl();
+  CartDaoFrame<ProductAndMemberCompositeKey, Cart> cartDaoFrame = new CartDao();
   SqlSession session;
 
   @BeforeEach
@@ -50,7 +50,7 @@ class CartDaoTest {
   void insertCart_WhenThereIsMemberAndProduct_CartIsInserted() throws Exception {
     getInitDataWithoutCartData();
     Cart expectedCart = new Cart(1L, 1L, 1L);
-    int expectedValue = cartDao.insert(expectedCart, session);
+    int expectedValue = cartDaoFrame.insert(expectedCart, session);
     Assertions.assertEquals(expectedValue, 1L);
   }
 
@@ -59,7 +59,7 @@ class CartDaoTest {
   void insertCart_WhenThereIsNotMemberAndProduct_SqlExceptionIsCatched() throws Exception {
     Cart expectedCart = new Cart(1L, 1L, 1L);
     Throwable throwable = assertThrows(PersistenceException.class, () -> {
-      cartDao.insert(expectedCart, session);
+      cartDaoFrame.insert(expectedCart, session);
     });
     Assertions.assertTrue(throwable.getCause() instanceof JdbcSQLIntegrityConstraintViolationException, "can not insert without member and product");
   }
@@ -69,7 +69,7 @@ class CartDaoTest {
   void deleteCart_WhenThereIsNotCart_return0() throws Exception {
     getInitDataWithoutCartData();
     Assertions.assertEquals(
-        cartDao.deleteById(new ProductAndMemberCompositeKey(1L, 1L), session), 0);
+        cartDaoFrame.deleteById(new ProductAndMemberCompositeKey(1L, 1L), session), 0);
   }
 
   @DisplayName("멤버와 제품이 존재할 때 카트 데이터 삭제하기")
@@ -78,7 +78,7 @@ class CartDaoTest {
     getInitDataWithoutCartData();
     getCartInitData();
     Assertions.assertEquals(
-        cartDao.deleteById(new ProductAndMemberCompositeKey(1L, 1L), session), 1);
+        cartDaoFrame.deleteById(new ProductAndMemberCompositeKey(1L, 1L), session), 1);
   }
 
   @DisplayName("멤버와 제품이 존재할 때 단일 카트 조회하기")
@@ -87,7 +87,7 @@ class CartDaoTest {
     getInitDataWithoutCartData();
     getCartInitData();
     Assertions.assertNotNull(
-        cartDao.selectById(new ProductAndMemberCompositeKey(1L, 1L), session).get());
+        cartDaoFrame.selectById(new ProductAndMemberCompositeKey(1L, 1L), session).get());
   }
 
   @DisplayName("멤버와 제품이 존재하지 않을 때 단일 카트 조회하기")
@@ -95,7 +95,7 @@ class CartDaoTest {
   void getOneCart_WhenThereIsNotMemberIdOrProductId_False() throws Exception {
     getInitDataWithoutCartData();
     Assertions.assertThrowsExactly(NoSuchElementException.class, () -> {
-      cartDao.selectById(new ProductAndMemberCompositeKey(1L, 1L),
+      cartDaoFrame.selectById(new ProductAndMemberCompositeKey(1L, 1L),
           session).get();
     });
 
@@ -106,7 +106,7 @@ class CartDaoTest {
   void getAllCartByMemberId_WhenThereIsExistMemberIdAndProduct_CartList() throws Exception {
     getInitDataWithoutCartData();
     getCartInitData();
-    List<Cart> cartList = cartDao.getCartProductListByMember(1L, session);
+    List<Cart> cartList = cartDaoFrame.getCartProductListByMember(1L, session);
     Assertions.assertTrue(cartList.size() > 0);
 
   }
@@ -115,7 +115,7 @@ class CartDaoTest {
   @Test
   void getAllCartByMemberId_WhenThereIsNotCartByMemberId_CatchSqlException() throws Exception {
     getInitDataWithoutCartData();
-    List<Cart> cartList = cartDao.getCartProductListByMember(1L, session);
+    List<Cart> cartList = cartDaoFrame.getCartProductListByMember(1L, session);
     Assertions.assertEquals(0, cartList.size());
   }
 
@@ -125,8 +125,8 @@ class CartDaoTest {
     getInitDataWithoutCartData();
     getCartInitData();
     Cart expected = new Cart(1L, 1L, 2L);
-    cartDao.update(expected, session);
-    Optional<Cart> actual = cartDao.selectById(new ProductAndMemberCompositeKey(1L, 1L),
+    cartDaoFrame.update(expected, session);
+    Optional<Cart> actual = cartDaoFrame.selectById(new ProductAndMemberCompositeKey(1L, 1L),
         session);
     Assertions.assertSame(expected.getProductQuantity(), actual.get().getProductQuantity());
   }
@@ -136,8 +136,8 @@ class CartDaoTest {
   void updateCartQuantity_WhenCartIsNotExisted_Catch() throws Exception {
     getInitDataWithoutCartData();
     Cart expected = new Cart(1L, 1L, 2L);
-    cartDao.update(expected, session);
-    Optional<Cart> actual = cartDao.selectById(new ProductAndMemberCompositeKey(1L, 1L),
+    cartDaoFrame.update(expected, session);
+    Optional<Cart> actual = cartDaoFrame.selectById(new ProductAndMemberCompositeKey(1L, 1L),
         session);
     Assertions.assertThrowsExactly(NoSuchElementException.class, actual::get);
   }
@@ -147,7 +147,7 @@ class CartDaoTest {
   void getAllCartAndProductByMember_WhenThereIsProductsByMemberId_getList() throws Exception {
     getInitDataWithoutCartData();
     getCartInitData();
-    List<CartAndProductDto> cartAndProductListDto = cartDao.getAllCartsAndAllProductsByMember(
+    List<CartAndProductDto> cartAndProductListDto = cartDaoFrame.getAllCartsAndAllProductsByMember(
         1L, session);
     System.out.println(cartAndProductListDto.get(0).toString());
     Assertions.assertNotNull(cartAndProductListDto);

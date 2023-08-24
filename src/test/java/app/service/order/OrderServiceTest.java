@@ -6,32 +6,26 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import app.dao.cart.CartDaoImpl;
+import app.dao.cart.CartDao;
+import app.dao.cart.CartDaoFrame;
 import app.dao.coupon.CouponDao;
 import app.dao.delivery.DeliveryDao;
 import app.dao.member.MemberDao;
 import app.dao.order.OrderDao;
 import app.dao.product.ProductDao;
 import app.dao.productorder.ProductOrderDao;
-<<<<<<< HEAD
-import app.dto.request.OrderCartCreateDto;
-import app.dto.request.OrderCreateDto;
-import app.dto.response.ProductOrderDetailDto;
-import app.dto.response.ProductOrderDto;
 import app.entity.Cart;
 import app.entity.Coupon;
 import app.entity.Delivery;
 import app.entity.Member;
 import app.entity.Order;
 import app.entity.Product;
+import app.entity.ProductAndMemberCompositeKey;
 import app.entity.ProductOrder;
-=======
 import app.dto.order.request.OrderCartCreateDto;
 import app.dto.order.request.OrderCreateDto;
 import app.dto.order.response.ProductOrderDetailDto;
 import app.dto.order.response.ProductOrderDto;
-import app.entity.*;
->>>>>>> ee84471235d438ea2cc92248aa2eb3f1c9fe0669
 import app.enums.CouponStatus;
 import app.enums.DeliveryStatus;
 import app.enums.OrderStatus;
@@ -56,7 +50,7 @@ public class OrderServiceTest {
   private final MemberDao memberDao = new MemberDao();
   private final ProductOrderDao productOrderDao = new ProductOrderDao();
   private final ProductDao productDao = ProductDao.getInstance();
-  private final CartDaoImpl carDao = new CartDaoImpl();
+  private final CartDaoFrame<ProductAndMemberCompositeKey,Cart> carDao = new CartDao();
 
   @BeforeEach
   void beforeEach() throws Exception {

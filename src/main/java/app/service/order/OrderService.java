@@ -2,7 +2,7 @@ package app.service.order;
 
 
 import app.dao.cart.CartDao;
-import app.dao.cart.CartDaoImpl;
+import app.dao.cart.CartDaoFrame;
 import app.dao.coupon.CouponDao;
 import app.dao.delivery.DeliveryDao;
 import app.dao.member.MemberDao;
@@ -13,13 +13,21 @@ import app.dao.productorder.ProductOrderDao;
 import app.dto.cart.CartAndProductDto;
 import app.dto.order.form.OrderCartCreateForm;
 import app.dto.order.form.OrderCreateForm;
-import app.dto.product.response.ProductDetailForOrder;
 import app.dto.order.request.OrderCartCreateDto;
 import app.dto.order.request.OrderCreateDto;
-import app.dto.response.OrderMemberDetail;
 import app.dto.order.response.ProductOrderDetailDto;
 import app.dto.order.response.ProductOrderDto;
-import app.entity.*;
+import app.dto.product.response.ProductDetailForOrder;
+import app.dto.response.OrderMemberDetail;
+import app.entity.Cart;
+import app.entity.Coupon;
+import app.entity.Delivery;
+import app.entity.Member;
+import app.entity.Order;
+import app.entity.Payment;
+import app.entity.Product;
+import app.entity.ProductAndMemberCompositeKey;
+import app.entity.ProductOrder;
 import app.enums.CouponStatus;
 import app.enums.DeliveryStatus;
 import app.enums.OrderStatus;
@@ -27,23 +35,31 @@ import app.exception.EntityNotFoundException;
 import app.exception.coupon.CouponEntityNotFoundException;
 import app.exception.delivery.DeliveryEntityNotFoundException;
 import app.exception.member.MemberEntityNotFoundException;
-import app.exception.order.*;
+import app.exception.order.OrderAlreadyCanceledException;
+import app.exception.order.OrderCartDeleteException;
+import app.exception.order.OrderCouponUpdateStatusException;
+import app.exception.order.OrderDeliveryAlreadyCanceledException;
+import app.exception.order.OrderDeliveryProcessingException;
+import app.exception.order.OrderDeliveryUpdateStatusException;
+import app.exception.order.OrderEntityNotFoundException;
+import app.exception.order.OrderMemberNotEnoughMoneyException;
+import app.exception.order.OrderMemberUpdateMoneyException;
+import app.exception.order.OrderProductNotEnoughStockQuantityException;
+import app.exception.order.OrderProductUpdateStockQuantityException;
+import app.exception.order.OrderUpdateStatusException;
 import app.exception.payment.PaymentEntityNotFoundException;
 import app.exception.product.ProductEntityNotFoundException;
 import app.utils.GetSessionFactory;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.log4j.Logger;
 
 public class OrderService {
 
-  private Logger log = Logger.getLogger("order");
   private final SqlSessionFactory sessionFactory = GetSessionFactory.getInstance();
   private final OrderDao orderDao = new OrderDao();
   private final DeliveryDao deliveryDao = new DeliveryDao();
@@ -52,7 +68,16 @@ public class OrderService {
   private final MemberDao memberDao = new MemberDao();
   private final ProductOrderDao productOrderDao = new ProductOrderDao();
   private final ProductDao productDao = ProductDao.getInstance();
-  private final CartDao<ProductAndMemberCompositeKey,Cart> cartDao = new CartDaoImpl();
+  private final CartDaoFrame<ProductAndMemberCompositeKey, Cart> cartDaoFrame = new CartDao();
+  private Logger log = Logger.getLogger("order");
+
+  private static boolean isDeliveryProcessing(String status) {
+    return status.equals(DeliveryStatus.PROCESSING.name());
+  }
+
+  private static boolean isCouponUsed(Long couponId) {
+    return couponId != null;
+  }
 
   /* 상품 주문 폼 */
   public OrderCreateForm getCreateOrderForm(Long memberId, Long productId) throws Exception {
@@ -156,7 +181,7 @@ public class OrderService {
               .orElseThrow(MemberEntityNotFoundException::new);
       /* 회원으로 장바구니에 들어있는 상품들 모두 조회 */
       List<CartAndProductDto> cartAndProductDtos =
-          cartDao.getAllCartsAndAllProductsByMember(memberId, session);
+          cartDaoFrame.getAllCartsAndAllProductsByMember(memberId, session);
 
       return OrderCartCreateForm.of(orderMemberDetail, cartAndProductDtos);
     } catch (EntityNotFoundException ex) {
@@ -178,7 +203,7 @@ public class OrderService {
     try {
       Long memberId = orderCartCreateDto.getMemberId();
       List<CartAndProductDto> cartAndProductDtos =
-          cartDao.getAllCartsAndAllProductsByMember(memberId, session);
+          cartDaoFrame.getAllCartsAndAllProductsByMember(memberId, session);
       orderCartCreateDto.setProducts(cartAndProductDtos);
       /* 상품 재고 확인 1. 없다면 구매 불가 2. 있다면 재고 차감 */
       List<ProductAndMemberCompositeKey> productAndMemberCompositeKeys = new ArrayList<>();
@@ -198,9 +223,9 @@ public class OrderService {
                   }
 
                   productAndMemberCompositeKeys.add(ProductAndMemberCompositeKey.builder()
-                          .memberId(memberId)
-                          .productId(product.getId())
-                          .build());
+                      .memberId(memberId)
+                      .productId(product.getId())
+                      .build());
 
                 } catch (Exception e) {
                   throw new RuntimeException(e);
@@ -208,8 +233,8 @@ public class OrderService {
               });
 
       /* 장바구니 벌크 삭제 */
-      int deletedRow = cartDao.bulkDelete(productAndMemberCompositeKeys, session);
-      if(deletedRow != productAndMemberCompositeKeys.size()) {
+      int deletedRow = cartDaoFrame.bulkDelete(productAndMemberCompositeKeys, session);
+      if (deletedRow != productAndMemberCompositeKeys.size()) {
         throw new OrderCartDeleteException();
       }
 
@@ -366,14 +391,6 @@ public class OrderService {
     } finally {
       session.close();
     }
-  }
-
-  private static boolean isDeliveryProcessing(String status) {
-    return status.equals(DeliveryStatus.PROCESSING.name());
-  }
-
-  private static boolean isCouponUsed(Long couponId) {
-    return couponId != null;
   }
 
   /* 회원의 1년내의 주문 목록들을 최신순으로 조회 */

@@ -7,11 +7,14 @@ import java.util.logging.Logger;
 import org.apache.ibatis.session.SqlSession;
 
 public class ProductImageDao implements ProductImageFrame<Long, ProductImage> {
+
   private static ProductImageDao instance;
   Logger log = Logger.getLogger("ProductImageDao");
 
   public static ProductImageDao getInstance() {
-    if (instance == null) return new ProductImageDao();
+    if (instance == null) {
+      return new ProductImageDao();
+    }
     return instance;
   }
 
@@ -34,7 +37,7 @@ public class ProductImageDao implements ProductImageFrame<Long, ProductImage> {
    * 상품 이미지 조회
    *
    * @param productId 상품 아이디
-   * @param session sql session
+   * @param session   sql session
    * @return ProductImage
    * @throws Exception 조회 오류
    */

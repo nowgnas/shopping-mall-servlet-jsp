@@ -22,18 +22,21 @@ import java.util.Optional;
 import org.apache.ibatis.session.SqlSession;
 
 public class ProductServiceImpl implements ProductService {
+
+  private static ProductServiceImpl instance;
   private ProductDaoFrame dao;
   private SqlSession session;
-  private static ProductServiceImpl instance;
-
-  public static ProductServiceImpl getInstance() {
-    if (instance == null) return new ProductServiceImpl();
-    return instance;
-  }
 
   public ProductServiceImpl() {
     this.dao = ProductDao.getInstance();
     this.session = GetSessionFactory.getInstance().openSession();
+  }
+
+  public static ProductServiceImpl getInstance() {
+    if (instance == null) {
+      return new ProductServiceImpl();
+    }
+    return instance;
   }
 
   @Override
@@ -48,7 +51,9 @@ public class ProductServiceImpl implements ProductService {
           dao.selectProductParentCategory(Long.valueOf(productDetail.getCategoryId()), session);
       productDetailWithCategory =
           ProductDetailWithCategory.getProductDetail(categories, productDetail);
-    } else throw new Exception("상품이 없습니다");
+    } else {
+      throw new Exception("상품이 없습니다");
+    }
     session.close();
     return productDetailWithCategory;
   }
@@ -91,7 +96,9 @@ public class ProductServiceImpl implements ProductService {
   public ProductDetailForOrder getProductDetailForOrder(Long productId, int quantity)
       throws Exception {
     int qty = dao.selectProductQuantity(productId, session);
-    if (qty < quantity) throw new Exception("주문 가능한 수량이 부족합니다");
+    if (qty < quantity) {
+      throw new Exception("주문 가능한 수량이 부족합니다");
+    }
     ProductDetailForOrder detail = dao.selectProductDetail(productId, session);
     session.close();
     return detail;
@@ -100,7 +107,9 @@ public class ProductServiceImpl implements ProductService {
   @Override
   public List<ProductSearchByKeyword> getProductsByKeyword(String keyword) throws Exception {
     List<Product> products = dao.selectProductsByKeyword(keyword, session);
-    if (products.size() == 0) throw new Exception("상품이 존재하지 않습니다");
+    if (products.size() == 0) {
+      throw new Exception("상품이 존재하지 않습니다");
+    }
     session.close();
     return Product.productSearchByKeyword(products);
   }

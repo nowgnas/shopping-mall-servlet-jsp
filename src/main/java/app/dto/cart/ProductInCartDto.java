@@ -20,11 +20,12 @@ public class ProductInCartDto {
   private String imgUrl;
   private Long price;
 
-  private ProductInCartDto(){
+  private ProductInCartDto() {
 
   }
 
-  public static List<ProductInCartDto> getProductInfo(List<ProductItemQuantity> productItemQuantity) {
+  public static List<ProductInCartDto> getProductInfo(
+      List<ProductItemQuantity> productItemQuantity) {
     return productItemQuantity.stream().map(ProductInCartDto::getProductInfo)
         .collect(Collectors.toList());
   }

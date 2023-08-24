@@ -1,11 +1,10 @@
 package app.dto.order.response;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
 import app.enums.DeliveryStatus;
 import app.enums.OrderStatus;
 import app.enums.PaymentType;
+import java.time.LocalDateTime;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,6 +14,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ProductOrderDetailDto {
+
   private Long orderId;
   private OrderStatus orderStatus;
   private LocalDateTime orderDate;
@@ -43,6 +43,7 @@ public class ProductOrderDetailDto {
   @AllArgsConstructor
   @NoArgsConstructor(access = AccessLevel.PROTECTED)
   public static class ProductDto {
+
     private Long productId;
     private String productName;
     private String thumbnailUrl;
@@ -54,6 +55,7 @@ public class ProductOrderDetailDto {
   @AllArgsConstructor
   @NoArgsConstructor(access = AccessLevel.PROTECTED)
   public static class DeliveryDto {
+
     private String roadName;
     private String addrDetail;
     private String zipCode;
@@ -64,6 +66,7 @@ public class ProductOrderDetailDto {
   @AllArgsConstructor
   @NoArgsConstructor
   public static class PaymentDto {
+
     private PaymentType paymentType;
     private int actualAmount;
   }
@@ -72,6 +75,7 @@ public class ProductOrderDetailDto {
   @AllArgsConstructor
   @NoArgsConstructor
   public static class CouponDto {
+
     private String couponName;
     private String couponStatus;
   }

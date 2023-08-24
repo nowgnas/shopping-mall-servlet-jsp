@@ -7,19 +7,19 @@ import app.exception.CustomException;
 import app.exception.ErrorCode;
 import app.service.member.MemberService;
 import app.utils.HttpUtil;
-import web.controller.validation.MemberValidation;
-import web.dispatcher.Navi;
-
+import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
+import web.controller.validation.MemberValidation;
+import web.dispatcher.Navi;
 
 @WebServlet({"/member"})
 public class MemberServlet extends HttpServlet {
+
   private static final long serialVersionUID = 1L;
   private final MemberService memberService;
 

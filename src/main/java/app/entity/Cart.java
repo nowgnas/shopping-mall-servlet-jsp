@@ -28,6 +28,7 @@ public class Cart {
     return new Cart(productAndMemberCompositeKey.getMemberId(),
         productAndMemberCompositeKey.getProductId(), productQuantity);
   }
+
   public static Cart updateCart(Cart cart, Long requestQuantity) {
     return Cart.cartCompKeyBuilder(
         new ProductAndMemberCompositeKey(cart.getProductId(), cart.getMemberId()),

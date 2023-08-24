@@ -17,10 +17,12 @@ import java.util.logging.Logger;
 import org.apache.ibatis.session.SqlSession;
 
 public class ProductDao implements ProductDaoFrame<Long, Product> {
-  private Logger log = Logger.getLogger("order");
-  private static ProductDao instance;
 
-  private ProductDao() {}
+  private static ProductDao instance;
+  private Logger log = Logger.getLogger("order");
+
+  private ProductDao() {
+  }
 
   /**
    * 싱글톤
@@ -28,7 +30,9 @@ public class ProductDao implements ProductDaoFrame<Long, Product> {
    * @return ProductDao
    */
   public static ProductDao getInstance() {
-    if (instance == null) return new ProductDao();
+    if (instance == null) {
+      return new ProductDao();
+    }
     return instance;
   }
 
@@ -37,19 +41,23 @@ public class ProductDao implements ProductDaoFrame<Long, Product> {
       List<Long> productId, SqlSession session) throws CustomException {
     List<ProductListItemOfLike> productListItemOfLikes =
         session.selectList("product.selectProductListItemOfLike", productId);
-    if (productListItemOfLikes.size() == 0) throw new CustomException(ErrorCode.ITEM_NOT_FOUND);
+    if (productListItemOfLikes.size() == 0) {
+      throw new CustomException(ErrorCode.ITEM_NOT_FOUND);
+    }
     return productListItemOfLikes;
   }
 
   /**
    * @param productId 상품 id list
-   * @param session sql session
+   * @param session   sql session
    * @return 상품 정보 (이름, 이미지, 가격, 개수)
    */
   @Override
   public List<ProductItemQuantity> selectProductQuantity(List<Long> productId, SqlSession session) {
     List<ProductItemQuantity> product = session.selectList("product.selectone", productId);
-    if (product.size() == 0) throw new CustomException(ErrorCode.ITEM_NOT_FOUND);
+    if (product.size() == 0) {
+      throw new CustomException(ErrorCode.ITEM_NOT_FOUND);
+    }
     return product;
   }
 
@@ -72,7 +80,7 @@ public class ProductDao implements ProductDaoFrame<Long, Product> {
    * 상품 상세 조회
    *
    * @param productId 상품 id
-   * @param session sql session
+   * @param session   sql session
    * @return 상품 객체
    * @throws Exception select error
    */
@@ -90,7 +98,9 @@ public class ProductDao implements ProductDaoFrame<Long, Product> {
   public List<ProductListItem> selectAllSortByPriceDesc(Map<String, Object> map, SqlSession session)
       throws Exception {
     List<ProductListItem> products = session.selectList("product.sortbypricedesc", map);
-    if (products.size() == 0) throw new CustomException(ErrorCode.ITEM_NOT_FOUND);
+    if (products.size() == 0) {
+      throw new CustomException(ErrorCode.ITEM_NOT_FOUND);
+    }
     return products;
   }
 
@@ -98,7 +108,9 @@ public class ProductDao implements ProductDaoFrame<Long, Product> {
   public List<ProductListItem> selectAllSortByPrice(Map<String, Object> map, SqlSession session)
       throws Exception {
     List<ProductListItem> products = session.selectList("product.sortbyprice");
-    if (products.size() == 0) throw new CustomException(ErrorCode.ITEM_NOT_FOUND);
+    if (products.size() == 0) {
+      throw new CustomException(ErrorCode.ITEM_NOT_FOUND);
+    }
     return products;
   }
 
@@ -106,7 +118,9 @@ public class ProductDao implements ProductDaoFrame<Long, Product> {
   public List<ProductListItem> selectAllSortByDate(Map<String, Object> map, SqlSession session)
       throws Exception {
     List<ProductListItem> products = session.selectList("product.sortbydate");
-    if (products.size() == 0) throw new CustomException(ErrorCode.ITEM_NOT_FOUND);
+    if (products.size() == 0) {
+      throw new CustomException(ErrorCode.ITEM_NOT_FOUND);
+    }
     return products;
   }
 

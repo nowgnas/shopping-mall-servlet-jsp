@@ -1,7 +1,7 @@
 package app.service.cart;
 
 import app.dao.cart.CartDao;
-import app.dao.cart.CartDaoImpl;
+import app.dao.cart.CartDaoFrame;
 import app.dao.member.MemberDao;
 import app.dao.member.MemberDaoFrame;
 import app.entity.ProductAndMemberCompositeKey;
@@ -29,16 +29,16 @@ import org.junit.jupiter.api.Test;
 class DeleteCartProductService {
 
   private final TestConfig testConfig = new TestConfig();
-  private final CartDao<ProductAndMemberCompositeKey, Cart> cartDao = new CartDaoImpl();
+  private final CartDaoFrame<ProductAndMemberCompositeKey, Cart> cartDaoFrame = new CartDao();
   private final MemberDaoFrame<Long, Member> memberDao = new MemberDao();
   private final EntityExistCheckerService<Long, Member> memberExistCheckerService = new MemberExistCheckerService(
       memberDao);
   private final EntityExistCheckerService<Long, Product> productExistCheckerService = new ProductExistCheckerService();
   private final EntityExistCheckerService<ProductAndMemberCompositeKey, Cart> cartExistCheckerService = new CartExistCheckerService();
-  private final UpdateCartService updateCartService = new UpdateCartServiceImpl(cartDao,
-      new DeleteCartWhenRestOfQuantityUnder0(cartDao));
+  private final UpdateCartService updateCartService = new UpdateCartServiceImpl(cartDaoFrame,
+      new DeleteCartWhenRestOfQuantityUnder0(cartDaoFrame));
     private final StockCheckerService stockCheckerService = new StockCheckerServiceImpl();
-  private final CartService cartService = new CartServiceImpl(cartDao, memberDao,
+  private final CartService cartService = new CartServiceImpl(cartDaoFrame, memberDao,
       memberExistCheckerService, productExistCheckerService, cartExistCheckerService,
       stockCheckerService, updateCartService);
   private SqlSession session;

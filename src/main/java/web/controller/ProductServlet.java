@@ -14,6 +14,7 @@ import web.dispatcher.Navi;
 
 @WebServlet({"/product"})
 public class ProductServlet extends HttpServlet {
+
   private static final long serialVersionUID = 1L;
   private final ProductService service = ProductServiceImpl.getInstance();
 

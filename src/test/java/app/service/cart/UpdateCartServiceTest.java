@@ -1,7 +1,7 @@
 package app.service.cart;
 
 import app.dao.cart.CartDao;
-import app.dao.cart.CartDaoImpl;
+import app.dao.cart.CartDaoFrame;
 import app.entity.ProductAndMemberCompositeKey;
 import app.entity.Cart;
 import app.exception.cart.CartQuantityIsUnder0Exception;
@@ -20,15 +20,15 @@ import org.junit.jupiter.api.Test;
 class UpdateCartServiceTest {
 
   private final TestConfig testConfig = new TestConfig();
-  private final CartDao<ProductAndMemberCompositeKey, Cart> cartDao = new CartDaoImpl();
+  private final CartDaoFrame<ProductAndMemberCompositeKey, Cart> cartDaoFrame = new CartDao();
 
 
   private final UpdateCartService increaseTheCartQuantityService = new UpdateCartServiceImpl(
-      cartDao, new DeleteCartWhenRestOfQuantityUnder0(cartDao));
+      cartDaoFrame, new DeleteCartWhenRestOfQuantityUnder0(cartDaoFrame));
   private final UpdateCartService updateCartServiceWithDeleteStrategyWhenCartQuantityUnder0 = new UpdateCartServiceImpl(
-      cartDao, new DeleteCartWhenRestOfQuantityUnder0(cartDao));
+      cartDaoFrame, new DeleteCartWhenRestOfQuantityUnder0(cartDaoFrame));
   private final UpdateCartService updateCartServiceWithThrowErrorWhenCartQuantityUnder0 = new UpdateCartServiceImpl(
-      cartDao, new ThrowExceptionUserRequestOverProductQuantityInCart(cartDao));
+      cartDaoFrame, new ThrowExceptionUserRequestOverProductQuantityInCart(cartDaoFrame));
 
   private SqlSession session;
 
@@ -57,7 +57,7 @@ class UpdateCartServiceTest {
     Long requestExtraQuantity = 1L;
     Long stock = 2L;
     increaseTheCartQuantityService.increaseQuantity(expected, requestExtraQuantity, stock, session);
-    Cart actual = cartDao.selectById(new ProductAndMemberCompositeKey(1L, 1L), session).get();
+    Cart actual = cartDaoFrame.selectById(new ProductAndMemberCompositeKey(1L, 1L), session).get();
     Assertions.assertEquals(expected.getProductQuantity() + requestExtraQuantity,
         actual.getProductQuantity());
   }
@@ -84,7 +84,7 @@ class UpdateCartServiceTest {
     Long requestExtraQuantity = 1L;
     updateCartServiceWithDeleteStrategyWhenCartQuantityUnder0.decreaseQuantity(expectedCart,
         requestExtraQuantity, session);
-    Long actualQuantity = cartDao.selectById(new ProductAndMemberCompositeKey(2L, 1L), session)
+    Long actualQuantity = cartDaoFrame.selectById(new ProductAndMemberCompositeKey(2L, 1L), session)
         .get().getProductQuantity();
     Assertions.assertEquals(expectedQuantity - requestExtraQuantity, actualQuantity);
   }
@@ -98,7 +98,7 @@ class UpdateCartServiceTest {
     Long requestExtraQuantity = 1L;
     updateCartServiceWithThrowErrorWhenCartQuantityUnder0.decreaseQuantity(expectedCart,
         requestExtraQuantity, session);
-    Long actualQuantity = cartDao.selectById(new ProductAndMemberCompositeKey(2L, 1L), session)
+    Long actualQuantity = cartDaoFrame.selectById(new ProductAndMemberCompositeKey(2L, 1L), session)
         .get().getProductQuantity();
     Assertions.assertEquals(expectedQuantity - requestExtraQuantity, actualQuantity);
   }
@@ -111,7 +111,7 @@ Cart expectedCart = new Cart(1L, 2L, 2L);
     Long requestExtraQuantity = 2L;
     updateCartServiceWithDeleteStrategyWhenCartQuantityUnder0.decreaseQuantity(expectedCart,
         requestExtraQuantity, session);
-    Optional<Cart> cartOptional = cartDao.selectById(new ProductAndMemberCompositeKey(2L, 1L), session);
+    Optional<Cart> cartOptional = cartDaoFrame.selectById(new ProductAndMemberCompositeKey(2L, 1L), session);
     Assertions.assertThrowsExactly(NoSuchElementException.class, cartOptional::get);
   }
 
@@ -123,7 +123,7 @@ Cart expectedCart = new Cart(1L, 2L, 2L);
     Long requestExtraQuantity = 3L;
     updateCartServiceWithDeleteStrategyWhenCartQuantityUnder0.decreaseQuantity(expectedCart,
         requestExtraQuantity, session);
-    Optional<Cart> cartOptional = cartDao.selectById(new ProductAndMemberCompositeKey(2L, 1L), session);
+    Optional<Cart> cartOptional = cartDaoFrame.selectById(new ProductAndMemberCompositeKey(2L, 1L), session);
     Assertions.assertThrowsExactly(NoSuchElementException.class, cartOptional::get);
   }
 

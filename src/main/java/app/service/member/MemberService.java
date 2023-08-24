@@ -11,12 +11,11 @@ import app.exception.CustomException;
 import app.exception.ErrorCode;
 import app.utils.CipherUtil;
 import app.utils.GetSessionFactory;
+import java.security.NoSuchAlgorithmException;
+import java.sql.SQLException;
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
-
-import java.security.NoSuchAlgorithmException;
-import java.sql.SQLException;
 
 public class MemberService {
 
@@ -123,7 +122,7 @@ public class MemberService {
   private String createHashedPassword(String password, String salt) throws SQLException {
     new String();
     CipherUtil.getSHA256(password, salt);
-    return new String(CipherUtil.getSHA256(password, salt)).replaceAll(" ","");
+    return new String(CipherUtil.getSHA256(password, salt)).replaceAll(" ", "");
   }
 
   private String createSalt() throws NoSuchAlgorithmException {

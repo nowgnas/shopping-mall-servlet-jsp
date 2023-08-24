@@ -13,8 +13,9 @@ public class ProductExistCheckerService implements
     EntityExistCheckerService<Long, Product> {
 
   @Override
-  public Product isExisted(DaoFrame<Long, Product> daoFrame, Long id, SqlSession session) throws Exception {
-   return ProductDao.getInstance().selectById(id, session)
+  public Product isExisted(DaoFrame<Long, Product> daoFrame, Long id, SqlSession session)
+      throws Exception {
+    return ProductDao.getInstance().selectById(id, session)
         .orElseThrow(() -> new ProductNotFoundException(
             ErrorCode.ITEM_NOT_FOUND));
   }

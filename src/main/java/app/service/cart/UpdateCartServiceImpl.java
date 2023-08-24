@@ -1,8 +1,8 @@
 package app.service.cart;
 
-import app.dao.cart.CartDao;
-import app.entity.ProductAndMemberCompositeKey;
+import app.dao.cart.CartDaoFrame;
 import app.entity.Cart;
+import app.entity.ProductAndMemberCompositeKey;
 import app.exception.ErrorCode;
 import app.exception.cart.OutOfStockException;
 import lombok.AllArgsConstructor;
@@ -11,7 +11,7 @@ import org.apache.ibatis.session.SqlSession;
 @AllArgsConstructor
 public class UpdateCartServiceImpl implements UpdateCartService {
 
-  private CartDao<ProductAndMemberCompositeKey, Cart> cartDao;
+  private CartDaoFrame<ProductAndMemberCompositeKey, Cart> cartDaoFrame;
   private CartProductDeletePolicy cartProductDeletePolicy;
 
 
@@ -24,13 +24,13 @@ public class UpdateCartServiceImpl implements UpdateCartService {
       throw new OutOfStockException(
           ErrorCode.QUANTITY_IS_NOT_SUFFICIENT);
     } else {
-      cartDao.update(Cart.updateCart(cart,totalRequestQuantity), session);
+      cartDaoFrame.update(Cart.updateCart(cart, totalRequestQuantity), session);
     }
   }
 
   @Override
   public void decreaseQuantity(Cart cart, Long requestQuantity, SqlSession session)
       throws Exception {
-    cartProductDeletePolicy.deleteRequestQuantity(cart,requestQuantity,session);
+    cartProductDeletePolicy.deleteRequestQuantity(cart, requestQuantity, session);
   }
 }
