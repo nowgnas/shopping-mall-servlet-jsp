@@ -1,16 +1,7 @@
 'use strict';
 
 (function ($) {
-
-    $('#open').on('click', () => {
-        console.log(delivery);
-        Swal.fire({
-            title: '${delivery.roadName}',
-            text: 'Do you want to continue',
-            icon: 'error',
-            confirmButtonText: 'Cool'
-        })
-    });
+    
 })(jQuery);
 
 function open_delivery(roadName, addrDetail, zipCode, deliveryStatus) {
