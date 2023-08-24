@@ -37,7 +37,12 @@ public class ProductOrderDao implements ProductOrderDaoFrame<Long, ProductOrder>
   }
 
   @Override
-  public List<ProductOrder> selectAllByOrderId(Long orderId, SqlSession session) {
+  public List<ProductOrder> selectAllByOrderId(Long orderId, SqlSession session) throws Exception {
     return session.selectList("productOrder.selectAllByOrderId", orderId);
+  }
+
+  @Override
+  public int bulkInsert(List<ProductOrder> productOrders, SqlSession session) throws Exception {
+    return session.insert("productOrder.bulkInsert", productOrders);
   }
 }

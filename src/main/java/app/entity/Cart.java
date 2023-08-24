@@ -6,6 +6,7 @@ import lombok.*;
 @Getter
 @Builder
 @AllArgsConstructor
+@ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Cart {
 
@@ -17,10 +18,15 @@ public class Cart {
   private Long productQuantity;
 
 
-  public static Cart CartCompKeyBuilder(ProductAndMemberCompositeKey productAndMemberCompositeKey,
+  public static Cart cartCompKeyBuilder(ProductAndMemberCompositeKey productAndMemberCompositeKey,
       Long productQuantity) {
     return new Cart(productAndMemberCompositeKey.getMemberId(),
         productAndMemberCompositeKey.getProductId(), productQuantity);
+  }
 
+  public static Cart updateCart(Cart cart, Long requestQuantity) {
+    return Cart.cartCompKeyBuilder(
+        new ProductAndMemberCompositeKey(cart.getProductId(), cart.getMemberId()),
+         requestQuantity);
   }
 }

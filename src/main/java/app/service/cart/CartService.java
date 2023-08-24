@@ -5,7 +5,7 @@ import app.dto.comp.ProductAndMemberCompositeKey;
 
 public interface CartService {
 
-  AllCartProductInfoDto getCartProductListByMember(ProductAndMemberCompositeKey productAndMemberCompositeKeys)
+  AllCartProductInfoDto getCartProductListByMember(Long memberId)
       throws Exception;
 
   void putItemIntoCart(ProductAndMemberCompositeKey productAndMemberCompositeKey,
@@ -13,9 +13,10 @@ public interface CartService {
       throws Exception;
 
   void updateQuantityOfCartProduct(ProductAndMemberCompositeKey productAndMemberCompositeKey,
-      Long productId, Long updateQuantity) throws Exception;
+      Long updateQuantity) throws Exception;
 
-  void delete(ProductAndMemberCompositeKey productAndMemberCompositeKeyList) throws Exception;
+  void delete(ProductAndMemberCompositeKey productAndMemberCompositeKeyList, Long quantity)
+      throws Exception;
 
 
 }
