@@ -75,16 +75,16 @@ class ProductDaoImplTest {
   @DisplayName("상품 리스트 조회 - 높은 가격 순")
   void selectAll() throws Exception {
     // case
-    int perPage = 5;
+    int perPage = 3;
     Long userId = -1L;
     SortOption dateDesc = SortOption.PRICE_DESC;
 
-    Pagination pagination = Pagination.builder().currentPage(1).perPage(perPage).build();
+    Pagination pagination = Pagination.builder().currentPage(0).perPage(perPage).build();
     Map<String, Object> map = new HashMap<>();
     map.put("current", 1);
     map.put("perPage", perPage);
     map.put("userId", userId.toString());
-    List<ProductListItem> products = productDao.selectAllSortByPriceDesc(map, session); // 모든 상품 조회
+    List<ProductListItem> products = productDao.selectAllSortByDate(map, session); // 모든 상품 조회
     System.out.println(products.toString());
     Assertions.assertEquals(perPage, products.size());
     session.close();

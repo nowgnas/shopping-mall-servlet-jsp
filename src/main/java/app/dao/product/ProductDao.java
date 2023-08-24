@@ -90,13 +90,13 @@ public class ProductDao implements ProductDaoFrame<Long, Product> {
   @Override
   public List<ProductListItem> selectAllSortByPrice(Map<String, Object> map, SqlSession session)
       throws Exception {
-    return session.selectList("product.sortbyprice");
+    return session.selectList("product.sortbyprice", map);
   }
 
   @Override
   public List<ProductListItem> selectAllSortByDate(Map<String, Object> map, SqlSession session)
       throws Exception {
-    return session.selectList("product.sortbydate");
+    return session.selectList("product.sortbydate", map);
   }
 
   @Override

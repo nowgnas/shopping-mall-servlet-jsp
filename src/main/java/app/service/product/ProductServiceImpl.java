@@ -55,8 +55,8 @@ public class ProductServiceImpl implements ProductService {
   }
 
   @Override
-  public ProductListWithPagination getProductList(
-      Long userId, int currentPage, SortOption sortOption) throws Exception {
+  public ProductListWithPagination getProductList(Long userId, int currentPage, String sortOption)
+      throws Exception {
     SqlSession session = sessionFactory.openSession();
     Map<String, Object> map = new HashMap<>();
     map.put("current", currentPage);
@@ -65,7 +65,7 @@ public class ProductServiceImpl implements ProductService {
 
     List<ProductListItem> products = null;
 
-    switch (sortOption) {
+    switch (SortOption.valueOf(sortOption)) {
       case PRICE_DESC:
         products = dao.selectAllSortByPriceDesc(map, session);
         break;
