@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-@WebServlet({"/shopping-cart"})
+@WebServlet({"/cart"})
 public class CartServlet extends HttpServlet {
 
   private final CartService cartService;
@@ -31,7 +31,7 @@ public class CartServlet extends HttpServlet {
     try {
       AllCartProductInfoDto cartInfo = cartService.getCartProductListByMember(memberId);
       request.setAttribute("cartInfo", cartInfo);
-      request.getRequestDispatcher("cart.jsp").forward(request, response);
+      request.getRequestDispatcher("/cart.jsp").forward(request, response);
     } catch (MemberNotFoundException e) {
       throw new MemberNotFoundException(ErrorCode.MEMBER_NOT_FOUND);
     } catch (Exception e) {
