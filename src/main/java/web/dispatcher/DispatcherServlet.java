@@ -3,6 +3,7 @@ package web.dispatcher;
 import app.utils.HttpUtil;
 import org.apache.log4j.Logger;
 import web.ControllerFrame;
+import web.controller.MainController;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -22,6 +23,8 @@ public class DispatcherServlet extends HttpServlet {
 
   public DispatcherServlet() {
     super();
+    controllerMapper.put("main",new MainController());
+//    controllerMapper.put("member",new MainController());
   }
 
   protected void service(HttpServletRequest request, HttpServletResponse response)
@@ -32,9 +35,14 @@ public class DispatcherServlet extends HttpServlet {
     work_log.debug(path);
     path = path.substring(1, path.lastIndexOf("."));
     work_log.debug(path);
-    String next = "main.jsp";
-    if (path != null) {
-      next = path;
+    String next = Navi.REDIRECT_MAIN;
+    try {
+      if (controllerMapper.containsKey(path)) {
+        ControllerFrame controller =  controllerMapper.get(path);
+        next = controller.execute(request, response);
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
     }
 
     String resultPath = next.substring(next.indexOf(":") + 1);
@@ -45,8 +53,5 @@ public class DispatcherServlet extends HttpServlet {
       HttpUtil.redirect(response, resultPath);
     }
 
-
-//    RequestDispatcher rd = request.getRequestDispatcher(next);
-//    rd.forward(request, response);
   }
 }
