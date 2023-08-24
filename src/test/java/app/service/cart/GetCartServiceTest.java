@@ -51,6 +51,7 @@ import org.junit.jupiter.api.Test;
     session = GetSessionFactory.getInstance().openSession();
     testConfig.init("schema.sql", session);
     testConfig.init("init-data.sql", session);
+    testConfig.init("product/product-image.sql",session);
   }
 
    @DisplayName("멤버가 존재 하지 않을 때 상품 조회")
