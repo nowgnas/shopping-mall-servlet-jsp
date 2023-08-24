@@ -1,6 +1,5 @@
 package app.service.cart;
 
-import app.dto.comp.ProductAndMemberCompositeKey;
 import app.entity.Cart;
 import org.apache.ibatis.session.SqlSession;
 

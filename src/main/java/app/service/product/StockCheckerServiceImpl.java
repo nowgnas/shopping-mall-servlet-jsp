@@ -1,8 +1,8 @@
 package app.service.product;
 
 import app.entity.Product;
-import app.error.ErrorCode;
-import app.error.exception.cart.OutOfStockException;
+import app.exception.ErrorCode;
+import app.exception.cart.OutOfStockException;
 
 public class StockCheckerServiceImpl implements StockCheckerService {
 

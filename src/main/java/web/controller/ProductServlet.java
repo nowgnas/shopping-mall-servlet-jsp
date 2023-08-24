@@ -58,6 +58,6 @@ public class ProductServlet extends HttpServlet {
   }
 
   private String productDetail() {
-    return Navi.FORWARD_DETAIL;
+    return Navi.FORWARD_SHOP_DETAIL;
   }
 }
