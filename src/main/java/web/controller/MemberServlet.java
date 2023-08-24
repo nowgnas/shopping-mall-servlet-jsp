@@ -3,8 +3,8 @@ package web.controller;
 import app.dto.request.LoginDto;
 import app.dto.request.MemberRegisterDto;
 import app.dto.response.MemberDetail;
-import app.error.CustomException;
-import app.error.ErrorCode;
+import app.exception.CustomException;
+import app.exception.ErrorCode;
 import app.service.member.MemberService;
 import app.utils.HttpUtil;
 import web.controller.validation.MemberValidation;
@@ -37,7 +37,6 @@ public class MemberServlet extends HttpServlet {
     }
 
     String path = next.substring(next.indexOf(":") + 1);
-
     if (next.startsWith("forward:")) {
       HttpUtil.forward(request, response, path);
     } else {
@@ -68,9 +67,9 @@ public class MemberServlet extends HttpServlet {
 
   private String register(HttpServletRequest request) {
 
-    String email = request.getParameter("email");
-    String password = request.getParameter("password");
-    String name = request.getParameter("name");
+    String email = request.getParameter("registerEmail");
+    String password = request.getParameter("registerPassword");
+    String name = request.getParameter("registerName");
 
     MemberRegisterDto dto = new MemberRegisterDto(email, password, name);
 
@@ -80,7 +79,7 @@ public class MemberServlet extends HttpServlet {
 
     memberService.register(dto);
 
-    return Navi.REDIRECT_LOGIN_FORM;
+    return Navi.REDIRECT_MAIN;
   }
 
   private String loginForm() {

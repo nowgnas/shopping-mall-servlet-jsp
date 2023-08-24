@@ -26,45 +26,7 @@
     <link rel="stylesheet" href="css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="css/style.css" type="text/css">
 </head>
-<style>
-    .container {
-        padding: 2rem 0rem;
-    }
 
-    @media (min-width: 576px) {
-        .modal-dialog {
-            max-width: 400px;
-        }
-
-        .modal-dialog .modal-content {
-            padding: 1rem;
-        }
-    }
-
-    .modal-header .close {
-        margin-top: -1.5rem;
-    }
-
-    .form-title {
-        margin: -2rem 0rem 2rem;
-    }
-
-    .btn-round {
-        border-radius: 3rem;
-    }
-
-    .delimiter {
-        padding: 1rem;
-    }
-
-    .social-buttons .btn {
-        margin: 0 0.5rem 1rem;
-    }
-
-    .signup-section {
-        padding: 0.3rem 0rem;
-    }
-</style>
 <script>
 
 </script>
@@ -77,57 +39,6 @@
 
 <!-- Header Section -->
 <jsp:include page="./common/header.jsp"/>
-
-<!-- login madal -->
-<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-     aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header border-bottom-0">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="form-title text-center">
-                    <h4>Login</h4>
-                </div>
-                <div class="d-flex flex-column text-center">
-                    <form id="loginForm" method="POST" action="member.bit?view=login">
-                        <div class="form-group">
-                            <input type="email" class="form-control" name="email" id="email"
-                                   placeholder="Your email address...">
-                        </div>
-                        <div class="form-group">
-                            <input type="password" class="form-control" name="password" id="password"
-                                   placeholder="Your password...">
-                        </div>
-                        <button type="button" class="btn btn-info btn-block btn-round" id="loginbtn">Login</button>
-                    </form>
-
-                    <div class="text-center text-muted delimiter">or use a social network</div>
-                    <div class="d-flex justify-content-center social-buttons">
-                        <button type="button" class="btn btn-secondary btn-round" data-toggle="tooltip"
-                                data-placement="top" title="Twitter">
-                            <i class="fab fa-twitter"></i>
-                        </button>
-                        <button type="button" class="btn btn-secondary btn-round" data-toggle="tooltip"
-                                data-placement="top" title="Facebook">
-                            <i class="fab fa-facebook"></i>
-                        </button>
-                        <button type="button" class="btn btn-secondary btn-round" data-toggle="tooltip"
-                                data-placement="top" title="Linkedin">
-                            <i class="fab fa-linkedin"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer d-flex justify-content-center">
-                <div class="signup-section">Not a member yet? <a href="#a" class="text-info"> Sign Up</a>.</div>
-            </div>
-        </div>
-    </div>
-</div>
 
 <!-- Hero Section Begin -->
 <section class="hero">
@@ -651,7 +562,6 @@
 <!-- Search End -->
 
 <!-- Js Plugins -->
-<script src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js'></script>
 <script src="js/jquery-3.3.1.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
 <script src="js/jquery.nice-select.min.js"></script>

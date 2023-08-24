@@ -7,8 +7,8 @@ import app.dto.request.MemberRegisterDto;
 import app.dto.response.MemberDetail;
 import app.entity.Encryption;
 import app.entity.Member;
-import app.error.CustomException;
-import app.error.ErrorCode;
+import app.exception.CustomException;
+import app.exception.ErrorCode;
 import app.utils.CipherUtil;
 import app.utils.GetSessionFactory;
 import org.apache.ibatis.exceptions.PersistenceException;
@@ -98,7 +98,7 @@ public class MemberService {
     return memberDetail;
   }
 
-  public boolean isDuplicatedEmail(String email) {
+  public Boolean isDuplicatedEmail(String email) {
     SqlSession sqlSession = sessionFactory.openSession();
     int result = 0;
     try {
