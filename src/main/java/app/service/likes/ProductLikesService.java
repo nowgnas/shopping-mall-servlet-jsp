@@ -1,11 +1,11 @@
 package app.service.likes;
 
-import app.dao.DaoFrame;
+import app.dao.cart.DaoFrame;
 import app.dao.likes.LikesDao;
 import app.dao.likes.LikesDaoFrame;
-import app.dto.comp.ProductAndMemberCompositeKey;
 import app.entity.Likes;
 import app.entity.Product;
+import app.entity.ProductAndMemberCompositeKey;
 import app.exception.CustomException;
 import app.exception.ErrorCode;
 import app.utils.GetSessionFactory;
@@ -137,7 +137,7 @@ public class ProductLikesService implements LikesService {
       session.rollback();
       e.printStackTrace();
       throw new CustomException(ErrorCode.PRODUCT_IS_NOT_VALID);
-    }catch (Exception e) {
+    } catch (Exception e) {
       session.rollback();
     } finally {
       session.close();

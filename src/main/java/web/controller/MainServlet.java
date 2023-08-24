@@ -1,22 +1,20 @@
 package web.controller;
 
-import app.entity.Address;
-import app.entity.Cart;
-import app.entity.Product;
 import app.utils.HttpUtil;
-import web.dispatcher.Navi;
-
-import javax.servlet.RequestDispatcher;
+import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import web.dispatcher.Navi;
 
-/** Servlet implementation class CustServlet */
+/**
+ * Servlet implementation class CustServlet
+ */
 @WebServlet({"/main"})
 public class MainServlet extends HttpServlet {
+
   private static final long serialVersionUID = 1L;
 
   public MainServlet() {

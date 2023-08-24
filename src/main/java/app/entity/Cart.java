@@ -1,7 +1,12 @@
 package app.entity;
 
-import app.dto.comp.ProductAndMemberCompositeKey;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.ToString;
 
 @Getter
 @Builder
@@ -27,6 +32,6 @@ public class Cart {
   public static Cart updateCart(Cart cart, Long requestQuantity) {
     return Cart.cartCompKeyBuilder(
         new ProductAndMemberCompositeKey(cart.getProductId(), cart.getMemberId()),
-         requestQuantity);
+        requestQuantity);
   }
 }

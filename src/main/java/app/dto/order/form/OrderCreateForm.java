@@ -4,7 +4,10 @@ import app.dto.product.response.ProductDetailForOrder;
 import app.dto.response.OrderMemberDetail;
 import java.util.List;
 import java.util.stream.Collectors;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
 
 @Getter
 @Builder
@@ -54,6 +57,7 @@ public class OrderCreateForm {
   @Getter
   @AllArgsConstructor(access = AccessLevel.PROTECTED)
   public static class AddressDto {
+
     private String roadName;
     private String addrDetail;
     private String zipCode;
@@ -62,6 +66,7 @@ public class OrderCreateForm {
   @Getter
   @AllArgsConstructor(access = AccessLevel.PROTECTED)
   public static class CouponDto {
+
     private Long id;
     private String name;
     private String discountPolicy;
@@ -72,6 +77,7 @@ public class OrderCreateForm {
   @Getter
   @AllArgsConstructor(access = AccessLevel.PROTECTED)
   public static class ProductDto {
+
     private Long id;
     private String name;
     private Long price;

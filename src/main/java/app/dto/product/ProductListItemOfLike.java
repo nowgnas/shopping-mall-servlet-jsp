@@ -13,6 +13,7 @@ import lombok.ToString;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
 public class ProductListItemOfLike {
+
   private Long id;
   private String name;
   private Long price;

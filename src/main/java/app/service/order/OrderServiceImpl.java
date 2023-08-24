@@ -1,6 +1,5 @@
 package app.service.order;
 
-
 import app.dao.cart.CartDao;
 import app.dao.cart.CartDaoFrame;
 import app.dao.coupon.CouponDao;
@@ -58,7 +57,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.log4j.Logger;
 
-public class OrderService {
+public class OrderServiceImpl {
 
   private final SqlSessionFactory sessionFactory = GetSessionFactory.getInstance();
   private final OrderDao orderDao = new OrderDao();
@@ -68,7 +67,7 @@ public class OrderService {
   private final MemberDao memberDao = new MemberDao();
   private final ProductOrderDao productOrderDao = new ProductOrderDao();
   private final ProductDao productDao = ProductDao.getInstance();
-  private final CartDaoFrame<ProductAndMemberCompositeKey, Cart> cartDaoFrame = new CartDao();
+  private final CartDaoFrame<ProductAndMemberCompositeKey, Cart> cartDao = new CartDao();
   private Logger log = Logger.getLogger("order");
 
   private static boolean isDeliveryProcessing(String status) {
@@ -181,7 +180,7 @@ public class OrderService {
               .orElseThrow(MemberEntityNotFoundException::new);
       /* 회원으로 장바구니에 들어있는 상품들 모두 조회 */
       List<CartAndProductDto> cartAndProductDtos =
-          cartDaoFrame.getAllCartsAndAllProductsByMember(memberId, session);
+          cartDao.getAllCartsAndAllProductsByMember(memberId, session);
 
       return OrderCartCreateForm.of(orderMemberDetail, cartAndProductDtos);
     } catch (EntityNotFoundException ex) {
@@ -203,7 +202,7 @@ public class OrderService {
     try {
       Long memberId = orderCartCreateDto.getMemberId();
       List<CartAndProductDto> cartAndProductDtos =
-          cartDaoFrame.getAllCartsAndAllProductsByMember(memberId, session);
+          cartDao.getAllCartsAndAllProductsByMember(memberId, session);
       orderCartCreateDto.setProducts(cartAndProductDtos);
       /* 상품 재고 확인 1. 없다면 구매 불가 2. 있다면 재고 차감 */
       List<ProductAndMemberCompositeKey> productAndMemberCompositeKeys = new ArrayList<>();
@@ -233,7 +232,7 @@ public class OrderService {
               });
 
       /* 장바구니 벌크 삭제 */
-      int deletedRow = cartDaoFrame.bulkDelete(productAndMemberCompositeKeys, session);
+      int deletedRow = cartDao.bulkDelete(productAndMemberCompositeKeys, session);
       if (deletedRow != productAndMemberCompositeKeys.size()) {
         throw new OrderCartDeleteException();
       }

@@ -1,7 +1,7 @@
 package app.service.cart;
 
 import app.dto.cart.AllCartProductInfoDto;
-import app.dto.comp.ProductAndMemberCompositeKey;
+import app.entity.ProductAndMemberCompositeKey;
 
 public interface CartService {
 

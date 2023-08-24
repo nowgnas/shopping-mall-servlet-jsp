@@ -7,7 +7,10 @@ import app.entity.ProductOrder;
 import app.enums.DeliveryStatus;
 import app.enums.OrderStatus;
 import app.enums.PaymentType;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
 
 @Getter
 @Builder

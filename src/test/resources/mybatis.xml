@@ -21,7 +21,7 @@
         <typeAlias type="app.entity.ProductOrder" alias="productOrder"/>
         <typeAlias type="app.dto.product.ProductListItemOfLike" alias="productOfLike"/>
         <typeAlias type="app.entity.Encryption" alias="encryption"/>
-        <typeAlias type="app.dto.comp.ProductAndMemberCompositeKey" alias="productAndMemberCompositeKey"/>
+        <typeAlias type="app.entity.ProductAndMemberCompositeKey" alias="productAndMemberCompositeKey"/>
     </typeAliases>
     <environments default="test">
         <environment id="test">

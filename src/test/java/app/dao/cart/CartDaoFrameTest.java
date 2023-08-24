@@ -2,10 +2,8 @@ package app.dao.cart;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import app.dao.CartDaoFrame;
-import app.dao.CartDaoFrameImpl;
 import app.dto.cart.CartAndProductDto;
-import app.dto.comp.ProductAndMemberCompositeKey;
+import app.entity.ProductAndMemberCompositeKey;
 import app.entity.Cart;
 import app.utils.GetSessionFactory;
 import config.TestConfig;
@@ -15,21 +13,28 @@ import java.util.Optional;
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.apache.ibatis.session.SqlSession;
 import org.h2.jdbc.JdbcSQLIntegrityConstraintViolationException;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-class CartDaoTest {
+class CartDaoFrameTest {
 
   private final TestConfig testConfig = new TestConfig();
-  CartDaoFrame<ProductAndMemberCompositeKey, Cart> cartDaoFrame = new CartDaoFrameImpl();
+  CartDaoFrame<ProductAndMemberCompositeKey, Cart> cartDaoFrame = new CartDao();
   SqlSession session;
 
   @BeforeEach
   void beforeEach() throws Exception {
     session = GetSessionFactory.getInstance().openSession();
     testConfig.init("schema.sql", session);
+  }
+
+  @AfterEach
+  void afterEach() throws Exception {
+    session = GetSessionFactory.getInstance().openSession();
+    testConfig.init("clear-data.sql", session);
   }
 
   void getInitDataWithoutCartData() throws Exception {

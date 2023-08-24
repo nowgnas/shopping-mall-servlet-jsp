@@ -1,11 +1,13 @@
 package app.dto.order.form;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import app.dto.cart.CartAndProductDto;
 import app.dto.response.OrderMemberDetail;
-import lombok.*;
+import java.util.List;
+import java.util.stream.Collectors;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
 
 @Getter
 @Builder
@@ -23,7 +25,8 @@ public class OrderCartCreateForm {
         .memberName(orderMemberDetail.getName())
         .products(
             cartAndProductDtos.stream()
-                .map(cp -> new ProductDto(cp.getProductId(), cp.getName(), cp.getPrice(), cp.getCartProductQuantity()))
+                .map(cp -> new ProductDto(cp.getProductId(), cp.getName(), cp.getPrice(),
+                    cp.getCartProductQuantity()))
                 .collect(Collectors.toList()))
         .defaultAddress(
             new OrderCartCreateForm.AddressDto(
@@ -47,6 +50,7 @@ public class OrderCartCreateForm {
   @Getter
   @AllArgsConstructor(access = AccessLevel.PROTECTED)
   public static class AddressDto {
+
     private String roadName;
     private String addrDetail;
     private String zipCode;
@@ -55,6 +59,7 @@ public class OrderCartCreateForm {
   @Getter
   @AllArgsConstructor(access = AccessLevel.PROTECTED)
   public static class CouponDto {
+
     private Long id;
     private String name;
     private String discountPolicy;
@@ -65,6 +70,7 @@ public class OrderCartCreateForm {
   @Getter
   @AllArgsConstructor(access = AccessLevel.PROTECTED)
   public static class ProductDto {
+
     private Long id;
     private String name;
     private Long price;

@@ -1,13 +1,13 @@
-package app.dao;
+package app.dao.cart;
 
 import app.dto.cart.CartAndProductDto;
-import app.dto.comp.ProductAndMemberCompositeKey;
 import app.entity.Cart;
+import app.entity.ProductAndMemberCompositeKey;
 import java.util.List;
 import java.util.Optional;
 import org.apache.ibatis.session.SqlSession;
 
-public class CartDaoFrameImpl implements CartDaoFrame<ProductAndMemberCompositeKey, Cart> {
+public class CartDao implements CartDaoFrame<ProductAndMemberCompositeKey, Cart> {
 
   @Override
   public int insert(Cart cart, SqlSession session) throws Exception {
@@ -49,7 +49,8 @@ public class CartDaoFrameImpl implements CartDaoFrame<ProductAndMemberCompositeK
   }
 
   @Override
-  public int bulkDelete(List<ProductAndMemberCompositeKey> productAndMemberCompositeKeys, SqlSession session) {
+  public int bulkDelete(List<ProductAndMemberCompositeKey> productAndMemberCompositeKeys,
+      SqlSession session) {
     return session.delete("cart.bulkDelete", productAndMemberCompositeKeys);
   }
 }

@@ -4,9 +4,9 @@ import app.dto.order.form.OrderCartCreateForm;
 import app.dto.order.form.OrderCreateForm;
 import app.dto.order.request.OrderCartCreateDto;
 import app.dto.order.request.OrderCreateDto;
-import app.dto.response.MemberDetail;
 import app.dto.order.response.ProductOrderDetailDto;
 import app.dto.order.response.ProductOrderDto;
+import app.dto.response.MemberDetail;
 import app.entity.Order;
 import app.exception.DomainException;
 import app.service.order.OrderService;
@@ -21,12 +21,14 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import web.dispatcher.Navi;
 
-/** Servlet implementation class CustServlet */
+/**
+ * Servlet implementation class CustServlet
+ */
 @WebServlet({"/order"})
 public class OrderServlet extends HttpServlet {
 
-  private Long memberId;
   private final OrderService orderService = new OrderService();
+  private Long memberId;
 
   public OrderServlet() {
     super();

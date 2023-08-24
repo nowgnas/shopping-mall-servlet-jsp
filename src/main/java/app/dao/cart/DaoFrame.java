@@ -1,11 +1,11 @@
-package app.dao;
-
-import org.apache.ibatis.session.SqlSession;
+package app.dao.cart;
 
 import java.util.List;
 import java.util.Optional;
+import org.apache.ibatis.session.SqlSession;
 
 public interface DaoFrame<K, V> {
+
   int insert(V v, SqlSession session) throws Exception;
 
   int update(V v, SqlSession session) throws Exception;

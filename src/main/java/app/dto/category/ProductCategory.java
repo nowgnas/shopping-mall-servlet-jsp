@@ -14,5 +14,6 @@ import lombok.ToString;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
 public class ProductCategory {
+
   private Map<Integer, String> categoryList;
 }

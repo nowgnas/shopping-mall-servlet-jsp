@@ -7,7 +7,7 @@
     <typeAliases>
         <typeAlias type="app.entity.Address" alias="address"/>
         <typeAlias type="app.entity.Cart" alias="cart"/>
-        <typeAlias type="app.dto.comp.ProductAndMemberCompositeKey" alias="comp"/>
+        <typeAlias type="app.entity.ProductAndMemberCompositeKey" alias="comp"/>
         <typeAlias type="app.entity.Category" alias="category"/>
         <typeAlias type="app.entity.Coupon" alias="coupon"/>
         <typeAlias type="app.entity.Delivery" alias="delivery"/>
@@ -22,7 +22,7 @@
         <typeAlias type="app.entity.ProductOrder" alias="productOrder"/>
         <typeAlias type="app.dto.product.ProductListItemOfLike" alias="productOfLike"/>
         <typeAlias type="app.entity.Encryption" alias="encryption"/>
-        <typeAlias type="app.dto.comp.ProductAndMemberCompositeKey"
+        <typeAlias type="app.entity.ProductAndMemberCompositeKey"
           alias="productAndMemberCompositeKey"/>
         <typeAlias type="app.dto.cart.AllCartProductInfoDto"
           alias="cartAndProductList"/>

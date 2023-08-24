@@ -1,8 +1,5 @@
 package app.dto.order.request;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import app.dto.cart.CartAndProductDto;
 import app.entity.Delivery;
 import app.entity.Order;
@@ -11,7 +8,12 @@ import app.entity.ProductOrder;
 import app.enums.DeliveryStatus;
 import app.enums.OrderStatus;
 import app.enums.PaymentType;
-import lombok.*;
+import java.util.List;
+import java.util.stream.Collectors;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
 
 @Getter
 @Builder
@@ -29,16 +31,9 @@ public class OrderCartCreateDto {
   public void setProducts(List<CartAndProductDto> cartAndProductDtos) {
     products =
         cartAndProductDtos.stream()
-            .map(cp -> new ProductDto(cp.getProductId(), cp.getPrice(), cp.getCartProductQuantity()))
+            .map(
+                cp -> new ProductDto(cp.getProductId(), cp.getPrice(), cp.getCartProductQuantity()))
             .collect(Collectors.toList());
-  }
-
-  @Getter
-  @AllArgsConstructor
-  public static class ProductDto {
-    private Long productId;
-    private Long price;
-    private Long quantity;
   }
 
   public Order toOrderEntity() {
@@ -78,5 +73,14 @@ public class OrderCartCreateDto {
         .type(PaymentType.CASH.name())
         .actualAmount(totalPrice)
         .build();
+  }
+
+  @Getter
+  @AllArgsConstructor
+  public static class ProductDto {
+
+    private Long productId;
+    private Long price;
+    private Long quantity;
   }
 }

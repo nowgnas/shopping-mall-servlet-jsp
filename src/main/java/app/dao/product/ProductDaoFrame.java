@@ -1,6 +1,6 @@
 package app.dao.product;
 
-import app.dao.DaoFrame;
+import app.dao.cart.DaoFrame;
 import app.dto.product.ProductDetail;
 import app.dto.product.ProductItemQuantity;
 import app.dto.product.ProductListItem;
@@ -13,6 +13,7 @@ import java.util.Map;
 import org.apache.ibatis.session.SqlSession;
 
 public interface ProductDaoFrame<K, V extends Product> extends DaoFrame<K, V> {
+
   int getTotalPage(SqlSession session);
 
   /**
@@ -51,7 +52,7 @@ public interface ProductDaoFrame<K, V extends Product> extends DaoFrame<K, V> {
    * <p>parameter: List<productId> | return: product id, quantity, name, url, price
    *
    * @param productId 상품 id list
-   * @param session sql session
+   * @param session   sql session
    * @return 상품 정보 (이름, 이미지, 가격, 개수)
    */
   List<ProductItemQuantity> selectProductQuantity(List<Long> productId, SqlSession session);
@@ -91,9 +92,9 @@ public interface ProductDaoFrame<K, V extends Product> extends DaoFrame<K, V> {
   /**
    * 상품 상세 정보 조회
    *
-   * @param memberId 사용자 id - 찜 확인
+   * @param memberId  사용자 id - 찜 확인
    * @param productId 상품 id
-   * @param session sql session
+   * @param session   sql session
    * @return
    */
   ProductDetail selectProductDetailWithCategory(Long memberId, Long productId, SqlSession session);
