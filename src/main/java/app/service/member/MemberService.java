@@ -63,7 +63,6 @@ public class MemberService {
     try {
       String hashedPassword = getHashedPassword(dto, sqlSession);
       dto.setPassword(hashedPassword);
-
       Member member =
           memberDao
               .selectByEmailAndPassword(dto, sqlSession)
@@ -122,7 +121,9 @@ public class MemberService {
   }
 
   private String createHashedPassword(String password, String salt) throws SQLException {
-    return new String(CipherUtil.getSHA256(password, salt));
+    new String();
+    CipherUtil.getSHA256(password, salt);
+    return new String(CipherUtil.getSHA256(password, salt)).replaceAll(" ","");
   }
 
   private String createSalt() throws NoSuchAlgorithmException {

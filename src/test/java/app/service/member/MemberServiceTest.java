@@ -1,5 +1,6 @@
 package app.service.member;
 
+import app.dao.encryption.EncryptionDao;
 import app.dao.member.MemberDao;
 import app.dto.request.LoginDto;
 import app.dto.request.MemberRegisterDto;
@@ -127,6 +128,14 @@ class MemberServiceTest {
     MemberDetail loginMember = memberService.login(loginDto);
     // then
     Assertions.assertEquals(dto.getEmail(), loginMember.getEmail());
+  }
+
+  @Test
+  void login_success123123() throws Exception {
+    // given
+    String email = "test@naver.com";
+    String password = "test123";
+
   }
 
   private MemberRegisterDto createMemberRegisterDto() {

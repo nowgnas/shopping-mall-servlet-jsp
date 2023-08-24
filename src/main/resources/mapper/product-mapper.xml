@@ -86,6 +86,7 @@
            p.description       description,
            p.quantity          quantity,
            pi.url              url,
+           p.code              code,
            CASE
              WHEN l.product_id IS NOT NULL THEN true
              ELSE false END AS isLiked
