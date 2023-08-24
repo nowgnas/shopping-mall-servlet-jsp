@@ -1,8 +1,7 @@
-package app.error.exception.product;
+package app.exception.product;
 
-import app.error.CustomException;
-import app.error.ErrorCode;
-import java.util.function.Supplier;
+import app.exception.CustomException;
+import app.exception.ErrorCode;
 
 public class ProductNotFoundException extends CustomException {
 

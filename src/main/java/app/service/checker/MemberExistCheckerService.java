@@ -1,11 +1,10 @@
 package app.service.checker;
 
 import app.dao.DaoFrame;
-import app.dao.member.MemberDao;
 import app.dao.member.MemberDaoFrame;
 import app.entity.Member;
-import app.error.ErrorCode;
-import app.error.exception.member.MemberNotFoundException;
+import app.exception.ErrorCode;
+import app.exception.member.MemberNotFoundException;
 import app.utils.GetSessionFactory;
 import lombok.AllArgsConstructor;
 import org.apache.ibatis.session.SqlSession;

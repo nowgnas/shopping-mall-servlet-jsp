@@ -1,12 +1,9 @@
 package app.service.checker;
-
-import app.dao.CartDaoFrame;
 import app.dao.DaoFrame;
 import app.dto.comp.ProductAndMemberCompositeKey;
 import app.entity.Cart;
-import app.entity.Product;
-import app.error.ErrorCode;
 import app.error.exception.cart.CartNotFoundException;
+import app.exception.ErrorCode;
 import lombok.AllArgsConstructor;
 import org.apache.ibatis.session.SqlSession;
 

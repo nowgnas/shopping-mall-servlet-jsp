@@ -1,7 +1,8 @@
 package app.error.exception.cart;
 
-import app.error.CustomException;
-import app.error.ErrorCode;
+
+import app.exception.CustomException;
+import app.exception.ErrorCode;
 
 public class CartNotFoundException extends CustomException {
 

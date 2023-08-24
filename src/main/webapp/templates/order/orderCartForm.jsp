@@ -2,95 +2,182 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
+    <meta name="description" content="Male_Fashion Template">
+    <meta name="keywords" content="Male_Fashion, unica, creative, html">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>상품 주문</title>
-    <link type="text/css" rel="stylesheet" href="css/order-cart-form.css"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Male-Fashion | Template</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&display=swap"
+          rel="stylesheet">
+
+    <!-- Css Styles -->
+    <link rel="stylesheet" href="../../css/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="../../css/font-awesome.min.css" type="text/css">
+    <link rel="stylesheet" href="../../css/elegant-icons.css" type="text/css">
+    <link rel="stylesheet" href="../../css/magnific-popup.css" type="text/css">
+    <link rel="stylesheet" href="../../css/nice-select.css" type="text/css">
+    <link rel="stylesheet" href="../../css/owl.carousel.min.css" type="text/css">
+    <link rel="stylesheet" href="../../css/slicknav.min.css" type="text/css">
+    <link rel="stylesheet" href="../../css/style.css" type="text/css">
 </head>
+
 <body>
-<h1>상품 주문</h1>
-<form action="/order.bit?view=cart&cmd=create" method="post">
-    <h2>회원 이름</h2>
-    <p id="member-name">${createCartOrderForm.name}</p>
+<!-- Page Preloder -->
+<div id="preloder">
+    <div class="loader"></div>
+</div>
 
-    <h2>배송지 입력</h2>
+<!-- Header Section Begin -->
+<jsp:include page="../common/header.jsp" />
+<!-- Header Section End -->
 
-    <button id="set-address-btn">기본 주소지로 설정</button>
+<!-- Breadcrumb Section Begin -->
+<section class="breadcrumb-option">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="breadcrumb__text">
+                    <h4>주문하기</h4>
+                    <div class="breadcrumb__links">
+                        <a href="../../index.html">홈</a>
+                        <a href="../../cart.html">장바구니</a>
+                        <span>주문하기</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Breadcrumb Section End -->
 
-    <br/>
-    <br/>
+<!-- Checkout Section Begin -->
+<section class="checkout spad">
+    <div class="container">
+        <div class="checkout__form">
+            <form action="/order.bit?view=cart&cmd=create" method="post">
+                <div class="row">
+                    <div class="col-lg-8 col-md-6">
+                        <h6 class="checkout__title">사용자 정보</h6>
+                        <div class="checkout__input">
+                            <p>이름<span></span></p>
+                            <input type="text" name="memberName" value="${memberName}" disabled>
+                        </div>
+                        <div class="checkout__input">
+                            <p>주소<span>*</span></p>
+                            <input type="text" placeholder="도로명 주소" class="checkout__input__add"
+                                   name="roadName"
+                                   value="${defaultAddress.roadName}" required
+                                   oninvalid="this.setCustomValidity('도로명 주소를 입력해주세요.')"
+                                   oninput="this.setCustomValidity('')">
+                            <input type="text" placeholder="상세 주소" class="checkout__input__add"
+                                   name="addrDetail"
+                                   value="${defaultAddress.addrDetail}" required
+                                   oninvalid="this.setCustomValidity('상세 주소를 입력해주세요.')"
+                                   oninput="this.setCustomValidity('')">
+                        </div>
+                        <div class="checkout__input">
+                            <p>우편번호<span>*</span></p>
+                            <input type="text" placeholder="우편번호" class="checkout__input__add"
+                                   name="zipCode"
+                                   value="${defaultAddress.zipCode}" required
+                                   oninvalid="this.setCustomValidity('우편번호를 입력해주세요.')"
+                                   oninput="this.setCustomValidity('')">
+                        </div>
+                        <div class="checkout__input">
+                            <p>쿠폰 선택<span></span></p>
+                            <select id="coupon" name="couponId" class="checkout__input__add"
+                                    onchange="updateTotalPrice()">
+                                <option value="0">적용 안함</option>
+                                <c:forEach var="coupon" items="${coupons}">
+                                    <option id="${coupon.discountValue}" name="${coupon.discountPolicy}"
+                                            value="${coupon.id}">${coupon.name}</option>
+                                </c:forEach>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-5">
+                        <div class="checkout__order">
+                            <h4 class="order__title">주문 목록</h4>
+                            <div class="checkout__order__products">상품 정보<span>가격</span></div>
+                            <ul class="checkout__total__products">
+                                <c:forEach var="product" items="${products}">
+                                    <li class="product-item">
+                                        <input type="hidden" class="product-id" name="productId" value="${product.id}">
+                                        <input type="hidden" class="product-name" name="productName"
+                                               value="${product.name}">
+                                        <input type="hidden" class="product-price" name="productPrice"
+                                               value="${product.price}">
+                                        <input type="hidden" class="product-quantity" name="productQuantity"
+                                               value="${product.quantity}">
+                                            ${product.name} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ${product.quantity}개<span
+                                            class="product-price">${product.price} 원</span>
+                                    </li>
+                                </c:forEach>
+                            </ul>
+                            <ul class="checkout__total__all">
+                                <li>할인 가격 <span id="discountPrice"></span></li>
+                                <input type="hidden" id="totalPrice" name="totalPrice">
+                                <li>총 가격 <span id="calculated-total"></span></li>
+                            </ul>
+                            <button type="submit" class="site-btn">주문 하기</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
 
-    <label for="roadName">도로명 주소</label>
-    <input type="text" id="roadName" name="roadName" required oninvalid="this.setCustomValidity('도로명 주소를 입력해주세요.')"
-           oninput="this.setCustomValidity('')"><br><br>
+<!-- Checkout Section End -->
 
-    <label for="addrDetail">상세 주소</label>
-    <input type="text" id="addrDetail" name="addrDetail" required
-           oninvalid="this.setCustomValidity('상세 주소를 입력해주세요.')"
-           oninput="this.setCustomValidity('')"><br><br>
+<!-- Footer Section Begin -->
+<jsp:include page="../common/footer.jsp" />
+<!-- Footer Section End -->
 
-    <label for="zipCode">우편번호</label>
-    <input type="text" id="zipCode" name="zipCode" required oninvalid="this.setCustomValidity('우편번호를 입력해주세요.')"
-           oninput="this.setCustomValidity('')"><br><br>
+<!-- Search Begin -->
+<div class="search-model">
+    <div class="h-100 d-flex align-items-center justify-content-center">
+        <div class="search-close-switch">+</div>
+        <form class="search-model-form">
+            <input type="text" id="search-input" placeholder="Search here.....">
+        </form>
+    </div>
+</div>
+<!-- Search End -->
 
-    <h2>주문 상품 목록</h2>
-    <ul>
-        <c:forEach var="productDetail" items="${productDetails}">
-            <li class="product-item">
-                <input type="hidden" id="productId" name="productId" value="${productDetail.id}">
-                <img src="${productDetail.thumbnailUrl}" alt="상품 썸네일 이미지">
-                <span class="product-name">${productDetail.name}</span>
-                <span class="product-price">가격: ${productDetail.price}</span>
-                <span class="product-quantity">수량: ${productDetail.quantity}개</span>
-            </li>
-        </c:forEach>
-    </ul>
+<!-- Js Plugins -->
+<script src="../../js/jquery-3.3.1.min.js"></script>
+<script src="../../js/bootstrap.min.js"></script>
+<script src="../../js/jquery.nice-select.min.js"></script>
+<script src="../../js/jquery.nicescroll.min.js"></script>
+<script src="../../js/jquery.magnific-popup.min.js"></script>
+<script src="../../js/jquery.countdown.min.js"></script>
+<script src="../../js/jquery.slicknav.js"></script>
+<script src="../../js/mixitup.min.js"></script>
+<script src="../../js/owl.carousel.min.js"></script>
+<script src="../../js/main.js"></script>
 
-    <label for="coupon">쿠폰 선택</label>
-    <select id="coupon" name="coupon">
-        <option value="0">적용 안함</option>
-        <c:forEach var="coupon" items="${createCartOrderForm.coupons}">
-            <option name="${coupon.discountPolicy}" value="${coupon.discountValue}">${coupon.name}</option>
-        </c:forEach>
-    </select>
-
-    <br>
-    <br>
-
-    <h2>요약 정보</h2>
-    <p id="total-price">총 가격: <span id="calculated-total">0</span>원</p>
-    <input type="submit" value="구매하기">
-</form>
 
 <script>
     const productItems = document.querySelectorAll(".product-item");
     const calculatedTotalElem = document.getElementById("calculated-total");
+    const calculatedTotalPrice = document.getElementById("totalPrice");
+    const calculatedDiscountPrice = document.getElementById("discountPrice");
     const couponSelect = document.getElementById("coupon");
 
     let total = 0;
-
-    productItems.forEach(item => {
-        const productPrice = parseInt(item.querySelector(".product-price").textContent.split(":")[1]);
-        const productQuantity = parseInt(item.querySelector(".product-quantity").textContent.split(":")[1]);
-
-        const totalItemPrice = productPrice * productQuantity;
-
-        item.addEventListener("click", function () {
-            updateTotalPrice();
-        });
-    });
-
-    couponSelect.addEventListener("change", function () {
-        updateTotalPrice();
-    });
 
     function updateTotalPrice() {
         let calculatedTotal = total;
 
         productItems.forEach(item => {
-            const productPrice = parseInt(item.querySelector(".product-price").textContent.split(":")[1]);
-            const productQuantity = parseInt(item.querySelector(".product-quantity").textContent.split(":")[1]);
+            const productPrice = parseInt(item.querySelector(".product-price").value);
+            const productQuantity = parseInt(item.querySelector(".product-quantity").value);
 
             const totalItemPrice = productPrice * productQuantity;
             calculatedTotal += totalItemPrice;
@@ -98,42 +185,25 @@
 
         const selectedOption = couponSelect.options[couponSelect.selectedIndex];
         const couponDiscountPolicy = selectedOption.getAttribute("name");
-        const couponDiscountValue = parseInt(couponSelect.value);
+        const couponDiscountValue = parseInt(selectedOption.getAttribute("id"));
 
+        calculatedDiscountPrice.textContent = '0 원';
         if (couponDiscountPolicy === 'CASH') {
             calculatedTotal -= couponDiscountValue;
+            calculatedDiscountPrice.textContent = '-' + couponDiscountValue + ' 원';
         }
         if (couponDiscountPolicy === 'DISCOUNT') {
             calculatedTotal -= (calculatedTotal * (couponDiscountValue / 100));
+            calculatedDiscountPrice.textContent = '-' + (calculatedTotal * (couponDiscountValue / 100)) + ' 원';
         }
 
-        calculatedTotalElem.textContent = calculatedTotal < 0 ? 0 : calculatedTotal;
+        calculatedTotalElem.textContent = calculatedTotal < 0 ? 0 : calculatedTotal + ' 원';
+        calculatedTotalPrice.value = calculatedTotal < 0 ? 0 : calculatedTotal;
     }
 
     // 초기 총 가격 계산
     updateTotalPrice();
 </script>
-<script>
-    const setAddressBtn = document.getElementById("set-address-btn");
-    const addressInput = document.getElementById("roadName");
-    const detailAddressInput = document.getElementById("addrDetail");
-    const zipcodeInput = document.getElementById("zipCode");
-
-    setAddressBtn.addEventListener("click", function (event) {
-        event.preventDefault();
-        // 기본 주소지로 설정
-        const defaultRoadName = '${createCartOrderForm.address.roadName}';
-        const defaultAddrDetail = '${createCartOrderForm.address.addrDetail}';
-        const defaultZipCode = '${createCartOrderForm.address.zipCode}';
-
-        addressInput.value = defaultRoadName;
-        detailAddressInput.value = defaultAddrDetail;
-        zipcodeInput.value = defaultZipCode;
-    });
-</script>
 </body>
+
 </html>
-
-
-
-

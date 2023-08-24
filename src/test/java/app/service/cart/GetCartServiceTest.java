@@ -5,13 +5,13 @@ import app.dao.CartDaoFrameImpl;
 import app.dao.member.MemberDao;
 import app.dao.member.MemberDaoFrame;
 import app.dto.cart.AllCartProductInfoDto;
-import app.dto.cart.CartAndProductDto;
+
 import app.dto.comp.ProductAndMemberCompositeKey;
 import app.entity.Cart;
 import app.entity.Member;
 import app.entity.Product;
-import app.error.exception.member.MemberNotFoundException;
-import app.error.exception.product.ProductNotFoundException;
+
+import app.exception.member.MemberNotFoundException;
 import app.service.checker.CartExistCheckerService;
 import app.service.checker.EntityExistCheckerService;
 import app.service.checker.MemberExistCheckerService;
@@ -20,7 +20,6 @@ import app.service.product.StockCheckerService;
 import app.service.product.StockCheckerServiceImpl;
 import app.utils.GetSessionFactory;
 import config.TestConfig;
-import java.util.List;
 import org.apache.ibatis.session.SqlSession;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

@@ -2,22 +2,11 @@ package app.service.cart;
 
 import app.dao.CartDaoFrame;
 import app.dao.CartDaoFrameImpl;
-import app.dao.member.MemberDao;
-import app.dao.member.MemberDaoFrame;
 import app.dto.comp.ProductAndMemberCompositeKey;
 import app.entity.Cart;
-import app.entity.Member;
-import app.entity.Product;
-import app.error.exception.cart.CartQuantityIsUnder0Exception;
-import app.error.exception.cart.OutOfStockException;
-import app.service.checker.CartExistCheckerService;
-import app.service.checker.EntityExistCheckerService;
-import app.service.checker.MemberExistCheckerService;
-import app.service.checker.ProductExistCheckerService;
-import app.service.product.StockCheckerService;
-import app.service.product.StockCheckerServiceImpl;
+import app.exception.cart.CartQuantityIsUnder0Exception;
+import app.exception.cart.OutOfStockException;
 import app.utils.GetSessionFactory;
-import com.sun.source.tree.AssertTree;
 import config.TestConfig;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -31,19 +20,15 @@ class UpdateCartServiceTest {
 
   private final TestConfig testConfig = new TestConfig();
   private final CartDaoFrame<ProductAndMemberCompositeKey, Cart> cartDaoFrame = new CartDaoFrameImpl();
-  private final MemberDaoFrame<Long, Member> memberDao = new MemberDao();
-  private final EntityExistCheckerService<Long, Member> memberExistCheckerService = new MemberExistCheckerService(
-      memberDao);
 
-  private final EntityExistCheckerService<Long, Product> productExistCheckerService = new ProductExistCheckerService();
-  private final EntityExistCheckerService<ProductAndMemberCompositeKey, Cart> cartExistCheckerService = new CartExistCheckerService();
+
   private final UpdateCartService increaseTheCartQuantityService = new UpdateCartServiceImpl(
       cartDaoFrame, new DeleteCartWhenRestOfQuantityUnder0(cartDaoFrame));
   private final UpdateCartService updateCartServiceWithDeleteStrategyWhenCartQuantityUnder0 = new UpdateCartServiceImpl(
       cartDaoFrame, new DeleteCartWhenRestOfQuantityUnder0(cartDaoFrame));
   private final UpdateCartService updateCartServiceWithThrowErrorWhenCartQuantityUnder0 = new UpdateCartServiceImpl(
       cartDaoFrame, new ThrowExceptionUserRequestOverProductQuantityInCart(cartDaoFrame));
-  private final StockCheckerService stockCheckerService = new StockCheckerServiceImpl();
+
   private SqlSession session;
 
 
@@ -72,8 +57,7 @@ class UpdateCartServiceTest {
 
   @DisplayName("이미 장바구니에 존재하는 상품을 상품의 재고보다 많게 장바구니에 담는 경우의 테스트")
   @Test
-  void updateCartQuantity_WhenThereIsAlreadyProductInCartAndProductStockIsSufficient_CatchOutOfStockException()
-      throws Exception {
+  void updateCartQuantity_WhenThereIsAlreadyProductInCartAndProductStockIsSufficient_CatchOutOfStockException() {
     Cart expected = new Cart(1L, 1L, 1L);
     Long requestExtraQuantity = 3L;
     Long stock = 2L;
@@ -139,13 +123,12 @@ Cart expectedCart = new Cart(1L, 2L, 2L);
 
   @DisplayName("감소했을 때 개수가 0개이하 경우, 에러를 던지는 전략 사용")
   @Test
-  void decreaseProductCartQuantity_whenResultOfCartProductQuantityUnder0_throwAnError()
-      throws Exception {
+  void decreaseProductCartQuantity_whenResultOfCartProductQuantityUnder0_throwAnError() {
     Cart expectedCart = new Cart(1L, 2L, 2L);
     Long requestExtraQuantity = 2L;
-  ;
-    Assertions.assertThrowsExactly(CartQuantityIsUnder0Exception.class,  ()-> updateCartServiceWithThrowErrorWhenCartQuantityUnder0.decreaseQuantity(expectedCart,
-        requestExtraQuantity, session));
+    Assertions.assertThrowsExactly(CartQuantityIsUnder0Exception.class,
+        () -> updateCartServiceWithThrowErrorWhenCartQuantityUnder0.decreaseQuantity(expectedCart,
+            requestExtraQuantity, session));
   }
 
 }
