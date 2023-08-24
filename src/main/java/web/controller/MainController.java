@@ -8,15 +8,12 @@ import javax.servlet.http.HttpServletResponse;
 
 public class MainController implements ControllerFrame {
 
-    public MainController() {
-    }
+  public MainController() {}
 
-    @Override
-    public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        String next = Navi.FORWARD_MAIN;
+  @Override
+  public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    String next = Navi.FORWARD_MAIN;
 
-        return next;
-    }
-
-
+    return next;
+  }
 }

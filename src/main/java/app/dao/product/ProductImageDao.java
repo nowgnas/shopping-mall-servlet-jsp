@@ -1,10 +1,11 @@
 package app.dao.product;
 
 import app.entity.ProductImage;
+import org.apache.ibatis.session.SqlSession;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
-import org.apache.ibatis.session.SqlSession;
 
 public class ProductImageDao implements ProductImageFrame<Long, ProductImage> {
 

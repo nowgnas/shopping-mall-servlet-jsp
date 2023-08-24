@@ -33,7 +33,7 @@
 </div>
 
 <!-- Header Section Begin -->
-<jsp:include page="../common/header.jsp" />
+<jsp:include page="../common/header.jsp"/>
 <!-- Header Section End -->
 
 <!-- Breadcrumb Section Begin -->
@@ -136,7 +136,7 @@
 <!-- Checkout Section End -->
 
 <!-- Footer Section Begin -->
-<jsp:include page="../common/footer.jsp" />
+<jsp:include page="../common/footer.jsp"/>
 <!-- Footer Section End -->
 
 <!-- Search Begin -->

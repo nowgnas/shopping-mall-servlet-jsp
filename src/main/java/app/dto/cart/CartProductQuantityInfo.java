@@ -1,11 +1,7 @@
 package app.dto.cart;
 
 import app.dto.product.ProductItemQuantity;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Getter
 @Builder
@@ -18,7 +14,7 @@ public class CartProductQuantityInfo {
 
   public static CartProductQuantityInfo getQuantityInfoFromProduct(
       ProductItemQuantity productItemQuantity) {
-    return new CartProductQuantityInfo(productItemQuantity.getId(),
-        productItemQuantity.getQuantity());
+    return new CartProductQuantityInfo(
+        productItemQuantity.getId(), productItemQuantity.getQuantity());
   }
 }

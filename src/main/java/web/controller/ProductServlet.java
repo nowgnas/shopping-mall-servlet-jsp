@@ -4,13 +4,14 @@ import app.dto.product.response.ProductDetailWithCategory;
 import app.service.product.ProductService;
 import app.service.product.ProductServiceImpl;
 import app.utils.HttpUtil;
-import java.io.IOException;
+import web.dispatcher.Navi;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import web.dispatcher.Navi;
+import java.io.IOException;
 
 @WebServlet({"/product"})
 public class ProductServlet extends HttpServlet {

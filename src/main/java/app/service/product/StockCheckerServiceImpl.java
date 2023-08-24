@@ -8,9 +8,7 @@ public class StockCheckerServiceImpl implements StockCheckerService {
 
   @Override
   public void isStockEnough(Product product, Long requestQuantity) {
-    if (product.getQuantity() - requestQuantity < 0) {
-      throw new OutOfStockException(
-          ErrorCode.QUANTITY_IS_NOT_SUFFICIENT);
-    }
+    if (product.getQuantity() - requestQuantity < 0)
+      throw new OutOfStockException(ErrorCode.QUANTITY_IS_NOT_SUFFICIENT);
   }
 }

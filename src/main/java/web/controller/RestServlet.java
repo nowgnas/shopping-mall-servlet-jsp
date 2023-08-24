@@ -1,16 +1,16 @@
 package web.controller;
 
 import app.service.member.MemberService;
-import java.io.IOException;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 @WebServlet({"/rest"})
 public class RestServlet extends HttpServlet {
-
   private static final long serialVersionUID = 1L;
   private MemberService memberService;
 
@@ -18,7 +18,6 @@ public class RestServlet extends HttpServlet {
     super();
     memberService = new MemberService();
   }
-
 
   protected void service(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
@@ -32,13 +31,9 @@ public class RestServlet extends HttpServlet {
     response.setCharacterEncoding("UTF-8");
     response.setContentType("text/json;charset=UTF-8");
     response.getWriter().print(result);
-
-
   }
 
-
-  private Object build(HttpServletRequest request,
-      String cmd) {
+  private Object build(HttpServletRequest request, String cmd) {
     Object result = null;
     switch (cmd) {
       case "loginCheck":

@@ -15,97 +15,95 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 public class MemberController implements ControllerFrame {
-    
-    private final MemberService memberService;
 
-    public MemberController() {
-        super();
-        memberService = new MemberService();
+  private final MemberService memberService;
+
+  public MemberController() {
+    super();
+    memberService = new MemberService();
+  }
+
+  @Override
+  public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    String next = Navi.REDIRECT_MAIN;
+    String view = request.getParameter("view");
+    if (view != null) {
+      next = build(request, view);
+    }
+    return next;
+  }
+
+  private String build(HttpServletRequest request, String view) {
+    String path = Navi.FORWARD_MAIN;
+    switch (view) {
+      case "registerForm":
+        return registerForm();
+      case "register":
+        return register(request);
+      case "loginForm":
+        return loginForm();
+      case "login":
+        return login(request);
+      case "logout":
+        return logout(request);
+    }
+    return path;
+  }
+
+  private String registerForm() {
+    return Navi.FORWARD_REGISTER_FORM;
+  }
+
+  private String register(HttpServletRequest request) {
+
+    String email = request.getParameter("registerEmail");
+    String password = request.getParameter("registerPassword");
+    String name = request.getParameter("registerName");
+
+    MemberRegisterDto dto = new MemberRegisterDto(email, password, name);
+
+    if (!registerValidationCheck(dto)) {
+      throw new CustomException(ErrorCode.REGISTER_FAIL);
     }
 
-    @Override
-    public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        String next = Navi.REDIRECT_MAIN;
-        String view = request.getParameter("view");
-        if (view != null) {
-            next = build(request, view);
-        }
-        return next;
+    memberService.register(dto);
+
+    return Navi.REDIRECT_MAIN;
+  }
+
+  private String loginForm() {
+    return Navi.FORWARD_LOGIN_FORM;
+  }
+
+  private String login(HttpServletRequest request) {
+    String email = request.getParameter("email");
+    String password = request.getParameter("password");
+
+    LoginDto loginDto = new LoginDto(email, password);
+    MemberDetail loginMember = memberService.login(loginDto);
+
+    HttpSession session = request.getSession();
+    session.setAttribute("loginMember", loginMember);
+    return Navi.REDIRECT_MAIN;
+  }
+
+  private String logout(HttpServletRequest request) {
+    HttpSession session = request.getSession();
+    session.invalidate();
+    request.setAttribute("center", "index");
+    return Navi.REDIRECT_MAIN;
+  }
+
+  private boolean registerValidationCheck(MemberRegisterDto dto) {
+    if (!MemberValidation.isValidEmail(dto.getEmail())) {
+      return false;
     }
-
-    private String build(HttpServletRequest request, String view) {
-        String path = Navi.FORWARD_MAIN;
-        switch (view) {
-            case "registerForm":
-                return registerForm();
-            case "register":
-                return register(request);
-            case "loginForm":
-                return loginForm();
-            case "login":
-                return login(request);
-            case "logout":
-                return logout(request);
-        }
-        return path;
+    if (!MemberValidation.isValidPassword(dto.getPassword())) {
+      return false;
     }
-
-    private String registerForm() {
-        return Navi.FORWARD_REGISTER_FORM;
+    if (!MemberValidation.isValidName(dto.getName())) {
+      return false;
     }
-
-    private String register(HttpServletRequest request) {
-
-        String email = request.getParameter("registerEmail");
-        String password = request.getParameter("registerPassword");
-        String name = request.getParameter("registerName");
-
-        MemberRegisterDto dto = new MemberRegisterDto(email, password, name);
-
-        if (!registerValidationCheck(dto)) {
-            throw new CustomException(ErrorCode.REGISTER_FAIL);
-        }
-
-        memberService.register(dto);
-
-        return Navi.REDIRECT_MAIN;
-    }
-
-    private String loginForm() {
-        return Navi.FORWARD_LOGIN_FORM;
-    }
-
-    private String login(HttpServletRequest request) {
-        String email = request.getParameter("email");
-        String password = request.getParameter("password");
-
-        LoginDto loginDto = new LoginDto(email, password);
-        MemberDetail loginMember = memberService.login(loginDto);
-
-        HttpSession session = request.getSession();
-        session.setAttribute("loginMember", loginMember);
-        return Navi.REDIRECT_MAIN;
-    }
-
-    private String logout(HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        session.invalidate();
-        request.setAttribute("center", "index");
-        return Navi.REDIRECT_MAIN;
-    }
-
-    private boolean registerValidationCheck(MemberRegisterDto dto) {
-        if (!MemberValidation.isValidEmail(dto.getEmail())) {
-            return false;
-        }
-        if (!MemberValidation.isValidPassword(dto.getPassword())) {
-            return false;
-        }
-        if (!MemberValidation.isValidName(dto.getName())) {
-            return false;
-        }
-        return true;
-    }
-
-
+    return true;
+  }
 }

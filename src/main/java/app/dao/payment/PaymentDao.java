@@ -1,9 +1,10 @@
 package app.dao.payment;
 
 import app.entity.Payment;
+import org.apache.ibatis.session.SqlSession;
+
 import java.util.List;
 import java.util.Optional;
-import org.apache.ibatis.session.SqlSession;
 
 public class PaymentDao implements PaymentDaoFrame<Long, Payment> {
 

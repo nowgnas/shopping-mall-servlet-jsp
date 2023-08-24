@@ -17,41 +17,40 @@ import java.util.Map;
 
 @WebServlet({"/DispatcherServlet", "/web/dispatcher", "*.bit"})
 public class DispatcherServlet extends HttpServlet {
-    private static final long serialVersionUID = 1L;
-    private Map<String, ControllerFrame> controllerMapper = new HashMap<>();
-    private Logger work_log = Logger.getLogger("work");
+  private static final long serialVersionUID = 1L;
+  private Map<String, ControllerFrame> controllerMapper = new HashMap<>();
+  private Logger work_log = Logger.getLogger("work");
 
-    public DispatcherServlet() {
-        super();
-        controllerMapper.put("main", new MainController());
-        controllerMapper.put("member", new MemberController());
+  public DispatcherServlet() {
+    super();
+    controllerMapper.put("main", new MainController());
+    controllerMapper.put("member", new MemberController());
+  }
+
+  protected void service(HttpServletRequest request, HttpServletResponse response)
+      throws ServletException, IOException {
+    String uri = request.getRequestURI();
+    request.setCharacterEncoding("UTF-8");
+    String path = uri.substring(uri.lastIndexOf("/"));
+    work_log.debug(path);
+    path = path.substring(1, path.lastIndexOf("."));
+    work_log.debug(path);
+    String next = Navi.REDIRECT_MAIN;
+    try {
+      if (controllerMapper.containsKey(path)) {
+        ControllerFrame controller = controllerMapper.get(path);
+        next = controller.execute(request, response);
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
     }
 
-    protected void service(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        String uri = request.getRequestURI();
-        request.setCharacterEncoding("UTF-8");
-        String path = uri.substring(uri.lastIndexOf("/"));
-        work_log.debug(path);
-        path = path.substring(1, path.lastIndexOf("."));
-        work_log.debug(path);
-        String next = Navi.REDIRECT_MAIN;
-        try {
-            if (controllerMapper.containsKey(path)) {
-                ControllerFrame controller = controllerMapper.get(path);
-                next = controller.execute(request, response);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    String resultPath = next.substring(next.indexOf(":") + 1);
 
-        String resultPath = next.substring(next.indexOf(":") + 1);
-
-        if (next.startsWith("forward:")) {
-            HttpUtil.forward(request, response, resultPath);
-        } else {
-            HttpUtil.redirect(response, resultPath);
-        }
-
+    if (next.startsWith("forward:")) {
+      HttpUtil.forward(request, response, resultPath);
+    } else {
+      HttpUtil.redirect(response, resultPath);
     }
+  }
 }

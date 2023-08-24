@@ -1,10 +1,11 @@
 package app.dto.cart;
 
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
+
+import java.util.List;
 
 @Getter
 @Builder
@@ -15,9 +16,7 @@ public class AllCartProductInfoDto {
   private List<ProductInCartDto> cartProductDtoList;
   private Long totalPrice;
 
-  private AllCartProductInfoDto() {
-
-  }
+  private AllCartProductInfoDto() {}
 
   public static AllCartProductInfoDto getCustomerViewOfCartInfo(
       List<ProductInCartDto> cartProductDtoList) {
@@ -25,7 +24,9 @@ public class AllCartProductInfoDto {
     for (ProductInCartDto cartProduct : cartProductDtoList) {
       totalProductPriceInCart += cartProduct.getPrice();
     }
-    return AllCartProductInfoDto.builder().cartProductDtoList(cartProductDtoList)
-        .totalPrice(totalProductPriceInCart).build();
+    return AllCartProductInfoDto.builder()
+        .cartProductDtoList(cartProductDtoList)
+        .totalPrice(totalProductPriceInCart)
+        .build();
   }
 }
