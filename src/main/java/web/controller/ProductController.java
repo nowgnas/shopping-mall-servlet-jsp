@@ -3,28 +3,22 @@ package web.controller;
 import app.dto.product.response.ProductDetailWithCategory;
 import app.service.product.ProductService;
 import app.service.product.ProductServiceImpl;
-import app.utils.HttpUtil;
+import web.ControllerFrame;
 import web.dispatcher.Navi;
 
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
-@WebServlet({"/product"})
-public class ProductServlet extends HttpServlet {
-
+public class ProductController implements ControllerFrame {
   private static final long serialVersionUID = 1L;
   private final ProductService service = ProductServiceImpl.getInstance();
 
-  public ProductServlet() {
+  public ProductController() {
     super();
   }
 
-  protected void service(HttpServletRequest request, HttpServletResponse response)
-      throws ServletException, IOException {
+  @Override
+  public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
     String view = request.getParameter("view");
     String cmd = request.getParameter("cmd");
 
@@ -32,7 +26,7 @@ public class ProductServlet extends HttpServlet {
     //    MemberDetail loginMember = (MemberDetail) session.getAttribute("loginMember");
     //    Long memberId = loginMember.getId();
 
-    String viewName = "index.jsp";
+    String viewName = Navi.FORWARD_MAIN;
     if (view != null) {
       try {
         viewName = build(request, view);
@@ -40,13 +34,8 @@ public class ProductServlet extends HttpServlet {
         throw new RuntimeException(e);
       }
     }
-    String path = viewName.substring(viewName.indexOf(":") + 1);
 
-    if (viewName.startsWith("forward:")) {
-      HttpUtil.forward(request, response, path);
-    } else {
-      HttpUtil.redirect(response, path);
-    }
+    return viewName;
   }
 
   private String build(HttpServletRequest request, String view) throws Exception {

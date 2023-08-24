@@ -6,6 +6,7 @@ import web.ControllerFrame;
 import web.controller.MainController;
 import web.controller.MemberController;
 import web.controller.OrderController;
+import web.controller.ProductController;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -27,6 +28,7 @@ public class DispatcherServlet extends HttpServlet {
     controllerMapper.put("main", new MainController());
     controllerMapper.put("member", new MemberController());
     controllerMapper.put("order", new OrderController());
+    controllerMapper.put("product", new ProductController());
   }
 
   protected void service(HttpServletRequest request, HttpServletResponse response)
