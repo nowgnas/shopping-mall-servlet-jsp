@@ -1,8 +1,8 @@
 package app.service.cart;
 
-import app.dao.CartDaoFrame;
-import app.dto.comp.ProductAndMemberCompositeKey;
+import app.dao.cart.CartDaoFrame;
 import app.entity.Cart;
+import app.entity.ProductAndMemberCompositeKey;
 import app.exception.ErrorCode;
 import app.exception.cart.CartQuantityIsUnder0Exception;
 import lombok.AllArgsConstructor;

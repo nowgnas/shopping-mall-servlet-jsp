@@ -1,6 +1,6 @@
 package app.service.likes;
 
-import app.dao.cart.DaoFrame;
+import app.dao.DaoFrame;
 import app.dao.likes.LikesDao;
 import app.dao.likes.LikesDaoFrame;
 import app.entity.Likes;

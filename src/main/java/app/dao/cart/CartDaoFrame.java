@@ -1,5 +1,6 @@
 package app.dao.cart;
 
+import app.dao.DaoFrame;
 import app.dto.cart.CartAndProductDto;
 import app.entity.Cart;
 import app.entity.ProductAndMemberCompositeKey;

@@ -1,6 +1,5 @@
 package app.entity;
 
-import app.dto.comp.ProductAndMemberCompositeKey;
 import lombok.*;
 
 @Getter

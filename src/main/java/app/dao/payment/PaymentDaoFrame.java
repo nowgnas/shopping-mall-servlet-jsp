@@ -1,6 +1,6 @@
 package app.dao.payment;
 
-import app.dao.cart.DaoFrame;
+import app.dao.DaoFrame;
 import app.entity.Payment;
 import org.apache.ibatis.session.SqlSession;
 

@@ -1,6 +1,6 @@
 package app.service.checker;
 
-import app.dao.cart.DaoFrame;
+import app.dao.DaoFrame;
 import app.dao.member.MemberDaoFrame;
 import app.entity.Member;
 import app.exception.ErrorCode;

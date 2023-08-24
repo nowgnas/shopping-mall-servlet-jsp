@@ -1,4 +1,4 @@
-package app.dao.cart;
+package app.dao;
 
 import java.util.List;
 import java.util.Optional;
