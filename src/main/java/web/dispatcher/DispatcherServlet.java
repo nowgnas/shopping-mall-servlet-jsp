@@ -3,10 +3,8 @@ package web.dispatcher;
 import app.utils.HttpUtil;
 import org.apache.log4j.Logger;
 import web.ControllerFrame;
-import web.controller.MainController;
-import web.controller.MemberController;
-import web.controller.OrderController;
-import web.controller.ProductController;
+import web.RestControllerFrame;
+import web.controller.*;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -21,6 +19,7 @@ import java.util.Map;
 public class DispatcherServlet extends HttpServlet {
   private static final long serialVersionUID = 1L;
   private Map<String, ControllerFrame> controllerMapper = new HashMap<>();
+  private Map<String, RestControllerFrame> restControllerMapper = new HashMap<>();
   private Logger work_log = Logger.getLogger("work");
 
   public DispatcherServlet() {
@@ -29,6 +28,7 @@ public class DispatcherServlet extends HttpServlet {
     controllerMapper.put("member", new MemberController());
     controllerMapper.put("order", new OrderController());
     controllerMapper.put("product", new ProductController());
+    restControllerMapper.put("rest", new RestController());
   }
 
   protected void service(HttpServletRequest request, HttpServletResponse response)
@@ -44,17 +44,25 @@ public class DispatcherServlet extends HttpServlet {
       if (controllerMapper.containsKey(path)) {
         ControllerFrame controller = controllerMapper.get(path);
         next = controller.execute(request, response);
+
+        String resultPath = next.substring(next.indexOf(":") + 1);
+
+        if (next.startsWith("forward:")) {
+          HttpUtil.forward(request, response, resultPath);
+        } else {
+          HttpUtil.redirect(response, resultPath);
+        }
+      }
+      if (restControllerMapper.containsKey(path)) {
+        RestControllerFrame restController = restControllerMapper.get(path);
+        Object result = restController.execute(request, response);
+
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("text/json;charset=UTF-8");
+        response.getWriter().print(result);
       }
     } catch (Exception e) {
       e.printStackTrace();
-    }
-
-    String resultPath = next.substring(next.indexOf(":") + 1);
-
-    if (next.startsWith("forward:")) {
-      HttpUtil.forward(request, response, resultPath);
-    } else {
-      HttpUtil.redirect(response, resultPath);
     }
   }
 }
