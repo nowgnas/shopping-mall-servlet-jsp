@@ -8,7 +8,7 @@
         <result column="member_id" property="memberId" jdbcType="BIGINT" javaType="Long"/>
         <result column="product_id" property="productId" jdbcType="BIGINT" javaType="Long"/>
         <result column="product_quantity" property="productQuantity" jdbcType="BIGINT"
-          javaType="Integer"/>
+          javaType="Long"/>
     </resultMap>
 
 <resultMap id="CartAndProductResultMap" type="app.dto.cart.CartAndProductDto">
