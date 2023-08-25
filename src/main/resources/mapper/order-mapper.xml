@@ -4,11 +4,11 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="order">
 
-    <resultMap id="ProductOrderDto" type="app.dto.response.ProductOrderDto">
+    <resultMap id="ProductOrderDto" type="app.dto.order.response.ProductOrderDto">
         <result property="orderId" column="orderId"/>
         <result property="orderStatus" column="orderStatus"/>
         <result property="orderDate" column="orderDate"/>
-        <collection property="products" ofType="app.dto.response.ProductOrderDto$ProductDto">
+        <collection property="products" ofType="app.dto.order.response.ProductOrderDto$ProductDto">
             <result property="productId" column="productId"/>
             <result property="name" column="productName"/>
             <result property="thumbnailUrl" column="thumbnailUrl"/>
@@ -17,26 +17,26 @@
         </collection>
     </resultMap>
 
-    <resultMap id="ProductOrderDetailDto" type="app.dto.response.ProductOrderDetailDto">
+    <resultMap id="ProductOrderDetailDto" type="app.dto.order.response.ProductOrderDetailDto">
         <result property="orderId" column="orderId"/>
         <result property="orderStatus" column="orderStatus"/>
         <result property="orderDate" column="orderDate"/>
         <result property="memberName" column="memberName"/>
-        <association property="delivery" javaType="app.dto.response.ProductOrderDetailDto$DeliveryDto">
+        <association property="delivery" javaType="app.dto.order.response.ProductOrderDetailDto$DeliveryDto">
             <result property="roadName" column="roadName"/>
             <result property="addrDetail" column="addrDetail"/>
             <result property="zipCode" column="zipCode"/>
             <result property="deliveryStatus" column="deliveryStatus"/>
         </association>
-        <association property="payment" javaType="app.dto.response.ProductOrderDetailDto$PaymentDto">
+        <association property="payment" javaType="app.dto.order.response.ProductOrderDetailDto$PaymentDto">
             <result property="paymentType" column="paymentType"/>
             <result property="actualAmount" column="actualAmount"/>
         </association>
-        <association property="coupon" javaType="app.dto.response.ProductOrderDetailDto$CouponDto">
+        <association property="coupon" javaType="app.dto.order.response.ProductOrderDetailDto$CouponDto">
             <result property="couponName" column="couponName"/>
             <result property="couponStatus" column="couponStatus"/>
         </association>
-        <collection property="products" ofType="app.dto.response.ProductOrderDetailDto$ProductDto">
+        <collection property="products" ofType="app.dto.order.response.ProductOrderDetailDto$ProductDto">
             <result property="productId" column="productId"/>
             <result property="productName" column="productName"/>
             <result property="thumbnailUrl" column="thumbnailUrl"/>

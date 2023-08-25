@@ -2,10 +2,11 @@ package app.entity;
 
 import app.dto.product.response.ProductSearchByKeyword;
 import app.utils.ModelMapperStrict;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.*;
 import org.modelmapper.ModelMapper;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Builder
@@ -21,10 +22,6 @@ public class Product extends BaseEntity {
   @NonNull private Long quantity;
   @NonNull private String code;
 
-  public void updateQuantity(Long quantity) {
-    this.quantity = quantity;
-  }
-
   public static List<ProductSearchByKeyword> productSearchByKeyword(List<Product> products) {
     ModelMapper modelMapper = ModelMapperStrict.strictMapper();
     List<ProductSearchByKeyword> list = new ArrayList<>();
@@ -33,5 +30,9 @@ public class Product extends BaseEntity {
           list.add(modelMapper.map(v, ProductSearchByKeyword.class));
         });
     return list;
+  }
+
+  public void updateQuantity(Long quantity) {
+    this.quantity = quantity;
   }
 }

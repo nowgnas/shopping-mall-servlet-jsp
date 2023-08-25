@@ -2,7 +2,7 @@ package app.dao.likes;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import app.dto.comp.ProductAndMemberCompositeKey;
+import app.entity.ProductAndMemberCompositeKey;
 import app.entity.Likes;
 import config.TestConfig;
 import java.util.List;
@@ -16,6 +16,7 @@ import org.junit.jupiter.api.Test;
 import utils.GetSessionFactory;
 
 class LikesDaoTest {
+
   private Logger log = Logger.getLogger("LikesDaoTest");
   private SqlSessionFactory sessionFactory = GetSessionFactory.getInstance();
   private SqlSession session;
@@ -24,24 +25,28 @@ class LikesDaoTest {
 
   @BeforeEach
   void beforeEach() throws Exception {
-//    log.info("before");
-    likesDao = new LikesDao();
+    likesDao = LikesDao.getInstance();
     session = sessionFactory.openSession();
     testConfig.init("schema.sql", session);
-    testConfig.init("init-data.sql", session);
+    testConfig.init("likes/init-likes-data.sql", session);
   }
 
   @AfterEach
   void afterEach() throws Exception {
-//    log.info("after");
-    session = GetSessionFactory.getInstance().openSession();
+    session = sessionFactory.openSession();
     testConfig.init("clear-data.sql", session);
   }
 
   @DisplayName("insert test")
   @Test
   void insert() throws Exception {
-    int res = likesDao.insert(new Likes(1L, 1L), session);
+    int res = likesDao.insert(
+        Likes.builder()
+            .memberId(1L)
+            .productId(1L)
+            .build()
+        , session
+    );
     session.commit();
 
     assertTrue(res == 1);
@@ -51,7 +56,13 @@ class LikesDaoTest {
   @DisplayName("delete test")
   @Test
   void deleteById() throws Exception {
-    int res = likesDao.deleteById(new ProductAndMemberCompositeKey(1L, 2L), session);
+    int res = likesDao.deleteById(
+        ProductAndMemberCompositeKey.builder()
+            .memberId(1L)
+            .productId(2L)
+            .build()
+        , session
+    );
     session.commit();
 
     assertTrue(res == 1);
@@ -61,18 +72,24 @@ class LikesDaoTest {
   @DisplayName("select test")
   @Test
   void selectById() throws Exception {
-    Likes inputLikes = new Likes(1L, 3L);
+    Likes inputLikes = Likes.builder()
+        .memberId(1L)
+        .productId(3L)
+        .build();
+
     likesDao.insert(inputLikes, session);
     session.commit();
 
     Likes ouputLikes = likesDao.selectById(
-            new ProductAndMemberCompositeKey(1L, 3L)
+            ProductAndMemberCompositeKey.builder()
+                .memberId(1L)
+                .productId(3L)
+                .build()
             , session)
         .get();
 
     assertEquals(inputLikes.getMemberId(), ouputLikes.getMemberId());
     assertEquals(inputLikes.getProductId(), ouputLikes.getProductId());
-//    Likes likes = likesDao.selectById(new ProductAndMemberCompositeKey(1L, 2L), session).get();
 //    log.info("[select test] member id : " + likes.getMemberId());
 //    log.info("[select test] product id : " + likes.getProductId());
   }
@@ -80,14 +97,32 @@ class LikesDaoTest {
   @DisplayName("select all test")
   @Test
   void selectAll() throws Exception {
-    likesDao.insert(new Likes(1L, 3L), session);
-    likesDao.insert(new Likes(1L, 4L), session);
+
+    // basic init Likes(1L, 2L)
+
+    likesDao.insert(
+        Likes.builder()
+            .memberId(1L)
+            .productId(3L)
+            .build()
+        , session);
+
+    likesDao.insert(
+        Likes.builder()
+            .memberId(1L)
+            .productId(4L)
+            .build()
+        , session);
+
     session.commit();
 
-    List<Likes> list = likesDao.selectAll(1L, session);
-    for (Likes likes : list) {
-      assertEquals(likes.getMemberId(), 1L);
-//      log.info("[select all test] product id : " + likes.getProductId());
+    List<Long> list = likesDao.selectAllProduct(1L, session);
+    long idx = 2L;
+
+    // total 3 rows
+    for (Long productId : list) {
+      assertEquals(productId, idx++);
+//      log.info("[select all test] product id : " + productId);
     }
   }
 }

@@ -33,7 +33,7 @@
 </div>
 
 <!-- Header Section Begin -->
-<jsp:include page="../common/header.jsp" />
+<jsp:include page="../common/header.jsp"/>
 <!-- Header Section End -->
 
 <!-- Breadcrumb Section Begin -->
@@ -90,7 +90,8 @@
                         </div>
                         <div class="checkout__input">
                             <p>쿠폰 선택<span></span></p>
-                            <select id="coupon" name="couponId" class="checkout__input__add" onchange="updateTotalPrice()">
+                            <select id="coupon" name="couponId" class="checkout__input__add"
+                                    onchange="updateTotalPrice()">
                                 <option value="0">적용 안함</option>
                                 <c:forEach var="coupon" items="${coupons}">
                                     <option id="${coupon.discountValue}" name="${coupon.discountPolicy}"
@@ -106,9 +107,12 @@
                             <ul class="checkout__total__products">
                                 <li class="product-item">
                                     <input type="hidden" class="product-id" name="productId" value="${product.id}">
-                                    <input type="hidden" class="product-name" name="productName" value="${product.name}">
-                                    <input type="hidden" class="product-price" name="productPrice" value="${product.price}">
-                                    <input type="hidden" class="product-quantity" name="productQuantity" value="${productQuantity}">
+                                    <input type="hidden" class="product-name" name="productName"
+                                           value="${product.name}">
+                                    <input type="hidden" class="product-price" name="productPrice"
+                                           value="${product.price}">
+                                    <input type="hidden" class="product-quantity" name="productQuantity"
+                                           value="${productQuantity}">
                                     ${product.name} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ${productQuantity}개<span
                                         class="product-price">${product.price} 원</span>
                                 </li>
@@ -130,7 +134,7 @@
 <!-- Checkout Section End -->
 
 <!-- Footer Section Begin -->
-<jsp:include page="../common/footer.jsp" />
+<jsp:include page="../common/footer.jsp"/>
 <!-- Footer Section End -->
 
 <!-- Search Begin -->

@@ -19,6 +19,7 @@ import lombok.ToString;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
 public class ProductDetailWithCategory {
+
   private ProductCategory category;
   private ProductDetail detail;
 

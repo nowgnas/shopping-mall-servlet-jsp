@@ -2,8 +2,8 @@ package app.dao.order;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import app.dto.response.ProductOrderDetailDto;
-import app.dto.response.ProductOrderDto;
+import app.dto.order.response.ProductOrderDetailDto;
+import app.dto.order.response.ProductOrderDto;
 import app.entity.Order;
 import config.TestConfig;
 

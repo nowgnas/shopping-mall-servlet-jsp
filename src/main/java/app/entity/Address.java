@@ -1,6 +1,11 @@
 package app.entity;
 
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 @Getter
 @Builder
@@ -9,9 +14,14 @@ import lombok.*;
 public class Address extends BaseEntity {
 
   private Long id;
-  @NonNull private Long memberId;
-  @Builder.Default private boolean isDefault = false;
-  @NonNull private String roadName;
-  @NonNull private String addrDetail;
-  @NonNull private String zipCode;
+  @NonNull
+  private Long memberId;
+  @Builder.Default
+  private boolean isDefault = false;
+  @NonNull
+  private String roadName;
+  @NonNull
+  private String addrDetail;
+  @NonNull
+  private String zipCode;
 }

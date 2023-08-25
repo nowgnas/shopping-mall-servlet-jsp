@@ -36,8 +36,12 @@
 </div>
 
 <!-- Header Section Begin -->
-<jsp:include page="../common/header.jsp" />
+<jsp:include page="../common/header.jsp"/>
 <!-- Header Section End -->
+
+<!-- Modal Begin -->
+
+<!-- Modal End -->
 
 <!-- Breadcrumb Section Begin -->
 <section class="breadcrumb-option">
@@ -99,14 +103,18 @@
                 </div>
             </div>
             <div class="col-lg-4">
-                    <a href="#" class="primary-btn">배송 조회</a>
+                <button onclick="open_delivery(`${delivery.roadName}`,`${delivery.addrDetail}`, `${delivery.zipCode}`, `${delivery.deliveryStatus.message}`)"
+                        class="primary-btn">배송 조회
+                </button>
                 <br/>
                 <br/>
                 <div class="cart__total">
                     <h6><b>주문 상세정보</b></h6>
                     <ul>
-                        <fmt:parseDate pattern="yyyy-MM-dd'T'HH:mm" value="${productOrderDetail.orderDate}" var="parsedOrderDate"/>
-                        <li>주문 날짜 <span><fmt:formatDate pattern="yyyy.MM.dd HH:mm" value="${parsedOrderDate}"/></span></li>
+                        <fmt:parseDate pattern="yyyy-MM-dd'T'HH:mm" value="${productOrderDetail.orderDate}"
+                                       var="parsedOrderDate"/>
+                        <li>주문 날짜 <span><fmt:formatDate pattern="yyyy.MM.dd HH:mm" value="${parsedOrderDate}"/></span>
+                        </li>
                         <li>주문 상태 <span>${productOrderDetail.orderStatus.getMessage()}</span></li>
                         <li>총 가격 <span>${productOrderDetail.getTotalPrice()} 원</span></li>
                         <li>할인 가격
@@ -131,7 +139,7 @@
                         <c:when test="${delivery.deliveryStatus.name() eq 'CANCELED'}">
                         </c:when>
                         <c:otherwise>
-                            <a id="orderCancelLink"  href="#" class="primary-btn">주문 취소</a>
+                            <a id="orderCancelLink" href="#" class="primary-btn">주문 취소</a>
                         </c:otherwise>
                     </c:choose>
                 </div>
@@ -142,7 +150,7 @@
 <!-- Shopping Cart Section End -->
 
 <!-- Footer Section Begin -->
-<jsp:include page="../common/footer.jsp" />
+<jsp:include page="../common/footer.jsp"/>
 <!-- Footer Section End -->
 
 <!-- Search Begin -->
@@ -157,6 +165,7 @@
 <!-- Search End -->
 
 <!-- Js Plugins -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="js/jquery-3.3.1.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
 <script src="js/jquery.nice-select.min.js"></script>
@@ -167,6 +176,7 @@
 <script src="js/mixitup.min.js"></script>
 <script src="js/owl.carousel.min.js"></script>
 <script src="js/main.js"></script>
+<script src="js/order.js"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -189,15 +199,15 @@
                     type: "GET",
                     url: "/order.bit?view=detail&cmd=delete&orderId=${productOrderDetail.orderId}",
                     dataType: "text",
-                    contentType : "application/x-www-form-urlencoded;charset=UTF-8",
-                    error: function() {
+                    contentType: "application/x-www-form-urlencoded;charset=UTF-8",
+                    error: function () {
                         Swal.fire(
                             '주문 취소 에러',
                             '해당 주문이 취소되지 않았습니다.',
                             'error'
                         )
                     },
-                    success: function(data) {
+                    success: function (data) {
                         Swal.fire(
                             '주문 취소 완료',
                             '해당 주문이 취소되었습니다.',

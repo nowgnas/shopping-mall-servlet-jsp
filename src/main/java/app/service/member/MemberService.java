@@ -9,6 +9,8 @@ import app.entity.Encryption;
 import app.entity.Member;
 import app.exception.CustomException;
 import app.exception.ErrorCode;
+import app.exception.member.LoginFailException;
+import app.exception.member.MemberEntityNotFoundException;
 import app.utils.CipherUtil;
 import app.utils.GetSessionFactory;
 import org.apache.ibatis.exceptions.PersistenceException;
@@ -46,8 +48,8 @@ public class MemberService {
 
     } catch (PersistenceException e) {
       sqlSession.rollback();
-      //      e.printStackTrace();
-      throw new CustomException(ErrorCode.EMAIL_IS_NOT_DUPLICATE);
+      e.printStackTrace();
+      throw new MemberEntityNotFoundException();
     } catch (Exception e) {
       sqlSession.rollback();
       e.printStackTrace();
@@ -64,9 +66,7 @@ public class MemberService {
       String hashedPassword = getHashedPassword(dto, sqlSession);
       dto.setPassword(hashedPassword);
       Member member =
-          memberDao
-              .selectByEmailAndPassword(dto, sqlSession)
-              .orElseThrow(() -> new CustomException(ErrorCode.LOGIN_FAIL));
+          memberDao.selectByEmailAndPassword(dto, sqlSession).orElseThrow(LoginFailException::new);
 
       loginMember = MemberDetail.of(member);
 
@@ -86,9 +86,7 @@ public class MemberService {
     MemberDetail memberDetail = null;
     try {
       Member member =
-          memberDao
-              .selectById(id, sqlSession)
-              .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+          memberDao.selectById(id, sqlSession).orElseThrow(MemberEntityNotFoundException::new);
       memberDetail = MemberDetail.of(member);
     } catch (SQLException e) {
       e.printStackTrace();
@@ -115,7 +113,7 @@ public class MemberService {
     Encryption encryption =
         encryptionDao
             .selectByEmail(dto.getEmail(), sqlSession)
-            .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+            .orElseThrow(MemberEntityNotFoundException::new);
     String hashedPassword = createHashedPassword(dto.getPassword(), encryption.getSalt());
     return hashedPassword;
   }
@@ -123,7 +121,7 @@ public class MemberService {
   private String createHashedPassword(String password, String salt) throws SQLException {
     new String();
     CipherUtil.getSHA256(password, salt);
-    return new String(CipherUtil.getSHA256(password, salt)).replaceAll(" ","");
+    return new String(CipherUtil.getSHA256(password, salt)).replaceAll(" ", "");
   }
 
   private String createSalt() throws NoSuchAlgorithmException {

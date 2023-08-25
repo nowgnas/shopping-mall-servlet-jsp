@@ -4,10 +4,7 @@ import app.dto.response.OrderMemberDetail;
 import config.TestConfig;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import utils.GetSessionFactory;
 
 class MemberDaoTest {
@@ -21,6 +18,13 @@ class MemberDaoTest {
     SqlSession session = sessionFactory.openSession();
     testConfig.init("schema.sql", session);
     testConfig.init("init-data.sql", session);
+  }
+
+  @AfterEach
+  void afterEach() throws Exception {
+    SqlSession session = sessionFactory.openSession();
+    testConfig.init("clear-data.sql", session);
+    session.close();
   }
 
   @Test
