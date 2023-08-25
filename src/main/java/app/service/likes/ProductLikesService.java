@@ -8,8 +8,6 @@ import app.dto.product.ProductListItemOfLike;
 import app.entity.Likes;
 import app.entity.Product;
 import app.entity.ProductAndMemberCompositeKey;
-import app.exception.CustomException;
-import app.exception.ErrorCode;
 import app.exception.likes.LikesEntityNotFoundException;
 import app.utils.GetSessionFactory;
 import org.apache.ibatis.session.SqlSession;
@@ -32,6 +30,7 @@ public class ProductLikesService implements LikesService {
 
   /**
    * 회원의 찜한 상품 목록 반환
+   *
    * @param memberId 회원 id
    * @return 리스트 : 상품 id, 이름, 가격, 이미지경로
    */
@@ -48,8 +47,7 @@ public class ProductLikesService implements LikesService {
     } catch (Exception e) {
       e.printStackTrace();
       throw new Exception(e.getMessage());
-    }
-    finally {
+    } finally {
       session.close();
     }
     return memberLikesList;
@@ -57,12 +55,14 @@ public class ProductLikesService implements LikesService {
 
   /**
    * 회원의 상품 찜 여부 반환
+   *
    * @param productAndMemberCompositeKey 상품 id, 회원 id로 이루어진 복합키
    * @return true(찜 O), false(찜 X)
    * @throws Exception
    */
   @Override
-  public boolean getMemberProductLikes(ProductAndMemberCompositeKey productAndMemberCompositeKey) throws Exception {
+  public boolean getMemberProductLikes(ProductAndMemberCompositeKey productAndMemberCompositeKey)
+      throws Exception {
     Likes likes = null;
     try {
       session = sessionFactory.openSession();
@@ -78,6 +78,7 @@ public class ProductLikesService implements LikesService {
 
   /**
    * 회원이 지정한 상품 찜 추가
+   *
    * @param productAndMemberCompositeKey 상품 id, 회원 id로 이루어진 복합키
    * @return res : 추가된 찜 갯수
    * @throws Exception
@@ -87,21 +88,18 @@ public class ProductLikesService implements LikesService {
     int res = 0;
     try {
       session = sessionFactory.openSession();
-      res = likesDao.insert(
-          new Likes(
-              productAndMemberCompositeKey.getMemberId()
-              , productAndMemberCompositeKey.getProductId()
-          )
-          , session
-      );
+      res =
+          likesDao.insert(
+              new Likes(
+                  productAndMemberCompositeKey.getMemberId(),
+                  productAndMemberCompositeKey.getProductId()),
+              session);
       session.commit();
     } catch (SQLException e) {
-
       session.rollback();
       e.printStackTrace();
-      throw new CustomException(ErrorCode.PRODUCT_IS_NOT_VALID);
+      throw new LikesEntityNotFoundException();
     } catch (Exception e) {
-      //
       session.rollback();
     } finally {
       session.close();
@@ -111,12 +109,14 @@ public class ProductLikesService implements LikesService {
 
   /**
    * 회원이 지정한 상품 찜 삭제
+   *
    * @param productAndMemberCompositeKey 상품 id, 회원 id로 이루어진 복합키
    * @return res : 삭제된 찜 갯수
    * @throws Exception
    */
   @Override
-  public int removeLikes(ProductAndMemberCompositeKey productAndMemberCompositeKey) throws Exception {
+  public int removeLikes(ProductAndMemberCompositeKey productAndMemberCompositeKey)
+      throws Exception {
     int res = 0;
     try {
       session = sessionFactory.openSession();
@@ -126,7 +126,7 @@ public class ProductLikesService implements LikesService {
 
       session.rollback();
       e.printStackTrace();
-      throw new CustomException(ErrorCode.PRODUCT_IS_NOT_VALID);
+      throw new LikesEntityNotFoundException();
     } catch (Exception e) {
       session.rollback();
     } finally {
@@ -137,6 +137,7 @@ public class ProductLikesService implements LikesService {
 
   /**
    * 회원의 찜 벌크 삭제
+   *
    * @param keyList 리스트 : 상품 id, 회원 id로 이루어진 복합키
    * @return res : 삭제된 찜 갯수
    * @throws Exception
@@ -154,7 +155,7 @@ public class ProductLikesService implements LikesService {
 
       session.rollback();
       e.printStackTrace();
-      throw new CustomException(ErrorCode.PRODUCT_IS_NOT_VALID);
+      throw new LikesEntityNotFoundException();
     } catch (Exception e) {
       session.rollback();
     } finally {
