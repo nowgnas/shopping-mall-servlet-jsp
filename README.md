@@ -76,4 +76,4 @@
 
 ## ERD & Diagram
 
-![erd](https://github.com/lotte-bit-1/shopping-mall-servlet-jsp/assets/55802893/62108f79-504a-4266-ba9a-f1343ff669e5)
+[바로가기](https://www.erdcloud.com/d/HnnmsKsQ4Q9ztQy4K)
