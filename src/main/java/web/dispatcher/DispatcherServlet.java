@@ -5,6 +5,8 @@ import org.apache.log4j.Logger;
 import web.ControllerFrame;
 import web.RestControllerFrame;
 import web.controller.*;
+import web.restController.LikesRestController;
+import web.restController.MemberRestController;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -29,7 +31,7 @@ public class DispatcherServlet extends HttpServlet {
     controllerMapper.put("order", new OrderController());
     controllerMapper.put("product", new ProductController());
     controllerMapper.put("likes", new LikesController());
-    restControllerMapper.put("rest", new RestController());
+    restControllerMapper.put("member-rest", new MemberRestController());
     restControllerMapper.put("likes", new LikesRestController());
   }
 

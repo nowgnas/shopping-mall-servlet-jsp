@@ -60,7 +60,7 @@ public class ProductServiceImpl implements ProductService {
     SqlSession session = sessionFactory.openSession();
     Map<String, Object> map = new HashMap<>();
     map.put("current", currentPage);
-    map.put("perPage", 10);
+    map.put("perPage", 9);
     map.put("userId", userId.toString());
 
     List<ProductListItem> products = null;
@@ -81,7 +81,7 @@ public class ProductServiceImpl implements ProductService {
     int totalPage = dao.getTotalPage(session);
     session.close();
     Pagination pagination =
-        Pagination.builder().totalPage(totalPage).perPage(10).currentPage(currentPage).build();
+        Pagination.builder().totalPage(totalPage).perPage(9).currentPage(currentPage).build();
 
     return ProductListWithPagination.<List<ProductListItem>, Pagination>builder()
         .item(products)

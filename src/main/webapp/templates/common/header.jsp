@@ -85,6 +85,7 @@
                                 <a href="#" data-toggle="modal" data-target="#loginModal">Sign in</a>
                             </c:if>
                             <c:if test="${ !empty loginMember }">
+                                <a href="#" disabled>${loginMember.name}님</a>
                                 <a href="member.bit?view=logout" target="_parent">logout</a>
                             </c:if>
                             <a href="#">FAQs</a>
@@ -105,7 +106,7 @@
                 <nav class="header__menu mobile-menu">
                     <ul>
                         <li class="active"><a href="./index.html">Home</a></li>
-                        <li><a href="/product.bit?view=shop&curPage=1&sort=DATE_DESC">Shop</a></li>
+                        <li><a href="/product.bit?view=shop&curPage=0&sort=DATE_DESC">Shop</a></li>
                         <li><a href="#">Pages</a>
                             <ul class="dropdown">
                                 <li><a href="./about.html">About Us</a></li>

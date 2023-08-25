@@ -140,7 +140,7 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="product__pagination">
-                            <c:if test="${productList.paging.currentPage > 1}">
+                            <c:if test="${productList.paging.currentPage > 0}">
                                 <a class="mr-3"
                                    href="/product.bit?view=shop&curPage=${productList.paging.currentPage - 1}&sort=PRICE_ASC">PREV</a>
                             </c:if>
@@ -173,7 +173,7 @@
                                 </c:choose>
                             </c:forEach>
 
-                            <c:if test="${productList.paging.currentPage < productList.paging.totalPage}">
+                            <c:if test="${productList.paging.currentPage < productList.paging.totalPage - 1}">
                                 <a href="/product.bit?view=shop&curPage=${productList.paging.currentPage + 1}&sort=PRICE_ASC">NEXT</a>
                             </c:if>
                         </div>

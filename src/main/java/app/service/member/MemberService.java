@@ -12,6 +12,7 @@ import app.exception.ErrorCode;
 import app.exception.member.DuplicatedEmailException;
 import app.exception.member.LoginFailException;
 import app.exception.member.MemberEntityNotFoundException;
+import app.exception.member.RegisterException;
 import app.utils.CipherUtil;
 import app.utils.GetSessionFactory;
 import org.apache.ibatis.exceptions.PersistenceException;
@@ -33,8 +34,9 @@ public class MemberService {
     sessionFactory = GetSessionFactory.getInstance();
   }
 
-  public void register(MemberRegisterDto dto) {
+  public Boolean register(MemberRegisterDto dto) {
     SqlSession sqlSession = sessionFactory.openSession();
+    int result = 0;
     try {
       String salt = createSalt();
       String hashedPassword = createHashedPassword(dto.getPassword(), salt);
@@ -43,7 +45,7 @@ public class MemberService {
       memberDao.insert(member, sqlSession);
 
       Encryption encryption = Encryption.from(member, salt);
-      encryptionDao.insert(encryption, sqlSession);
+      result = encryptionDao.insert(encryption, sqlSession);
 
       sqlSession.commit();
 
@@ -52,10 +54,11 @@ public class MemberService {
       throw new DuplicatedEmailException();
     } catch (Exception e) {
       sqlSession.rollback();
-      throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
+      throw new RegisterException();
     } finally {
       sqlSession.close();
     }
+    return result == 1 ? true : false;
   }
 
   public MemberDetail login(LoginDto dto) {
