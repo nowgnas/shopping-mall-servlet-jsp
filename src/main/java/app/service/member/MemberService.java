@@ -9,6 +9,7 @@ import app.entity.Encryption;
 import app.entity.Member;
 import app.exception.CustomException;
 import app.exception.ErrorCode;
+import app.exception.member.DuplicatedEmailException;
 import app.exception.member.LoginFailException;
 import app.exception.member.MemberEntityNotFoundException;
 import app.utils.CipherUtil;
@@ -48,11 +49,9 @@ public class MemberService {
 
     } catch (PersistenceException e) {
       sqlSession.rollback();
-      e.printStackTrace();
-      throw new MemberEntityNotFoundException();
+      throw new DuplicatedEmailException();
     } catch (Exception e) {
       sqlSession.rollback();
-      e.printStackTrace();
       throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
     } finally {
       sqlSession.close();
@@ -71,10 +70,8 @@ public class MemberService {
       loginMember = MemberDetail.of(member);
 
     } catch (SQLException e) {
-      e.printStackTrace();
 
     } catch (Exception e) {
-      e.printStackTrace();
     } finally {
       sqlSession.close();
     }
@@ -89,7 +86,6 @@ public class MemberService {
           memberDao.selectById(id, sqlSession).orElseThrow(MemberEntityNotFoundException::new);
       memberDetail = MemberDetail.of(member);
     } catch (SQLException e) {
-      e.printStackTrace();
     } finally {
       sqlSession.close();
     }
@@ -102,7 +98,6 @@ public class MemberService {
     try {
       result = memberDao.countByEmail(email, sqlSession);
     } catch (SQLException e) {
-      e.printStackTrace();
     } finally {
       sqlSession.close();
     }

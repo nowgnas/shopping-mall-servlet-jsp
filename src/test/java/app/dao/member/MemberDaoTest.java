@@ -1,6 +1,7 @@
 package app.dao.member;
 
 import app.dto.response.OrderMemberDetail;
+import app.entity.Member;
 import config.TestConfig;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -9,22 +10,20 @@ import utils.GetSessionFactory;
 
 class MemberDaoTest {
 
-  private final MemberDao memberDao = new MemberDao();
-  private final TestConfig testConfig = new TestConfig();
-  private SqlSessionFactory sessionFactory = GetSessionFactory.getInstance();
+  private static final MemberDao memberDao = new MemberDao();
+  private static final TestConfig testConfig = new TestConfig();
+  private static SqlSessionFactory sessionFactory = GetSessionFactory.getInstance();
 
-  @BeforeEach
-  void beforeEach() throws Exception {
+  @BeforeAll
+  static void beforeAll() throws Exception {
     SqlSession session = sessionFactory.openSession();
     testConfig.init("schema.sql", session);
-    testConfig.init("init-data.sql", session);
   }
 
   @AfterEach
   void afterEach() throws Exception {
     SqlSession session = sessionFactory.openSession();
-    testConfig.init("clear-data.sql", session);
-    session.close();
+    testConfig.init("member/member-clear.sql", session);
   }
 
   @Test
@@ -32,7 +31,9 @@ class MemberDaoTest {
   void select() throws Exception {
     // given
     SqlSession session = sessionFactory.openSession();
-
+    Member member = createMember();
+    memberDao.insert(member, session);
+    session.commit();
     // when
     OrderMemberDetail orderMemberDetail = memberDao.selectAddressAndCouponById(1L, session).get();
 
@@ -45,11 +46,14 @@ class MemberDaoTest {
   void countByEmail_result_1() throws Exception {
     // given
     SqlSession session = sessionFactory.openSession();
-    String email = "test@naver.com";
+    Member member = createMember();
+    memberDao.insert(member, session);
+    session.commit();
     int expectedResult = 1;
 
     // when
-    int result = memberDao.countByEmail(email, session);
+    SqlSession newSession = sessionFactory.openSession();
+    int result = memberDao.countByEmail(member.getEmail(), newSession);
 
     // then
     Assertions.assertEquals(expectedResult, result);
@@ -60,13 +64,20 @@ class MemberDaoTest {
   void countByEmail_result_0() throws Exception {
     // given
     SqlSession session = sessionFactory.openSession();
-    String email = "test123@naver.com";
+    Member member = createMember();
+    memberDao.insert(member, session);
+    session.commit();;
     int expectedResult = 0;
 
     // when
-    int result = memberDao.countByEmail(email, session);
+    SqlSession newSession = sessionFactory.openSession();
+    int result = memberDao.countByEmail("test02", newSession);
 
     // then
     Assertions.assertEquals(expectedResult, result);
+  }
+
+  private Member createMember() {
+    return Member.builder().email("user01").password("test").name("테스트").build();
   }
 }
