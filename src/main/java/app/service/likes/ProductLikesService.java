@@ -84,7 +84,7 @@ public class ProductLikesService implements LikesService {
    * @throws Exception
    */
   @Override
-  public int addLikes(ProductAndMemberCompositeKey productAndMemberCompositeKey) throws Exception {
+  public int addLikes(ProductAndMemberCompositeKey productAndMemberCompositeKey) {
     int res = 0;
     try {
       session = sessionFactory.openSession();
@@ -115,8 +115,7 @@ public class ProductLikesService implements LikesService {
    * @throws Exception
    */
   @Override
-  public int removeLikes(ProductAndMemberCompositeKey productAndMemberCompositeKey)
-      throws Exception {
+  public int removeLikes(ProductAndMemberCompositeKey productAndMemberCompositeKey) {
     int res = 0;
     try {
       session = sessionFactory.openSession();
@@ -143,7 +142,7 @@ public class ProductLikesService implements LikesService {
    * @throws Exception
    */
   @Override
-  public int removeSomeLikes(List<ProductAndMemberCompositeKey> keyList) throws Exception {
+  public int removeSomeLikes(List<ProductAndMemberCompositeKey> keyList) {
     int res = 0;
     try {
       session = sessionFactory.openSession();
