@@ -27,6 +27,7 @@
     <link rel="stylesheet" href="css/style.css" type="text/css">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>
@@ -34,6 +35,23 @@
 <div id="preloder">
     <div class="loader"></div>
 </div>
+
+<script>
+    const hostName = location.host;
+    const queryParameters = new URLSearchParams(decodeURI(location.search));
+    const errorMessage = queryParameters.get("errorMessage");
+    const orderId = queryParameters.get("orderId");
+    if(errorMessage !== null) {
+        Swal.fire({
+            icon: 'error',
+            title: "ERROR",
+            text: errorMessage,
+            footer: '<a href="https://github.com/lotte-bit-1/shopping-mall-servlet-jsp/issues">이슈 남기러 가기</a>'
+        }).then((result) => {
+            window.location.replace("http://" + hostName + "/order.bit?view=detail&cmd=get&orderId=" + orderId);
+        });
+    }
+</script>
 
 <!-- Header Section Begin -->
 <jsp:include page="../common/header.jsp"/>
@@ -177,8 +195,6 @@
 <script src="js/owl.carousel.min.js"></script>
 <script src="js/main.js"></script>
 <script src="js/order.js"></script>
-
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
     $('#orderCancelLink').on('click', function () {

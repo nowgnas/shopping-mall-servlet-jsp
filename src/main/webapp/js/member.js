@@ -30,7 +30,7 @@
             $("#vaildEmail").text("이메일 형식이 아닙니다.").css("color", "red");
             return;
         }
-        $.post("rest.bit?cmd=loginCheck", {
+        $.post("member-rest.bit?cmd=loginCheck", {
             email: email
         }, function (isValidEmail) {
             if (isValidEmail) {
@@ -60,7 +60,6 @@
     $("#registerPassword2").on("focusout", function () {
         let password = $("#registerPassword").val()
         let password2 = $("#registerPassword2").val();
-        console.log("asdasd")
         if ((password2 != "" && password2 != "undefined") && password === password2) {
             $("#vaildPassword2").text("비밀번호가 일치합니다.").css("color", "green");
             rePasswordFlag = true;
@@ -110,6 +109,5 @@
         }
         return true;
     }
-
 
 })(jQuery);

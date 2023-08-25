@@ -9,13 +9,18 @@ import app.entity.Encryption;
 import app.entity.Member;
 import app.exception.CustomException;
 import app.exception.ErrorCode;
+import app.exception.member.DuplicatedEmailException;
+import app.exception.member.LoginFailException;
+import app.exception.member.MemberEntityNotFoundException;
+import app.exception.member.RegisterException;
 import app.utils.CipherUtil;
 import app.utils.GetSessionFactory;
-import java.security.NoSuchAlgorithmException;
-import java.sql.SQLException;
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
+
+import java.security.NoSuchAlgorithmException;
+import java.sql.SQLException;
 
 public class MemberService {
 
@@ -29,8 +34,9 @@ public class MemberService {
     sessionFactory = GetSessionFactory.getInstance();
   }
 
-  public void register(MemberRegisterDto dto) {
+  public Boolean register(MemberRegisterDto dto) {
     SqlSession sqlSession = sessionFactory.openSession();
+    int result = 0;
     try {
       String salt = createSalt();
       String hashedPassword = createHashedPassword(dto.getPassword(), salt);
@@ -39,21 +45,20 @@ public class MemberService {
       memberDao.insert(member, sqlSession);
 
       Encryption encryption = Encryption.from(member, salt);
-      encryptionDao.insert(encryption, sqlSession);
+      result = encryptionDao.insert(encryption, sqlSession);
 
       sqlSession.commit();
 
     } catch (PersistenceException e) {
       sqlSession.rollback();
-      //      e.printStackTrace();
-      throw new CustomException(ErrorCode.EMAIL_IS_NOT_DUPLICATE);
+      throw new DuplicatedEmailException();
     } catch (Exception e) {
       sqlSession.rollback();
-      e.printStackTrace();
-      throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
+      throw new RegisterException();
     } finally {
       sqlSession.close();
     }
+    return result == 1 ? true : false;
   }
 
   public MemberDetail login(LoginDto dto) {
@@ -63,17 +68,13 @@ public class MemberService {
       String hashedPassword = getHashedPassword(dto, sqlSession);
       dto.setPassword(hashedPassword);
       Member member =
-          memberDao
-              .selectByEmailAndPassword(dto, sqlSession)
-              .orElseThrow(() -> new CustomException(ErrorCode.LOGIN_FAIL));
+          memberDao.selectByEmailAndPassword(dto, sqlSession).orElseThrow(LoginFailException::new);
 
       loginMember = MemberDetail.of(member);
 
     } catch (SQLException e) {
-      e.printStackTrace();
 
     } catch (Exception e) {
-      e.printStackTrace();
     } finally {
       sqlSession.close();
     }
@@ -85,12 +86,9 @@ public class MemberService {
     MemberDetail memberDetail = null;
     try {
       Member member =
-          memberDao
-              .selectById(id, sqlSession)
-              .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+          memberDao.selectById(id, sqlSession).orElseThrow(MemberEntityNotFoundException::new);
       memberDetail = MemberDetail.of(member);
     } catch (SQLException e) {
-      e.printStackTrace();
     } finally {
       sqlSession.close();
     }
@@ -103,7 +101,6 @@ public class MemberService {
     try {
       result = memberDao.countByEmail(email, sqlSession);
     } catch (SQLException e) {
-      e.printStackTrace();
     } finally {
       sqlSession.close();
     }
@@ -114,7 +111,7 @@ public class MemberService {
     Encryption encryption =
         encryptionDao
             .selectByEmail(dto.getEmail(), sqlSession)
-            .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+            .orElseThrow(MemberEntityNotFoundException::new);
     String hashedPassword = createHashedPassword(dto.getPassword(), encryption.getSalt());
     return hashedPassword;
   }
