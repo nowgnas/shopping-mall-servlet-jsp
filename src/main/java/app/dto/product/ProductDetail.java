@@ -8,7 +8,7 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
 public class ProductDetail {
-
+  private Long id;
   private String name;
   private Long price;
   private Integer categoryId;
