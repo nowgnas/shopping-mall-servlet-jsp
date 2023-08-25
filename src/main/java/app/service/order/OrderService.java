@@ -70,18 +70,18 @@ public class OrderService {
       orderProductManager.updateStockQuantity(
           product, product.getQuantity() - orderCreateDto.getQuantity(), session);
 
-      /* 회원의 잔액 확인 1. 총 상품 가격보다 잔액이 적다면 구매 불가 2. 잔액이 충분하다면 회원의 잔액에서 차감 */
-      Member member = orderMemberManager.determineMember(orderCreateDto.getMemberId(), session);
-      orderMemberManager.validateEnoughMoney(member.getMoney(), orderCreateDto.getTotalPrice());
-      orderMemberManager.updateMemberMoney(
-          member, member.getMoney() - orderCreateDto.getTotalPrice(), session);
-
       /* 회원이 쿠폰을 썼는지 확인 1. 쿠폰을 적용했다면 회원의 쿠폰 정보 '사용됨' 상태로 바꿈 2. 쿠폰을 적용하지 않았다면 패스 */
       Long couponId = orderCreateDto.getCouponId();
       if (orderCouponManager.isCouponUsed(couponId)) {
         Coupon coupon = orderCouponManager.determineCoupon(couponId, session);
         orderCouponManager.updateCouponStatus(coupon, CouponStatus.USED, session);
       }
+
+      /* 회원의 잔액 확인 1. 총 상품 가격보다 잔액이 적다면 구매 불가 2. 잔액이 충분하다면 회원의 잔액에서 차감 */
+      Member member = orderMemberManager.determineMember(orderCreateDto.getMemberId(), session);
+      orderMemberManager.validateEnoughMoney(member.getMoney(), orderCreateDto.getTotalPrice());
+      orderMemberManager.updateMemberMoney(
+              member, member.getMoney() - orderCreateDto.getTotalPrice(), session);
 
       /* 상품 주문 Order, ProductOrder, Payment, Delivery 생성 */
       Order order = orderCreateDto.toOrderEntity();
