@@ -8,10 +8,10 @@ import app.dto.response.MemberDetail;
 import app.dto.response.ProductOrderDetailDto;
 import app.dto.response.ProductOrderDto;
 import app.entity.Order;
+import app.exception.DomainException;
 import app.service.order.OrderServiceImpl;
 import app.utils.HttpUtil;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -39,16 +39,15 @@ public class OrderServlet extends HttpServlet {
 
     HttpSession session = request.getSession();
     MemberDetail loginMember = (MemberDetail) session.getAttribute("loginMember");
-    //    Long memberId = loginMember.getId();
-    memberId = 6L;
-    /* 로그인이 되어있지 않다면 메인으로 리다이렉트 */
-    //    if(memberId == null) {
-    //
-    //    }
 
-    String viewName = Navi.FORWARD_MAIN;
+    String viewName = Navi.REDIRECT_MAIN;
 
-    if (view != null && cmd != null) {
+    if (loginMember == null) {
+      viewName = Navi.REDIRECT_MAIN;
+    }
+
+    if (loginMember != null && view != null && cmd != null) {
+      memberId = loginMember.getId();
       viewName = build(request, response, view, cmd);
     }
 
@@ -79,16 +78,14 @@ public class OrderServlet extends HttpServlet {
       return deleteOrder(request, response);
     }
 
-    return Navi.FORWARD_MAIN;
+    return Navi.REDIRECT_MAIN;
   }
 
   // TODO: 상품 주문 폼
   private String getCreateOrderForm(HttpServletRequest request, HttpServletResponse response) {
     try {
-      //      Long productId = Long.parseLong(request.getParameter("productId"));
-      //      Long quantity = Long.parseLong(request.getParameter("quantity"));
-      Long productId = 1L;
-      Long quantity = 1L;
+      Long productId = Long.parseLong(request.getParameter("productId"));
+      Long quantity = Long.parseLong(request.getParameter("quantity"));
 
       OrderCreateForm createOrderForm = orderService.getCreateOrderForm(memberId, productId);
       request.setAttribute("memberName", createOrderForm.getMemberName());
@@ -98,8 +95,10 @@ public class OrderServlet extends HttpServlet {
       request.setAttribute("coupons", createOrderForm.getCoupons());
 
       return Navi.FORWARD_ORDER_FORM;
+    } catch (DomainException e) {
+      return Navi.FORWARD_MAIN;
     } catch (Exception e) {
-      throw new RuntimeException(e);
+      return Navi.REDIRECT_MAIN;
     }
   }
 
@@ -135,6 +134,8 @@ public class OrderServlet extends HttpServlet {
           orderService.getOrderDetailsForMemberAndOrderId(order.getId(), memberId);
       request.setAttribute("productOrderDetail", productOrderDetail);
       return String.format(Navi.REDIRECT_ORDER_DETAIL, order.getId());
+    } catch (DomainException e) {
+      return Navi.FORWARD_MAIN;
     } catch (Exception e) {
       return Navi.REDIRECT_MAIN;
     }
@@ -151,6 +152,8 @@ public class OrderServlet extends HttpServlet {
       request.setAttribute("coupons", createCartOrderForm.getCoupons());
 
       return Navi.FORWARD_ORDER_CART_FORM;
+    } catch (DomainException e) {
+      return Navi.FORWARD_MAIN;
     } catch (Exception e) {
       return Navi.REDIRECT_MAIN;
     }
@@ -183,6 +186,8 @@ public class OrderServlet extends HttpServlet {
           orderService.getOrderDetailsForMemberAndOrderId(order.getId(), memberId);
       request.setAttribute("orderDetails", orderDetails);
       return String.format(Navi.REDIRECT_ORDER_DETAIL, order.getId());
+    } catch (DomainException e) {
+      return Navi.FORWARD_MAIN;
     } catch (Exception e) {
       return Navi.REDIRECT_MAIN;
     }
@@ -193,6 +198,8 @@ public class OrderServlet extends HttpServlet {
       Long orderId = Long.parseLong(request.getParameter("orderId"));
       orderService.cancelOrder(orderId);
       return String.format(Navi.REDIRECT_ORDER_DETAIL, orderId);
+    } catch (DomainException e) {
+      return Navi.FORWARD_MAIN;
     } catch (Exception e) {
       return Navi.REDIRECT_MAIN;
     }
@@ -204,6 +211,8 @@ public class OrderServlet extends HttpServlet {
           orderService.getProductOrdersForMemberCurrentYear(memberId);
       request.setAttribute("productOrders", productOrders);
       return Navi.FORWARD_ORDER_LIST;
+    } catch (DomainException e) {
+      return Navi.FORWARD_MAIN;
     } catch (Exception e) {
       return Navi.REDIRECT_MAIN;
     }
@@ -214,8 +223,13 @@ public class OrderServlet extends HttpServlet {
       Long orderId = Long.parseLong(request.getParameter("orderId"));
       ProductOrderDetailDto productOrderDetail =
           orderService.getOrderDetailsForMemberAndOrderId(orderId, memberId);
+      request.setAttribute("products", productOrderDetail.getProducts());
+      request.setAttribute("payment", productOrderDetail.getPayment());
+      request.setAttribute("delivery", productOrderDetail.getDelivery());
       request.setAttribute("productOrderDetail", productOrderDetail);
       return Navi.FORWARD_ORDER_DETAIL;
+    } catch (DomainException e) {
+      return Navi.FORWARD_MAIN;
     } catch (Exception e) {
       return Navi.REDIRECT_MAIN;
     }

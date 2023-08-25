@@ -24,6 +24,13 @@
         FROM product_order
         WHERE order_id = #{orderId}
     </select>
+    <insert id="bulkInsert" parameterType="productOrder">
+        INSERT INTO product_order (product_id, order_id, price, quantity)
+        VALUES
+        <foreach collection="list" item="productOrder" separator=",">
+            (#{productOrder.productId}, #{productOrder.orderId}, #{productOrder.price}, #{productOrder.quantity})
+        </foreach>
+    </insert>
     <insert id="insert" parameterType="productOrder">
         INSERT INTO product_order (product_id, order_id, price, quantity)
         VALUES (#{productId}, #{orderId}, #{price}, #{quantity})

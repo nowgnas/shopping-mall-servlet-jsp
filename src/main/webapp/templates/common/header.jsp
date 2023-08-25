@@ -5,8 +5,48 @@
   Time: 오후 5:26
   To change this template use File | Settings | File Templates.
 --%>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!-- Offcanvas Menu Begin -->
+<style>
+    .container {
+        padding: 2rem 0rem;
+    }
+
+    @media (min-width: 576px) {
+        .modal-dialog {
+            max-width: 400px;
+        }
+
+        .modal-dialog .modal-content {
+            padding: 1rem;
+        }
+    }
+
+    .modal-header .close {
+        margin-top: -1.5rem;
+    }
+
+    .form-title {
+        margin: -2rem 0rem 2rem;
+    }
+
+    .btn-round {
+        border-radius: 3rem;
+    }
+
+    .delimiter {
+        padding: 1rem;
+    }
+
+    .social-buttons .btn {
+        margin: 0 0.5rem 1rem;
+    }
+
+    .signup-section {
+        padding: 0.3rem 0rem;
+    }
+</style>
 <div class="offcanvas-menu-overlay"></div>
 <div class="offcanvas-menu-wrapper">
     <div class="offcanvas__option">
@@ -74,7 +114,7 @@
         <div class="row">
             <div class="col-lg-3 col-md-3">
                 <div class="header__logo">
-                    <a href="./index.html"><img src="img/logo.png" alt=""></a>
+                    <a href="/"><img src="img/logo.png" alt=""></a>
                 </div>
             </div>
             <div class="col-lg-6 col-md-6">
@@ -92,7 +132,9 @@
                             </ul>
                         </li>
                         <li><a href="./blog.html">Blog</a></li>
-                        <li><a href="./contact.html">Contacts</a></li>
+                        <c:if test="${ !empty loginMember }">
+                            <li><a href="/order.bit?view=list&cmd=get">주문 조회</a></li>
+                        </c:if>
                     </ul>
                 </nav>
             </div>
@@ -108,3 +150,58 @@
         <div class="canvas__open"><i class="fa fa-bars"></i></div>
     </div>
 </header>
+
+<!-- login madal -->
+<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header border-bottom-0">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-title text-center">
+                    <h4>Login</h4>
+                </div>
+                <div class="d-flex flex-column text-center">
+                    <form id="loginForm" method="POST" action="member.bit?view=login">
+                        <div class="form-group">
+                            <input type="email" class="form-control" name="email" id="email"
+                                   placeholder="Your email address...">
+                        </div>
+                        <div class="form-group">
+                            <input type="password" class="form-control" name="password" id="password"
+                                   placeholder="Your password...">
+                        </div>
+                        <button type="button" class="btn btn-info btn-block btn-round" id="loginbtn">Login</button>
+                    </form>
+
+                    <div class="text-center text-muted delimiter">or use a social network</div>
+                    <div class="d-flex justify-content-center social-buttons">
+                        <button type="button" class="btn btn-secondary btn-round" data-toggle="tooltip"
+                                data-placement="top" title="Twitter">
+                            <i class="fab fa-twitter"></i>
+                        </button>
+                        <button type="button" class="btn btn-secondary btn-round" data-toggle="tooltip"
+                                data-placement="top" title="Facebook">
+                            <i class="fab fa-facebook"></i>
+                        </button>
+                        <button type="button" class="btn btn-secondary btn-round" data-toggle="tooltip"
+                                data-placement="top" title="Linkedin">
+                            <i class="fab fa-linkedin"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer d-flex justify-content-center">
+                <div class="signup-section">Not a member yet? <a href="member.bit?view=registerForm" class="text-info"> Sign Up</a>.</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js'></script>
+<script src="js/jquery-3.3.1.min.js"></script>
+<script src="js/header.js"></script>

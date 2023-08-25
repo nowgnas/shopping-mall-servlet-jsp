@@ -69,12 +69,12 @@
                c.status
         FROM member m
                  LEFT OUTER JOIN coupon c
-                                 ON m.id = c.member_id,
-             address a
-        WHERE m.id = a.member_id
-          AND m.id = #{id}
-          AND a.is_default = '1'
-          AND status = 'UNUSED'
+                                 ON m.id = c.member_id
+                                     AND c.status = 'UNUSED'
+                 LEFT OUTER JOIN address a
+                                 ON m.id = a.member_id
+                                     AND a.is_default = '1'
+        WHERE m.id = #{id}
 
     </select>
 

@@ -98,6 +98,7 @@
       and pi.is_thumbnail = false
   </select>
 
+<<<<<<< HEAD
   <select id="selectone" parameterType="Long" resultMap="singleProduct">
     SELECT p.id, p.name, p.quantity, p.price, i.url
     FROM product p
@@ -168,6 +169,74 @@
     FROM product
     WHERE id = #{id}
   </delete>
+=======
+<select id="selectone" parameterType="java.util.List" resultMap="singleProduct">
+  SELECT p.id, p.name, p.quantity, p.price, i.url
+  FROM product p
+  LEFT JOIN product_image i ON p.id = i.product_id
+  WHERE p.id IN
+  <foreach collection="list" item="id" open="(" separator="," close=")">
+    #{id}
+  </foreach>
+  AND i.is_thumbnail = true <!-- Make sure this matches your actual column name -->
+</select>
+    <select id="selectall" resultType="product">
+      SELECT *
+      FROM product
+    </select>
+    <select id="sortbypricedesc" parameterType="hashMap" resultMap="ListResultMap">
+      SELECT p.name,
+             p.price,
+             pi.url,
+             CASE WHEN l.product_id IS NOT NULL THEN true ELSE false END AS is_liked
+      FROM product p
+             LEFT JOIN likes l ON l.product_id = p.id AND l.member_id = #{userId}
+             left join product_image pi on p.id = pi.product_id
+      ORDER BY p.price desc
+        LIMIT #{current}, #{perPage}
+    </select>
+    <select id="sortbydate" resultMap="ListResultMap">
+      SELECT p.name,
+             p.price,
+             pi.url,
+             CASE WHEN l.product_id IS NOT NULL THEN true ELSE false END AS is_liked
+      FROM product p
+             LEFT JOIN likes l ON l.product_id = p.id AND l.member_id = #{userId}
+             left join product_image pi on p.id = pi.product_id
+      ORDER BY p.created_at desc
+        LIMIT #{current}, #{perPage}
+    </select>
+    <select id="sortbyprice" resultMap="ListResultMap">
+      SELECT p.name,
+             p.price,
+             pi.url,
+             CASE WHEN l.product_id IS NOT NULL THEN true ELSE false END AS is_liked
+      FROM product p
+             LEFT JOIN likes l ON l.product_id = p.id AND l.member_id = #{userId}
+             left join product_image pi on p.id = pi.product_id
+      ORDER BY p.price
+        LIMIT #{current}, #{perPage}
+    </select>
+    <insert id="insert" parameterType="product">
+        INSERT INTO product (category_id, name, description, price, quantity, code)
+        VALUES (#{categoryId}, #{name}, #{description}, #{price}, #{quantity}, #{code})
+    </insert>
+    <update id="update" parameterType="product">
+        UPDATE product
+        SET category_id = #{categoryId},
+            name        = #{name},
+            description = #{description},
+            price       = #{price},
+            quantity    = #{quantity},
+            code        = #{code}
+        WHERE id = #{id}
+    </update>
+    <delete id="delete" parameterType="Long">
+        DELETE
+        FROM product
+        WHERE id = #{id}
+    </delete>
+>>>>>>> 2265a6e2d5ff8b016146fa9d801f0d88f8ce18d2
 
   <select id="get-category" parameterType="Long" resultType="category">
     SELECT c1.id AS id, c1.parent_id parentId, c1.name name, c1.level level
