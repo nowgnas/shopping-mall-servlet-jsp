@@ -28,7 +28,7 @@ class LikesDaoTest {
     likesDao = LikesDao.getInstance();
     session = sessionFactory.openSession();
     testConfig.init("schema.sql", session);
-    testConfig.init("init-data.sql", session);
+    testConfig.init("likes/init-likes-data.sql", session);
   }
 
   @AfterEach

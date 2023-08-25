@@ -49,30 +49,20 @@ class ProductLikesServiceTest {
             3 : "아이맥 20"
             4 : "갤럭시 데스크탑 20"
      */
-    
+
     // 찜 정보 추가
     likesService.addLikes(
-        ProductAndMemberCompositeKey.builder()
-            .memberId(1L)
-            .productId(3L)
-            .build()
-    );
+        ProductAndMemberCompositeKey.builder().memberId(1L).productId(3L).build());
 
     likesService.addLikes(
-        ProductAndMemberCompositeKey.builder()
-            .memberId(1L)
-            .productId(4L)
-            .build()
-    );
+        ProductAndMemberCompositeKey.builder().memberId(1L).productId(4L).build());
 
     // 찜 목록 가져오기
     List<ProductListItemOfLike> list = likesService.getMemberLikes(1L);
 
-
     assertEquals(list.get(0).getName(), "갤럭시북 20");
     assertEquals(list.get(1).getName(), "아이맥 20");
     assertEquals(list.get(2).getName(), "갤럭시 데스크탑 20");
-
   }
 
   @DisplayName("회원의 물품 찜 여부 조회 테스트")
@@ -80,12 +70,9 @@ class ProductLikesServiceTest {
   void getMemberProductLikes() throws Exception {
 
     // 회원 id 1, 상품 id 2인 찜 정보 여부 조회
-    boolean res = likesService.getMemberProductLikes(
-        ProductAndMemberCompositeKey.builder()
-            .memberId(1L)
-            .productId(2L)
-            .build()
-    );
+    boolean res =
+        likesService.getMemberProductLikes(
+            ProductAndMemberCompositeKey.builder().memberId(1L).productId(2L).build());
 
     assertTrue(res);
   }
@@ -93,51 +80,37 @@ class ProductLikesServiceTest {
   @DisplayName("회원 찜 추가 테스트")
   @Test
   void addLikes() throws Exception {
-    
+
     // 회원 id 1, 상품 id 3인 찜 정보 추가
-    int res = likesService.addLikes(
-        ProductAndMemberCompositeKey.builder()
-            .memberId(1L)
-            .productId(3L)
-            .build()
-    );
+    int res =
+        likesService.addLikes(
+            ProductAndMemberCompositeKey.builder().memberId(1L).productId(3L).build());
 
     // 추가 로직 작동여부 파악
     assertEquals(res, 1);
 
     // 추가된 찜 정보 조회
-    assertTrue(likesService.getMemberProductLikes(
-        ProductAndMemberCompositeKey.builder()
-            .memberId(1L)
-            .productId(3L)
-            .build()
-        )
-    );
+    assertTrue(
+        likesService.getMemberProductLikes(
+            ProductAndMemberCompositeKey.builder().memberId(1L).productId(3L).build()));
   }
 
   @DisplayName("회원 찜 삭제 테스트")
   @Test
   void removeLikes() throws Exception {
-    
+
     // 회원 id 1, 상품 id 2인 찜 정보 삭제
-    int res = likesService.removeLikes(
-        ProductAndMemberCompositeKey.builder()
-            .memberId(1L)
-            .productId(2L)
-            .build()
-    );
+    int res =
+        likesService.removeLikes(
+            ProductAndMemberCompositeKey.builder().memberId(1L).productId(2L).build());
 
     // 삭제 로직 작동여부 파악
     assertEquals(res, 1);
-    
+
     // 삭제된 찜 정보 조회 없어야 함
-    assertFalse(likesService.getMemberProductLikes(
-            ProductAndMemberCompositeKey.builder()
-                .memberId(1L)
-                .productId(2L)
-                .build()
-        )
-    );
+    assertFalse(
+        likesService.getMemberProductLikes(
+            ProductAndMemberCompositeKey.builder().memberId(1L).productId(2L).build()));
   }
 
   @DisplayName("회원 찜 벌크 삭제 테스트")
@@ -146,13 +119,8 @@ class ProductLikesServiceTest {
 
     // 회원 id 1, 상품 id 2 ~ 4 세팅
     List<ProductAndMemberCompositeKey> keyList = new ArrayList<>();
-    for(long i = 2; i <= 4; i++) {
-      keyList.add(
-          ProductAndMemberCompositeKey.builder()
-              .memberId(1L)
-              .productId(i)
-              .build()
-      );
+    for (long i = 2; i <= 4; i++) {
+      keyList.add(ProductAndMemberCompositeKey.builder().memberId(1L).productId(i).build());
     }
 
     // 회원 id 1, 상품 id 3
