@@ -12,6 +12,5 @@ public abstract class Navi {
   public static final String FORWARD_ORDER_LIST = "forward:templates/order/orderList.jsp";
   public static final String FORWARD_ORDER_FORM = "forward:templates/order/orderForm.jsp";
   public static final String FORWARD_ORDER_CART_FORM = "forward:templates/order/orderCartForm.jsp";
-  public static final String FORWARD_DETAIL = "forward:templates/product/shop-details.jsp";
   public static final String FORWARD_PRODUCT_DETAIL = "forward:templates/product/shop.jsp";
 }
