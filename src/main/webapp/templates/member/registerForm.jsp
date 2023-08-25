@@ -61,7 +61,7 @@
         <div class="input-form-backgroud row">
             <div class="input-form col-md-12 mx-auto">
                 <h4 class="mb-3">Register</h4>
-                <form method="POST" action="member.bit?view=register" class="validation-form" novalidate>
+                <form method="POST" action="member-rest.bit?cmd=register" class="validation-form" novalidate>
 
                     <div class="mb-3">
                         <label for="registerEmail">이메일</label>

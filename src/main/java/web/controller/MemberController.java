@@ -38,8 +38,6 @@ public class MemberController implements ControllerFrame {
     switch (view) {
       case "registerForm":
         return registerForm();
-      case "register":
-        return register(request);
       case "loginForm":
         return loginForm();
       case "login":
@@ -52,23 +50,6 @@ public class MemberController implements ControllerFrame {
 
   private String registerForm() {
     return Navi.FORWARD_REGISTER_FORM;
-  }
-
-  private String register(HttpServletRequest request) {
-
-    String email = request.getParameter("registerEmail");
-    String password = request.getParameter("registerPassword");
-    String name = request.getParameter("registerName");
-
-    MemberRegisterDto dto = new MemberRegisterDto(email, password, name);
-
-    if (!registerValidationCheck(dto)) {
-      throw new CustomException(ErrorCode.REGISTER_FAIL);
-    }
-
-    memberService.register(dto);
-
-    return Navi.REDIRECT_MAIN;
   }
 
   private String loginForm() {
@@ -90,20 +71,6 @@ public class MemberController implements ControllerFrame {
   private String logout(HttpServletRequest request) {
     HttpSession session = request.getSession();
     session.invalidate();
-    request.setAttribute("center", "index");
     return Navi.REDIRECT_MAIN;
-  }
-
-  private boolean registerValidationCheck(MemberRegisterDto dto) {
-    if (!MemberValidation.isValidEmail(dto.getEmail())) {
-      return false;
-    }
-    if (!MemberValidation.isValidPassword(dto.getPassword())) {
-      return false;
-    }
-    if (!MemberValidation.isValidName(dto.getName())) {
-      return false;
-    }
-    return true;
   }
 }
