@@ -3,11 +3,10 @@ package app.dao.member;
 import app.dto.request.LoginDto;
 import app.dto.response.OrderMemberDetail;
 import app.entity.Member;
-import org.apache.ibatis.session.SqlSession;
-
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
+import org.apache.ibatis.session.SqlSession;
 
 public class MemberDao implements MemberDaoFrame<Long, Member> {
 
@@ -48,7 +47,7 @@ public class MemberDao implements MemberDaoFrame<Long, Member> {
   }
 
   @Override
-  public int countByEmail(String email, SqlSession session) throws SQLException{
+  public int countByEmail(String email, SqlSession session) throws SQLException {
 
     return session.selectOne("member.countByEmail", email);
   }
@@ -57,6 +56,4 @@ public class MemberDao implements MemberDaoFrame<Long, Member> {
       throws SQLException {
     return Optional.ofNullable(session.selectOne("member.selectAddressAndCouponById", id));
   }
-
-
 }

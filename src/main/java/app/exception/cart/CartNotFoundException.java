@@ -1,4 +1,4 @@
-package app.error.exception.cart;
+package app.exception.cart;
 
 
 import app.exception.CustomException;

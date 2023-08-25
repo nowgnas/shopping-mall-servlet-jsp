@@ -1,9 +1,8 @@
 package app.service.cart;
 
-import app.dao.CartDaoFrame;
-import app.dao.product.ProductDao;
-import app.dto.comp.ProductAndMemberCompositeKey;
+import app.dao.cart.CartDaoFrame;
 import app.entity.Cart;
+import app.entity.ProductAndMemberCompositeKey;
 import lombok.AllArgsConstructor;
 import org.apache.ibatis.session.SqlSession;
 
@@ -20,7 +19,7 @@ public class DeleteCartWhenRestOfQuantityUnder0 implements CartProductDeletePoli
       cartDaoFrame.deleteById(
           new ProductAndMemberCompositeKey(cart.getProductId(), cart.getMemberId()), session);
     } else {
-      cartDaoFrame.update(Cart.updateCart(cart,totalRequestQuantity),
+      cartDaoFrame.update(Cart.updateCart(cart, totalRequestQuantity),
           session);
     }
   }

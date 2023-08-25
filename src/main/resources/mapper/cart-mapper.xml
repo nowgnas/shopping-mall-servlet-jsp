@@ -26,7 +26,7 @@
 
 
 
-    <select id="select" parameterType="app.dto.comp.ProductAndMemberCompositeKey" resultMap="cart">
+    <select id="select" parameterType="app.entity.ProductAndMemberCompositeKey" resultMap="cart">
         SELECT *
         FROM cart
         WHERE member_id = #{memberId}
@@ -52,17 +52,17 @@
         INSERT INTO cart (member_id, product_id, product_quantity)
         VALUES (#{memberId}, #{productId}, #{productQuantity})
     </insert>
-    <update id="update" parameterType="app.dto.comp.ProductAndMemberCompositeKey">
+    <update id="update" parameterType="app.entity.ProductAndMemberCompositeKey">
         UPDATE cart
         SET product_quantity = #{productQuantity}
     </update>
-    <delete id="delete" parameterType="app.dto.comp.ProductAndMemberCompositeKey">
+    <delete id="delete" parameterType="app.entity.ProductAndMemberCompositeKey">
         DELETE
         FROM cart
         WHERE member_id = #{memberId}
         and product_id = #{productId}
     </delete>
-    <delete id="bulkDelete" parameterType="app.dto.comp.ProductAndMemberCompositeKey">
+    <delete id="bulkDelete" parameterType="app.entity.ProductAndMemberCompositeKey">
         DELETE FROM cart
         WHERE (member_id, product_id) IN
         <foreach collection="list" item="productAndMemberCompositeKey" separator="," open="(" close=")">

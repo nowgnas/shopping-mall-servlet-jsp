@@ -1,6 +1,5 @@
 package app.entity;
 
-import app.dto.comp.ProductAndMemberCompositeKey;
 import lombok.*;
 
 @Getter
@@ -14,11 +13,16 @@ public class Cart {
   @NonNull private Long productId;
   @NonNull private Long productQuantity;
 
-  public static Cart CartCompKeyBuilder(
+  public static Cart cartCompKeyBuilder(
       ProductAndMemberCompositeKey productAndMemberCompositeKey, Long productQuantity) {
     return new Cart(
         productAndMemberCompositeKey.getMemberId(),
         productAndMemberCompositeKey.getProductId(),
         productQuantity);
+  }
+
+  public static Cart updateCart(Cart cart, Long requestQuantity) {
+    return Cart.cartCompKeyBuilder(
+        new ProductAndMemberCompositeKey(cart.getProductId(), cart.getMemberId()), requestQuantity);
   }
 }

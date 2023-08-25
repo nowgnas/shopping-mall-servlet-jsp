@@ -1,8 +1,8 @@
 package app.service.cart;
 
-import app.dao.CartDaoFrame;
-import app.dao.CartDaoFrameImpl;
-import app.dto.comp.ProductAndMemberCompositeKey;
+import app.dao.cart.CartDao;
+import app.dao.cart.CartDaoFrame;
+import app.entity.ProductAndMemberCompositeKey;
 import app.entity.Cart;
 import app.exception.cart.CartQuantityIsUnder0Exception;
 import app.exception.cart.OutOfStockException;
@@ -11,6 +11,7 @@ import config.TestConfig;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import org.apache.ibatis.session.SqlSession;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -19,7 +20,7 @@ import org.junit.jupiter.api.Test;
 class UpdateCartServiceTest {
 
   private final TestConfig testConfig = new TestConfig();
-  private final CartDaoFrame<ProductAndMemberCompositeKey, Cart> cartDaoFrame = new CartDaoFrameImpl();
+  private final CartDaoFrame<ProductAndMemberCompositeKey, Cart> cartDaoFrame = new CartDao();
 
 
   private final UpdateCartService increaseTheCartQuantityService = new UpdateCartServiceImpl(
@@ -39,6 +40,12 @@ class UpdateCartServiceTest {
     testConfig.init("schema.sql", session);
     testConfig.init("init-data.sql", session);
 
+  }
+
+  @AfterEach
+  void afterEach() throws Exception {
+    session = GetSessionFactory.getInstance().openSession();
+    testConfig.init("clear-data.sql", session);
   }
 
 
@@ -104,7 +111,7 @@ Cart expectedCart = new Cart(1L, 2L, 2L);
     Long requestExtraQuantity = 2L;
     updateCartServiceWithDeleteStrategyWhenCartQuantityUnder0.decreaseQuantity(expectedCart,
         requestExtraQuantity, session);
-    Optional<Cart> cartOptional =cartDaoFrame.selectById(new ProductAndMemberCompositeKey(2L, 1L), session);
+    Optional<Cart> cartOptional = cartDaoFrame.selectById(new ProductAndMemberCompositeKey(2L, 1L), session);
     Assertions.assertThrowsExactly(NoSuchElementException.class, cartOptional::get);
   }
 
@@ -116,7 +123,7 @@ Cart expectedCart = new Cart(1L, 2L, 2L);
     Long requestExtraQuantity = 3L;
     updateCartServiceWithDeleteStrategyWhenCartQuantityUnder0.decreaseQuantity(expectedCart,
         requestExtraQuantity, session);
-    Optional<Cart> cartOptional =cartDaoFrame.selectById(new ProductAndMemberCompositeKey(2L, 1L), session);
+    Optional<Cart> cartOptional = cartDaoFrame.selectById(new ProductAndMemberCompositeKey(2L, 1L), session);
     Assertions.assertThrowsExactly(NoSuchElementException.class, cartOptional::get);
   }
 

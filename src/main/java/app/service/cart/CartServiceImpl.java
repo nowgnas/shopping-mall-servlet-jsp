@@ -1,15 +1,16 @@
 package app.service.cart;
-import app.dao.CartDaoFrame;
+
+import app.dao.cart.CartDaoFrame;
 import app.dao.DaoFrame;
 import app.dao.product.ProductDao;
 import app.dto.cart.AllCartProductInfoDto;
 import app.dto.cart.ProductInCartDto;
-import app.dto.comp.ProductAndMemberCompositeKey;
 import app.dto.product.ProductItemQuantity;
 import app.entity.Cart;
-
 import app.entity.Member;
 import app.entity.Product;
+import app.entity.ProductAndMemberCompositeKey;
+import app.exception.member.MemberNotFoundException;
 import app.service.checker.EntityExistCheckerService;
 import app.service.product.StockCheckerService;
 import app.utils.GetSessionFactory;
@@ -27,9 +28,9 @@ import org.apache.ibatis.session.SqlSession;
 @AllArgsConstructor
 public class CartServiceImpl implements CartService {
 
-  private CartDaoFrame<ProductAndMemberCompositeKey, Cart> cartDao;
-  private DaoFrame<Long, Member> memberDao;
   private final ProductDao productDao = ProductDao.getInstance();
+  private CartDaoFrame<ProductAndMemberCompositeKey, Cart> cartDaoFrame;
+  private DaoFrame<Long, Member> memberDao;
   private EntityExistCheckerService<Long, Member> memberExistCheckerService;
   private EntityExistCheckerService<Long, Product> productExistCheckerService;
   private EntityExistCheckerService<ProductAndMemberCompositeKey, Cart> cartExistCheckerService;
@@ -37,17 +38,19 @@ public class CartServiceImpl implements CartService {
   private UpdateCartService updateCartService;
 
 
-
   @Override
   public AllCartProductInfoDto getCartProductListByMember(
-      Long memberId) throws Exception {
+      Long memberId) throws Exception, MemberNotFoundException {
     SqlSession session = GetSessionFactory.getInstance().openSession();
-      //MemberNotFoundException
+    //MemberNotFoundException
     memberExistCheckerService.isExisted(memberDao, memberId, session).getId();
-    List<Cart> cartList = cartDao.getCartProductListByMember(memberId,session);
-    List<Long> productIdList = cartList.stream().map(p -> p.getProductId()).collect(Collectors.toList());
-    List<ProductItemQuantity> allProductInfo = productDao.selectProductQuantity(productIdList,session);
-    return AllCartProductInfoDto.getCustomerViewOfCartInfo(ProductInCartDto.getProductInfo(allProductInfo));
+    List<Cart> cartList = cartDaoFrame.getCartProductListByMember(memberId, session);
+    List<Long> productIdList = cartList.stream().map(p -> p.getProductId())
+        .collect(Collectors.toList());
+    List<ProductItemQuantity> allProductInfo = productDao.selectProductQuantity(productIdList,
+        session);
+    return AllCartProductInfoDto.getCustomerViewOfCartInfo(
+        ProductInCartDto.getProductInfo(allProductInfo));
   }
 
   @Override
@@ -61,12 +64,12 @@ public class CartServiceImpl implements CartService {
     //ProductNotFoundException
     Product product = productExistCheckerService.isExisted(productDao, productId, session);
 
-    Optional<Cart> cartOptional = cartDao.selectById(productAndMemberCompositeKey, session);
+    Optional<Cart> cartOptional = cartDaoFrame.selectById(productAndMemberCompositeKey, session);
     if (cartOptional.isPresent()) {
       updateCartService.increaseQuantity(cartOptional.get(), requestQuantity, product.getQuantity(),
           session);
     } else {
-      cartDao.insert(Cart.cartCompKeyBuilder(productAndMemberCompositeKey, requestQuantity),
+      cartDaoFrame.insert(Cart.cartCompKeyBuilder(productAndMemberCompositeKey, requestQuantity),
           session);
     }
   }
@@ -84,11 +87,12 @@ public class CartServiceImpl implements CartService {
     //ProductNotFoundException
     Product product = productExistCheckerService.isExisted(productDao, productId, session);
     //CartNotFoundException
-    Cart cart = cartExistCheckerService.isExisted(cartDao,productAndMemberCompositeKey,session);
+    Cart cart = cartExistCheckerService.isExisted(cartDaoFrame, productAndMemberCompositeKey, session);
     if (requestUpdateQuantity > 0) {
-      updateCartService.increaseQuantity(cart,requestUpdateQuantity,product.getQuantity(),session);
+      updateCartService.increaseQuantity(cart, requestUpdateQuantity, product.getQuantity(),
+          session);
     } else {
-      updateCartService.decreaseQuantity(cart,requestUpdateQuantity,session);
+      updateCartService.decreaseQuantity(cart, requestUpdateQuantity, session);
     }
 
   }
@@ -104,9 +108,9 @@ public class CartServiceImpl implements CartService {
     //ProductNotFoundException
     productExistCheckerService.isExisted(productDao, productId, session);
     //CartNotFoundException
-    cartExistCheckerService.isExisted(cartDao, productAndMemberCompositeKey, session);
+    cartExistCheckerService.isExisted(cartDaoFrame, productAndMemberCompositeKey, session);
 
-    cartDao.deleteById(productAndMemberCompositeKey, session);
+    cartDaoFrame.deleteById(productAndMemberCompositeKey, session);
 
   }
 }
