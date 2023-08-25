@@ -20,25 +20,26 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
 
 public class ProductServiceImpl implements ProductService {
-  private ProductDaoFrame dao;
-  private SqlSession session;
   private static ProductServiceImpl instance;
+  private final SqlSessionFactory sessionFactory = GetSessionFactory.getInstance();
+  private ProductDaoFrame dao;
+
+  public ProductServiceImpl() {
+    this.dao = ProductDao.getInstance();
+  }
 
   public static ProductServiceImpl getInstance() {
     if (instance == null) return new ProductServiceImpl();
     return instance;
   }
 
-  public ProductServiceImpl() {
-    this.dao = ProductDao.getInstance();
-    this.session = GetSessionFactory.getInstance().openSession();
-  }
-
   @Override
   public ProductDetailWithCategory getProductDetail(Long memberId, Long productId)
       throws Exception {
+    SqlSession session = sessionFactory.openSession();
     Optional<ProductDetail> detail =
         Optional.ofNullable(dao.selectProductDetailWithCategory(memberId, productId, session));
     ProductDetailWithCategory productDetailWithCategory = null;
@@ -54,8 +55,9 @@ public class ProductServiceImpl implements ProductService {
   }
 
   @Override
-  public ProductListWithPagination getProductList(
-      Long userId, int currentPage, SortOption sortOption) throws Exception {
+  public ProductListWithPagination getProductList(Long userId, int currentPage, String sortOption)
+      throws Exception {
+    SqlSession session = sessionFactory.openSession();
     Map<String, Object> map = new HashMap<>();
     map.put("current", currentPage);
     map.put("perPage", 10);
@@ -63,7 +65,7 @@ public class ProductServiceImpl implements ProductService {
 
     List<ProductListItem> products = null;
 
-    switch (sortOption) {
+    switch (SortOption.valueOf(sortOption)) {
       case PRICE_DESC:
         products = dao.selectAllSortByPriceDesc(map, session);
         break;
@@ -90,6 +92,7 @@ public class ProductServiceImpl implements ProductService {
   @Override
   public ProductDetailForOrder getProductDetailForOrder(Long productId, int quantity)
       throws Exception {
+    SqlSession session = sessionFactory.openSession();
     int qty = dao.selectProductQuantity(productId, session);
     if (qty < quantity) throw new Exception("주문 가능한 수량이 부족합니다");
     ProductDetailForOrder detail = dao.selectProductDetail(productId, session);
@@ -99,6 +102,7 @@ public class ProductServiceImpl implements ProductService {
 
   @Override
   public List<ProductSearchByKeyword> getProductsByKeyword(String keyword) throws Exception {
+    SqlSession session = sessionFactory.openSession();
     List<Product> products = dao.selectProductsByKeyword(keyword, session);
     if (products.size() == 0) throw new Exception("상품이 존재하지 않습니다");
     session.close();

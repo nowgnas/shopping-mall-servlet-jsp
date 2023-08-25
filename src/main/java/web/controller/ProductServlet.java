@@ -1,6 +1,7 @@
 package web.controller;
 
 import app.dto.product.response.ProductDetailWithCategory;
+import app.dto.product.response.ProductListWithPagination;
 import app.service.product.ProductService;
 import app.service.product.ProductServiceImpl;
 import app.utils.HttpUtil;
@@ -53,8 +54,18 @@ public class ProductServlet extends HttpServlet {
       ProductDetailWithCategory productDetail = service.getProductDetail(6L, 1L);
       request.setAttribute("productDetail", productDetail);
       return productDetail();
+    } else if (view.equals("shop")) {
+      int curPage = Integer.parseInt(request.getParameter("curPage"));
+      String sort = request.getParameter("sort");
+      ProductListWithPagination productList = service.getProductList(6L, curPage, sort);
+      request.setAttribute("productList", productList);
+      return productList();
     }
     return path;
+  }
+
+  private String productList() {
+    return Navi.FORWARD_PRODUCT_DETAIL;
   }
 
   private String productDetail() {
