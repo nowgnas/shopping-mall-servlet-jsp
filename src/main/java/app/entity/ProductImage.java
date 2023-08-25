@@ -1,12 +1,6 @@
 package app.entity;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.ToString;
+import lombok.*;
 
 @Getter
 @Builder
@@ -16,10 +10,7 @@ import lombok.ToString;
 public class ProductImage extends BaseEntity {
 
   private Long id;
-  @NonNull
-  private Long productId;
-  @NonNull
-  private String url;
-  @Builder.Default
-  private boolean isThumbnail = false;
+  @NonNull private Long productId;
+  @NonNull private String url;
+  @Builder.Default private boolean isThumbnail = false;
 }

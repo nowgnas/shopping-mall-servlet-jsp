@@ -3,8 +3,6 @@ package app.dto.order.response;
 import app.enums.DeliveryStatus;
 import app.enums.OrderStatus;
 import app.enums.PaymentType;
-import java.time.LocalDateTime;
-import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
