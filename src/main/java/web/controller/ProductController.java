@@ -3,8 +3,12 @@ package web.controller;
 import app.dto.product.response.ProductDetailWithCategory;
 import app.dto.product.response.ProductListWithPagination;
 import app.dto.response.MemberDetail;
+import app.entity.Category;
+import app.service.category.CategoryService;
+import app.service.category.CategoryServiceImpl;
 import app.service.product.ProductService;
 import app.service.product.ProductServiceImpl;
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -14,6 +18,7 @@ import web.dispatcher.Navi;
 public class ProductController implements ControllerFrame {
   private static final long serialVersionUID = 1L;
   private final ProductService service = ProductServiceImpl.getInstance();
+  private final CategoryService categoryService = CategoryServiceImpl.getInstance();
 
   public ProductController() {
     super();
@@ -56,9 +61,13 @@ public class ProductController implements ControllerFrame {
       if (loginMember != null) {
         memberId = loginMember.getId();
       }
+
+      List<Category> categories = categoryService.getAllCategory();
+
       int curPage = Integer.parseInt(request.getParameter("curPage"));
       String sort = request.getParameter("sort");
       ProductListWithPagination productList = service.getProductList(memberId, curPage, sort);
+      request.setAttribute("categories", categories);
       request.setAttribute("productList", productList);
       return productList();
     }
