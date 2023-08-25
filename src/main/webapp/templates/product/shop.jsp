@@ -107,7 +107,7 @@
                         <div class="col-lg-6 col-md-6 col-sm-6">
                             <div class="shop__product__option__right">
                                 <p>Sort Option:</p>
-                                <select>
+                                <select id="sortOption">
                                     <option value="DATE_DESC">Date</option>
                                     <option value="PRICE_DESC">Lowest Price First</option>
                                     <option value="PRICE_ASC">Highest Price First</option>
@@ -127,7 +127,9 @@
                                     <ul class="product__hover">
                                         <li><a href="#"><img src="img/icon/heart.png" alt=""></a>
                                         </li>
-                                        <li><a href="#"><img src="img/icon/search.png" alt=""></a>
+                                        <li>
+                                            <a href="/product.bit?view=shop-detail&productId=${product.id}"><img
+                                                    src="img/icon/search.png" alt=""></a>
                                         </li>
                                     </ul>
                                 </div>
@@ -160,12 +162,16 @@
                             <c:if test="${endPage > productList.paging.totalPage}">
                                 <c:set var="endPage" value="${productList.paging.totalPage}"/>
                                 <c:set var="startPage" value="${productList.paging.totalPage - 4}"/>
+                                <c:choose>
+                                    <c:when test="${startPage < 1}">
+                                        <c:set var="startPage" value="1"/>
+                                    </c:when>
+                                </c:choose>
                             </c:if>
-
                             <c:forEach begin="${startPage}" end="${endPage}" var="page">
                                 <c:choose>
                                     <c:when test="${page == productList.paging.currentPage}">
-                                        <a class="active">${page}</a>
+                                        <a id="curPage">${page}</a>
                                     </c:when>
                                     <c:otherwise>
                                         <a href="/product.bit?view=shop&curPage=${page}&sort=PRICE_ASC">${page}</a>
@@ -211,6 +217,7 @@
 <script src="../../js/mixitup.min.js"></script>
 <script src="../../js/owl.carousel.min.js"></script>
 <script src="../../js/main.js"></script>
+
 </body>
 
 </html>
