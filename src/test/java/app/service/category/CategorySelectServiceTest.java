@@ -16,6 +16,7 @@ import org.junit.jupiter.api.Test;
 public class CategorySelectServiceTest {
   private final TestConfig testConfig = new TestConfig();
   private final CategoryDaoFrame dao = CategoryDao.getInstance();
+  private final CategoryService service = CategoryServiceImpl.getInstance();
   SqlSession session;
 
   @BeforeEach
@@ -34,10 +35,18 @@ public class CategorySelectServiceTest {
   }
 
   @Test
-  @DisplayName("category select all service test")
+  @DisplayName("category select all service test - call dao")
   void selectAll() throws Exception {
     List<Category> list = dao.selectAll(session);
     Assertions.assertEquals(6, list.size());
     session.close();
+  }
+
+  @Test
+  @DisplayName("category service select all and show data ")
+  void selectAllAndData() throws Exception {
+    List<Category> allCategory = service.getAllCategory();
+    System.out.println(allCategory.toString());
+    Assertions.assertEquals(6, allCategory.size());
   }
 }
