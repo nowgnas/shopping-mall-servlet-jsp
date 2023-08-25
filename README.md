@@ -30,35 +30,43 @@
 ### 회원
 
 **📌 회원가입**
+
 ![register-flowchart](./assets/images/register-flowchart.png)
 
 **📌 로그인**
+
 ![login-flowchart](./assets/images/login-flowchart.png)
 
 **📌 로그아웃**
+
 ![logout-flowchart](./assets/images/logout-flowchart.png)
 
 ### 주문
 
 **📌 주문 생성**
+
 ![order-create-flowchart](./assets/images/order-create-flowchart.png)
 
 **📌 주문 삭제**
+
 ![order-delete-flowchart](./assets/images/order-delete-flowchart.png)
 
 ### 찜
 
 **📌 찜 목록에 추가**
+
 ![likes-flowchart](./assets/images/likes-flowchart.png)
 
 ### 장바구니
 
 **📌 장바구니에 추가**
+
 ![cart-flowchart](./assets/images/cart-flowchart.png)
 
 ### 상품
 
 **📌 상품 상세조회**
+
 ![product-detail-flowchart](./assets/images/product-detail-flowchart.png)
 
 
