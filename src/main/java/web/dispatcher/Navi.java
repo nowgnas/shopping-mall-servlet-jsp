@@ -16,4 +16,5 @@ public abstract class Navi {
   public static final String REDIRECT_ORDER_LIST = "redirect:order.bit?view=list&cmd=get";
   public static final String FORWARD_ORDER_FORM = "forward:templates/order/orderForm.jsp";
   public static final String FORWARD_ORDER_CART_FORM = "forward:templates/order/orderCartForm.jsp";
+  public static final String FORWARD_PRODUCT_DETAIL = "forward:templates/product/shop.jsp";
 }

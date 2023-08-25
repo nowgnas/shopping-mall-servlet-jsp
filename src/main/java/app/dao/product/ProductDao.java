@@ -32,10 +32,7 @@ public class ProductDao implements ProductDaoFrame<Long, Product> {
   @Override
   public List<ProductListItemOfLike> selectProductListItemOfLike(
       List<Long> productId, SqlSession session) throws CustomException {
-    List<ProductListItemOfLike> productListItemOfLikes =
-        session.selectList("product.selectProductListItemOfLike", productId);
-    if (productListItemOfLikes.size() == 0) throw new CustomException(ErrorCode.ITEM_NOT_FOUND);
-    return productListItemOfLikes;
+    return session.selectList("product.selectProductListItemOfLike", productId);
   }
 
   /**
@@ -45,9 +42,7 @@ public class ProductDao implements ProductDaoFrame<Long, Product> {
    */
   @Override
   public List<ProductItemQuantity> selectProductQuantity(List<Long> productId, SqlSession session) {
-    List<ProductItemQuantity> product = session.selectList("product.selectone", productId);
-    if (product.size() == 0) throw new CustomException(ErrorCode.ITEM_NOT_FOUND);
-    return product;
+    return session.selectList("product.selectone", productId);
   }
 
   @Override
@@ -86,25 +81,19 @@ public class ProductDao implements ProductDaoFrame<Long, Product> {
   @Override
   public List<ProductListItem> selectAllSortByPriceDesc(Map<String, Object> map, SqlSession session)
       throws Exception {
-    List<ProductListItem> products = session.selectList("product.sortbypricedesc", map);
-    if (products.size() == 0) throw new CustomException(ErrorCode.ITEM_NOT_FOUND);
-    return products;
+    return session.selectList("product.sortbypricedesc", map);
   }
 
   @Override
   public List<ProductListItem> selectAllSortByPrice(Map<String, Object> map, SqlSession session)
       throws Exception {
-    List<ProductListItem> products = session.selectList("product.sortbyprice");
-    if (products.size() == 0) throw new CustomException(ErrorCode.ITEM_NOT_FOUND);
-    return products;
+    return session.selectList("product.sortbyprice", map);
   }
 
   @Override
   public List<ProductListItem> selectAllSortByDate(Map<String, Object> map, SqlSession session)
       throws Exception {
-    List<ProductListItem> products = session.selectList("product.sortbydate");
-    if (products.size() == 0) throw new CustomException(ErrorCode.ITEM_NOT_FOUND);
-    return products;
+    return session.selectList("product.sortbydate", map);
   }
 
   @Override
