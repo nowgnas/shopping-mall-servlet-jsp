@@ -240,18 +240,7 @@ public class OrderService {
       if (deletedRow != productAndMemberCompositeKeys.size()) {
         throw new OrderCartDeleteException();
       }
-
-      /* 회원의 잔액 확인 1. 총 상품 가격보다 잔액이 적다면 구매 불가 2. 잔액이 충분하다면 회원의 잔액에서 차감 */
-      Member member =
-          memberDao
-              .selectById(orderCartCreateDto.getMemberId(), session)
-              .orElseThrow(MemberEntityNotFoundException::new);
-      validateEnoughMoney(member.getMoney(), orderCartCreateDto.getTotalPrice());
-      member.updateMoney(member.getMoney() - orderCartCreateDto.getTotalPrice());
-      if (memberDao.update(member, session) == 0) {
-        throw new OrderMemberUpdateMoneyException();
-      }
-
+      
       /* 회원이 쿠폰을 썼는지 확인 1. 쿠폰을 적용했다면 회원의 쿠폰 정보 '사용됨' 상태로 바꿈 2. 쿠폰을 적용하지 않았다면 패스 */
       if (isCouponUsed(orderCartCreateDto.getCouponId())) {
         Coupon coupon =
@@ -262,6 +251,17 @@ public class OrderService {
         if (couponDao.update(coupon, session) == 0) {
           throw new OrderCouponUpdateStatusException();
         }
+      }
+
+      /* 회원의 잔액 확인 1. 총 상품 가격보다 잔액이 적다면 구매 불가 2. 잔액이 충분하다면 회원의 잔액에서 차감 */
+      Member member =
+              memberDao
+                      .selectById(orderCartCreateDto.getMemberId(), session)
+                      .orElseThrow(MemberEntityNotFoundException::new);
+      validateEnoughMoney(member.getMoney(), orderCartCreateDto.getTotalPrice());
+      member.updateMoney(member.getMoney() - orderCartCreateDto.getTotalPrice());
+      if (memberDao.update(member, session) == 0) {
+        throw new OrderMemberUpdateMoneyException();
       }
 
       /* 상품 주문 orders, product_order, payment, delivery 생성 */
@@ -350,20 +350,6 @@ public class OrderService {
         }
       }
 
-      /* 회원의 보유 금액을 실제 결제 금액에 비례하여 증가시킴 */
-      Payment payment =
-          paymentDao
-              .selectByOrderId(orderId, session)
-              .orElseThrow(PaymentEntityNotFoundException::new);
-      Member member =
-          memberDao
-              .selectById(order.getMemberId(), session)
-              .orElseThrow(MemberEntityNotFoundException::new);
-      member.updateMoney(member.getMoney() + payment.getActualAmount());
-      if (memberDao.update(member, session) == 0) {
-        throw new OrderMemberUpdateMoneyException();
-      }
-
       /* 취소한 상품들에 대한 수량을 증가시킴 */
       List<ProductOrder> productOrders = productOrderDao.selectAllByOrderId(orderId, session);
       productOrders.forEach(
@@ -381,6 +367,20 @@ public class OrderService {
               throw new RuntimeException(e);
             }
           });
+
+      /* 회원의 보유 금액을 실제 결제 금액에 비례하여 증가시킴 */
+      Payment payment =
+              paymentDao
+                      .selectByOrderId(orderId, session)
+                      .orElseThrow(PaymentEntityNotFoundException::new);
+      Member member =
+              memberDao
+                      .selectById(order.getMemberId(), session)
+                      .orElseThrow(MemberEntityNotFoundException::new);
+      member.updateMoney(member.getMoney() + payment.getActualAmount());
+      if (memberDao.update(member, session) == 0) {
+        throw new OrderMemberUpdateMoneyException();
+      }
 
       session.commit();
     } catch (DomainException ex) {
