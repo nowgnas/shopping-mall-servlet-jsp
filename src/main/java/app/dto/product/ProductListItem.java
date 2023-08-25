@@ -9,7 +9,7 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
 public class ProductListItem extends BaseEntity {
-
+  private Long id;
   private String name;
   private Long price;
   private String url;
