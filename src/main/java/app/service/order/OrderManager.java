@@ -40,15 +40,18 @@ public class OrderManager {
     }
   }
 
-  public List<ProductOrderDto> getProductOrdersForMemberCurrentYear(Long memberId, SqlSession session) throws Exception {
+  public List<ProductOrderDto> getProductOrdersForMemberCurrentYear(
+      Long memberId, SqlSession session) throws Exception {
     return orderDao.selectProductOrdersForMemberCurrentYear(memberId, session);
   }
 
-  public ProductOrderDetailDto getOrderDetailsForMemberAndOrderId(Long orderId, Long memberId, SqlSession session) throws Exception {
+  public ProductOrderDetailDto getOrderDetailsForMemberAndOrderId(
+      Long orderId, Long memberId, SqlSession session) throws Exception {
     final Map<String, Long> orderIdAndMemberIdParameterMap = new HashMap<>();
     orderIdAndMemberIdParameterMap.put("orderId", orderId);
     orderIdAndMemberIdParameterMap.put("memberId", memberId);
-    return orderDao.selectOrderDetailsForMemberAndOrderId(orderIdAndMemberIdParameterMap, session)
-            .orElseThrow(OrderEntityNotFoundException::new);
+    return orderDao
+        .selectOrderDetailsForMemberAndOrderId(orderIdAndMemberIdParameterMap, session)
+        .orElseThrow(OrderEntityNotFoundException::new);
   }
 }
