@@ -15,8 +15,8 @@
         WHERE member_id = #{memberId}
           and product_id = #{productId}
     </select>
-    <select id="selectall" resultMap="likes">
-        SELECT *
+    <select id="selectall" resultType="Long">
+        SELECT product_id
         FROM likes
         WHERE member_id = #{memberId}
     </select>
