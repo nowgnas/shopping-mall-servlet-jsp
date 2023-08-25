@@ -122,6 +122,7 @@
     FROM product p
            LEFT JOIN likes l ON l.product_id = p.id AND l.member_id = #{userId}
            left join product_image pi on p.id = pi.product_id
+    WHERE pi.is_thumbnail = true
     ORDER BY p.price desc
       LIMIT #{current}, #{perPage}
   </select>
@@ -134,6 +135,7 @@
     FROM product p
            LEFT JOIN likes l ON l.product_id = p.id AND l.member_id = #{userId}
            left join product_image pi on p.id = pi.product_id
+    WHERE pi.is_thumbnail = true
     ORDER BY p.created_at desc
     LIMIT #{current}, #{perPage}
   </select>
@@ -146,6 +148,7 @@
     FROM product p
            LEFT JOIN likes l ON l.product_id = p.id AND l.member_id = #{userId}
            left join product_image pi on p.id = pi.product_id
+    WHERE pi.is_thumbnail = true
     ORDER BY p.price
       LIMIT #{current}, #{perPage}
   </select>
