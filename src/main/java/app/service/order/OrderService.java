@@ -1,6 +1,5 @@
 package app.service.order;
 
-import app.dao.order.OrderDao;
 import app.dto.cart.CartAndProductDto;
 import app.dto.order.form.OrderCartCreateForm;
 import app.dto.order.form.OrderCreateForm;
@@ -15,21 +14,16 @@ import app.enums.CouponStatus;
 import app.enums.DeliveryStatus;
 import app.enums.OrderStatus;
 import app.exception.DomainException;
-import app.exception.order.OrderEntityNotFoundException;
 import app.utils.GetSessionFactory;
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.log4j.Logger;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 public class OrderService {
 
   private final SqlSessionFactory sessionFactory = GetSessionFactory.getInstance();
-  private final OrderDao orderDao = new OrderDao();
   private final OrderManager orderManager = new OrderManager();
   private final OrderProductManager orderProductManager = new OrderProductManager();
   private final OrderMemberManager orderMemberManager = new OrderMemberManager();
@@ -90,7 +84,7 @@ public class OrderService {
 
       /* 상품 주문 Order, ProductOrder, Payment, Delivery 생성 */
       Order order = orderCreateDto.toOrderEntity();
-      orderDao.insert(order, session);
+      orderManager.createOrder(order, session);
 
       ProductOrder productOrder = orderCreateDto.toProductOrderEntity(order.getId());
       orderProductOrderManager.createProductOrder(productOrder, session);
@@ -196,7 +190,7 @@ public class OrderService {
 
       /* 상품 주문 orders, product_order, payment, delivery 생성 */
       Order order = orderCartCreateDto.toOrderEntity();
-      orderDao.insert(order, session);
+      orderManager.createOrder(order, session);
 
       List<ProductOrder> productOrders = orderCartCreateDto.toProductOrderEntities(order.getId());
       orderProductOrderManager.createProductOrders(productOrders, session);
@@ -285,9 +279,8 @@ public class OrderService {
   public List<ProductOrderDto> getProductOrdersForMemberCurrentYear(Long memberId)
       throws Exception {
     SqlSession session = sessionFactory.openSession();
-    List<ProductOrderDto> productOrderDtos;
     try {
-      productOrderDtos = orderDao.selectProductOrdersForMemberCurrentYear(memberId, session);
+      return orderManager.getProductOrdersForMemberCurrentYear(memberId, session);
     } catch (DomainException ex) {
       log.error(ex.getMessage());
       throw ex;
@@ -297,23 +290,14 @@ public class OrderService {
     } finally {
       session.close();
     }
-
-    return productOrderDtos;
   }
 
   /* 회원의 상세 주문을 조회 */
   public ProductOrderDetailDto getOrderDetailsForMemberAndOrderId(Long orderId, Long memberId)
       throws Exception {
     SqlSession session = sessionFactory.openSession();
-    ProductOrderDetailDto productOrderDetailDto;
     try {
-      final Map<String, Long> orderIdAndMemberIdParameterMap = new HashMap<>();
-      orderIdAndMemberIdParameterMap.put("orderId", orderId);
-      orderIdAndMemberIdParameterMap.put("memberId", memberId);
-      productOrderDetailDto =
-          orderDao
-              .selectOrderDetailsForMemberAndOrderId(orderIdAndMemberIdParameterMap, session)
-              .orElseThrow(OrderEntityNotFoundException::new);
+      return orderManager.getOrderDetailsForMemberAndOrderId(orderId, memberId, session);
     } catch (DomainException ex) {
       log.error(ex.getMessage());
       throw ex;
@@ -323,7 +307,5 @@ public class OrderService {
     } finally {
       session.close();
     }
-
-    return productOrderDetailDto;
   }
 }
