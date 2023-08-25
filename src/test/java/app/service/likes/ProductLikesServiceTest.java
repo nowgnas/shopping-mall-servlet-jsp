@@ -2,6 +2,7 @@ package app.service.likes;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import app.dto.product.ProductListItemOfLike;
 import app.entity.ProductAndMemberCompositeKey;
 import config.TestConfig;
 import java.util.ArrayList;
@@ -30,7 +31,7 @@ class ProductLikesServiceTest {
     testConfig.init("schema.sql", session);
 
     // 기본 찜 정보 : init Likes(1L, 2L)
-    testConfig.init("init-data.sql", session);
+    testConfig.init("likes/init-likes-data.sql", session);
   }
 
   @AfterEach
@@ -65,14 +66,13 @@ class ProductLikesServiceTest {
     );
 
     // 찜 목록 가져오기
-    // 썸네일 없을 경우 상품 목록을 가져오지 못 하는 점 수정 필요
-//    List<ProductListItemOfLike> list = likesService.getMemberLikes(1L);
+    List<ProductListItemOfLike> list = likesService.getMemberLikes(1L);
 
-    /*
+
     assertEquals(list.get(0).getName(), "갤럭시북 20");
     assertEquals(list.get(1).getName(), "아이맥 20");
     assertEquals(list.get(2).getName(), "갤럭시 데스크탑 20");
-    */
+
   }
 
   @DisplayName("회원의 물품 찜 여부 조회 테스트")
@@ -130,8 +130,8 @@ class ProductLikesServiceTest {
     // 삭제 로직 작동여부 파악
     assertEquals(res, 1);
     
-    // 삭제된 찜 정보 조회, 없어야 하므로 !연산자 추가
-    assertTrue(!likesService.getMemberProductLikes(
+    // 삭제된 찜 정보 조회 없어야 함
+    assertFalse(likesService.getMemberProductLikes(
             ProductAndMemberCompositeKey.builder()
                 .memberId(1L)
                 .productId(2L)
