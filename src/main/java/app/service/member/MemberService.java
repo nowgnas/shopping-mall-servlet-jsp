@@ -71,7 +71,6 @@ public class MemberService {
 
     } catch (SQLException e) {
 
-    } catch (Exception e) {
     } finally {
       sqlSession.close();
     }

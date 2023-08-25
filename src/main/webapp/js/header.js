@@ -15,4 +15,15 @@
         $(".offcanvas-menu-overlay").removeClass("active");
     });
 
+    $("#like-icon").on("click", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        Swal.fire({
+            title: '로그인을 해주세요.',
+            icon: 'error',
+            confirmButtonText: '확인'
+        })
+    });
+
+
 })(jQuery);
