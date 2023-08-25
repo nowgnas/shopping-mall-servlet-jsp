@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 
-@WebFilter(urlPatterns = "/*")
+@WebFilter(urlPatterns = "*.bit")
 public class BadRequestFilter implements Filter {
 
   private Logger work_log = Logger.getLogger("work");
