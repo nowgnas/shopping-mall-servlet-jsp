@@ -109,7 +109,7 @@
                 <nav class="header__menu mobile-menu">
                     <ul>
                         <li><a href="./index.html">Home</a></li>
-                        <li class="active"><a href="./shop.html">Shop</a></li>
+                        <li><a href="./shop.html">Shop</a></li>
                         <li><a href="#">Pages</a>
                             <ul class="dropdown">
                                 <li><a href="./about.html">About Us</a></li>
@@ -144,11 +144,10 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="breadcrumb__text">
-                    <h4>Shopping Cart</h4>
+                    <h4>Likes</h4>
                     <div class="breadcrumb__links">
-                        <a href="./index.html">Home</a>
-                        <a href="./shop.html">Shop</a>
-                        <span>Shopping Cart</span>
+                        <a href="index.jsp">Home</a>
+                        <span>Likes</span>
                     </div>
                 </div>
             </div>
@@ -157,7 +156,7 @@
 </section>
 <!-- Breadcrumb Section End -->
 
-<!-- Shopping Cart Section Begin -->
+<!-- Likes Section Begin -->
 <section class="shopping-cart spad">
     <div class="container">
         <div class="row">
@@ -166,34 +165,35 @@
                     <table>
                         <thead>
                         <tr>
+                            <th>Select</th> <!-- 체크박스 추가 -->
+                            <th>Thumbnail</th>
                             <th>Product</th>
-                            <th>Quantity</th>
-                            <th>Total</th>
-                            <th></th>
+                            <th>Price</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <c:forEach items="${allCartProductInfoDto.cartProductDtoList}"
-                                   var="product">
+                        <c:forEach items="${list}" var="product">
                             <tr>
                                 <td class="product__cart__item">
                                     <div class="product__cart__item__pic">
-                                        <img alt="" src="${product.imgUrl}">
-                                    </div>
-                                    <div class="product__cart__item__text">
-                                        <h6>${product.productName}</h6>
-                                        <h5>${product.productPrice}</h5>
+                                        <input type="checkbox" onclick="addToSelectedProducts(this)" name="selectedProducts" value="${product.id}">
                                     </div>
                                 </td>
-                                <td class="quantity__item">
-                                    <div class="quantity">
-                                        <div class="pro-qty-2">
-                                            <input type="text" value="${product.quantity}">
-                                        </div>
+                                <td class="product__cart__item">
+                                    <div class="product__cart__item__pic">
+                                        <img alt="" src="${product.url}" width="200px" height="150px">
                                     </div>
                                 </td>
-                                <td class="cart__price">$ ${product.price}</td>
-                                <td class="cart__close"><i class="fa fa-close"></i></td>
+                                <td class="product__cart__item">
+                                    <div class="quantity__item">
+                                        <h6>${product.name}</h6>
+                                    </div>
+                                </td>
+                                <td class="product__cart__item">
+                                    <div class="cart__price">
+                                        <h5>${product.price}</h5>
+                                    </div>
+                                </td>
                             </tr>
                         </c:forEach>
                         </tbody>
@@ -207,38 +207,20 @@
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6">
                         <div class="continue__btn update__btn">
-                            <a href="#"><i class="fa fa-spinner"></i> Update cart</a>
+                            <a href="#" id="deleteAll-btn"><i class="fa fa-spinner"></i>delete Likes</a>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="col-lg-4">
-                <div class="cart__total">
-                    <h6>Cart total</h6>
-                    <ul>
-                        <li>Subtotal <span>$ ${allCartProductInfoDto.totalPrice}</span></li>
-                        <li>Total <span>$ ${allCartProductInfoDto.totalPrice}</span></li>
-                    </ul>
-                    <a href="#" class="primary-btn">Proceed to checkout</a>
                 </div>
             </div>
         </div>
     </div>
 </section>
-<!-- Shopping Cart Section End -->
-
+<!-- Likes Section End -->
 
 <!-- Js Plugins -->
 <script src="js/jquery-3.3.1.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
-<script src="js/jquery.nice-select.min.js"></script>
-<script src="js/jquery.nicescroll.min.js"></script>
-<script src="js/jquery.magnific-popup.min.js"></script>
-<script src="js/jquery.countdown.min.js"></script>
-<script src="js/jquery.slicknav.js"></script>
-<script src="js/mixitup.min.js"></script>
-<script src="js/owl.carousel.min.js"></script>
-<script src="js/main.js"></script>
+<script src="js/likesList.js"></script>
 </body>
 
 </html>

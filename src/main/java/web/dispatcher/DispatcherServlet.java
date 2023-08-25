@@ -30,7 +30,7 @@ public class DispatcherServlet extends HttpServlet {
     controllerMapper.put("product", new ProductController());
     controllerMapper.put("likes", new LikesController());
     restControllerMapper.put("rest", new RestController());
-    restControllerMapper.put("likes", new LikesRestController());
+    restControllerMapper.put("likes-rest", new LikesRestController());
   }
 
   protected void service(HttpServletRequest request, HttpServletResponse response)

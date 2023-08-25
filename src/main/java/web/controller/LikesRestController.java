@@ -50,12 +50,6 @@ public class LikesRestController implements RestControllerFrame {
       case "cancel":
         productId = Long.parseLong(request.getParameter("productId"));
         return cancelLikes(request);
-      case "cancelSome":
-        List<Long> productIdList =
-            Arrays.stream(request.getParameterValues("productIdList"))
-                .map(Long::valueOf)
-                .collect(Collectors.toList());
-        return cancelSomeLikes(request, productIdList);
       default:
         return -1;
     }
@@ -75,14 +69,5 @@ public class LikesRestController implements RestControllerFrame {
   private Object cancelLikes(HttpServletRequest request) {
     return likesService.removeLikes(
         ProductAndMemberCompositeKey.builder().memberId(memberId).productId(productId).build());
-  }
-
-  // 찜 벌크 취소
-  private Object cancelSomeLikes(HttpServletRequest request, List<Long> productIdList) {
-    List<ProductAndMemberCompositeKey> compKey = new ArrayList<>();
-    for (Long pId : productIdList) {
-      compKey.add(ProductAndMemberCompositeKey.builder().memberId(memberId).productId(pId).build());
-    }
-    return likesService.removeSomeLikes(compKey);
   }
 }
