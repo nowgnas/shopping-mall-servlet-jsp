@@ -145,9 +145,24 @@
                     <div class="col-lg-12">
                         <div class="product__pagination">
                             <c:if test="${productList.paging.currentPage > 1}">
-                                <a href="/product.bit?view=shop&curPage=${productList.paging.currentPage - 1}&sort=PRICE_ASC">Previous</a>
+                                <a class="mr-3"
+                                   href="/product.bit?view=shop&curPage=${productList.paging.currentPage - 1}&sort=PRICE_ASC">PREV</a>
                             </c:if>
-                            <c:forEach begin="1" end="${productList.paging.totalPage}" var="page">
+
+                            <c:set var="startPage" value="${productList.paging.currentPage - 2}"/>
+                            <c:set var="endPage" value="${productList.paging.currentPage + 2}"/>
+
+                            <c:if test="${startPage < 1}">
+                                <c:set var="startPage" value="1"/>
+                                <c:set var="endPage" value="5"/>
+                            </c:if>
+
+                            <c:if test="${endPage > productList.paging.totalPage}">
+                                <c:set var="endPage" value="${productList.paging.totalPage}"/>
+                                <c:set var="startPage" value="${productList.paging.totalPage - 4}"/>
+                            </c:if>
+
+                            <c:forEach begin="${startPage}" end="${endPage}" var="page">
                                 <c:choose>
                                     <c:when test="${page == productList.paging.currentPage}">
                                         <a class="active">${page}</a>
@@ -157,10 +172,12 @@
                                     </c:otherwise>
                                 </c:choose>
                             </c:forEach>
+
                             <c:if test="${productList.paging.currentPage < productList.paging.totalPage}">
-                                <a href="/product.bit?view=shop&curPage=${productList.paging.currentPage + 1}&sort=PRICE_ASC">Next</a>
+                                <a href="/product.bit?view=shop&curPage=${productList.paging.currentPage + 1}&sort=PRICE_ASC">NEXT</a>
                             </c:if>
                         </div>
+
                     </div>
                 </div>
             </div>
