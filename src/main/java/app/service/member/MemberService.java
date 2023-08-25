@@ -9,6 +9,7 @@ import app.entity.Encryption;
 import app.entity.Member;
 import app.exception.CustomException;
 import app.exception.ErrorCode;
+import app.exception.member.DuplicatedEmailException;
 import app.exception.member.LoginFailException;
 import app.exception.member.MemberEntityNotFoundException;
 import app.utils.CipherUtil;
@@ -49,7 +50,7 @@ public class MemberService {
     } catch (PersistenceException e) {
       sqlSession.rollback();
       e.printStackTrace();
-      throw new MemberEntityNotFoundException();
+      throw new DuplicatedEmailException()d;
     } catch (Exception e) {
       sqlSession.rollback();
       e.printStackTrace();

@@ -6,6 +6,8 @@ import app.dto.request.MemberRegisterDto;
 import app.dto.response.MemberDetail;
 import app.entity.Member;
 import app.exception.CustomException;
+import app.exception.member.DuplicatedEmailException;
+import app.exception.member.MemberEntityNotFoundException;
 import config.TestConfig;
 import org.apache.ibatis.session.SqlSession;
 import org.junit.jupiter.api.*;
@@ -51,18 +53,18 @@ class MemberServiceTest {
   void register_fail_duplicate_email() throws Exception {
     // given
     MemberRegisterDto dto = createMemberRegisterDto();
-    String expectedMessage = "가입 된 이메일 입니다.";
+    String expectedMessage = "중복 된 이메일 입니다.";
     memberService.register(dto);
     // when
-    CustomException customException =
+    DuplicatedEmailException exception =
         Assertions.assertThrows(
-            CustomException.class,
+            DuplicatedEmailException.class,
             () -> {
               memberService.register(dto);
             });
 
     // then
-    Assertions.assertEquals(expectedMessage, customException.getMessage());
+    Assertions.assertEquals(expectedMessage, exception.getMessage());
   }
 
   @Test
@@ -81,16 +83,16 @@ class MemberServiceTest {
   void getMemberDetail_fail() throws Exception {
     // given
     Long id= 10L;
-    String expectedMessage = "해당 아이디의 회원은 존재 하지 않습니다.";
+    String expectedMessage = "회원 정보를 찾을 수 없습니다.";
     // when
-    CustomException customException =
+    MemberEntityNotFoundException exception =
             Assertions.assertThrows(
-                    CustomException.class,
+                    MemberEntityNotFoundException.class,
                     () -> {
                       memberService.get(id);
                     });
     // then
-    Assertions.assertEquals(expectedMessage, customException.getMessage());
+    Assertions.assertEquals(expectedMessage, exception.getMessage());
   }
 
   @Test
@@ -127,14 +129,6 @@ class MemberServiceTest {
     MemberDetail loginMember = memberService.login(loginDto);
     // then
     Assertions.assertEquals(dto.getEmail(), loginMember.getEmail());
-  }
-
-  @Test
-  void login_success123123() throws Exception {
-    // given
-    String email = "test@naver.com";
-    String password = "test123";
-
   }
 
   private MemberRegisterDto createMemberRegisterDto() {
