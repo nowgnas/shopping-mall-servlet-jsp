@@ -9,7 +9,6 @@ import app.service.category.CategoryServiceImpl;
 import app.service.product.ProductService;
 import app.service.product.ProductServiceImpl;
 import java.util.List;
-import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -20,7 +19,6 @@ public class ProductController implements ControllerFrame {
   private static final long serialVersionUID = 1L;
   private final ProductService service = ProductServiceImpl.getInstance();
   private final CategoryService categoryService = CategoryServiceImpl.getInstance();
-  Logger log = Logger.getLogger("ProductController");
 
   public ProductController() {
     super();
@@ -69,15 +67,6 @@ public class ProductController implements ControllerFrame {
       int curPage = Integer.parseInt(request.getParameter("curPage"));
       String sort = request.getParameter("sort");
       ProductListWithPagination productList = service.getProductList(memberId, curPage, sort);
-      log.info(
-          "total page : "
-              + productList.getPaging().getTotalPage()
-              + "per page "
-              + productList.getPaging().getPerPage()
-              + "cur page"
-              + productList.getPaging().getCurrentPage()
-              + productList.getItem().size()
-              + " 개 나옴 .. ");
       request.setAttribute("categories", categories);
       request.setAttribute("productList", productList);
       return productList();
