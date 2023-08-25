@@ -5,6 +5,7 @@ import org.apache.log4j.Logger;
 import web.ControllerFrame;
 import web.RestControllerFrame;
 import web.controller.*;
+import web.restController.LikesRestController;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
