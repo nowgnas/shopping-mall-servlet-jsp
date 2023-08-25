@@ -157,7 +157,7 @@
     <!-- Breadcrumb Section End -->
 
     <!-- Shopping Cart Section Begin -->
-    <section class="shopping-cart spad">
+    < <section class="shopping-cart spad">
         <div class="container">
             <div class="row">
                 <div class="col-lg-8">
@@ -172,29 +172,28 @@
                                 </tr>
                             </thead>
                             <tbody>
-                            <c:forEach items="${allCartProductInfoDto.cartProductDtoList}"
-                                       var="product">
-                                <tr>
-                                    <td class="product__cart__item">
-                                        <div class="product__cart__item__pic">
-                                            <img alt="" src="${product.imgUrl}">
-                                        </div>
-                                        <div class="product__cart__item__text">
-                                            <h6>${product.productName}</h6>
-                                            <h5>${product.productPrice}</h5>
-                                        </div>
-                                    </td>
-                                    <td class="quantity__item">
-                                        <div class="quantity">
-                                            <div class="pro-qty-2">
-                                                <input type="text" value="${product.quantity}">
+                                <c:forEach items="${cartInfo.cartProductDtoList}" var="product">
+                                    <tr>
+                                        <td class="product__cart__item">
+                                            <div class="product__cart__item__pic">
+                                                <img alt="" src="${product.imgUrl}">
                                             </div>
-                                        </div>
-                                    </td>
-                                    <td class="cart__price">$ ${product.price}</td>
-                                    <td class="cart__close"><i class="fa fa-close"></i></td>
-                                </tr>
-                            </c:forEach>
+                                            <div class="product__cart__item__text">
+                                                <h6>${product.productName}</h6>
+                                                <h5>$${product.productPrice}</h5>
+                                            </div>
+                                        </td>
+                                        <td class="quantity__item">
+                                            <div class="quantity">
+                                                <div class="pro-qty-2">
+                                                    <input type="text" value="${product.quantity}">
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="cart__price">${product.price}원</td>
+                                        <td class="cart__close"><i class="fa fa-close"></i></td>
+                                    </tr>
+                                </c:forEach>
                             </tbody>
                         </table>
                     </div>
@@ -215,8 +214,8 @@
                     <div class="cart__total">
                         <h6>Cart total</h6>
                         <ul>
-                            <li>Subtotal <span>$ ${allCartProductInfoDto.totalPrice}</span></li>
-                            <li>Total <span>$ ${allCartProductInfoDto.totalPrice}</span></li>
+                            <li>Subtotal <span>${cartInfo.totalPrice}원</span></li>
+                            <li>Total <span>${cartInfo.totalPrice}원</span></li>
                         </ul>
                         <a href="#" class="primary-btn">Proceed to checkout</a>
                     </div>
