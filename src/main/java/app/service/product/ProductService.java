@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface ProductService {
 
-  ProductListWithPagination getProductList(Long userId, int currentPage, SortOption sortOption)
+  ProductListWithPagination getProductList(Long userId, int currentPage, String sortOption)
       throws Exception;
 
   ProductDetailWithCategory getProductDetail(Long memberId, Long productId) throws Exception;
