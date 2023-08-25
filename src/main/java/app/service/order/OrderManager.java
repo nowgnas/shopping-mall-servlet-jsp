@@ -10,22 +10,23 @@ import org.apache.ibatis.session.SqlSession;
 
 public class OrderManager {
 
-    private final OrderDao orderDao = new OrderDao();
+  private final OrderDao orderDao = new OrderDao();
 
-    public Order determineOrder(Long orderId, SqlSession session) throws Exception {
-        return orderDao.selectById(orderId, session).orElseThrow(OrderEntityNotFoundException::new);
-    }
+  public Order determineOrder(Long orderId, SqlSession session) throws Exception {
+    return orderDao.selectById(orderId, session).orElseThrow(OrderEntityNotFoundException::new);
+  }
 
-    public void checkAlreadyOrdered(Order order) {
-        if (order.getStatus().equals(OrderStatus.CANCELED.name())) {
-            throw new OrderAlreadyCanceledException();
-        }
+  public void checkAlreadyOrdered(Order order) {
+    if (order.getStatus().equals(OrderStatus.CANCELED.name())) {
+      throw new OrderAlreadyCanceledException();
     }
+  }
 
-    public void updateOrderStatus(Order order, OrderStatus status, SqlSession session) throws Exception {
-        order.updateStatus(status.name());
-        if (orderDao.update(order, session) == 0) {
-            throw new OrderUpdateStatusException();
-        }
+  public void updateOrderStatus(Order order, OrderStatus status, SqlSession session)
+      throws Exception {
+    order.updateStatus(status.name());
+    if (orderDao.update(order, session) == 0) {
+      throw new OrderUpdateStatusException();
     }
+  }
 }
