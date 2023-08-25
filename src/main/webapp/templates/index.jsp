@@ -1,7 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
-<html lang="zxx">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
@@ -25,6 +25,8 @@
     <link rel="stylesheet" href="css/owl.carousel.min.css" type="text/css">
     <link rel="stylesheet" href="css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="css/style.css" type="text/css">
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <script>
@@ -39,6 +41,22 @@
 
 <!-- Header Section -->
 <jsp:include page="./common/header.jsp"/>
+
+<script>
+    const hostName = location.host;
+    const queryParameters = new URLSearchParams(decodeURI(location.search));
+    const errorMessage = queryParameters.get("errorMessage");
+    if(errorMessage !== null) {
+        Swal.fire({
+            icon: 'error',
+            title: "ERROR",
+            text: errorMessage,
+            footer: '<a href="https://github.com/lotte-bit-1/shopping-mall-servlet-jsp/issues">이슈 남기러 가기</a>'
+        }).then((result) => {
+            window.location.replace("http://" + hostName);
+        });
+    }
+</script>
 
 <!-- Hero Section Begin -->
 <section class="hero">
