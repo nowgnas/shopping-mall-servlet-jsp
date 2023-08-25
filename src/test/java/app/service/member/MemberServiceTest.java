@@ -5,38 +5,37 @@ import app.dto.request.LoginDto;
 import app.dto.request.MemberRegisterDto;
 import app.dto.response.MemberDetail;
 import app.entity.Member;
-import app.exception.CustomException;
 import app.exception.member.DuplicatedEmailException;
 import app.exception.member.MemberEntityNotFoundException;
 import config.TestConfig;
 import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
 import org.junit.jupiter.api.*;
 import utils.GetSessionFactory;
 
 class MemberServiceTest {
 
+  private static final MemberDao memberDao = new MemberDao();
+  private static final TestConfig testConfig = new TestConfig();
+  private static SqlSessionFactory sessionFactory = GetSessionFactory.getInstance();
   private final MemberService memberService = new MemberService();
-  private final MemberDao memberDao = new MemberDao();
-  private final TestConfig testConfig = new TestConfig();
-  private SqlSession session;
 
-  @BeforeEach
-  void beforeEach() throws Exception {
-    session = GetSessionFactory.getInstance().openSession();
+  @BeforeAll
+  static void beforeAll() throws Exception {
+    SqlSession session = sessionFactory.openSession();
     testConfig.init("schema.sql", session);
-    testConfig.init("init-data.sql", session);
   }
 
   @AfterEach
   void afterEach() throws Exception {
-    session = GetSessionFactory.getInstance().openSession();
-    testConfig.init("clear-data.sql", session);
+    SqlSession session = sessionFactory.openSession();
+    testConfig.init("member/member-clear.sql", session);
   }
 
   @Test
   @DisplayName("회원 가입 성공 테스트")
   void register_success() throws Exception {
-
+    SqlSession session = sessionFactory.openSession();
     // given
     MemberRegisterDto dto = createMemberRegisterDto();
 
@@ -45,6 +44,7 @@ class MemberServiceTest {
 
     // then
     Member member = memberDao.selectByEmail(dto.getEmail(), session).get();
+    session.close();
     Assertions.assertEquals(dto.getEmail(), member.getEmail());
   }
 
@@ -71,35 +71,41 @@ class MemberServiceTest {
   @DisplayName("회원 아이디(pk)로 내 정보 조회를 할 수 있다.")
   void getMemberDetail() throws Exception {
     // given
-    Long id= 1L;
+    MemberRegisterDto memberRegisterDto = createMemberRegisterDto();
+    memberService.register(memberRegisterDto);
+    SqlSession session = sessionFactory.openSession();
+    Member member = memberDao.selectByEmail(memberRegisterDto.getEmail(), session).get();
+
     // when
-    MemberDetail memberDetail = memberService.get(id);
+    MemberDetail memberDetail = memberService.get(member.getId());
     // then
-    Assertions.assertEquals(id, memberDetail.getId());
+    Assertions.assertEquals(member.getId(), memberDetail.getId());
   }
 
   @Test
   @DisplayName("존재 하지 않는 회원 아이디로 조회 시 예외가 발생한다.")
   void getMemberDetail_fail() throws Exception {
     // given
-    Long id= 10L;
+    Long id = 11111L;
     String expectedMessage = "회원 정보를 찾을 수 없습니다.";
     // when
     MemberEntityNotFoundException exception =
-            Assertions.assertThrows(
-                    MemberEntityNotFoundException.class,
-                    () -> {
-                      memberService.get(id);
-                    });
+        Assertions.assertThrows(
+            MemberEntityNotFoundException.class,
+            () -> {
+              memberService.get(id);
+            });
     // then
     Assertions.assertEquals(expectedMessage, exception.getMessage());
   }
 
   @Test
-  @DisplayName("이메일 중복검사 성공 시 true를 반환한다.")
+  @DisplayName("이메일 중복 검사 후 중복된 이메일이 없는 경우 true를 반환 한다.")
   void email_duplicate_success() throws Exception {
     // given
-    String email = "testSuccess@naver.com";
+    MemberRegisterDto memberRegisterDto = createMemberRegisterDto();
+    memberService.register(memberRegisterDto);
+    String email = "user0003@naver.com";
     // when
     boolean result = memberService.isDuplicatedEmail(email);
     // then
@@ -107,10 +113,12 @@ class MemberServiceTest {
   }
 
   @Test
-  @DisplayName("이메일 중복검사 실패 시 false를 반환한다.")
+  @DisplayName("이메일 중복 검사 후 중복된 이메일이 있는 경우 false를 반환한다.")
   void email_duplicate_fail() throws Exception {
     // given
-    String email = "test@naver.com";
+    MemberRegisterDto memberRegisterDto = createMemberRegisterDto();
+    memberService.register(memberRegisterDto);
+    String email = "user01@naver.com";
     // when
     boolean result = memberService.isDuplicatedEmail(email);
     // then
