@@ -7,7 +7,7 @@ import java.util.List;
 public interface LikesService {
   List<ProductListItemOfLike> getMemberLikes(Long memberId) throws Exception;
   boolean getMemberProductLikes(ProductAndMemberCompositeKey productAndMemberCompositeKey) throws Exception;
-  int addLikes(ProductAndMemberCompositeKey productAndMemberCompositeKey) throws Exception;
-  int removeLikes(ProductAndMemberCompositeKey productAndMemberCompositeKey) throws Exception;
-  int removeSomeLikes(List<ProductAndMemberCompositeKey> keyList) throws Exception;
+  int addLikes(ProductAndMemberCompositeKey productAndMemberCompositeKey);
+  int removeLikes(ProductAndMemberCompositeKey productAndMemberCompositeKey);
+  int removeSomeLikes(List<ProductAndMemberCompositeKey> keyList);
 }
