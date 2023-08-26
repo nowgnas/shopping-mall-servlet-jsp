@@ -204,10 +204,16 @@
       and pi.is_thumbnail = true
   </select>
 
-  <select id="searchByWord" parameterType="String" resultType="product">
-    SELECT *
-    FROM product
-    WHERE name LIKE '%' || #{keyword} || '%'
-    ORDER BY name
+  <select id="searchByWord" parameterType="hashMap" resultMap="ListResultMap">
+    SELECT p.name                                                         name,
+           p.price                                                        price,
+           pi.url                                                         url,
+           p.id                                                           id,
+           CASE WHEN l.product_id IS NOT NULL THEN true ELSE false END AS is_Liked
+    FROM product p
+           LEFT JOIN likes l ON l.product_id = p.id AND l.member_id = #{userId}
+           left join product_image pi on p.id = pi.product_id
+    WHERE pi.is_thumbnail = true and p.name LIKE '%' || #{keyword} || '%'
+      LIMIT #{current}, 9
   </select>
 </mapper>
