@@ -49,11 +49,10 @@
   </select>
 
   <select id="search-product-by-category" parameterType="hashMap" resultMap="CategorySearch">
-    select p.name,
-           p.price,
-           c.name,
-           pi.url,
-           p.id,
+    select p.name              name,
+           p.price             price,
+           pi.url              url,
+           p.id                id,
            CASE
              WHEN l.product_id IS NOT NULL THEN true
              ELSE false END AS is_Liked
@@ -65,11 +64,10 @@
       and pi.is_thumbnail = true
       and c.name LIKE '%' || #{keyword} || '%'
     UNION
-    select p.name,
-           p.price,
-           c.name,
-           pi.url,
-           p.id,
+    select p.name              name,
+           p.price             price,
+           pi.url              url,
+           p.id                id,
            CASE
              WHEN l.product_id IS NOT NULL THEN true
              ELSE false END AS is_liked
@@ -81,11 +79,10 @@
       and pi.is_thumbnail = true
       and c.name LIKE '%' || #{keyword} || '%'
     UNION
-    select p.name,
-           p.price,
-           c.name,
-           pi.url,
-           p.id,
+    select p.name              name,
+           p.price             price,
+           pi.url              url,
+           p.id                id,
            CASE
              WHEN l.product_id IS NOT NULL THEN true
              ELSE false END AS is_Liked
