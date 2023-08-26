@@ -2,12 +2,13 @@ package app.dto.order.form;
 
 import app.dto.cart.CartAndProductDto;
 import app.dto.response.OrderMemberDetail;
-import java.util.List;
-import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Builder
@@ -25,8 +26,13 @@ public class OrderCartCreateForm {
         .memberName(orderMemberDetail.getName())
         .products(
             cartAndProductDtos.stream()
-                .map(cp -> new ProductDto(cp.getProductId(), cp.getName(), cp.getPrice(),
-                    cp.getCartProductQuantity()))
+                .map(
+                    cp ->
+                        new ProductDto(
+                            cp.getProductId(),
+                            cp.getName(),
+                            cp.getPrice(),
+                            cp.getCartProductQuantity()))
                 .collect(Collectors.toList()))
         .defaultAddress(
             new OrderCartCreateForm.AddressDto(
