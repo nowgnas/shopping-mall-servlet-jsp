@@ -1,11 +1,6 @@
 package app.entity;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
+import lombok.*;
 
 @Getter
 @Builder
@@ -14,12 +9,8 @@ import lombok.NonNull;
 public class ProductOrder extends BaseEntity {
 
   private Long id;
-  @NonNull
-  private Long productId;
-  @NonNull
-  private Long orderId;
-  @NonNull
-  private Long price;
-  @NonNull
-  private Long quantity;
+  @NonNull private Long productId;
+  @NonNull private Long orderId;
+  @NonNull private Long price;
+  @NonNull private Long quantity;
 }

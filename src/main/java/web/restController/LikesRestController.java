@@ -1,4 +1,4 @@
-package web.controller;
+package web.restController;
 
 import app.dto.response.MemberDetail;
 import app.entity.ProductAndMemberCompositeKey;

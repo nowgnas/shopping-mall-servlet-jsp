@@ -78,15 +78,9 @@
                                     <div class="card-body">
                                         <div class="shop__sidebar__categories">
                                             <ul class="nice-scroll">
-                                                <li><a href="#">Men (20)</a></li>
-                                                <li><a href="#">Women (20)</a></li>
-                                                <li><a href="#">Bags (20)</a></li>
-                                                <li><a href="#">Clothing (20)</a></li>
-                                                <li><a href="#">Shoes (20)</a></li>
-                                                <li><a href="#">Accessories (20)</a></li>
-                                                <li><a href="#">Kids (20)</a></li>
-                                                <li><a href="#">Kids (20)</a></li>
-                                                <li><a href="#">Kids (20)</a></li>
+                                                <c:forEach var="category" items="${categories}">
+                                                    <li><a href="#">${category.name}</a></li>
+                                                </c:forEach>
                                             </ul>
                                         </div>
                                     </div>
@@ -146,7 +140,7 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="product__pagination">
-                            <c:if test="${productList.paging.currentPage > 1}">
+                            <c:if test="${productList.paging.currentPage > 0}">
                                 <a class="mr-3"
                                    href="/product.bit?view=shop&curPage=${productList.paging.currentPage - 1}&sort=PRICE_ASC">PREV</a>
                             </c:if>
@@ -179,7 +173,7 @@
                                 </c:choose>
                             </c:forEach>
 
-                            <c:if test="${productList.paging.currentPage < productList.paging.totalPage}">
+                            <c:if test="${productList.paging.currentPage < productList.paging.totalPage - 1}">
                                 <a href="/product.bit?view=shop&curPage=${productList.paging.currentPage + 1}&sort=PRICE_ASC">NEXT</a>
                             </c:if>
                         </div>
