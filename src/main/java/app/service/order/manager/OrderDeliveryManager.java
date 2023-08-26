@@ -1,4 +1,4 @@
-package app.service.order;
+package app.service.order.manager;
 
 import app.dao.delivery.DeliveryDao;
 import app.entity.Delivery;

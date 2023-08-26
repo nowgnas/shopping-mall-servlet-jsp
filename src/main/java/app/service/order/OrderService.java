@@ -14,15 +14,20 @@ import app.enums.CouponStatus;
 import app.enums.DeliveryStatus;
 import app.enums.OrderStatus;
 import app.exception.DomainException;
+import app.service.order.interfaces.OrderCartCreateService;
+import app.service.order.interfaces.OrderCreateService;
+import app.service.order.interfaces.OrderDeleteService;
+import app.service.order.interfaces.OrderReadService;
+import app.service.order.manager.*;
 import app.utils.GetSessionFactory;
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.log4j.Logger;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class OrderService {
+public class OrderService
+    implements OrderCreateService, OrderCartCreateService, OrderReadService, OrderDeleteService {
 
   private final SqlSessionFactory sessionFactory = GetSessionFactory.getInstance();
   private final OrderManager orderManager = new OrderManager();
@@ -36,6 +41,7 @@ public class OrderService {
   private Logger log = Logger.getLogger("order");
 
   /* 상품 주문 폼 */
+  @Override
   public OrderCreateForm getCreateOrderForm(Long memberId, Long productId) throws Exception {
     SqlSession session = sessionFactory.openSession();
     try {
@@ -59,6 +65,7 @@ public class OrderService {
   }
 
   /* 상품 주문 */
+  @Override
   public Order createOrder(OrderCreateDto orderCreateDto) throws Exception {
     SqlSession session = sessionFactory.openSession();
     try {
@@ -81,7 +88,7 @@ public class OrderService {
       Member member = orderMemberManager.determineMember(orderCreateDto.getMemberId(), session);
       orderMemberManager.validateEnoughMoney(member.getMoney(), orderCreateDto.getTotalPrice());
       orderMemberManager.updateMemberMoney(
-              member, member.getMoney() - orderCreateDto.getTotalPrice(), session);
+          member, member.getMoney() - orderCreateDto.getTotalPrice(), session);
 
       /* 상품 주문 Order, ProductOrder, Payment, Delivery 생성 */
       Order order = orderCreateDto.toOrderEntity();
@@ -114,6 +121,7 @@ public class OrderService {
   }
 
   /* 장바구니 상품 주문 폼 */
+  @Override
   public OrderCartCreateForm getCreateCartOrderForm(Long memberId) throws Exception {
     SqlSession session = sessionFactory.openSession();
     try {
@@ -143,6 +151,7 @@ public class OrderService {
   }
 
   /* 장바구니 상품 주문 */
+  @Override
   public Order createCartOrder(OrderCartCreateDto orderCartCreateDto) throws Exception {
     SqlSession session = sessionFactory.openSession();
     try {
@@ -219,6 +228,7 @@ public class OrderService {
   }
 
   /* 상품 주문 취소 */
+  @Override
   public void cancelOrder(Long orderId) throws Exception {
     SqlSession session = sessionFactory.openSession();
     try {
@@ -277,6 +287,7 @@ public class OrderService {
   }
 
   /* 회원의 1년내의 주문 목록들을 최신순으로 조회 */
+  @Override
   public List<ProductOrderDto> getProductOrdersForMemberCurrentYear(Long memberId)
       throws Exception {
     SqlSession session = sessionFactory.openSession();
@@ -294,6 +305,7 @@ public class OrderService {
   }
 
   /* 회원의 상세 주문을 조회 */
+  @Override
   public ProductOrderDetailDto getOrderDetailsForMemberAndOrderId(Long orderId, Long memberId)
       throws Exception {
     SqlSession session = sessionFactory.openSession();

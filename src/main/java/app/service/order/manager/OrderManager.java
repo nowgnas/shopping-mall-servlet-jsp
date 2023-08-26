@@ -1,4 +1,4 @@
-package app.service.order;
+package app.service.order.manager;
 
 import app.dao.order.OrderDao;
 import app.dto.order.response.ProductOrderDetailDto;
