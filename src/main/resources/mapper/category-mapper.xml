@@ -1,44 +1,100 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper
-        PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="category">
-    <resultMap id="BaseResultMap" type="category">
-        <id column="id" property="id"/>
-        <result column="parent_id" property="parentId"/>
-        <result column="name" property="name"/>
-        <result column="level" property="level"/>
-    </resultMap>
+  <resultMap id="BaseResultMap" type="category">
+    <id column="id" property="id"/>
+    <result column="parent_id" property="parentId"/>
+    <result column="name" property="name"/>
+    <result column="level" property="level"/>
+  </resultMap>
 
-    <select id="select" parameterType="Long" resultType="category">
-        SELECT *
-        FROM category
-        WHERE id = #{id}
-    </select>
-    <select id="selectall" resultMap="BaseResultMap">
-        SELECT *
-        FROM category
-    </select>
-    <insert id="insert" parameterType="category">
-        INSERT INTO category (parent_id, name, level)
-        VALUES (#{parentId}, #{name}, #{level})
-    </insert>
-    <update id="update" parameterType="category">
-        UPDATE category
-        SET name  = #{name},
-            level = #{level}
-        WHERE id = #{id}
-    </update>
-    <delete id="delete" parameterType="Long">
-        DELETE
-        FROM category
-        WHERE id = #{id}
-    </delete>
-    <select id="first-category" resultType="category">
-      SELECT *
-      FROM category
-      WHERE level = 1
-    </select>
+  <resultMap id="CategorySearch" type="productListItem">
+    <id column="id" jdbcType="BIGINT" property="id"/>
+    <result column="name" jdbcType="VARCHAR" property="name"/>
+    <result column="price" jdbcType="BIGINT" property="price"/>
+    <result column="is_liked" jdbcType="BOOLEAN" property="isLiked"/>
+    <result column="url" jdbcType="VARCHAR" property="url"/>
+  </resultMap>
+
+  <select id="select" parameterType="Long" resultType="category">
+    SELECT *
+    FROM category
+    WHERE id = #{id}
+  </select>
+  <select id="selectall" resultMap="BaseResultMap">
+    SELECT *
+    FROM category
+  </select>
+  <insert id="insert" parameterType="category">
+    INSERT INTO category (parent_id, name, level)
+    VALUES (#{parentId}, #{name}, #{level})
+  </insert>
+  <update id="update" parameterType="category">
+    UPDATE category
+    SET name  = #{name},
+        level = #{level}
+    WHERE id = #{id}
+  </update>
+  <delete id="delete" parameterType="Long">
+    DELETE
+    FROM category
+    WHERE id = #{id}
+  </delete>
+  <select id="first-category" resultType="category">
+    SELECT *
+    FROM category
+    WHERE level = 1
+  </select>
+
+  <select id="search-product-by-category" parameterType="hashMap" resultMap="CategorySearch">
+    select p.name              name,
+           p.price             price,
+           pi.url              url,
+           p.id                id,
+           CASE
+             WHEN l.product_id IS NOT NULL THEN true
+             ELSE false END AS is_Liked
+    from category c
+           left join product p on c.id = p.category_id
+           left join product_image pi on p.id = pi.product_id
+           LEFT JOIN likes l ON l.product_id = p.id AND l.member_id = #{memberId}
+    where level = 1
+      and pi.is_thumbnail = true
+      and c.name LIKE '%' || #{keyword} || '%'
+    UNION
+    select p.name              name,
+           p.price             price,
+           pi.url              url,
+           p.id                id,
+           CASE
+             WHEN l.product_id IS NOT NULL THEN true
+             ELSE false END AS is_liked
+    from category c
+           left join product p on c.id = p.category_id
+           left join product_image pi on p.id = pi.product_id
+           LEFT JOIN likes l ON l.product_id = p.id AND l.member_id = #{memberId}
+    where level = 2
+      and pi.is_thumbnail = true
+      and c.name LIKE '%' || #{keyword} || '%'
+    UNION
+    select p.name              name,
+           p.price             price,
+           pi.url              url,
+           p.id                id,
+           CASE
+             WHEN l.product_id IS NOT NULL THEN true
+             ELSE false END AS is_Liked
+    from category c
+           left join product p on c.id = p.category_id
+           left join product_image pi on p.id = pi.product_id
+           LEFT JOIN likes l ON l.product_id = p.id AND l.member_id = #{memberId}
+    where level = 3
+      and pi.is_thumbnail = true
+      and c.name LIKE '%' || #{keyword} || '%'
+      limit #{curPage}, 9
+  </select>
 
 </mapper>
 

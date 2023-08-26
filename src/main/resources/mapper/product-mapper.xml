@@ -90,7 +90,7 @@
            p.id                id,
            CASE
              WHEN l.product_id IS NOT NULL THEN true
-             ELSE false END AS isLiked
+             ELSE false END AS is_Liked
     FROM product p
            left join likes l on p.id = l.product_id and l.member_id = #{memberId}
            left join product_image pi on p.id = pi.product_id
@@ -118,7 +118,7 @@
            p.price                                                        price,
            pi.url                                                         url,
            p.id                                                           id,
-           CASE WHEN l.product_id IS NOT NULL THEN true ELSE false END AS isLiked
+           CASE WHEN l.product_id IS NOT NULL THEN true ELSE false END AS is_Liked
     FROM product p
            LEFT JOIN likes l ON l.product_id = p.id AND l.member_id = #{userId}
            left join product_image pi on p.id = pi.product_id
@@ -131,7 +131,7 @@
            p.price                                                        price,
            pi.url                                                         url,
            p.id                                                           id,
-           CASE WHEN l.product_id IS NOT NULL THEN true ELSE false END AS isLiked
+           CASE WHEN l.product_id IS NOT NULL THEN true ELSE false END AS is_Liked
     FROM product p
            LEFT JOIN likes l ON l.product_id = p.id AND l.member_id = #{userId}
            left join product_image pi on p.id = pi.product_id
@@ -144,7 +144,7 @@
            p.price                                                        price,
            pi.url                                                         url,
            p.id                                                           id,
-           CASE WHEN l.product_id IS NOT NULL THEN true ELSE false END AS isLiked
+           CASE WHEN l.product_id IS NOT NULL THEN true ELSE false END AS is_Liked
     FROM product p
            LEFT JOIN likes l ON l.product_id = p.id AND l.member_id = #{userId}
            left join product_image pi on p.id = pi.product_id
