@@ -11,13 +11,16 @@
   });
 
 
-  $('#deleteAll-btn').on('click', (e) => {
+  $('#cancel-likes-btn').on('click', (e) => {
     e.preventDefault();
     e.stopPropagation();
     console.log(selectedProductsList);
 
-    $.post("likes.bit?view=cancelSome", {
+    $.post("likes-rest.bit?cmd=cancelSome", {
       selectedProductsList : JSON.stringify(selectedProductsList)
+    }).done(function(response) {
+      // 페이지 리디렉션
+      window.location.href = "/likes.bit?view=likes";
     });
   })
 

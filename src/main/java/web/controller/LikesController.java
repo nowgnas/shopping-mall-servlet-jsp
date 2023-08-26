@@ -43,29 +43,8 @@ public class LikesController implements ControllerFrame {
 
     memberId = loginMember.getId();
 
-    switch (view) {
-      case "likes":
-        return getLikes(request);
-      case "cancelSome":
-
-        JsonArray jsonValues = JsonParser.parseArray(new StringReader(request.getParameter("selectedProductsList")));
-        String json = request.getParameter("selectedProductsList");
-        ObjectMapper objectMapper = new ObjectMapper();
-
-        ArrayList<Long> selectedProductsList  = (ArrayList<Long>) objectMapper.readValue(json, List.class)
-            .stream()
-            .map(obj -> Long.valueOf(obj.toString()))
-            .collect(Collectors.toList());
-
-        System.out.println(selectedProductsList.get(0));
-        System.out.println(selectedProductsList.get(1));
-
-//        ArrayList<Long> selectedProductsList = objectMapper.readValue(str, List.class)
-//            .stream()
-//            .map(obj -> Long.valueOf(obj.toString()))
-//            .collect(Collectors.toList());
-
-        return cancelSomeLikes(request, selectedProductsList);
+    if(view.equals("likes")) {
+      return getLikes(request);
     }
 
     return next;
@@ -79,26 +58,6 @@ public class LikesController implements ControllerFrame {
       List<ProductListItemOfLike> list = likesService.getMemberLikes(memberId);
       request.setAttribute("list", list);
       return Navi.FORWARD_LIKES_LIST;
-    } catch (DomainException e) {
-      return Navi.REDIRECT_LIKES_LIST + String.format("?errorMessage=%s", e.getMessage());
-    } catch (Exception e) {
-      return Navi.REDIRECT_MAIN + String.format("?errorMessage=%s", errorMessage);
-    }
-  }
-
-  // 찜 벌크 취소
-  private String cancelSomeLikes(HttpServletRequest request, List<Long> selectedProductsList) {
-    List<ProductAndMemberCompositeKey> compKey = new ArrayList<>();
-    String errorMessage = "";
-    try {
-      errorMessage = URLEncoder.encode("시스템 에러", "UTF-8");
-
-      for (Long productId : selectedProductsList) {
-        compKey.add(
-            ProductAndMemberCompositeKey.builder().memberId(memberId).productId(productId).build());
-      }
-      likesService.removeSomeLikes(compKey);
-      return getLikes(request);
     } catch (DomainException e) {
       return Navi.REDIRECT_LIKES_LIST + String.format("?errorMessage=%s", e.getMessage());
     } catch (Exception e) {
