@@ -40,6 +40,7 @@ public class SearchProduct {
   void searchByKeyword() throws Exception {
     String word = "맥";
     List<ProductSearchByKeyword> productsByKeyword = service.getProductsByKeyword(word);
+    log.info(productsByKeyword.toString());
     Assertions.assertEquals(2, productsByKeyword.size());
   }
 

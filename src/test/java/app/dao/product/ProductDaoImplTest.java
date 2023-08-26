@@ -82,7 +82,7 @@ class ProductDaoImplTest {
 
     Pagination pagination = Pagination.builder().currentPage(0).perPage(perPage).build();
     Map<String, Object> map = new HashMap<>();
-    map.put("current", 1);
+    map.put("current", 0);
     map.put("perPage", perPage);
     map.put("userId", userId.toString());
     List<ProductListItem> products = productDao.selectAllSortByDate(map, session); // 모든 상품 조회
