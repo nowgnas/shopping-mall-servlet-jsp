@@ -61,7 +61,8 @@
            left join product p on c.id = p.category_id
            left join product_image pi on p.id = pi.product_id
            LEFT JOIN likes l ON l.product_id = p.id AND l.member_id = #{memberId}
-    where level = 1 and pi.is_thumbnail = true
+    where level = 1
+      and pi.is_thumbnail = true
       and c.name LIKE '%' || #{keyword} || '%'
     UNION
     select p.name,
@@ -76,7 +77,8 @@
            left join product p on c.id = p.category_id
            left join product_image pi on p.id = pi.product_id
            LEFT JOIN likes l ON l.product_id = p.id AND l.member_id = #{memberId}
-    where level = 2 and pi.is_thumbnail = true
+    where level = 2
+      and pi.is_thumbnail = true
       and c.name LIKE '%' || #{keyword} || '%'
     UNION
     select p.name,
@@ -91,8 +93,10 @@
            left join product p on c.id = p.category_id
            left join product_image pi on p.id = pi.product_id
            LEFT JOIN likes l ON l.product_id = p.id AND l.member_id = #{memberId}
-    where level = 3 and pi.is_thumbnail = true
+    where level = 3
+      and pi.is_thumbnail = true
       and c.name LIKE '%' || #{keyword} || '%'
+      limit #{curPage}, 9
   </select>
 
 </mapper>

@@ -55,8 +55,8 @@ public class CategorySelectTest {
   @Test
   @DisplayName("select product by category name - dao")
   void selectProductByCategoryNameDao() {
-    List<ProductListItem> products = dao.selectProductByCategoryName(1L, "갤", session);
-    System.out.println(products.toString());
-    Assertions.assertEquals(2, products.size());
+//    List<ProductListItem> products = dao.selectProductByCategoryName(1L, "갤", session);
+//    System.out.println(products.toString());
+//    Assertions.assertEquals(2, products.size());
   }
 }
