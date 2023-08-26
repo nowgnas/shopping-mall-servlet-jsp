@@ -120,10 +120,20 @@
                                      data-setbg="${product.url}">
                                     <ul class="product__hover">
                                         <c:if test="${!product.isLiked}">
-                                            <li><a href="#" class="likes-btn" data-product-id="${product.id}"><img src="img/icon/heart.png" alt=""></a></li>
+                                            <li>
+                                                <a href="#" class="likes-btn"
+                                                   data-product-id="${product.id}"
+                                                   data-login-info="${loginMember}"><img
+                                                        src="img/icon/heart.png" alt=""></a>
+                                            </li>
                                         </c:if>
                                         <c:if test="${product.isLiked}">
-                                            <li><a href="#" class="likes-cancel-btn" data-product-id="${product.id}"><img src="img/icon/fill_heart.png" alt=""></a></li>
+                                            <li>
+                                                <a href="#" class="likes-cancel-btn"
+                                                   data-product-id="${product.id}"
+                                                   data-login-info="${loginMember}"><img
+                                                        src="img/icon/fill_heart.png" alt=""></a>
+                                            </li>
                                         </c:if>
                                         <li>
                                             <a href="/product.bit?view=shop-detail&productId=${product.id}"><img
