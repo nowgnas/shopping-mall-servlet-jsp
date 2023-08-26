@@ -111,7 +111,7 @@
                     </div>
                 </div>
                 <%--  product item list --%>
-                <div class="row">
+                <div class="row" id="common-parent-element">
                     <c:forEach var="product" items="${productList.item}">
                         <%-- each item --%>
                         <div class="col-lg-4 col-md-6 col-sm-6">
@@ -119,8 +119,12 @@
                                 <div class="product__item__pic set-bg"
                                      data-setbg="${product.url}">
                                     <ul class="product__hover">
-                                        <li><a href="#"><img src="img/icon/heart.png" alt=""></a>
-                                        </li>
+                                        <c:if test="${!product.isLiked}">
+                                            <li><a href="#" class="likes-btn" data-product-id="${product.id}"><img src="img/icon/heart.png" alt=""></a></li>
+                                        </c:if>
+                                        <c:if test="${product.isLiked}">
+                                            <li><a href="#" class="likes-cancel-btn" data-product-id="${product.id}"><img src="img/icon/fill_heart.png" alt=""></a></li>
+                                        </c:if>
                                         <li>
                                             <a href="/product.bit?view=shop-detail&productId=${product.id}"><img
                                                     src="img/icon/search.png" alt=""></a>
@@ -211,6 +215,7 @@
 <script src="../../js/mixitup.min.js"></script>
 <script src="../../js/owl.carousel.min.js"></script>
 <script src="../../js/main.js"></script>
+<script src="../../js/likes.js"></script>
 
 </body>
 
