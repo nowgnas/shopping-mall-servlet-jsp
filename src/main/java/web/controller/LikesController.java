@@ -2,13 +2,23 @@ package web.controller;
 
 import app.dto.product.ProductListItemOfLike;
 import app.dto.response.MemberDetail;
+import app.entity.ProductAndMemberCompositeKey;
 import app.exception.DomainException;
 import app.service.likes.ProductLikesService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mysql.cj.xdevapi.JsonArray;
+import com.mysql.cj.xdevapi.JsonParser;
+import com.mysql.cj.xdevapi.JsonValue;
+import java.io.StringReader;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.json.JSONArray;
 import web.ControllerFrame;
 import web.dispatcher.Navi;
 
@@ -29,13 +39,12 @@ public class LikesController implements ControllerFrame {
     HttpSession session = request.getSession();
     MemberDetail loginMember = (MemberDetail) session.getAttribute("loginMember");
 
-    if (loginMember == null)
-      return next;
+    if (loginMember == null) return next;
 
     memberId = loginMember.getId();
 
-    if (view.equals("likes")) {
-      next = getLikes(request);
+    if(view.equals("likes")) {
+      return getLikes(request);
     }
 
     return next;
@@ -55,5 +64,4 @@ public class LikesController implements ControllerFrame {
       return Navi.REDIRECT_MAIN + String.format("?errorMessage=%s", errorMessage);
     }
   }
-
 }

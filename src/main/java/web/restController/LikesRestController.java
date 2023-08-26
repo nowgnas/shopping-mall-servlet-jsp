@@ -2,8 +2,11 @@ package web.restController;
 
 import app.dto.response.MemberDetail;
 import app.entity.ProductAndMemberCompositeKey;
+import app.exception.DomainException;
 import app.exception.likes.LikesEntityDuplicateException;
 import app.service.likes.ProductLikesService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -12,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import web.RestControllerFrame;
+import web.dispatcher.Navi;
 
 public class LikesRestController implements RestControllerFrame {
 
@@ -51,11 +55,16 @@ public class LikesRestController implements RestControllerFrame {
         productId = Long.parseLong(request.getParameter("productId"));
         return cancelLikes(request);
       case "cancelSome":
-        List<Long> productIdList =
-            Arrays.stream(request.getParameterValues("productIdList"))
-                .map(Long::valueOf)
-                .collect(Collectors.toList());
-        return cancelSomeLikes(request, productIdList);
+        String json = request.getParameter("selectedProductsList");
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        ArrayList<Long> selectedProductsList =
+            (ArrayList<Long>)
+                objectMapper.readValue(json, List.class).stream()
+                    .map(obj -> Long.valueOf(obj.toString()))
+                    .collect(Collectors.toList());
+
+        return cancelSomeLikes(request, selectedProductsList);
       default:
         return -1;
     }
@@ -78,10 +87,11 @@ public class LikesRestController implements RestControllerFrame {
   }
 
   // 찜 벌크 취소
-  private Object cancelSomeLikes(HttpServletRequest request, List<Long> productIdList) {
+  private Object cancelSomeLikes(HttpServletRequest request, List<Long> selectedProductsList) {
     List<ProductAndMemberCompositeKey> compKey = new ArrayList<>();
-    for (Long pId : productIdList) {
-      compKey.add(ProductAndMemberCompositeKey.builder().memberId(memberId).productId(pId).build());
+    for (Long productId : selectedProductsList) {
+      compKey.add(
+          ProductAndMemberCompositeKey.builder().memberId(memberId).productId(productId).build());
     }
     return likesService.removeSomeLikes(compKey);
   }
