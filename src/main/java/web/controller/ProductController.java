@@ -71,6 +71,7 @@ public class ProductController implements ControllerFrame {
       request.setAttribute("productList", productList);
       return productList();
     } else if (view.equals("search")) {
+      // fixme: 카테고리 입력 만들었는데 슬 수가 없음 - 입력 필드 없음
       Long memberId = -1L;
       HttpSession session = request.getSession();
       MemberDetail loginMember = (MemberDetail) session.getAttribute("loginMember");
@@ -87,6 +88,21 @@ public class ProductController implements ControllerFrame {
 
       request.setAttribute("categories", categories);
       request.setAttribute("productList", productsByKeyword);
+      return productList();
+    } else if (view.equals("category")) {
+      Long memberId = -1L;
+      HttpSession session = request.getSession();
+      MemberDetail loginMember = (MemberDetail) session.getAttribute("loginMember");
+      if (loginMember != null) {
+        memberId = loginMember.getId();
+      }
+      String keyword = request.getParameter("keyword");
+      String curPage = request.getParameter("curPage");
+      log.info("view : " + view + " keyword : " + keyword + " curpage : " + curPage);
+      ProductListWithPagination productListByCategoryName =
+          categoryService.getProductListByCategoryName(
+              memberId, keyword, Integer.parseInt(curPage));
+      request.setAttribute("productList", productListByCategoryName);
       return productList();
     }
     return path;

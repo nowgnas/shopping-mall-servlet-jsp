@@ -53,10 +53,12 @@ public class CategorySelectTest {
   }
 
   @Test
-  @DisplayName("select product by category name - dao")
-  void selectProductByCategoryNameDao() {
-//    List<ProductListItem> products = dao.selectProductByCategoryName(1L, "갤", session);
-//    System.out.println(products.toString());
-//    Assertions.assertEquals(2, products.size());
+  @DisplayName("select category id list")
+  void selectCategoryIdListByName() {
+    //    List<CategoryIdListItem> ids = session.selectList("category.select-subcategory", "컴퓨터");
+    List<Long> ids = dao.selectSubCategoryByName("컴퓨터", session);
+    System.out.println(ids.toString());
+    Assertions.assertEquals(4, ids.size());
+    session.close();
   }
 }
