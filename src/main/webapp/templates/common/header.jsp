@@ -147,5 +147,5 @@
 </header>
 
 <jsp:include page="../member/loginModal.jsp"/>
-<script src="js/header.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="js/header.js"></script>

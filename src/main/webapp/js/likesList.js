@@ -13,7 +13,15 @@
   $('#cancel-likes-btn').on('click', (e) => {
     e.preventDefault();
     e.stopPropagation();
-    console.log(selectedProductsList);
+
+    if (selectedProductsList.length === 0) {
+      Swal.fire({
+        icon: 'warning',
+        title: '선택한 상품이 없습니다',
+        text: '찜을 취소할 상품을 골라주세요.',
+      });
+      return;
+    }
 
     $.post("likes-rest.bit?cmd=cancelSome", {
       selectedProductsList: JSON.stringify(selectedProductsList)
