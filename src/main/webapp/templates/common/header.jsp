@@ -58,7 +58,7 @@
     <div class="offcanvas__nav__option">
         <a href="#" class="search-switch"><img src="img/icon/search.png" alt=""></a>
         <c:if test="${ empty loginMember }">
-            <a href="#" id="like-icon"><img src="img/icon/heart.png" alt=""></a>
+            <a href="#" class="likes-icon"><img src="img/icon/heart.png" alt=""></a>
         </c:if>
         <c:if test="${ !empty loginMember }">
             <a href="/likes.bit?view=likes"><img src="img/icon/heart.png" alt=""></a>
@@ -132,7 +132,7 @@
                 <div class="header__nav__option">
                     <a href="#" class="search-switch"><img src="img/icon/search.png" alt=""></a>
                     <c:if test="${ empty loginMember }">
-                        <a href="#" id="like-icon"><img src="img/icon/heart.png" alt=""></a>
+                        <a href="#" class="likes-icon"><img src="img/icon/heart.png" alt=""></a>
                     </c:if>
                     <c:if test="${ !empty loginMember }">
                         <a href="/likes.bit?view=likes"><img src="img/icon/heart.png" alt=""></a>
