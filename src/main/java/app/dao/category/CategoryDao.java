@@ -53,12 +53,12 @@ public class CategoryDao implements CategoryDaoFrame<Long, Category> {
   }
 
   @Override
-  public List<CategoryIdListItem> selectSubCategoryByName(String keyword, SqlSession session) {
+  public List<Long> selectSubCategoryByName(String keyword, SqlSession session) {
     return session.selectList("category.select-subcategory", keyword);
   }
 
   @Override
-  public List<ProductSearchBySubCategory> selectProductBySubCategoryName(
+  public List<ProductListItem> selectProductBySubCategoryName(
       Map<String, Object> map, SqlSession session) {
     return session.selectList("product.search-subcategory-product", map);
   }

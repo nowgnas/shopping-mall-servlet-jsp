@@ -12,8 +12,8 @@ import org.apache.ibatis.session.SqlSession;
 public interface CategoryDaoFrame<K, V extends Category> extends DaoFrame<K, V> {
   List<ProductListItem> selectProductByCategoryName(Map<String, Object> map, SqlSession session);
 
-  List<CategoryIdListItem> selectSubCategoryByName(String keyword, SqlSession session);
+  List<Long> selectSubCategoryByName(String keyword, SqlSession session);
 
-  List<ProductSearchBySubCategory> selectProductBySubCategoryName(
+  List<ProductListItem> selectProductBySubCategoryName(
       Map<String, Object> map, SqlSession session);
 }

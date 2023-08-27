@@ -1,6 +1,5 @@
 package app.dao.category;
 
-import app.dto.category.CategoryIdListItem;
 import app.dto.product.ProductListItem;
 import app.entity.Category;
 import app.utils.GetSessionFactory;
@@ -56,7 +55,8 @@ public class CategorySelectTest {
   @Test
   @DisplayName("select category id list")
   void selectCategoryIdListByName() {
-    List<CategoryIdListItem> ids = session.selectList("category.select-subcategory", "컴퓨터");
+    //    List<CategoryIdListItem> ids = session.selectList("category.select-subcategory", "컴퓨터");
+    List<Long> ids = dao.selectSubCategoryByName("컴퓨터", session);
     System.out.println(ids.toString());
     Assertions.assertEquals(4, ids.size());
     session.close();

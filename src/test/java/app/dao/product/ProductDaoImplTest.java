@@ -99,7 +99,7 @@ class ProductDaoImplTest {
     Map<String, Object> map = new HashMap<>();
     map.put("memberId", 1L);
     map.put("id", Arrays.asList(4L, 5L));
-    List<ProductSearchBySubCategory> products =
+    List<ProductListItem> products =
         categoryDao.selectProductBySubCategoryName(map, session);
     //    List<ProductSearchBySubCategory> products =
     //        session.selectList("product.search-subcategory-product", map);

@@ -79,7 +79,9 @@
                                         <div class="shop__sidebar__categories">
                                             <ul class="nice-scroll">
                                                 <c:forEach var="category" items="${categories}">
-                                                    <li><a href="#">${category.name}</a></li>
+                                                    <li>
+                                                        <a href="/product.bit?view=category&keyword=${category.name}&curPage=0">${category.name}</a>
+                                                    </li>
                                                 </c:forEach>
                                             </ul>
                                         </div>

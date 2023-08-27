@@ -219,8 +219,8 @@
         , 9
   </select>
 
-  <select id="search-subcategory-product" parameterType="Long"
-    resultType="productSearchBySubCategory">
+  <select id="search-subcategory-product" parameterType="hashMap"
+    resultType="productListItem">
     SELECT p.name name,
     p.price price,
     pi.url url,
@@ -234,5 +234,6 @@
       #{id}
     </foreach>
     and pi.is_thumbnail = true
+    limit #{curPage}, 9
   </select>
 </mapper>
