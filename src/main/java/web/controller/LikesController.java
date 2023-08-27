@@ -1,24 +1,14 @@
 package web.controller;
 
-import app.dto.product.ProductListItemOfLike;
+import app.dto.likes.response.LikesListWithPagination;
 import app.dto.response.MemberDetail;
-import app.entity.ProductAndMemberCompositeKey;
 import app.exception.DomainException;
 import app.service.likes.ProductLikesService;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mysql.cj.xdevapi.JsonArray;
-import com.mysql.cj.xdevapi.JsonParser;
-import com.mysql.cj.xdevapi.JsonValue;
-import java.io.StringReader;
 import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import org.json.JSONArray;
 import web.ControllerFrame;
 import web.dispatcher.Navi;
 
@@ -43,7 +33,7 @@ public class LikesController implements ControllerFrame {
 
     memberId = loginMember.getId();
 
-    if(view.equals("likes")) {
+    if (view.equals("likes")) {
       return getLikes(request);
     }
 
@@ -54,9 +44,12 @@ public class LikesController implements ControllerFrame {
     String errorMessage = "";
     try {
       errorMessage = URLEncoder.encode("시스템 에러", "UTF-8");
+      Integer curPage =
+          Optional.ofNullable(request.getParameter("curPage")).map(Integer::parseInt).orElse(1);
 
-      List<ProductListItemOfLike> list = likesService.getMemberLikes(memberId);
-      request.setAttribute("list", list);
+      LikesListWithPagination products = likesService.getMemberLikes(memberId, curPage);
+      request.setAttribute("products", products);
+
       return Navi.FORWARD_LIKES_LIST;
     } catch (DomainException e) {
       return Navi.REDIRECT_LIKES_LIST + String.format("?errorMessage=%s", e.getMessage());

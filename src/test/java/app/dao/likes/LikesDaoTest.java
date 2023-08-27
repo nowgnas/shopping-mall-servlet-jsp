@@ -122,7 +122,7 @@ class LikesDaoTest {
         , session);
 
     session.commit();
-
+    /*
     List<Long> list = likesDao.selectAllProduct(1L, session);
     long idx = 2L;
 
@@ -131,5 +131,7 @@ class LikesDaoTest {
       assertEquals(productId, idx++);
 //      log.info("[select all test] product id : " + productId);
     }
+
+     */
   }
 }

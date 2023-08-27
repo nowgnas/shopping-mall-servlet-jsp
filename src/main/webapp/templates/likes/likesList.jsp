@@ -39,104 +39,8 @@
     <div class="loader"></div>
 </div>
 
-<!-- Offcanvas Menu Begin -->
-<div class="offcanvas-menu-overlay"></div>
-<div class="offcanvas-menu-wrapper">
-    <div class="offcanvas__option">
-        <div class="offcanvas__links">
-            <a href="#">Sign in</a>
-            <a href="#">FAQs</a>
-        </div>
-        <div class="offcanvas__top__hover">
-            <span>Usd <i class="arrow_carrot-down"></i></span>
-            <ul>
-                <li>USD</li>
-                <li>EUR</li>
-                <li>USD</li>
-            </ul>
-        </div>
-    </div>
-    <div class="offcanvas__nav__option">
-        <a href="#" class="search-switch"><img src="img/icon/search.png" alt=""></a>
-        <a href="#"><img src="img/icon/heart.png" alt=""></a>
-        <a href="shopping-cart.html"><img alt="" src="img/icon/cart.png"> <span>0</span></a>
-        <div class="price">$0.00</div>
-    </div>
-    <div id="mobile-menu-wrap"></div>
-    <div class="offcanvas__text">
-        <p>Free shipping, 30-day return or refund guarantee.</p>
-    </div>
-</div>
-<!-- Offcanvas Menu End -->
-
-<!-- Header Section Begin -->
-<header class="header">
-    <div class="header__top">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-6 col-md-7">
-                    <div class="header__top__left">
-                        <p>Free shipping, 30-day return or refund guarantee.</p>
-                    </div>
-                </div>
-                <div class="col-lg-6 col-md-5">
-                    <div class="header__top__right">
-                        <div class="header__top__links">
-                            <a href="#">Sign in</a>
-                            <a href="#">FAQs</a>
-                        </div>
-                        <div class="header__top__hover">
-                            <span>Usd <i class="arrow_carrot-down"></i></span>
-                            <ul>
-                                <li>USD</li>
-                                <li>EUR</li>
-                                <li>USD</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-3 col-md-3">
-                <div class="header__logo">
-                    <a href="./index.html"><img src="img/logo.png" alt=""></a>
-                </div>
-            </div>
-            <div class="col-lg-6 col-md-6">
-                <nav class="header__menu mobile-menu">
-                    <ul>
-                        <li><a href="./index.html">Home</a></li>
-                        <li><a href="./shop.html">Shop</a></li>
-                        <li><a href="#">Pages</a>
-                            <ul class="dropdown">
-                                <li><a href="./about.html">About Us</a></li>
-                                <li><a href="shop-details.jsp">Shop Details</a></li>
-                                <li><a href="./shopping-cart.html">Shopping Cart</a></li>
-                                <li><a href="./checkout.html">Check Out</a></li>
-                                <li><a href="./blog-details.html">Blog Details</a></li>
-                            </ul>
-                        </li>
-                        <li><a href="./blog.html">Blog</a></li>
-                        <li><a href="./contact.html">Contacts</a></li>
-                    </ul>
-                </nav>
-            </div>
-            <div class="col-lg-3 col-md-3">
-                <div class="header__nav__option">
-                    <a href="#" class="search-switch"><img src="img/icon/search.png" alt=""></a>
-                    <a href="#"><img src="img/icon/heart.png" alt=""></a>
-                    <a href="shopping"><img alt="" src="img/icon/cart.png"> <span>0</span></a>
-                    <div class="price">$0.00</div>
-                </div>
-            </div>
-        </div>
-        <div class="canvas__open"><i class="fa fa-bars"></i></div>
-    </div>
-</header>
-<!-- Header Section End -->
+<!-- Header Section -->
+<jsp:include page="../common/header.jsp"/>
 
 <!-- Breadcrumb Section Begin -->
 <section class="breadcrumb-option">
@@ -172,7 +76,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <c:forEach items="${list}" var="product">
+                        <c:forEach items="${products.list}" var="product">
                             <tr>
                                 <td class="product__cart__item">
                                     <div class="product__cart__item__pic">
@@ -200,14 +104,57 @@
                     </table>
                 </div>
                 <div class="row">
+                    <div class="col-lg-12">
+                        <div class="product__pagination">
+                            <c:if test="${products.paging.currentPage > 1}">
+                                <a class="mr-3"
+                                   href="/likes.bit?view=likes&curPage=${products.paging.currentPage - 1}">PREV</a>
+                            </c:if>
+
+                            <c:set var="startPage" value="${products.paging.currentPage - 2}"/>
+                            <c:set var="endPage" value="${products.paging.currentPage + 2}"/>
+
+                            <c:if test="${startPage < 1}">
+                                <c:set var="startPage" value="1"/>
+                                <c:set var="endPage" value="5"/>
+                            </c:if>
+
+                            <c:if test="${endPage > products.paging.totalPage}">
+                                <c:set var="endPage" value="${products.paging.totalPage}"/>
+                                <c:set var="startPage" value="${products.paging.totalPage - 4}"/>
+                                <c:choose>
+                                    <c:when test="${startPage < 1}">
+                                        <c:set var="startPage" value="1"/>
+                                    </c:when>
+                                </c:choose>
+                            </c:if>
+                            <c:forEach begin="${startPage}" end="${endPage}" var="page">
+                                <c:choose>
+                                    <c:when test="${page == products.paging.currentPage}">
+                                        <a id="curPage">${page}</a>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <a href="/likes.bit?view=likes&curPage=${page}">${page}</a>
+                                    </c:otherwise>
+                                </c:choose>
+                            </c:forEach>
+
+                            <c:if test="${products.paging.currentPage < products.paging.totalPage}">
+                                <a href="/likes.bit?view=likes&curPage=${products.paging.currentPage + 1}">NEXT</a>
+                            </c:if>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row">
                     <div class="col-lg-6 col-md-6 col-sm-6">
                         <div class="continue__btn">
-                            <a href="#">Continue Shopping</a>
+                            <a href="/product.bit?view=shop&curPage=0&sort=DATE_DESC">Continue Shopping</a>
                         </div>
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6">
                         <div class="continue__btn update__btn">
-                            <a href="#" id="cancel-likes-btn"><i class="fa fa-spinner"></i>cancel Likes</a>
+                            <a href="#" id="cancel-likes-btn"><i class="fa"></i>cancel Likes</a>
                         </div>
                     </div>
                 </div>

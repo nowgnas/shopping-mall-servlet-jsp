@@ -26,6 +26,8 @@
           alias="productAndMemberCompositeKey"/>
         <typeAlias type="app.dto.cart.AllCartProductInfoDto"
           alias="cartAndProductList"/>
+        <typeAlias type="app.dto.likes.request.LikesSelectForPage"
+            alias="likesSelectForPage"/>
 
     </typeAliases>
     <environments default="dev">

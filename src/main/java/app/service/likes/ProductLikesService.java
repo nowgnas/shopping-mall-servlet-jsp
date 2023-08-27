@@ -4,6 +4,9 @@ import app.dao.likes.LikesDao;
 import app.dao.likes.LikesDaoFrame;
 import app.dao.product.ProductDao;
 import app.dao.product.ProductDaoFrame;
+import app.dto.likes.request.LikesSelectForPage;
+import app.dto.likes.response.LikesListWithPagination;
+import app.dto.paging.Pagination;
 import app.dto.product.ProductListItemOfLike;
 import app.entity.Likes;
 import app.entity.Product;
@@ -35,12 +38,30 @@ public class ProductLikesService implements LikesService {
    * @return 리스트 : 상품 id, 이름, 가격, 이미지경로
    */
   @Override
-  public List<ProductListItemOfLike> getMemberLikes(Long memberId) throws Exception {
-    List<ProductListItemOfLike> memberLikesList;
+  public LikesListWithPagination getMemberLikes(Long memberId, Integer curPage) throws Exception {
     try {
       session = sessionFactory.openSession();
-      List<Long> productIdList = likesDao.selectAllProduct(memberId, session);
-      memberLikesList = productDao.selectProductListItemOfLike(productIdList, session);
+
+      int perPage = 5;
+      int totalPage = likesDao.selectTotalPage(memberId, perPage, session);
+      System.out.println("totalPage : " + totalPage);
+
+      int start = (curPage - 1) * perPage;
+      LikesSelectForPage likesSelectForPage =
+          LikesSelectForPage.builder().memberId(memberId).start(start).PerPage(perPage).build();
+
+      List<Long> productIdList = likesDao.selectAllProduct(likesSelectForPage, session);
+      List<ProductListItemOfLike> memberLikesList =
+          productDao.selectProductListItemOfLike(productIdList, session);
+
+      Pagination paging =
+          Pagination.builder()
+              .currentPage(Math.toIntExact(curPage))
+              .totalPage(totalPage)
+              .perPage(perPage)
+              .build();
+
+      return LikesListWithPagination.builder().list(memberLikesList).paging(paging).build();
     } catch (LikesEntityNotFoundException e) {
       e.printStackTrace();
       throw e;
@@ -50,7 +71,6 @@ public class ProductLikesService implements LikesService {
     } finally {
       session.close();
     }
-    return memberLikesList;
   }
 
   /**
