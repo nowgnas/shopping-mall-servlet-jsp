@@ -10,7 +10,9 @@
 <div class="search-model">
     <div class="h-100 d-flex align-items-center justify-content-center">
         <div class="search-close-switch">+</div>
-        <input placeholder="Search here... " id="search-input"/>
+        <form class="search-model-form">
+            <input placeholder="Search here... " id="search-input"/>
+        </form>
     </div>
 </div>
 <!-- Search End -->
