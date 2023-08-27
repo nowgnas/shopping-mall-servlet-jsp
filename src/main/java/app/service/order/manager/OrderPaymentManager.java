@@ -1,4 +1,4 @@
-package app.service.order;
+package app.service.order.manager;
 
 import app.dao.payment.PaymentDao;
 import app.entity.Payment;
