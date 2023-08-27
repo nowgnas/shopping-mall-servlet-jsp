@@ -44,7 +44,6 @@ public class ProductLikesService implements LikesService {
 
       int perPage = 5;
       int totalPage = likesDao.selectTotalPage(memberId, perPage, session);
-      System.out.println("totalPage : " + totalPage);
 
       int start = (curPage - 1) * perPage;
       LikesSelectForPage likesSelectForPage =

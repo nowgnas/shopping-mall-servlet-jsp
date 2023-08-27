@@ -80,18 +80,25 @@
                             <tr>
                                 <td class="product__cart__item">
                                     <div class="product__cart__item__pic">
-                                        <input type="checkbox" onclick="addToSelectedProducts(this)" name="selectedProducts" value="${product.id}">
+                                        <input type="checkbox"
+                                               onclick="addToSelectedProducts(this)"
+                                               name="selectedProducts" value="${product.id}">
                                     </div>
                                 </td>
                                 <td class="product__cart__item">
-                                    <div class="product__cart__item__pic">
-                                        <img alt="" src="${product.url}" width="200px" height="150px">
-                                    </div>
+                                    <a href="/product.bit?view=shop-detail&productId=${product.id}">
+                                        <div class="product__cart__item__pic">
+                                            <img alt="" src="${product.url}" width="200px"
+                                                 height="150px">
+                                        </div>
+                                    </a>
                                 </td>
                                 <td class="product__cart__item">
-                                    <div class="quantity__item">
-                                        <h6>${product.name}</h6>
-                                    </div>
+                                    <a href="/product.bit?view=shop-detail&productId=${product.id}">
+                                        <div class="quantity__item">
+                                            <h6>${product.name}</h6>
+                                        </div>
+                                    </a>
                                 </td>
                                 <td class="product__cart__item">
                                     <div class="cart__price">
@@ -149,7 +156,8 @@
                 <div class="row">
                     <div class="col-lg-6 col-md-6 col-sm-6">
                         <div class="continue__btn">
-                            <a href="/product.bit?view=shop&curPage=0&sort=DATE_DESC">Continue Shopping</a>
+                            <a href="/product.bit?view=shop&curPage=0&sort=DATE_DESC">Continue
+                                Shopping</a>
                         </div>
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6">
