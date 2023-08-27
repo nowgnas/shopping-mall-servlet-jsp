@@ -171,16 +171,7 @@
 <jsp:include page="../common/footer.jsp"/>
 <!-- Footer Section End -->
 
-<!-- Search Begin -->
-<div class="search-model">
-    <div class="h-100 d-flex align-items-center justify-content-center">
-        <div class="search-close-switch">+</div>
-        <form class="search-model-form">
-            <input type="text" id="search-input" placeholder="Search here.....">
-        </form>
-    </div>
-</div>
-<!-- Search End -->
+<jsp:include page="../common/search.jsp"/>
 
 <!-- Js Plugins -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
