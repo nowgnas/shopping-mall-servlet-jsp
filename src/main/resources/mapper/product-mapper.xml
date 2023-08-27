@@ -213,7 +213,7 @@
     FROM product p
            LEFT JOIN likes l ON l.product_id = p.id AND l.member_id = #{userId}
            left join product_image pi on p.id = pi.product_id
-    WHERE pi.is_thumbnail = true and p.name LIKE '%' || #{keyword} || '%'
+    WHERE pi.is_thumbnail = true and p.name LIKE CONCAT('%', #{keyword}, '%')
       LIMIT #{current}, 9
   </select>
 </mapper>

@@ -92,7 +92,7 @@
            LEFT JOIN likes l ON l.product_id = p.id AND l.member_id = #{memberId}
     where level = 3
       and pi.is_thumbnail = true
-      and c.name LIKE '%' || #{keyword} || '%'
+      and c.name LIKE CONCAT('%', #{keyword}, '%')
       limit #{curPage}, 9
   </select>
 

@@ -43,19 +43,19 @@
 <jsp:include page="./common/header.jsp"/>
 
 <script>
-    const hostName = location.host;
-    const queryParameters = new URLSearchParams(decodeURI(location.search));
-    const errorMessage = queryParameters.get("errorMessage");
-    if(errorMessage !== null) {
-        Swal.fire({
-            icon: 'error',
-            title: "ERROR",
-            text: errorMessage,
-            footer: '<a href="https://github.com/lotte-bit-1/shopping-mall-servlet-jsp/issues">이슈 남기러 가기</a>'
-        }).then((result) => {
-            window.location.replace("http://" + hostName);
-        });
-    }
+  const hostName = location.host;
+  const queryParameters = new URLSearchParams(decodeURI(location.search));
+  const errorMessage = queryParameters.get("errorMessage");
+  if (errorMessage !== null) {
+    Swal.fire({
+      icon: 'error',
+      title: "ERROR",
+      text: errorMessage,
+      footer: '<a href="https://github.com/lotte-bit-1/shopping-mall-servlet-jsp/issues">이슈 남기러 가기</a>'
+    }).then((result) => {
+      window.location.replace("http://" + hostName);
+    });
+  }
 </script>
 
 <!-- Hero Section Begin -->
@@ -68,9 +68,11 @@
                         <div class="hero__text">
                             <h6>Summer Collection</h6>
                             <h2>Fall - Winter Collections 2030</h2>
-                            <p>A specialist label creating luxury essentials. Ethically crafted with an unwavering
+                            <p>A specialist label creating luxury essentials. Ethically crafted with
+                                an unwavering
                                 commitment to exceptional quality.</p>
-                            <a href="#" class="primary-btn">Shop now <span class="arrow_right"></span></a>
+                            <a href="#" class="primary-btn">Shop now <span
+                                    class="arrow_right"></span></a>
                             <div class="hero__social">
                                 <a href="#"><i class="fa fa-facebook"></i></a>
                                 <a href="#"><i class="fa fa-twitter"></i></a>
@@ -89,9 +91,11 @@
                         <div class="hero__text">
                             <h6>Summer Collection</h6>
                             <h2>Fall - Winter Collections 2030</h2>
-                            <p>A specialist label creating luxury essentials. Ethically crafted with an unwavering
+                            <p>A specialist label creating luxury essentials. Ethically crafted with
+                                an unwavering
                                 commitment to exceptional quality.</p>
-                            <a href="#" class="primary-btn">Shop now <span class="arrow_right"></span></a>
+                            <a href="#" class="primary-btn">Shop now <span
+                                    class="arrow_right"></span></a>
                             <div class="hero__social">
                                 <a href="#"><i class="fa fa-facebook"></i></a>
                                 <a href="#"><i class="fa fa-twitter"></i></a>
@@ -168,7 +172,8 @@
                         <span class="label">New</span>
                         <ul class="product__hover">
                             <li><a href="#"><img src="img/icon/heart.png" alt=""></a></li>
-                            <li><a href="#"><img src="img/icon/compare.png" alt=""> <span>Compare</span></a></li>
+                            <li><a href="#"><img src="img/icon/compare.png" alt="">
+                                <span>Compare</span></a></li>
                             <li><a href="#"><img src="img/icon/search.png" alt=""></a></li>
                         </ul>
                     </div>
@@ -202,7 +207,8 @@
                     <div class="product__item__pic set-bg" data-setbg="img/product/product-2.jpg">
                         <ul class="product__hover">
                             <li><a href="#"><img src="img/icon/heart.png" alt=""></a></li>
-                            <li><a href="#"><img src="img/icon/compare.png" alt=""> <span>Compare</span></a></li>
+                            <li><a href="#"><img src="img/icon/compare.png" alt="">
+                                <span>Compare</span></a></li>
                             <li><a href="#"><img src="img/icon/search.png" alt=""></a></li>
                         </ul>
                     </div>
@@ -237,7 +243,8 @@
                         <span class="label">Sale</span>
                         <ul class="product__hover">
                             <li><a href="#"><img src="img/icon/heart.png" alt=""></a></li>
-                            <li><a href="#"><img src="img/icon/compare.png" alt=""> <span>Compare</span></a></li>
+                            <li><a href="#"><img src="img/icon/compare.png" alt="">
+                                <span>Compare</span></a></li>
                             <li><a href="#"><img src="img/icon/search.png" alt=""></a></li>
                         </ul>
                     </div>
@@ -271,7 +278,8 @@
                     <div class="product__item__pic set-bg" data-setbg="img/product/product-4.jpg">
                         <ul class="product__hover">
                             <li><a href="#"><img src="img/icon/heart.png" alt=""></a></li>
-                            <li><a href="#"><img src="img/icon/compare.png" alt=""> <span>Compare</span></a></li>
+                            <li><a href="#"><img src="img/icon/compare.png" alt="">
+                                <span>Compare</span></a></li>
                             <li><a href="#"><img src="img/icon/search.png" alt=""></a></li>
                         </ul>
                     </div>
@@ -305,7 +313,8 @@
                     <div class="product__item__pic set-bg" data-setbg="img/product/product-5.jpg">
                         <ul class="product__hover">
                             <li><a href="#"><img src="img/icon/heart.png" alt=""></a></li>
-                            <li><a href="#"><img src="img/icon/compare.png" alt=""> <span>Compare</span></a></li>
+                            <li><a href="#"><img src="img/icon/compare.png" alt="">
+                                <span>Compare</span></a></li>
                             <li><a href="#"><img src="img/icon/search.png" alt=""></a></li>
                         </ul>
                     </div>
@@ -340,7 +349,8 @@
                         <span class="label">Sale</span>
                         <ul class="product__hover">
                             <li><a href="#"><img src="img/icon/heart.png" alt=""></a></li>
-                            <li><a href="#"><img src="img/icon/compare.png" alt=""> <span>Compare</span></a></li>
+                            <li><a href="#"><img src="img/icon/compare.png" alt="">
+                                <span>Compare</span></a></li>
                             <li><a href="#"><img src="img/icon/search.png" alt=""></a></li>
                         </ul>
                     </div>
@@ -374,7 +384,8 @@
                     <div class="product__item__pic set-bg" data-setbg="img/product/product-7.jpg">
                         <ul class="product__hover">
                             <li><a href="#"><img src="img/icon/heart.png" alt=""></a></li>
-                            <li><a href="#"><img src="img/icon/compare.png" alt=""> <span>Compare</span></a></li>
+                            <li><a href="#"><img src="img/icon/compare.png" alt="">
+                                <span>Compare</span></a></li>
                             <li><a href="#"><img src="img/icon/search.png" alt=""></a></li>
                         </ul>
                     </div>
@@ -408,7 +419,8 @@
                     <div class="product__item__pic set-bg" data-setbg="img/product/product-8.jpg">
                         <ul class="product__hover">
                             <li><a href="#"><img src="img/icon/heart.png" alt=""></a></li>
-                            <li><a href="#"><img src="img/icon/compare.png" alt=""> <span>Compare</span></a></li>
+                            <li><a href="#"><img src="img/icon/compare.png" alt="">
+                                <span>Compare</span></a></li>
                             <li><a href="#"><img src="img/icon/search.png" alt=""></a></li>
                         </ul>
                     </div>
@@ -496,18 +508,25 @@
         <div class="row">
             <div class="col-lg-8">
                 <div class="instagram__pic">
-                    <div class="instagram__pic__item set-bg" data-setbg="img/instagram/instagram-1.jpg"></div>
-                    <div class="instagram__pic__item set-bg" data-setbg="img/instagram/instagram-2.jpg"></div>
-                    <div class="instagram__pic__item set-bg" data-setbg="img/instagram/instagram-3.jpg"></div>
-                    <div class="instagram__pic__item set-bg" data-setbg="img/instagram/instagram-4.jpg"></div>
-                    <div class="instagram__pic__item set-bg" data-setbg="img/instagram/instagram-5.jpg"></div>
-                    <div class="instagram__pic__item set-bg" data-setbg="img/instagram/instagram-6.jpg"></div>
+                    <div class="instagram__pic__item set-bg"
+                         data-setbg="img/instagram/instagram-1.jpg"></div>
+                    <div class="instagram__pic__item set-bg"
+                         data-setbg="img/instagram/instagram-2.jpg"></div>
+                    <div class="instagram__pic__item set-bg"
+                         data-setbg="img/instagram/instagram-3.jpg"></div>
+                    <div class="instagram__pic__item set-bg"
+                         data-setbg="img/instagram/instagram-4.jpg"></div>
+                    <div class="instagram__pic__item set-bg"
+                         data-setbg="img/instagram/instagram-5.jpg"></div>
+                    <div class="instagram__pic__item set-bg"
+                         data-setbg="img/instagram/instagram-6.jpg"></div>
                 </div>
             </div>
             <div class="col-lg-4">
                 <div class="instagram__text">
                     <h2>Instagram</h2>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+                        tempor incididunt ut
                         labore et dolore magna aliqua.</p>
                     <h3>#Male_Fashion</h3>
                 </div>
@@ -572,12 +591,21 @@
 <div class="search-model">
     <div class="h-100 d-flex align-items-center justify-content-center">
         <div class="search-close-switch">+</div>
-        <form class="search-model-form">
-            <input type="text" id="search-input" placeholder="Search here.....">
-        </form>
+        <input placeholder="Search here... " id="search-input"/>
     </div>
 </div>
 <!-- Search End -->
+
+<script>
+  const search = document.getElementById("search-input");
+  search.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault(); // Prevent form submission
+      const inputData = document.getElementById("search-input").value;
+      window.location.href = `/product.bit?view=search&keyword=` + inputData + `&curPage=0`;
+    }
+  })
+</script>
 
 <!-- Js Plugins -->
 <script src="js/jquery-3.3.1.min.js"></script>

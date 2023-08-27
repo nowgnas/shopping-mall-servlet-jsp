@@ -17,12 +17,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.logging.Logger;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 
 public class ProductServiceImpl implements ProductService {
   private static ProductServiceImpl instance;
   private final SqlSessionFactory sessionFactory = GetSessionFactory.getInstance();
+  Logger log = Logger.getLogger("ProductServiceImpl");
   private ProductDaoFrame dao;
 
   public ProductServiceImpl() {
@@ -101,12 +103,21 @@ public class ProductServiceImpl implements ProductService {
   @Override
   public ProductListWithPagination getProductsByKeyword(String keyword, Long memberId, int curPage)
       throws Exception {
+    log.info(
+        "request info : keyword => "
+            + keyword
+            + " member id => "
+            + memberId
+            + " cur page => "
+            + curPage);
     SqlSession session = sessionFactory.openSession();
     Map<String, Object> map = new HashMap<>();
     map.put("userId", memberId);
     map.put("current", curPage);
-    map.put("keyword", keyword);
+    map.put("keyword", keyword.trim());
     List<ProductListItem> products = dao.selectProductsByKeyword(map, session);
+    log.info(products.toString());
+    log.info("product item size " + products.size());
     session.close();
     int totalPage = (int) Math.ceil(products.size() / 9);
     Pagination pagination = Pagination.builder().currentPage(curPage).perPage(9).build();
