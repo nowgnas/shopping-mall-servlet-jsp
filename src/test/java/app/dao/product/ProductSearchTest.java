@@ -1,11 +1,14 @@
 package app.dao.product;
 
-import app.entity.Product;
+import app.dto.product.ProductListItem;
 import app.utils.GetSessionFactory;
 import config.TestConfig;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.apache.ibatis.session.SqlSession;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -34,7 +37,11 @@ public class ProductSearchTest {
   @DisplayName("상품 이름 검색 ")
   void searchProduct() {
     String keyword = "맥";
-    List<Product> products = session.selectList("product.searchByWord", keyword);
-    System.out.println(products.size());
+    Map<String, Object> map = new HashMap<>();
+    map.put("userId", 1L);
+    map.put("current", 0);
+    map.put("keyword", keyword);
+    List<ProductListItem> products = session.selectList("product.searchByWord", map);
+    Assertions.assertEquals(2, products.size());
   }
 }

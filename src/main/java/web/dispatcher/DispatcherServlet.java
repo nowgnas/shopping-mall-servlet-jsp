@@ -31,8 +31,8 @@ public class DispatcherServlet extends HttpServlet {
     controllerMapper.put("order", new OrderController());
     controllerMapper.put("product", new ProductController());
     controllerMapper.put("likes", new LikesController());
+    restControllerMapper.put("likes-rest", new LikesRestController());
     restControllerMapper.put("member-rest", new MemberRestController());
-    restControllerMapper.put("likes", new LikesRestController());
   }
 
   protected void service(HttpServletRequest request, HttpServletResponse response)

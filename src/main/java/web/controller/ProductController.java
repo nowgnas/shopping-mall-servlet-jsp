@@ -9,6 +9,7 @@ import app.service.category.CategoryServiceImpl;
 import app.service.product.ProductService;
 import app.service.product.ProductServiceImpl;
 import java.util.List;
+import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -19,6 +20,7 @@ public class ProductController implements ControllerFrame {
   private static final long serialVersionUID = 1L;
   private final ProductService service = ProductServiceImpl.getInstance();
   private final CategoryService categoryService = CategoryServiceImpl.getInstance();
+  Logger log = Logger.getLogger("ProductController");
 
   public ProductController() {
     super();
@@ -61,14 +63,46 @@ public class ProductController implements ControllerFrame {
       if (loginMember != null) {
         memberId = loginMember.getId();
       }
-
       List<Category> categories = categoryService.getAllCategory();
-
       int curPage = Integer.parseInt(request.getParameter("curPage"));
       String sort = request.getParameter("sort");
       ProductListWithPagination productList = service.getProductList(memberId, curPage, sort);
       request.setAttribute("categories", categories);
       request.setAttribute("productList", productList);
+      return productList();
+    } else if (view.equals("search")) {
+      // fixme: 카테고리 입력 만들었는데 슬 수가 없음 - 입력 필드 없음
+      Long memberId = -1L;
+      HttpSession session = request.getSession();
+      MemberDetail loginMember = (MemberDetail) session.getAttribute("loginMember");
+      if (loginMember != null) {
+        memberId = loginMember.getId();
+      }
+      List<Category> categories = categoryService.getAllCategory();
+      int curPage = Integer.parseInt(request.getParameter("curPage"));
+      String keyword = request.getParameter("keyword");
+      ProductListWithPagination productsByKeyword =
+          service.getProductsByKeyword(keyword, memberId, curPage);
+
+      System.out.println(productsByKeyword.getItem().size() + " 개?");
+
+      request.setAttribute("categories", categories);
+      request.setAttribute("productList", productsByKeyword);
+      return productList();
+    } else if (view.equals("category")) {
+      Long memberId = -1L;
+      HttpSession session = request.getSession();
+      MemberDetail loginMember = (MemberDetail) session.getAttribute("loginMember");
+      if (loginMember != null) {
+        memberId = loginMember.getId();
+      }
+      String keyword = request.getParameter("keyword");
+      String curPage = request.getParameter("curPage");
+      log.info("view : " + view + " keyword : " + keyword + " curpage : " + curPage);
+      ProductListWithPagination productListByCategoryName =
+          categoryService.getProductListByCategoryName(
+              memberId, keyword, Integer.parseInt(curPage));
+      request.setAttribute("productList", productListByCategoryName);
       return productList();
     }
     return path;

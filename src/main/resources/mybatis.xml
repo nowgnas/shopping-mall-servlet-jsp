@@ -1,59 +1,64 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE configuration
-        PUBLIC "-//mybatis.org/DTD Config 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+  PUBLIC "-//mybatis.org/DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
-    <properties resource="mysql.properties"/>
-    <typeAliases>
-        <typeAlias type="app.entity.Address" alias="address"/>
-        <typeAlias type="app.entity.Cart" alias="cart"/>
-        <typeAlias type="app.entity.ProductAndMemberCompositeKey" alias="comp"/>
-        <typeAlias type="app.entity.Category" alias="category"/>
-        <typeAlias type="app.entity.Coupon" alias="coupon"/>
-        <typeAlias type="app.entity.Delivery" alias="delivery"/>
-        <typeAlias type="app.entity.Likes" alias="likes"/>
-        <typeAlias type="app.entity.Member" alias="member"/>
-        <typeAlias type="app.entity.Order" alias="order"/>
-        <typeAlias type="app.entity.Payment" alias="payment"/>
-        <typeAlias type="app.entity.ProductImage" alias="productImage"/>
-        <typeAlias type="app.dto.product.ProductListItem" alias="productListItem"/>
-        <typeAlias type="app.dto.product.ProductItemQuantity" alias="productItemQuantity"/>
-        <typeAlias type="app.entity.Product" alias="product"/>
-        <typeAlias type="app.entity.ProductOrder" alias="productOrder"/>
-        <typeAlias type="app.dto.product.ProductListItemOfLike" alias="productOfLike"/>
-        <typeAlias type="app.entity.Encryption" alias="encryption"/>
-        <typeAlias type="app.entity.ProductAndMemberCompositeKey"
-          alias="productAndMemberCompositeKey"/>
-        <typeAlias type="app.dto.cart.AllCartProductInfoDto"
-          alias="cartAndProductList"/>
+  <properties resource="mysql.properties"/>
+  <typeAliases>
+    <typeAlias type="app.entity.Address" alias="address"/>
+    <typeAlias type="app.entity.Cart" alias="cart"/>
+    <typeAlias type="app.entity.ProductAndMemberCompositeKey" alias="comp"/>
+    <typeAlias type="app.entity.Category" alias="category"/>
+    <typeAlias type="app.entity.Coupon" alias="coupon"/>
+    <typeAlias type="app.entity.Delivery" alias="delivery"/>
+    <typeAlias type="app.entity.Likes" alias="likes"/>
+    <typeAlias type="app.entity.Member" alias="member"/>
+    <typeAlias type="app.entity.Order" alias="order"/>
+    <typeAlias type="app.entity.Payment" alias="payment"/>
+    <typeAlias type="app.entity.ProductImage" alias="productImage"/>
+    <typeAlias type="app.dto.product.ProductListItem" alias="productListItem"/>
+    <typeAlias type="app.dto.product.ProductItemQuantity" alias="productItemQuantity"/>
+    <typeAlias type="app.entity.Product" alias="product"/>
+    <typeAlias type="app.entity.ProductOrder" alias="productOrder"/>
+    <typeAlias type="app.dto.product.ProductListItemOfLike" alias="productOfLike"/>
+    <typeAlias type="app.entity.Encryption" alias="encryption"/>
+    <typeAlias type="app.entity.ProductAndMemberCompositeKey"
+      alias="productAndMemberCompositeKey"/>
+    <typeAlias type="app.dto.cart.AllCartProductInfoDto"
+      alias="cartAndProductList"/>
+    <typeAlias type="app.dto.category.CategoryIdListItem" alias="categoryListItem"/>
+    <typeAlias type="app.dto.product.response.ProductSearchBySubCategory"
+      alias="ProductSearchBySubCategory"/>
+        <typeAlias type="app.dto.likes.request.LikesSelectForPage"
+            alias="likesSelectForPage"/>
 
-    </typeAliases>
-    <environments default="dev">
-        <environment id="dev">
-            <transactionManager type="JDBC"/>
-            <dataSource type="POOLED">
-                <property name="driver" value="com.mysql.cj.jdbc.Driver"/>
-                <property name="url" value="${url}"/>
-                <property name="username" value="${user}"/>
-                <property name="password" value="${password}"/>
-            </dataSource>
-        </environment>
-    </environments>
-    <mappers>
-        <mapper resource="./mapper/address-mapper.xml"/>
-        <mapper resource="./mapper/cart-mapper.xml"/>
-        <mapper resource="./mapper/category-mapper.xml"/>
-        <mapper resource="./mapper/coupon-mapper.xml"/>
-        <mapper resource="./mapper/delivery-mapper.xml"/>
-        <mapper resource="./mapper/likes-mapper.xml"/>
-        <mapper resource="./mapper/member-mapper.xml"/>
-        <mapper resource="./mapper/order-mapper.xml"/>
-        <mapper resource="./mapper/payment-mapper.xml"/>
-        <mapper resource="./mapper/product-image-mapper.xml"/>
-        <mapper resource="./mapper/product-mapper.xml"/>
-        <mapper resource="./mapper/product-order-mapper.xml"/>
-        <mapper resource="./mapper/encryption-mapper.xml"/>
-    </mappers>
+  </typeAliases>
+  <environments default="dev">
+    <environment id="dev">
+      <transactionManager type="JDBC"/>
+      <dataSource type="POOLED">
+        <property name="driver" value="com.mysql.cj.jdbc.Driver"/>
+        <property name="url" value="${url}"/>
+        <property name="username" value="${user}"/>
+        <property name="password" value="${password}"/>
+      </dataSource>
+    </environment>
+  </environments>
+  <mappers>
+    <mapper resource="./mapper/address-mapper.xml"/>
+    <mapper resource="./mapper/cart-mapper.xml"/>
+    <mapper resource="./mapper/category-mapper.xml"/>
+    <mapper resource="./mapper/coupon-mapper.xml"/>
+    <mapper resource="./mapper/delivery-mapper.xml"/>
+    <mapper resource="./mapper/likes-mapper.xml"/>
+    <mapper resource="./mapper/member-mapper.xml"/>
+    <mapper resource="./mapper/order-mapper.xml"/>
+    <mapper resource="./mapper/payment-mapper.xml"/>
+    <mapper resource="./mapper/product-image-mapper.xml"/>
+    <mapper resource="./mapper/product-mapper.xml"/>
+    <mapper resource="./mapper/product-order-mapper.xml"/>
+    <mapper resource="./mapper/encryption-mapper.xml"/>
+  </mappers>
 </configuration>
 
 

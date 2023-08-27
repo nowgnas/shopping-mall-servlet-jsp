@@ -57,7 +57,12 @@
     </div>
     <div class="offcanvas__nav__option">
         <a href="#" class="search-switch"><img src="img/icon/search.png" alt=""></a>
-        <a href="#"><img src="img/icon/heart.png" alt=""></a>
+        <c:if test="${ empty loginMember }">
+            <a href="#" class="likes-icon"><img src="img/icon/heart.png" alt=""></a>
+        </c:if>
+        <c:if test="${ !empty loginMember }">
+            <a href="/likes.bit?view=likes"><img src="img/icon/heart.png" alt=""></a>
+        </c:if>
         <a href="shopping-cart.html"><img src="img/icon/cart.png" alt=""> <span>0</span></a>
         <div class="price">$0.00</div>
     </div>
@@ -105,7 +110,7 @@
             <div class="col-lg-6 col-md-6">
                 <nav class="header__menu mobile-menu">
                     <ul>
-                        <li class="active"><a href="./index.html">Home</a></li>
+                        <li class="active"><a href="/main.bit">Home</a></li>
                         <li><a href="/product.bit?view=shop&curPage=0&sort=DATE_DESC">Shop</a></li>
                         <li><a href="#">Pages</a>
                             <ul class="dropdown">
@@ -126,7 +131,12 @@
             <div class="col-lg-3 col-md-3">
                 <div class="header__nav__option">
                     <a href="#" class="search-switch"><img src="img/icon/search.png" alt=""></a>
-                    <a href="#"><img src="img/icon/heart.png" alt=""></a>
+                    <c:if test="${ empty loginMember }">
+                        <a href="#" class="likes-icon"><img src="img/icon/heart.png" alt=""></a>
+                    </c:if>
+                    <c:if test="${ !empty loginMember }">
+                        <a href="/likes.bit?view=likes"><img src="img/icon/heart.png" alt=""></a>
+                    </c:if>
                     <a href="shopping-cart.html"><img src="img/icon/cart.png" alt=""> <span>0</span></a>
                     <div class="price">$0.00</div>
                 </div>
@@ -137,3 +147,5 @@
 </header>
 
 <jsp:include page="../member/loginModal.jsp"/>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="js/header.js"></script>

@@ -15,10 +15,16 @@
         WHERE member_id = #{memberId}
           and product_id = #{productId}
     </select>
-    <select id="selectall" resultType="Long">
+    <select id="selectall" parameterType="likesSelectForPage" resultType="Long">
         SELECT product_id
         FROM likes
         WHERE member_id = #{memberId}
+        LIMIT #{start}, #{perPage}
+    </select>
+    <select id="selectTotalCount" resultType="Long">
+        SELECT COUNT(*)
+        FROM likes
+        WHERE member_id = #{memberId};
     </select>
     <insert id="insert" parameterType="likes">
         INSERT INTO likes (member_id, product_id)

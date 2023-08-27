@@ -2,6 +2,7 @@ package app.service.category;
 
 import app.dao.category.CategoryDao;
 import app.dao.category.CategoryDaoFrame;
+import app.dto.product.response.ProductListWithPagination;
 import app.entity.Category;
 import app.utils.GetSessionFactory;
 import config.TestConfig;
@@ -48,5 +49,12 @@ public class CategorySelectServiceTest {
     List<Category> allCategory = service.getAllCategory();
     System.out.println(allCategory.toString());
     Assertions.assertEquals(6, allCategory.size());
+  }
+
+  @Test
+  @DisplayName("select product list by category name")
+  void selectProductByCategoryName() {
+    ProductListWithPagination name = service.getProductListByCategoryName(1L, "컴퓨터", 0);
+    System.out.println(name.toString());
   }
 }

@@ -8,9 +8,7 @@ import app.dto.product.ProductListItem;
 import app.dto.product.response.ProductDetailForOrder;
 import app.dto.product.response.ProductDetailWithCategory;
 import app.dto.product.response.ProductListWithPagination;
-import app.dto.product.response.ProductSearchByKeyword;
 import app.entity.Category;
-import app.entity.Product;
 import app.enums.SortOption;
 import app.exception.CustomException;
 import app.exception.ErrorCode;
@@ -19,12 +17,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.logging.Logger;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 
 public class ProductServiceImpl implements ProductService {
   private static ProductServiceImpl instance;
   private final SqlSessionFactory sessionFactory = GetSessionFactory.getInstance();
+  Logger log = Logger.getLogger("ProductServiceImpl");
   private ProductDaoFrame dao;
 
   public ProductServiceImpl() {
@@ -101,11 +101,26 @@ public class ProductServiceImpl implements ProductService {
   }
 
   @Override
-  public List<ProductSearchByKeyword> getProductsByKeyword(String keyword) throws Exception {
+  public ProductListWithPagination getProductsByKeyword(String keyword, Long memberId, int curPage)
+      throws Exception {
+    log.info(
+        "request info : keyword => "
+            + keyword
+            + " member id => "
+            + memberId
+            + " cur page => "
+            + curPage);
     SqlSession session = sessionFactory.openSession();
-    List<Product> products = dao.selectProductsByKeyword(keyword, session);
-    if (products.size() == 0) throw new Exception("상품이 존재하지 않습니다");
+    Map<String, Object> map = new HashMap<>();
+    map.put("userId", memberId);
+    map.put("current", curPage);
+    map.put("keyword", keyword.trim());
+    List<ProductListItem> products = dao.selectProductsByKeyword(map, session);
+    log.info(products.toString());
+    log.info("product item size " + products.size());
     session.close();
-    return Product.productSearchByKeyword(products);
+    int totalPage = (int) Math.ceil(products.size() / 9);
+    Pagination pagination = Pagination.builder().currentPage(curPage).perPage(9).build();
+    return ProductListWithPagination.makeListWithPaging(products, pagination, totalPage);
   }
 }
