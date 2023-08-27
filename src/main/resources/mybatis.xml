@@ -27,6 +27,8 @@
     <typeAlias type="app.dto.cart.AllCartProductInfoDto"
       alias="cartAndProductList"/>
     <typeAlias type="app.dto.category.CategoryIdListItem" alias="categoryListItem"/>
+    <typeAlias type="app.dto.product.response.ProductSearchBySubCategory"
+      alias="ProductSearchBySubCategory"/>
 
   </typeAliases>
   <environments default="dev">
