@@ -1,11 +1,13 @@
 package app.service.likes;
 
-import app.dto.product.ProductListItemOfLike;
+import app.dto.likes.response.LikesListWithPagination;
 import app.entity.ProductAndMemberCompositeKey;
 import java.util.List;
 
 public interface LikesService {
-  List<ProductListItemOfLike> getMemberLikes(Long memberId) throws Exception;
+
+  LikesListWithPagination getMemberLikes(Long memberId, Integer curPage) throws Exception;
+
   boolean getMemberProductLikes(ProductAndMemberCompositeKey productAndMemberCompositeKey) throws Exception;
   int addLikes(ProductAndMemberCompositeKey productAndMemberCompositeKey);
   int removeLikes(ProductAndMemberCompositeKey productAndMemberCompositeKey);

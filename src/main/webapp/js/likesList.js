@@ -10,15 +10,22 @@
     $("#preloder").delay(200).fadeOut("slow");
   });
 
-
   $('#cancel-likes-btn').on('click', (e) => {
     e.preventDefault();
     e.stopPropagation();
-    console.log(selectedProductsList);
+
+    if (selectedProductsList.length === 0) {
+      Swal.fire({
+        icon: 'warning',
+        title: '선택한 상품이 없습니다',
+        text: '찜을 취소할 상품을 골라주세요.',
+      });
+      return;
+    }
 
     $.post("likes-rest.bit?cmd=cancelSome", {
-      selectedProductsList : JSON.stringify(selectedProductsList)
-    }).done(function(response) {
+      selectedProductsList: JSON.stringify(selectedProductsList)
+    }).done(function (response) {
       // 페이지 리디렉션
       window.location.href = "/likes.bit?view=likes";
     });
@@ -42,13 +49,4 @@ function addToSelectedProducts(checkbox) {
       console.log("uncheck " + productId);
     }
   }
-}
-
-// 카트 업데이트 함수
-function deleteSomeLikes() {
-  // selectedProductsList 배열에 선택된 상품 ID들
-  console.log("Selected Products:", selectedProductsList);
-
-  // 선택된 상품 ID들을 서버로 전송하는 로직
-
 }
