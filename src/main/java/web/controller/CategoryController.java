@@ -46,7 +46,6 @@ public class CategoryController implements ControllerFrame {
       return productListByCategorySearch();
     }
     return path;
-    // fixme: 카테고리 조회를 할 필드가 없다.
   }
 
   private String productListByCategorySearch() {

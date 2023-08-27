@@ -92,9 +92,17 @@
            LEFT JOIN likes l ON l.product_id = p.id AND l.member_id = #{memberId}
     where level = 3
       and pi.is_thumbnail = true
-      and c.name LIKE '%' || #{keyword} || '%'
+      and c.name LIKE CONCAT('%', #{keyword}, '%')
       limit #{curPage}, 9
   </select>
+
+<select id="select-subcategory" parameterType="String" resultType="Long">
+  select c3.id
+  from category c1
+         left join category c2 on c1.id = c2.parent_id
+         left join category c3 on c2.id = c3.parent_id
+  where c1.name = #{keyword}
+</select>
 
 </mapper>
 

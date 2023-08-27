@@ -1,9 +1,11 @@
 package app.dao.product;
 
+import app.dao.category.CategoryDao;
 import app.dto.paging.Pagination;
 import app.dto.product.ProductItemQuantity;
 import app.dto.product.ProductListItem;
 import app.dto.product.ProductListItemOfLike;
+import app.dto.product.response.ProductSearchBySubCategory;
 import app.enums.SortOption;
 import app.utils.GetSessionFactory;
 import config.TestConfig;
@@ -19,17 +21,17 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 class ProductDaoImplTest {
-  ProductDao productDao = ProductDao.getInstance();
-  SqlSession session;
-
   private final TestConfig testConfig = new TestConfig();
+  ProductDao productDao = ProductDao.getInstance();
+  CategoryDao categoryDao = CategoryDao.getInstance();
+  SqlSession session;
 
   @BeforeEach
   void beforeEach() throws Exception {
     session = GetSessionFactory.getInstance().openSession();
     testConfig.init("schema.sql", session);
     testConfig.init("init-data.sql", session);
-//    testConfig.init("product/product-likes.sql", session);
+    //    testConfig.init("product/product-likes.sql", session);
     testConfig.init("product/product-image.sql", session);
   }
 
@@ -42,8 +44,8 @@ class ProductDaoImplTest {
   @Test
   void selectProductListItemOfLike() throws Exception {
     List<Long> lst = Arrays.asList(1L, 2L, 3L);
-    List<ProductListItemOfLike> productListItemOfLikes = productDao.selectProductListItemOfLike(lst,
-            session);
+    List<ProductListItemOfLike> productListItemOfLikes =
+        productDao.selectProductListItemOfLike(lst, session);
     System.out.println(productListItemOfLikes.toString());
   }
 
@@ -92,6 +94,15 @@ class ProductDaoImplTest {
   }
 
   @Test
-  void selectAllByDate() throws Exception {
+  @DisplayName("select product list by subcategory")
+  void subcategoryProduct() {
+    Map<String, Object> map = new HashMap<>();
+    map.put("memberId", 1L);
+    map.put("id", Arrays.asList(4L, 5L));
+    List<ProductListItem> products =
+        categoryDao.selectProductBySubCategoryName(map, session);
+    //    List<ProductSearchBySubCategory> products =
+    //        session.selectList("product.search-subcategory-product", map);
+    System.out.println(products.toString());
   }
 }
