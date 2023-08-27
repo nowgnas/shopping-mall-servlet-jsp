@@ -96,6 +96,14 @@
       limit #{curPage}, 9
   </select>
 
+<select id="select-subcategory" parameterType="String" resultType="categoryListItem">
+  select c3.id
+  from category c1
+         left join category c2 on c1.id = c2.parent_id
+         left join category c3 on c2.id = c3.parent_id
+  where c1.name = #{keyword}
+</select>
+
 </mapper>
 
 
