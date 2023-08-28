@@ -60,7 +60,7 @@ public class MemberService {
     return result == 1 ? true : false;
   }
 
-  public MemberDetail login(LoginDto dto) {
+  public MemberDetail login(LoginDto dto) throws Exception {
     SqlSession sqlSession = sessionFactory.openSession();
     MemberDetail loginMember = null;
     try {
@@ -130,7 +130,7 @@ public class MemberService {
     return result == 0 ? true : false;
   }
 
-  private String getHashedPassword(LoginDto dto, SqlSession sqlSession) throws SQLException {
+  private String getHashedPassword(LoginDto dto, SqlSession sqlSession) throws Exception {
     Encryption encryption =
         encryptionDao
             .selectByEmail(dto.getEmail(), sqlSession)
@@ -139,7 +139,7 @@ public class MemberService {
     return hashedPassword;
   }
 
-  private String createHashedPassword(String password, String salt) throws SQLException {
+  private String createHashedPassword(String password, String salt) throws Exception {
     new String();
     CipherUtil.getSHA256(password, salt);
     return new String(CipherUtil.getSHA256(password, salt)).replaceAll(" ", "");

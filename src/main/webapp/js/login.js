@@ -56,7 +56,7 @@
                             email: res.kakao_account.email,
                             nickname: res.properties.nickname
                         }, function () {
-                            window.location.href = "/member.bit"
+                            window.location.href = "/main.bit"
                         })
                             .fail(function (err) {
                                 console.log(err);

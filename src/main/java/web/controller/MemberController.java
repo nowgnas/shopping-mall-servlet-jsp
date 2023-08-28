@@ -29,7 +29,7 @@ public class MemberController implements ControllerFrame {
     return next;
   }
 
-  private String build(HttpServletRequest request, String view) {
+  private String build(HttpServletRequest request, String view) throws Exception {
     String path = Navi.FORWARD_MAIN;
     switch (view) {
       case "registerForm":
@@ -52,7 +52,7 @@ public class MemberController implements ControllerFrame {
     return Navi.FORWARD_LOGIN_FORM;
   }
 
-  private String login(HttpServletRequest request) {
+  private String login(HttpServletRequest request) throws Exception {
     String email = request.getParameter("email");
     String password = request.getParameter("password");
 
