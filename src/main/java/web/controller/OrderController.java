@@ -57,12 +57,8 @@ public class OrderController implements ControllerFrame {
       throws UnsupportedEncodingException {
     if (view.equals("direct") && cmd.equals("form")) {
       return getCreateOrderForm(request, response);
-    } else if (view.equals("direct") && cmd.equals("create")) {
-      return createOrder(request, response);
     } else if (view.equals("cart") && cmd.equals("form")) {
       return getCreateCartOrderForm(request, response);
-    } else if (view.equals("cart") && cmd.equals("create")) {
-      return createCartOrder(request, response);
     } else if (view.equals("detail") && cmd.equals("get")) {
       return getProductOrderDetail(request, response);
     } else if (view.equals("list") && cmd.equals("get")) {
@@ -101,48 +97,6 @@ public class OrderController implements ControllerFrame {
     }
   }
 
-  // TODO: 상품 주문
-  private String createOrder(HttpServletRequest request, HttpServletResponse response)
-      throws UnsupportedEncodingException {
-    try {
-      Long couponId =
-          request.getParameter("couponId") == null
-              ? null
-              : Long.parseLong(request.getParameter("couponId"));
-      Long productId = Long.parseLong(request.getParameter("productId"));
-      Long price = Long.parseLong(request.getParameter("productPrice"));
-      Long quantity = Long.parseLong(request.getParameter("productQuantity"));
-      String roadName = request.getParameter("roadName");
-      String addrDetail = request.getParameter("addrDetail");
-      String zipCode = request.getParameter("zipCode");
-      Long totalPrice = Long.parseLong(request.getParameter("totalPrice"));
-
-      OrderCreateDto orderCreateDto =
-          OrderCreateDto.builder()
-              .memberId(memberId)
-              .couponId(couponId)
-              .roadName(roadName)
-              .addrDetail(addrDetail)
-              .zipCode(zipCode)
-              .productId(productId)
-              .price(price)
-              .quantity(quantity)
-              .totalPrice(totalPrice)
-              .build();
-      Order order = orderService.createOrder(orderCreateDto);
-      ProductOrderDetailDto productOrderDetail =
-          orderService.getOrderDetailsForMemberAndOrderId(order.getId(), memberId);
-      request.setAttribute("productOrderDetail", productOrderDetail);
-      return String.format(Navi.REDIRECT_ORDER_DETAIL, order.getId());
-    } catch (DomainException e) {
-      return Navi.REDIRECT_SHOP_DETAIL
-          + String.format("?errorMessage=%s", URLEncoder.encode(e.getMessage(), "UTF-8"));
-    } catch (Exception e) {
-      return Navi.REDIRECT_MAIN
-          + String.format("?errorMessage=%s", URLEncoder.encode("시스템 에러", "UTF-8"));
-    }
-  }
-
   // TODO: 장바구니 상품 주문 폼
   private String getCreateCartOrderForm(HttpServletRequest request, HttpServletResponse response)
       throws UnsupportedEncodingException {
@@ -154,43 +108,6 @@ public class OrderController implements ControllerFrame {
       request.setAttribute("coupons", createCartOrderForm.getCoupons());
 
       return Navi.FORWARD_ORDER_CART_FORM;
-    } catch (DomainException e) {
-      return Navi.REDIRECT_CART_FORM
-          + String.format("?errorMessage=%s", URLEncoder.encode(e.getMessage(), "UTF-8"));
-    } catch (Exception e) {
-      return Navi.REDIRECT_MAIN
-          + String.format("?errorMessage=%s", URLEncoder.encode("시스템 에러", "UTF-8"));
-    }
-  }
-
-  // TODO: 장바구니 상품 주문
-  private String createCartOrder(HttpServletRequest request, HttpServletResponse response)
-      throws UnsupportedEncodingException {
-    try {
-      Long couponId =
-          request.getParameter("couponId") == null
-              ? null
-              : Long.parseLong(request.getParameter("couponId"));
-      String roadName = request.getParameter("roadName");
-      String addrDetail = request.getParameter("addrDetail");
-      String zipCode = request.getParameter("zipCode");
-      Long totalPrice = Long.parseLong(request.getParameter("totalPrice"));
-
-      OrderCartCreateDto orderCartCreateDto =
-          OrderCartCreateDto.builder()
-              .memberId(memberId)
-              .couponId(couponId)
-              .roadName(roadName)
-              .addrDetail(addrDetail)
-              .zipCode(zipCode)
-              .totalPrice(totalPrice)
-              .build();
-
-      Order order = orderService.createCartOrder(orderCartCreateDto);
-      ProductOrderDetailDto orderDetails =
-          orderService.getOrderDetailsForMemberAndOrderId(order.getId(), memberId);
-      request.setAttribute("orderDetails", orderDetails);
-      return String.format(Navi.REDIRECT_ORDER_DETAIL, order.getId());
     } catch (DomainException e) {
       return Navi.REDIRECT_CART_FORM
           + String.format("?errorMessage=%s", URLEncoder.encode(e.getMessage(), "UTF-8"));

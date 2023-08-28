@@ -7,6 +7,7 @@ import web.RestControllerFrame;
 import web.controller.*;
 import web.restController.LikesRestController;
 import web.restController.MemberRestController;
+import web.restController.OrderRestController;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -33,6 +34,7 @@ public class DispatcherServlet extends HttpServlet {
     controllerMapper.put("likes", new LikesController());
     restControllerMapper.put("likes-rest", new LikesRestController());
     restControllerMapper.put("member-rest", new MemberRestController());
+    restControllerMapper.put("order-rest", new OrderRestController());
   }
 
   protected void service(HttpServletRequest request, HttpServletResponse response)
