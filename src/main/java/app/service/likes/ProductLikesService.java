@@ -62,8 +62,8 @@ public class ProductLikesService implements LikesService {
 
       return LikesListWithPagination.builder().list(memberLikesList).paging(paging).build();
     } catch (LikesEntityNotFoundException e) {
-      e.printStackTrace();
-      throw e;
+//      e.printStackTrace();
+      return LikesListWithPagination.builder().build();
     } catch (Exception e) {
       e.printStackTrace();
       throw new Exception(e.getMessage());
