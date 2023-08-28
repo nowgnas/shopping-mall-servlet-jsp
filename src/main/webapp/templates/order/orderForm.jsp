@@ -24,6 +24,8 @@
     <link rel="stylesheet" href="../../css/owl.carousel.min.css" type="text/css">
     <link rel="stylesheet" href="../../css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="../../css/style.css" type="text/css">
+
+    <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.5.js"></script>
 </head>
 
 <body>
@@ -59,7 +61,7 @@
 <section class="checkout spad">
     <div class="container">
         <div class="checkout__form">
-            <form action="/order.bit?view=direct&cmd=create" method="post">
+            <form id="order-form" action="/order.bit?view=direct&cmd=create" method="post">
                 <div class="row">
                     <div class="col-lg-8 col-md-6">
                         <h6 class="checkout__title">사용자 정보</h6>
@@ -114,7 +116,7 @@
                                     <input type="hidden" class="product-quantity" name="productQuantity"
                                            value="${productQuantity}">
                                     ${product.name} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ${productQuantity}개<span
-                                        class="product-price">${product.price} 원</span>
+                                        class="product-price">${product.price}원</span>
                                 </li>
                             </ul>
                             <ul class="checkout__total__all">
@@ -122,7 +124,7 @@
                                 <input type="hidden" id="totalPrice" name="totalPrice">
                                 <li>총 가격 <span id="calculated-total"></span></li>
                             </ul>
-                            <button type="submit" class="site-btn">주문 하기</button>
+                            <a id="payment-btn" href="#" onclick="kakaoPay()"><img src="../../img/payments/payment_icon_yellow_large.png" height="70"></a>
                         </div>
                     </div>
                 </div>
@@ -151,7 +153,6 @@
 <script src="../../js/owl.carousel.min.js"></script>
 <script src="../../js/main.js"></script>
 
-
 <script>
     const productItems = document.querySelectorAll(".product-item");
     const calculatedTotalElem = document.getElementById("calculated-total");
@@ -176,22 +177,69 @@
         const couponDiscountPolicy = selectedOption.getAttribute("name");
         const couponDiscountValue = parseInt(selectedOption.getAttribute("id"));
 
-        calculatedDiscountPrice.textContent = '0 원';
+        calculatedDiscountPrice.textContent = '0원';
         if (couponDiscountPolicy === 'CASH') {
             calculatedTotal -= couponDiscountValue;
-            calculatedDiscountPrice.textContent = '-' + couponDiscountValue + ' 원';
+            calculatedDiscountPrice.textContent = '-' + couponDiscountValue + '원';
         }
         if (couponDiscountPolicy === 'DISCOUNT') {
             calculatedTotal -= (calculatedTotal * (couponDiscountValue / 100));
-            calculatedDiscountPrice.textContent = '-' + (calculatedTotal * (couponDiscountValue / 100)) + ' 원';
+            calculatedDiscountPrice.textContent = '-' + (calculatedTotal * (couponDiscountValue / 100)) + '원';
         }
 
-        calculatedTotalElem.textContent = calculatedTotal < 0 ? 0 : calculatedTotal + ' 원';
+        calculatedTotalElem.textContent = calculatedTotal < 0 ? 0 : calculatedTotal + '원';
         calculatedTotalPrice.value = calculatedTotal < 0 ? 0 : calculatedTotal;
     }
 
     // 초기 총 가격 계산
     updateTotalPrice();
+</script>
+
+<script>
+    function kakaoPay() {
+        const calculatedTotalPrice = document.getElementById("totalPrice").value;
+
+        var IMP = window.IMP;
+        IMP.init('imp11402415');
+        IMP.request_pay({
+            pg : 'kakaopay',
+            pay_method : 'card',
+            merchant_uid: "order_no_" + new Date().getTime(),
+            name : '<c:out value="${product.name}"/>',
+            amount : calculatedTotalPrice,
+            buyer_email : 'test@naver.com',
+            buyer_name : '<c:out value="${memberName}"/>',
+            buyer_tel : '010-1234-5678',
+            buyer_addr : '<c:out value="${defaultAddress.roadName}"/>',
+            buyer_postcode : '<c:out value="${defaultAddress.zipCode}"/>',
+            m_redirect_url : 'http://localhost:8080'
+        }, function(response) {
+            // 실패 시
+            if (!response.success) {
+                var msg = '오류로 인하여 결제가 시작되지 못하였습니다.';
+                msg += '에러내용 : ' + response.error_msg;
+
+                alert(msg);
+            } else {
+                const formData = $('#order-form').serialize();
+                $.ajax({
+                    type: "POST",
+                    url: "/order-rest.bit?cmd=orderCreate",
+                    dataType: 'text',
+                    data: formData,
+                    contentType: "application/x-www-form-urlencoded;charset=UTF-8",
+                    error: function (error) {
+                        console.log(error);
+                        alert('상품 주문 에러: ' + error);
+                    },
+                    success: function (data) {
+                        console.log('성공')
+                        window.location.replace(`http://localhost:8080/order.bit?view=detail&cmd=get&orderId=` + data);
+                    }
+                });
+            }
+        });
+    }
 </script>
 </body>
 
