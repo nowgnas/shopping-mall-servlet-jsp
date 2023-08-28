@@ -10,7 +10,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.net.URLEncoder;
 
-@WebFilter("/*.bit")
+@WebFilter(urlPatterns = "*.bit")
 public class LoginFilter implements Filter {
 
   private Logger work_log = Logger.getLogger("work");
