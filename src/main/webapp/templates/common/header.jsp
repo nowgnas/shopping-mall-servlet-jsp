@@ -52,7 +52,6 @@
     <div class="offcanvas__option">
         <div class="offcanvas__links">
             <a href="#">Sign in</a>
-            <a href="#">FAQs</a>
         </div>
     </div>
     <div class="offcanvas__nav__option">
@@ -93,7 +92,6 @@
                                 <a href="#" disabled>${loginMember.name}님</a>
                                 <a href="member.bit?view=logout" target="_parent">logout</a>
                             </c:if>
-                            <a href="#">FAQs</a>
                         </div>
                     </div>
                 </div>
@@ -121,9 +119,8 @@
                                 <li><a href="./blog-details.html">Blog Details</a></li>
                             </ul>
                         </li>
-                        <li><a href="./blog.html">Blog</a></li>
                         <c:if test="${ !empty loginMember }">
-                            <li><a href="/order.bit?view=list&cmd=get">주문 조회</a></li>
+                            <li><a href="/order.bit?view=list&cmd=get">Order List</a></li>
                         </c:if>
                     </ul>
                 </nav>

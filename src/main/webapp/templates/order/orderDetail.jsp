@@ -67,11 +67,11 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="breadcrumb__text">
-                    <h4>주문 상세조회</h4>
+                    <h4>Order Details</h4>
                     <div class="breadcrumb__links">
-                        <a href="/main.bit">홈</a>
-                        <a href="/order.bit?view=list&cmd=get">주문 조회</a>
-                        <span>주문 상세조회</span>
+                        <a href="/main.bit">Home</a>
+                        <a href="/order.bit?view=list&cmd=get">Order List</a>
+                        <span>Order Details</span>
                     </div>
                 </div>
             </div>
