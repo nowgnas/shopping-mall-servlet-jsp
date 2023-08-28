@@ -2,6 +2,10 @@
 
 (function ($) {
 
+    $(window).on('load', function () {
+        window.Kakao.init("4337d77950ddb4dce28d3222251115bf");
+    });
+
     $('#loginbtn').on('click', function (e) {
         e.preventDefault();
         if (!loginCheck()) {
@@ -32,6 +36,39 @@
         }
         $("#checkEmail").text("");
     });
+
+
+    $('#kakaoLogin-btn').on('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        kakaoLogin();
+    });
+
+    function kakaoLogin() {
+        window.Kakao.Auth.login({
+            scope: "profile_nickname, account_email",
+            success: (authObj) => {
+                window.Kakao.API.request({
+                    url: "/v2/user/me",
+                    success: (res) => {
+                        console.log(res)
+                        $.post("member-rest.bit?cmd=kakaoLogin", {
+                            email: res.kakao_account.email,
+                            nickname: res.properties.nickname
+                        }, function () {
+                            window.location.href = "/member.bit"
+                        })
+                            .fail(function (err) {
+                                console.log(err);
+                            });
+                    },
+                    fail: (res) => {
+                        console.log(res);
+                    },
+                });
+            },
+        });
+    }
 
     function loginCheck() {
 

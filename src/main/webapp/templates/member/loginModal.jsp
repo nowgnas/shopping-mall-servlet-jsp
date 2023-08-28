@@ -38,7 +38,7 @@
 
                     <div class="text-center text-muted delimiter">or use a social network</div>
                     <div class="d-flex justify-content-center social-buttons">
-                        <a href="#"><img src="img/icon/kakaotalk_sharing_btn_small.png"/></a>
+                        <a href="#" id="kakaoLogin-btn" ><img src="img/icon/kakaotalk_sharing_btn_small.png"/></a>
                     </div>
                 </div>
             </div>
@@ -50,7 +50,7 @@
 </div>
 
 <!-- login modal end -->
-
+<script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
 <script src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js'></script>
 <script src="js/jquery-3.3.1.min.js"></script>
 <script src="js/login.js"></script>
