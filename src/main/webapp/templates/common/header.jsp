@@ -111,7 +111,7 @@
                 <nav class="header__menu mobile-menu">
                     <ul>
                         <li class="active"><a href="/main.bit">Home</a></li>
-                        <li><a href="/product.bit?view=shop&curPage=0&sort=DATE_DESC">Shop</a></li>
+                        <li><a href="/product.bit?view=shop&curPage=0&sort=PRICE_ASC">Shop</a></li>
                         <li><a href="#">Pages</a>
                             <ul class="dropdown">
                                 <li><a href="./about.html">About Us</a></li>

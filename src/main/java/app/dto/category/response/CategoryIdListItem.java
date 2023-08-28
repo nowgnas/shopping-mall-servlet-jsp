@@ -1,4 +1,4 @@
-package app.dto.category;
+package app.dto.category.response;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

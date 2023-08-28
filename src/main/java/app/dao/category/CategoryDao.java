@@ -1,8 +1,6 @@
 package app.dao.category;
 
-import app.dto.category.CategoryIdListItem;
 import app.dto.product.ProductListItem;
-import app.dto.product.response.ProductSearchBySubCategory;
 import app.entity.Category;
 import java.util.List;
 import java.util.Map;
@@ -61,5 +59,10 @@ public class CategoryDao implements CategoryDaoFrame<Long, Category> {
   public List<ProductListItem> selectProductBySubCategoryName(
       Map<String, Object> map, SqlSession session) {
     return session.selectList("product.search-subcategory-product", map);
+  }
+
+  @Override
+  public List<Category> hierarchyCategory(SqlSession session) {
+    return session.selectList("category.selectall");
   }
 }
