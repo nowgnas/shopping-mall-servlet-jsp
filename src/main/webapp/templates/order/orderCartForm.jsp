@@ -42,11 +42,11 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="breadcrumb__text">
-                    <h4>주문하기</h4>
+                    <h4>Cart Order</h4>
                     <div class="breadcrumb__links">
-                        <a href="../../index.html">홈</a>
-                        <a href="../../cart.html">장바구니</a>
-                        <span>주문하기</span>
+                        <a href="../../index.html">Home</a>
+                        <a href="../../cart.html">Cart</a>
+                        <span>Cart Order</span>
                     </div>
                 </div>
             </div>

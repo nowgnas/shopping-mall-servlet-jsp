@@ -62,10 +62,10 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="breadcrumb__text">
-                    <h4>주문 조회</h4>
+                    <h4>Order List</h4>
                     <div class="breadcrumb__links">
-                        <a href="/main.bit">홈</a>
-                        <span>주문 조회</span>
+                        <a href="/main.bit">Home</a>
+                        <span>Order List</span>
                     </div>
                 </div>
             </div>
