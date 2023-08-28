@@ -22,7 +22,6 @@ public class CartServlet extends HttpServlet {
 
   private final CartService cartService;
 
-
   @Override
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
@@ -37,7 +36,6 @@ public class CartServlet extends HttpServlet {
     } catch (Exception e) {
       e.printStackTrace();
     }
-
   }
 
   @Override
@@ -48,8 +46,8 @@ public class CartServlet extends HttpServlet {
     try {
       Long memberId = (Long) request.getSession().getAttribute("memberId");
       Long productId = Long.parseLong(request.getParameter("productId"));
-      ProductAndMemberCompositeKey compositeKey = new ProductAndMemberCompositeKey(productId,
-          memberId);
+      ProductAndMemberCompositeKey compositeKey =
+          new ProductAndMemberCompositeKey(productId, memberId);
 
       if ("add".equals(action)) {
         Long quantity = Long.parseLong(request.getParameter("quantity"));
@@ -64,14 +62,11 @@ public class CartServlet extends HttpServlet {
     } catch (MemberNotFoundException e) {
       throw new MemberNotFoundException(ErrorCode.MEMBER_NOT_FOUND);
     } catch (ProductNotFoundException e) {
-      throw new ProductNotFoundException(ErrorCode.ITEM_NOT_FOUND);
+      throw new ProductNotFoundException();
     } catch (CartNotFoundException e) {
       throw new CartNotFoundException(ErrorCode.CART_IS_NOT_EXISTED);
     } catch (Exception e) {
       e.printStackTrace();
     }
-
-
   }
-
 }
