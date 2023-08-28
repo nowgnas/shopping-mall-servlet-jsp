@@ -8,20 +8,20 @@ import app.exception.member.MemberNotFoundException;
 import app.exception.product.ProductNotFoundException;
 import app.service.cart.CartService;
 import app.utils.HttpUtil;
-import java.io.IOException;
+import lombok.AllArgsConstructor;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import lombok.AllArgsConstructor;
+import java.io.IOException;
 
 @AllArgsConstructor
 @WebServlet({"/shopping-cart"})
 public class CartServlet extends HttpServlet {
 
   private final CartService cartService;
-
 
   @Override
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -37,7 +37,6 @@ public class CartServlet extends HttpServlet {
     } catch (Exception e) {
       e.printStackTrace();
     }
-
   }
 
   @Override
@@ -48,8 +47,8 @@ public class CartServlet extends HttpServlet {
     try {
       Long memberId = (Long) request.getSession().getAttribute("memberId");
       Long productId = Long.parseLong(request.getParameter("productId"));
-      ProductAndMemberCompositeKey compositeKey = new ProductAndMemberCompositeKey(productId,
-          memberId);
+      ProductAndMemberCompositeKey compositeKey =
+          new ProductAndMemberCompositeKey(productId, memberId);
 
       if ("add".equals(action)) {
         Long quantity = Long.parseLong(request.getParameter("quantity"));
@@ -70,8 +69,5 @@ public class CartServlet extends HttpServlet {
     } catch (Exception e) {
       e.printStackTrace();
     }
-
-
   }
-
 }
