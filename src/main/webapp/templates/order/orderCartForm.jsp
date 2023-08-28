@@ -124,7 +124,7 @@
                                 <input type="hidden" id="totalPrice" name="totalPrice">
                                 <li>총 가격 <span id="calculated-total"></span></li>
                             </ul>
-                            <a id="payment-btn" href="#" onclick="return kakaoPay()"><img src="../../img/payments/payment_icon_yellow_large.png" height="70"></a>
+                            <a id="payment-btn" href="#" onclick="kakaoPay()"><img src="../../img/payments/payment_icon_yellow_large.png" height="70"></a>
                         </div>
                     </div>
                 </div>
