@@ -101,7 +101,7 @@ public class ProductDao implements ProductDaoFrame<Long, Product> {
 
   @Override
   public ProductDetail selectProductDetailWithCategory(
-      Long memberId, Long productId, SqlSession session) {
+      Long memberId, Long productId, SqlSession session) throws Exception{
     return session.selectOne(
         "product.selectDetail",
         ProductDetailParameter.builder().productId(productId).memberId(memberId).build());

@@ -10,8 +10,8 @@ import app.dto.product.response.ProductDetailWithCategory;
 import app.dto.product.response.ProductListWithPagination;
 import app.entity.Category;
 import app.enums.SortOption;
-import app.exception.CustomException;
-import app.exception.ErrorCode;
+import app.exception.product.ProductNotFoundException;
+import app.exception.product.ProductQuantityLackException;
 import app.utils.GetSessionFactory;
 import java.util.HashMap;
 import java.util.List;
@@ -25,7 +25,7 @@ public class ProductServiceImpl implements ProductService {
   private static ProductServiceImpl instance;
   private final SqlSessionFactory sessionFactory = GetSessionFactory.getInstance();
   Logger log = Logger.getLogger("ProductServiceImpl");
-  private ProductDaoFrame dao;
+  private ProductDaoFrame<Long, app.entity.Product> dao;
 
   public ProductServiceImpl() {
     this.dao = ProductDao.getInstance();
@@ -40,18 +40,18 @@ public class ProductServiceImpl implements ProductService {
   public ProductDetailWithCategory getProductDetail(Long memberId, Long productId)
       throws Exception {
     SqlSession session = sessionFactory.openSession();
-    Optional<ProductDetail> detail =
-        Optional.ofNullable(dao.selectProductDetailWithCategory(memberId, productId, session));
-    ProductDetailWithCategory productDetailWithCategory = null;
-    if (detail.isPresent()) {
-      ProductDetail productDetail = detail.get();
-      List<Category> categories =
-          dao.selectProductParentCategory(Long.valueOf(productDetail.getCategoryId()), session);
-      productDetailWithCategory =
-          ProductDetailWithCategory.getProductDetail(categories, productDetail);
-    } else throw new Exception("상품이 없습니다");
+
+    ProductDetail productDetail =
+        Optional.ofNullable(dao.selectProductDetailWithCategory(memberId, productId, session))
+            .orElseThrow(ProductNotFoundException::new);
+
+    List<Category> categories =
+        dao.selectProductParentCategory(Long.valueOf(productDetail.getCategoryId()), session);
+    ProductDetailWithCategory productDetail1 =
+        ProductDetailWithCategory.getProductDetail(categories, productDetail);
+
     session.close();
-    return productDetailWithCategory;
+    return productDetail1;
   }
 
   @Override
@@ -76,7 +76,7 @@ public class ProductServiceImpl implements ProductService {
         products = dao.selectAllSortByDate(map, session);
         break;
       default:
-        throw new CustomException(ErrorCode.ITEM_NOT_FOUND);
+        throw new ProductNotFoundException();
     }
     int totalPage = dao.getTotalPage(session);
     session.close();
@@ -94,7 +94,7 @@ public class ProductServiceImpl implements ProductService {
       throws Exception {
     SqlSession session = sessionFactory.openSession();
     int qty = dao.selectProductQuantity(productId, session);
-    if (qty < quantity) throw new Exception("주문 가능한 수량이 부족합니다");
+    if (qty < quantity) throw new ProductQuantityLackException();
     ProductDetailForOrder detail = dao.selectProductDetail(productId, session);
     session.close();
     return detail;
@@ -103,22 +103,14 @@ public class ProductServiceImpl implements ProductService {
   @Override
   public ProductListWithPagination getProductsByKeyword(String keyword, Long memberId, int curPage)
       throws Exception {
-    log.info(
-        "request info : keyword => "
-            + keyword
-            + " member id => "
-            + memberId
-            + " cur page => "
-            + curPage);
     SqlSession session = sessionFactory.openSession();
     Map<String, Object> map = new HashMap<>();
     map.put("userId", memberId);
     map.put("current", curPage);
     map.put("keyword", keyword.trim());
     List<ProductListItem> products = dao.selectProductsByKeyword(map, session);
-    log.info(products.toString());
-    log.info("product item size " + products.size());
     session.close();
+    if (products.isEmpty()) throw new ProductNotFoundException();
     int totalPage = (int) Math.ceil(products.size() / 9);
     Pagination pagination = Pagination.builder().currentPage(curPage).perPage(9).build();
     return ProductListWithPagination.makeListWithPaging(products, pagination, totalPage);
