@@ -29,8 +29,8 @@
     <typeAlias type="app.dto.category.CategoryIdListItem" alias="categoryListItem"/>
     <typeAlias type="app.dto.product.response.ProductSearchBySubCategory"
       alias="ProductSearchBySubCategory"/>
-        <typeAlias type="app.dto.likes.request.LikesSelectForPage"
-            alias="likesSelectForPage"/>
+    <typeAlias type="app.dto.likes.request.LikesSelectForPage"
+      alias="likesSelectForPage"/>
 
   </typeAliases>
   <environments default="dev">
