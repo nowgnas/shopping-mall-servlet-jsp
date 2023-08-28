@@ -97,7 +97,8 @@ public interface ProductDaoFrame<K, V extends Product> extends DaoFrame<K, V> {
    * @param session sql session
    * @return
    */
-  ProductDetail selectProductDetailWithCategory(Long memberId, Long productId, SqlSession session);
+  ProductDetail selectProductDetailWithCategory(Long memberId, Long productId, SqlSession session)
+      throws Exception;
 
   /**
    * 상품 카테고리 - 상세 정보를 위함

@@ -3,10 +3,10 @@ package app.exception.product;
 import app.exception.DomainException;
 import javax.servlet.http.HttpServletResponse;
 
-public class ProductNotFoundException extends DomainException {
-  private static final String message = "상품이 존재하지 않습니다";
+public class ProductQuantityLackException extends DomainException {
+  private static final String message = "상품 수랑이 부족합니다";
 
-  public ProductNotFoundException() {
+  public ProductQuantityLackException() {
     super(message);
   }
 

@@ -63,7 +63,7 @@ public class CartServlet extends HttpServlet {
     } catch (MemberNotFoundException e) {
       throw new MemberNotFoundException(ErrorCode.MEMBER_NOT_FOUND);
     } catch (ProductNotFoundException e) {
-      throw new ProductNotFoundException(ErrorCode.ITEM_NOT_FOUND);
+      throw new ProductNotFoundException();
     } catch (CartNotFoundException e) {
       throw new CartNotFoundException(ErrorCode.CART_IS_NOT_EXISTED);
     } catch (Exception e) {

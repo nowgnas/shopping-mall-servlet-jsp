@@ -3,7 +3,6 @@ package app.service.checker;
 import app.dao.DaoFrame;
 import app.dao.product.ProductDao;
 import app.entity.Product;
-import app.exception.ErrorCode;
 import app.exception.product.ProductNotFoundException;
 import lombok.AllArgsConstructor;
 import org.apache.ibatis.session.SqlSession;
@@ -16,6 +15,6 @@ public class ProductExistCheckerService implements EntityExistCheckerService<Lon
       throws Exception {
     return ProductDao.getInstance()
         .selectById(id, session)
-        .orElseThrow(() -> new ProductNotFoundException(ErrorCode.ITEM_NOT_FOUND));
+        .orElseThrow(ProductNotFoundException::new);
   }
 }

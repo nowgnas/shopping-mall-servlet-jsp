@@ -1,6 +1,6 @@
 package app.dto.product.response;
 
-import app.dto.category.ProductCategory;
+import app.dto.category.response.ProductCategory;
 import app.dto.product.ProductDetail;
 import app.entity.Category;
 import java.util.HashMap;
