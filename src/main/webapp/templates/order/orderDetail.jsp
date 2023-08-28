@@ -104,16 +104,16 @@
                                     </div>
                                     <div class="product__cart__item__text">
                                         <h6>${product.productName}</h6>
-                                        <h5>${product.price} 원</h5>
+                                        <h5>${product.price}원</h5>
                                     </div>
                                 </td>
                                 <td class="quantity__item">
                                     <div class="quantity">
-                                        <h5>${product.quantity} 개</h5>
+                                        <h5>${product.quantity}개</h5>
                                     </div>
                                 </td>
                                 <c:set var="rowTotalPrice" value="${product.price * product.quantity}"/>
-                                <td class="cart__price"><c:out value="${rowTotalPrice}"/> 원</td>
+                                <td class="cart__price"><c:out value="${rowTotalPrice}"/>원</td>
                             </tr>
                         </c:forEach>
                         </tbody>
@@ -134,20 +134,20 @@
                         <li>주문 날짜 <span><fmt:formatDate pattern="yyyy.MM.dd HH:mm" value="${parsedOrderDate}"/></span>
                         </li>
                         <li>주문 상태 <span>${productOrderDetail.orderStatus.getMessage()}</span></li>
-                        <li>총 가격 <span>${productOrderDetail.getTotalPrice()} 원</span></li>
+                        <li>총 가격 <span>${productOrderDetail.getTotalPrice()}원</span></li>
                         <li>할인 가격
                             <span>
                                 <c:choose>
                                     <c:when test="${productOrderDetail.getDiscountPrice() == 0}">
-                                        ${productOrderDetail.getDiscountPrice()} 원
+                                        ${productOrderDetail.getDiscountPrice()}원
                                     </c:when>
                                     <c:otherwise>
-                                        - ${productOrderDetail.getDiscountPrice()} 원
+                                        -${productOrderDetail.getDiscountPrice()}원
                                     </c:otherwise>
                                 </c:choose>
                             </span>
                         </li>
-                        <li>결제 금액 <span>${payment.actualAmount} 원</span></li>
+                        <li>결제 금액 <span>${payment.actualAmount}원</span></li>
                         <li>결제 종류 <span>${payment.paymentType.getMessage()}</span></li>
                     </ul>
                     <c:choose>

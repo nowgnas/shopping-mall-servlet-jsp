@@ -115,7 +115,7 @@
                                         <input type="hidden" class="product-quantity" name="productQuantity"
                                                value="${product.quantity}">
                                             ${product.name} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ${product.quantity}개<span
-                                            class="product-price">${product.price} 원</span>
+                                            class="product-price">${product.price}원</span>
                                     </li>
                                 </c:forEach>
                             </ul>
@@ -178,17 +178,17 @@
         const couponDiscountPolicy = selectedOption.getAttribute("name");
         const couponDiscountValue = parseInt(selectedOption.getAttribute("id"));
 
-        calculatedDiscountPrice.textContent = '0 원';
+        calculatedDiscountPrice.textContent = '0원';
         if (couponDiscountPolicy === 'CASH') {
             calculatedTotal -= couponDiscountValue;
-            calculatedDiscountPrice.textContent = '-' + couponDiscountValue + ' 원';
+            calculatedDiscountPrice.textContent = '-' + couponDiscountValue + '원';
         }
         if (couponDiscountPolicy === 'DISCOUNT') {
             calculatedTotal -= (calculatedTotal * (couponDiscountValue / 100));
-            calculatedDiscountPrice.textContent = '-' + (calculatedTotal * (couponDiscountValue / 100)) + ' 원';
+            calculatedDiscountPrice.textContent = '-' + (calculatedTotal * (couponDiscountValue / 100)) + '원';
         }
 
-        calculatedTotalElem.textContent = calculatedTotal < 0 ? 0 : calculatedTotal + ' 원';
+        calculatedTotalElem.textContent = calculatedTotal < 0 ? 0 : calculatedTotal + '원';
         calculatedTotalPrice.value = calculatedTotal < 0 ? 0 : calculatedTotal;
     }
 
