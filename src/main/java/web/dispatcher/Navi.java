@@ -20,5 +20,4 @@ public abstract class Navi {
   public static final String FORWARD_LIKES_LIST = "forward:templates/likes/likesList.jsp";
   public static final String FORWARD_CATEGORY_SEARCH = "forward:templates/product/shop.jsp";
   public static final String REDIRECT_LIKES_LIST = "redirect:likes.bit?view=likes";
-
 }

@@ -2,20 +2,17 @@ package web.restController;
 
 import app.dto.response.MemberDetail;
 import app.entity.ProductAndMemberCompositeKey;
-import app.exception.DomainException;
 import app.exception.likes.LikesEntityDuplicateException;
 import app.service.likes.ProductLikesService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
+import web.RestControllerFrame;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import web.RestControllerFrame;
-import web.dispatcher.Navi;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class LikesRestController implements RestControllerFrame {
 

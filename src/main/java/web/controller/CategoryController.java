@@ -4,11 +4,12 @@ import app.dto.product.response.ProductListWithPagination;
 import app.dto.response.MemberDetail;
 import app.service.category.CategoryService;
 import app.service.category.CategoryServiceImpl;
+import web.ControllerFrame;
+import web.dispatcher.Navi;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import web.ControllerFrame;
-import web.dispatcher.Navi;
 
 public class CategoryController implements ControllerFrame {
   private final CategoryService service = CategoryServiceImpl.getInstance();

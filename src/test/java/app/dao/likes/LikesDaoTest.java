@@ -2,6 +2,7 @@ package app.dao.likes;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import app.dto.likes.request.LikesSelectForPage;
 import app.entity.ProductAndMemberCompositeKey;
 import app.entity.Likes;
 import config.TestConfig;
@@ -40,65 +41,44 @@ class LikesDaoTest {
   @DisplayName("insert test")
   @Test
   void insert() throws Exception {
-    int res = likesDao.insert(
-        Likes.builder()
-            .memberId(1L)
-            .productId(1L)
-            .build()
-        , session
-    );
-    int res2 = likesDao.insert(
-        Likes.builder()
-            .memberId(1L)
-            .productId(1L)
-            .build()
-        , session
-    );
+    int res = likesDao.insert(Likes.builder().memberId(1L).productId(1L).build(), session);
+    int res2 = likesDao.insert(Likes.builder().memberId(1L).productId(1L).build(), session);
     session.commit();
 
     assertTrue(res == 1);
-//    log.info("[insert test] insert result : " + (res == 1 ? "true" : "false"));
+    //    log.info("[insert test] insert result : " + (res == 1 ? "true" : "false"));
   }
 
   @DisplayName("delete test")
   @Test
   void deleteById() throws Exception {
-    int res = likesDao.deleteById(
-        ProductAndMemberCompositeKey.builder()
-            .memberId(1L)
-            .productId(2L)
-            .build()
-        , session
-    );
+    int res =
+        likesDao.deleteById(
+            ProductAndMemberCompositeKey.builder().memberId(1L).productId(2L).build(), session);
     session.commit();
 
     assertTrue(res == 1);
-//    log.info("[delete test] delete result : " + (res == 1 ? "true" : "false"));
+    //    log.info("[delete test] delete result : " + (res == 1 ? "true" : "false"));
   }
 
   @DisplayName("select test")
   @Test
   void selectById() throws Exception {
-    Likes inputLikes = Likes.builder()
-        .memberId(1L)
-        .productId(3L)
-        .build();
+    Likes inputLikes = Likes.builder().memberId(1L).productId(3L).build();
 
     likesDao.insert(inputLikes, session);
     session.commit();
 
-    Likes ouputLikes = likesDao.selectById(
-            ProductAndMemberCompositeKey.builder()
-                .memberId(1L)
-                .productId(3L)
-                .build()
-            , session)
-        .get();
+    Likes ouputLikes =
+        likesDao
+            .selectById(
+                ProductAndMemberCompositeKey.builder().memberId(1L).productId(3L).build(), session)
+            .get();
 
     assertEquals(inputLikes.getMemberId(), ouputLikes.getMemberId());
     assertEquals(inputLikes.getProductId(), ouputLikes.getProductId());
-//    log.info("[select test] member id : " + likes.getMemberId());
-//    log.info("[select test] product id : " + likes.getProductId());
+    //    log.info("[select test] member id : " + likes.getMemberId());
+    //    log.info("[select test] product id : " + likes.getProductId());
   }
 
   @DisplayName("select all test")
@@ -107,31 +87,21 @@ class LikesDaoTest {
 
     // basic init Likes(1L, 2L)
 
-    likesDao.insert(
-        Likes.builder()
-            .memberId(1L)
-            .productId(3L)
-            .build()
-        , session);
+    likesDao.insert(Likes.builder().memberId(1L).productId(3L).build(), session);
 
-    likesDao.insert(
-        Likes.builder()
-            .memberId(1L)
-            .productId(4L)
-            .build()
-        , session);
+    likesDao.insert(Likes.builder().memberId(1L).productId(4L).build(), session);
 
     session.commit();
-    /*
-    List<Long> list = likesDao.selectAllProduct(1L, session);
+
+    List<Long> list =
+        likesDao.selectAllProduct(
+            LikesSelectForPage.builder().memberId(1L).start(0).PerPage(5).build(), session);
     long idx = 2L;
 
     // total 3 rows
     for (Long productId : list) {
       assertEquals(productId, idx++);
-//      log.info("[select all test] product id : " + productId);
+      //      log.info("[select all test] product id : " + productId);
     }
-
-     */
   }
 }
