@@ -15,6 +15,7 @@
     e.stopPropagation();
 
     var likesBtn = $(this);
+    likesBtn.addClass();
     var productId = likesBtn.data("product-id");
     var loginMember = likesBtn.data("login-info");
 
@@ -55,9 +56,5 @@
       }
     });
   });
-
-  function login() {
-    console.log("login first");
-  }
 
 })(jQuery);
