@@ -1,13 +1,9 @@
 package web.controller;
 
 import app.dto.request.LoginDto;
-import app.dto.request.MemberRegisterDto;
 import app.dto.response.MemberDetail;
-import app.exception.CustomException;
-import app.exception.ErrorCode;
 import app.service.member.MemberService;
 import web.ControllerFrame;
-import web.controller.validation.MemberValidation;
 import web.dispatcher.Navi;
 
 import javax.servlet.http.HttpServletRequest;
