@@ -41,12 +41,10 @@ function addToSelectedProducts(checkbox) {
   var productId = checkbox.value;
   if (checkbox.checked) {
     selectedProductsList.push(productId);
-    console.log("check " + productId);
   } else {
     var index = selectedProductsList.indexOf(productId);
     if (index > -1) {
       selectedProductsList.splice(index, 1);
-      console.log("uncheck " + productId);
     }
   }
 }
