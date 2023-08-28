@@ -7,8 +7,6 @@ import app.dto.request.MemberRegisterDto;
 import app.dto.response.MemberDetail;
 import app.entity.Encryption;
 import app.entity.Member;
-import app.exception.CustomException;
-import app.exception.ErrorCode;
 import app.exception.member.DuplicatedEmailException;
 import app.exception.member.LoginFailException;
 import app.exception.member.MemberEntityNotFoundException;
@@ -21,6 +19,7 @@ import org.apache.ibatis.session.SqlSessionFactory;
 
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
+import java.util.Optional;
 
 public class MemberService {
 
@@ -74,6 +73,31 @@ public class MemberService {
 
     } catch (SQLException e) {
 
+    } finally {
+      sqlSession.close();
+    }
+    return loginMember;
+  }
+
+  public MemberDetail kakaoLogin(MemberRegisterDto dto) {
+    SqlSession sqlSession = sessionFactory.openSession();
+    MemberDetail loginMember = null;
+    Member member = null;
+    try {
+      Optional<Member> optionalMember = memberDao.selectByEmail(dto.getEmail(), sqlSession);
+      if (optionalMember.isEmpty()) {
+
+        member = dto.toEntity("ASDQWEASDQWEASD");
+        memberDao.insert(member, sqlSession);
+        sqlSession.commit();
+        loginMember = MemberDetail.of(member);
+      } else {
+        member = optionalMember.get();
+        loginMember = MemberDetail.of(member);
+      }
+
+    } catch (SQLException e) {
+      sqlSession.rollback();
     } finally {
       sqlSession.close();
     }
