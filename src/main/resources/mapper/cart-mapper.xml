@@ -14,17 +14,23 @@
 <resultMap id="CartAndProductResultMap" type="app.dto.cart.CartAndProductDto">
     <id property="productId" column="id" />
     <result property="cartProductQuantity" column="product_quantity" />
-    <result property="categoryId" column="category_id" />
-    <result property="name" column="name" />
-    <result property="description" column="description" />
-    <result property="price" column="price" />
-    <result property="productQuantity" column="quantity" />
-    <result property="code" column="code" />
-    <result property="createdAt" column="created_at" />
-    <result property="updatedAt" column="updated_at" />
+    <result property="categoryId" column="category_id"/>
+    <result property="name" column="name"/>
+    <result property="description" column="description"/>
+    <result property="price" column="price"/>
+    <result property="productQuantity" column="quantity"/>
+    <result property="code" column="code"/>
+    <result property="createdAt" column="created_at"/>
+    <result property="updatedAt" column="updated_at"/>
 </resultMap>
 
 
+
+    <select id="get-total-page" resultType="Long" parameterType="Long">
+        SELECT CEIL(COUNT(*) / 10)
+        FROM cart
+        WHERE member_id = #{memberId}
+    </select>
 
     <select id="select" parameterType="app.entity.ProductAndMemberCompositeKey" resultMap="cart">
         SELECT *
@@ -55,6 +61,7 @@
     <update id="update" parameterType="app.entity.ProductAndMemberCompositeKey">
         UPDATE cart
         SET product_quantity = #{productQuantity}
+        WHERE product_id = #{productId}
     </update>
     <delete id="delete" parameterType="app.entity.ProductAndMemberCompositeKey">
         DELETE

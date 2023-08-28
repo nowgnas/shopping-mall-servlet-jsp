@@ -11,18 +11,24 @@ public class CartDao implements CartDaoFrame<ProductAndMemberCompositeKey, Cart>
 
   @Override
   public int insert(Cart cart, SqlSession session) throws Exception {
-    return session.insert("cart.insert", cart);
+    int returnValue =  session.insert("cart.insert", cart);
+    session.commit();
+    return returnValue;
   }
 
   @Override
   public int update(Cart cart, SqlSession session) throws Exception {
-    return session.update("cart.update", cart);
+    int returnValue =  session.update("cart.update", cart);
+    session.commit();
+    return returnValue;
   }
 
   @Override
   public int deleteById(ProductAndMemberCompositeKey productAndMemberCompositeKey,
       SqlSession session) throws Exception {
-    return session.delete("cart.delete", productAndMemberCompositeKey);
+    int returnValue = session.delete("cart.delete", productAndMemberCompositeKey);
+    session.commit();
+    return returnValue;
   }
 
   @Override
@@ -35,6 +41,12 @@ public class CartDao implements CartDaoFrame<ProductAndMemberCompositeKey, Cart>
   @Override
   public List<Cart> selectAll(SqlSession session) throws Exception {
     return session.selectList("select-all");
+  }
+
+
+  @Override
+  public Long getTheNumberOfTotalProductInCart(Long memberId, SqlSession session) {
+    return session.selectOne("get-total-page", memberId);
   }
 
   @Override
@@ -51,6 +63,9 @@ public class CartDao implements CartDaoFrame<ProductAndMemberCompositeKey, Cart>
   @Override
   public int bulkDelete(List<ProductAndMemberCompositeKey> productAndMemberCompositeKeys,
       SqlSession session) {
-    return session.delete("cart.bulkDelete", productAndMemberCompositeKeys);
+    int returnValue = session.delete("cart.bulkDelete", productAndMemberCompositeKeys);
+    session.commit();
+    return returnValue;
+
   }
 }

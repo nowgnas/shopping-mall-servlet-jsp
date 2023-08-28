@@ -56,7 +56,7 @@ class UpdateCartServiceTest {
     Cart expected = new Cart(1L, 1L, 1L);
     Long requestExtraQuantity = 1L;
     Long stock = 2L;
-    increaseTheCartQuantityService.increaseQuantity(expected, requestExtraQuantity, stock, session);
+    increaseTheCartQuantityService.update(expected, requestExtraQuantity, stock, session);
     Cart actual = cartDaoFrame.selectById(new ProductAndMemberCompositeKey(1L, 1L), session).get();
     Assertions.assertEquals(expected.getProductQuantity() + requestExtraQuantity,
         actual.getProductQuantity());
@@ -70,72 +70,8 @@ class UpdateCartServiceTest {
     Long stock = 2L;
 
     Assertions.assertThrowsExactly(OutOfStockException.class,
-        () -> increaseTheCartQuantityService.increaseQuantity(expected, requestExtraQuantity, stock,
+        () -> increaseTheCartQuantityService.update(expected, requestExtraQuantity, stock,
             session));
-  }
-
-
-  @DisplayName("감소해도 카트의 총 개수가 1개 이상인 경우, 카트를 지우는 전략 사용")
-  @Test
-  void decreaseProductCartQuantity_whenResultOfCartProductQuantityOver0_decreaseCartQauntity()
-      throws Exception {
-    Cart expectedCart = new Cart(1L, 2L, 2L);
-    Long expectedQuantity = 2L;
-    Long requestExtraQuantity = 1L;
-    updateCartServiceWithDeleteStrategyWhenCartQuantityUnder0.decreaseQuantity(expectedCart,
-        requestExtraQuantity, session);
-    Long actualQuantity = cartDaoFrame.selectById(new ProductAndMemberCompositeKey(2L, 1L), session)
-        .get().getProductQuantity();
-    Assertions.assertEquals(expectedQuantity - requestExtraQuantity, actualQuantity);
-  }
-
-  @DisplayName("감소해도 카트의 총 개수가 1개 이상인 경우, 업데이트 개수가 0개 미만일 경우에러를 던지는 전략 사용")
-  @Test
-  void decreaseProductCartQuantity_WhenResultOfCartProductQuantityOver0WithUsingErrorStrategy_decreaseCartQauntity()
-      throws Exception {
-   Cart expectedCart = new Cart(1L, 2L, 2L);
-    Long expectedQuantity = 2L;
-    Long requestExtraQuantity = 1L;
-    updateCartServiceWithThrowErrorWhenCartQuantityUnder0.decreaseQuantity(expectedCart,
-        requestExtraQuantity, session);
-    Long actualQuantity = cartDaoFrame.selectById(new ProductAndMemberCompositeKey(2L, 1L), session)
-        .get().getProductQuantity();
-    Assertions.assertEquals(expectedQuantity - requestExtraQuantity, actualQuantity);
-  }
-
-  @DisplayName("감소했을 때 개수가 0개인 경우, 카트를 지우는 전략을 사용")
-  @Test
-  void decreaseProductCartQuantity_whenResultOfCartProductQuantityEqual0WithDeleteCartStrategy_deleteCart()
-      throws Exception {
-Cart expectedCart = new Cart(1L, 2L, 2L);
-    Long requestExtraQuantity = 2L;
-    updateCartServiceWithDeleteStrategyWhenCartQuantityUnder0.decreaseQuantity(expectedCart,
-        requestExtraQuantity, session);
-    Optional<Cart> cartOptional = cartDaoFrame.selectById(new ProductAndMemberCompositeKey(2L, 1L), session);
-    Assertions.assertThrowsExactly(NoSuchElementException.class, cartOptional::get);
-  }
-
-   @DisplayName("감소했을 때 개수가 0개 미만인 경우, 카트를 지우는 전략을 사용")
-  @Test
-  void decreaseProductCartQuantity_whenResultOfCartProductQuantityUnder0_deleteCart()
-      throws Exception {
-Cart expectedCart = new Cart(1L, 2L, 2L);
-    Long requestExtraQuantity = 3L;
-    updateCartServiceWithDeleteStrategyWhenCartQuantityUnder0.decreaseQuantity(expectedCart,
-        requestExtraQuantity, session);
-    Optional<Cart> cartOptional = cartDaoFrame.selectById(new ProductAndMemberCompositeKey(2L, 1L), session);
-    Assertions.assertThrowsExactly(NoSuchElementException.class, cartOptional::get);
-  }
-
-
-  @DisplayName("감소했을 때 개수가 0개이하 경우, 에러를 던지는 전략 사용")
-  @Test
-  void decreaseProductCartQuantity_whenResultOfCartProductQuantityUnder0_throwAnError() {
-    Cart expectedCart = new Cart(1L, 2L, 2L);
-    Long requestExtraQuantity = 2L;
-    Assertions.assertThrowsExactly(CartQuantityIsUnder0Exception.class,
-        () -> updateCartServiceWithThrowErrorWhenCartQuantityUnder0.decreaseQuantity(expectedCart,
-            requestExtraQuantity, session));
   }
 
 }

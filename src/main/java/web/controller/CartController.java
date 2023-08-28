@@ -4,8 +4,7 @@ import app.dao.cart.CartDao;
 import app.dao.cart.CartDaoFrame;
 import app.dao.member.MemberDao;
 import app.dao.member.MemberDaoFrame;
-import app.dao.product.ProductDao;
-import app.dto.cart.AllCartProductInfoDto;
+import app.dto.cart.AllCartProductInfoDtoWithPagination;
 import app.entity.Cart;
 import app.entity.Member;
 import app.entity.Product;
@@ -36,7 +35,7 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @WebServlet({"/cart"})
-public class CartServlet extends HttpServlet {
+public class CartController extends HttpServlet {
 
  private final CartDaoFrame<ProductAndMemberCompositeKey, Cart> cartDaoFrame = new CartDao();
   private final MemberDaoFrame<Long, Member> memberDao = new MemberDao();
@@ -56,12 +55,17 @@ public class CartServlet extends HttpServlet {
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
 //    Long memberId = (Long) request.getSession().getAttribute("memberId");
+    log("once is completed");
     Long memberId = 1L;
 
     try {
 
-      AllCartProductInfoDto cartInfo = cartService.getCartProductListByMember(memberId);
-      request.setAttribute("cartInfo", cartInfo);
+      AllCartProductInfoDtoWithPagination cartInfo = cartService.getCartProductListByMemberPagination(
+          memberId);
+      request.setAttribute("productList",
+          cartInfo.getCartProductInfoDto().getCartProductDtoList());
+      request.setAttribute("totalPrice", cartInfo.getCartProductInfoDto().getTotalPrice());
+      request.setAttribute("pagination", cartInfo.getPaging());
       request.getRequestDispatcher("templates/cart/cart.jsp").forward(request, response);
     } catch (MemberNotFoundException e) {
       throw new MemberNotFoundException(ErrorCode.MEMBER_NOT_FOUND);
@@ -77,8 +81,10 @@ public class CartServlet extends HttpServlet {
     String action = request.getParameter("action");
 
     try {
-      Long memberId = (Long) request.getSession().getAttribute("memberId");
+      Long memberId = 1L;
+//      Long memberId = (Long) request.getSession().getAttribute("memberId");
       Long productId = Long.parseLong(request.getParameter("productId"));
+
       ProductAndMemberCompositeKey compositeKey = new ProductAndMemberCompositeKey(productId,
           memberId);
 
@@ -89,9 +95,9 @@ public class CartServlet extends HttpServlet {
         Long updatedQuantity = Long.parseLong(request.getParameter("updatedQuantity"));
         cartService.updateQuantityOfCartProduct(compositeKey, updatedQuantity);
       } else if ("delete".equals(action)) {
-        cartService.delete(compositeKey, 1L);
+        cartService.delete(compositeKey);
       }
-      HttpUtil.forward(request, response, "/shopping-cart");
+      HttpUtil.redirect(response, "/cart");
     } catch (MemberNotFoundException e) {
       throw new MemberNotFoundException(ErrorCode.MEMBER_NOT_FOUND);
     } catch (ProductNotFoundException e) {

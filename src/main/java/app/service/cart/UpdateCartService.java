@@ -5,8 +5,6 @@ import org.apache.ibatis.session.SqlSession;
 
 public interface UpdateCartService {
 
-  void increaseQuantity(Cart cart, Long requestQuantity, Long stock, SqlSession session)
+  void update(Cart cart, Long requestQuantity, Long stock, SqlSession session)
       throws Exception;
-
-  void decreaseQuantity(Cart cart, Long requestQuantity, SqlSession session) throws Exception;
 }

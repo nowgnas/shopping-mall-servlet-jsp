@@ -62,7 +62,7 @@ import org.junit.jupiter.api.Test;
    @Test
    void deleteCartProduct_MemberIsNotExisted_CatchMemberNotFoundException() {
      Assertions.assertThrowsExactly(MemberNotFoundException.class,
-         () -> cartService.delete(new ProductAndMemberCompositeKey(1L, 100L), 2L));
+         () -> cartService.delete(new ProductAndMemberCompositeKey(1L, 100L)));
    }
 
    @DisplayName("카트에 상품이 있을 때 모든 카트의 상품의 상세 정보 총 가격 얻기")
