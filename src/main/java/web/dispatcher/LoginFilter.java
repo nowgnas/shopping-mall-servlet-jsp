@@ -1,5 +1,7 @@
 package web.dispatcher;
 
+import org.apache.log4j.Logger;
+
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
@@ -8,8 +10,10 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.net.URLEncoder;
 
-@WebFilter("*.bit")
+@WebFilter("/*")
 public class LoginFilter implements Filter {
+
+  private Logger work_log = Logger.getLogger("work");
 
   @Override
   public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
@@ -18,8 +22,9 @@ public class LoginFilter implements Filter {
     request.setCharacterEncoding("UTF-8");
     // 1. request 파라미터를 이용한 요청 필터 작업 수행
     String uri = ((HttpServletRequest) request).getRequestURI();
-
+    work_log.debug("doFilter----" + uri);
     String path = uri.substring(uri.lastIndexOf("/"));
+    work_log.debug("doFilter----" + path);
     if (path.equals("/")) {
       ((HttpServletResponse) response).sendRedirect("main.bit");
       return;
