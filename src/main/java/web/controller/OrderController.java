@@ -4,23 +4,21 @@ import app.dto.order.form.OrderCartCreateForm;
 import app.dto.order.form.OrderCreateForm;
 import app.dto.order.request.OrderCartCreateDto;
 import app.dto.order.request.OrderCreateDto;
-import app.dto.response.MemberDetail;
 import app.dto.order.response.ProductOrderDetailDto;
 import app.dto.order.response.ProductOrderDto;
+import app.dto.response.MemberDetail;
 import app.entity.Order;
 import app.exception.DomainException;
-import app.exception.coupon.CouponEntityNotFoundException;
 import app.exception.order.OrderProductNotEnoughStockQuantityException;
 import app.service.order.OrderService;
-import web.ControllerFrame;
-import web.dispatcher.Navi;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.List;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import web.ControllerFrame;
+import web.dispatcher.Navi;
 
 public class OrderController implements ControllerFrame {
 
@@ -54,7 +52,8 @@ public class OrderController implements ControllerFrame {
   }
 
   private String build(
-      HttpServletRequest request, HttpServletResponse response, String view, String cmd) {
+      HttpServletRequest request, HttpServletResponse response, String view, String cmd)
+      throws UnsupportedEncodingException {
     if (view.equals("direct") && cmd.equals("form")) {
       return getCreateOrderForm(request, response);
     } else if (view.equals("direct") && cmd.equals("create")) {
@@ -75,11 +74,9 @@ public class OrderController implements ControllerFrame {
   }
 
   // TODO: 상품 주문 폼
-  private String getCreateOrderForm(HttpServletRequest request, HttpServletResponse response) {
-    String errorMessage = null;
+  private String getCreateOrderForm(HttpServletRequest request, HttpServletResponse response)
+      throws UnsupportedEncodingException {
     try {
-      errorMessage = URLEncoder.encode("시스템 에러", "UTF-8");
-
       Long productId = Long.parseLong(request.getParameter("productId"));
       Long quantity = Long.parseLong(request.getParameter("quantity"));
 
@@ -95,18 +92,18 @@ public class OrderController implements ControllerFrame {
 
       return Navi.FORWARD_ORDER_FORM;
     } catch (DomainException e) {
-      return Navi.REDIRECT_SHOP_DETAIL + String.format("?errorMessage=%s", e.getMessage());
+      return Navi.REDIRECT_SHOP_DETAIL
+          + String.format("?errorMessage=%s", URLEncoder.encode(e.getMessage(), "UTF-8"));
     } catch (Exception e) {
-      return Navi.REDIRECT_MAIN + String.format("?errorMessage=%s", errorMessage);
+      return Navi.REDIRECT_MAIN
+          + String.format("?errorMessage=%s", URLEncoder.encode("시스템 에러", "UTF-8"));
     }
   }
 
   // TODO: 상품 주문
-  private String createOrder(HttpServletRequest request, HttpServletResponse response) {
-    String errorMessage = null;
+  private String createOrder(HttpServletRequest request, HttpServletResponse response)
+      throws UnsupportedEncodingException {
     try {
-      errorMessage = URLEncoder.encode("시스템 에러", "UTF-8");
-
       Long couponId =
           Long.parseLong(request.getParameter("couponId")) == 0
               ? null
@@ -137,18 +134,18 @@ public class OrderController implements ControllerFrame {
       request.setAttribute("productOrderDetail", productOrderDetail);
       return String.format(Navi.REDIRECT_ORDER_DETAIL, order.getId());
     } catch (DomainException e) {
-      return Navi.REDIRECT_SHOP_DETAIL + String.format("?errorMessage=%s", e.getMessage());
+      return Navi.REDIRECT_SHOP_DETAIL
+          + String.format("?errorMessage=%s", URLEncoder.encode(e.getMessage(), "UTF-8"));
     } catch (Exception e) {
-      return Navi.REDIRECT_MAIN + String.format("?errorMessage=%s", errorMessage);
+      return Navi.REDIRECT_MAIN
+          + String.format("?errorMessage=%s", URLEncoder.encode("시스템 에러", "UTF-8"));
     }
   }
 
   // TODO: 장바구니 상품 주문 폼
-  private String getCreateCartOrderForm(HttpServletRequest request, HttpServletResponse response) {
-    String errorMessage = null;
+  private String getCreateCartOrderForm(HttpServletRequest request, HttpServletResponse response)
+      throws UnsupportedEncodingException {
     try {
-      errorMessage = URLEncoder.encode("시스템 에러", "UTF-8");
-
       OrderCartCreateForm createCartOrderForm = orderService.getCreateCartOrderForm(memberId);
       request.setAttribute("memberName", createCartOrderForm.getMemberName());
       request.setAttribute("defaultAddress", createCartOrderForm.getDefaultAddress());
@@ -157,18 +154,18 @@ public class OrderController implements ControllerFrame {
 
       return Navi.FORWARD_ORDER_CART_FORM;
     } catch (DomainException e) {
-      return Navi.REDIRECT_CART_FORM + String.format("?errorMessage=%s", e.getMessage());
+      return Navi.REDIRECT_CART_FORM
+          + String.format("?errorMessage=%s", URLEncoder.encode(e.getMessage(), "UTF-8"));
     } catch (Exception e) {
-      return Navi.REDIRECT_MAIN + String.format("?errorMessage=%s", errorMessage);
+      return Navi.REDIRECT_MAIN
+          + String.format("?errorMessage=%s", URLEncoder.encode("시스템 에러", "UTF-8"));
     }
   }
 
   // TODO: 장바구니 상품 주문
-  private String createCartOrder(HttpServletRequest request, HttpServletResponse response) {
-    String errorMessage = null;
+  private String createCartOrder(HttpServletRequest request, HttpServletResponse response)
+      throws UnsupportedEncodingException {
     try {
-      errorMessage = URLEncoder.encode("시스템 에러", "UTF-8");
-
       Long couponId =
           Long.parseLong(request.getParameter("couponId")) == 0
               ? null
@@ -194,48 +191,48 @@ public class OrderController implements ControllerFrame {
       request.setAttribute("orderDetails", orderDetails);
       return String.format(Navi.REDIRECT_ORDER_DETAIL, order.getId());
     } catch (DomainException e) {
-      return Navi.REDIRECT_CART_FORM + String.format("?errorMessage=%s", e.getMessage());
+      return Navi.REDIRECT_CART_FORM
+          + String.format("?errorMessage=%s", URLEncoder.encode(e.getMessage(), "UTF-8"));
     } catch (Exception e) {
-      return Navi.REDIRECT_MAIN + String.format("?errorMessage=%s", errorMessage);
+      return Navi.REDIRECT_MAIN
+          + String.format("?errorMessage=%s", URLEncoder.encode("시스템 에러", "UTF-8"));
     }
   }
 
-  private String deleteOrder(HttpServletRequest request, HttpServletResponse response) {
-    String errorMessage = null;
+  private String deleteOrder(HttpServletRequest request, HttpServletResponse response)
+      throws UnsupportedEncodingException {
     try {
-      errorMessage = URLEncoder.encode("시스템 에러", "UTF-8");
-
       Long orderId = Long.parseLong(request.getParameter("orderId"));
       orderService.cancelOrder(orderId);
       return String.format(Navi.REDIRECT_ORDER_DETAIL, orderId);
     } catch (DomainException e) {
-      return Navi.REDIRECT_ORDER_DETAIL + String.format("?errorMessage=%s", e.getMessage());
+      return Navi.REDIRECT_ORDER_DETAIL
+          + String.format("?errorMessage=%s", URLEncoder.encode(e.getMessage(), "UTF-8"));
     } catch (Exception e) {
-      return Navi.REDIRECT_MAIN + String.format("?errorMessage=%s", errorMessage);
+      return Navi.REDIRECT_MAIN
+          + String.format("?errorMessage=%s", URLEncoder.encode("시스템 에러", "UTF-8"));
     }
   }
 
-  private String getProductOrders(HttpServletRequest request, HttpServletResponse response) {
-    String errorMessage = null;
+  private String getProductOrders(HttpServletRequest request, HttpServletResponse response)
+      throws UnsupportedEncodingException {
     try {
-      errorMessage = URLEncoder.encode("시스템 에러", "UTF-8");
-
       List<ProductOrderDto> productOrders =
           orderService.getProductOrdersForMemberCurrentYear(memberId);
       request.setAttribute("productOrders", productOrders);
       return Navi.FORWARD_ORDER_LIST;
     } catch (DomainException e) {
-      return Navi.REDIRECT_MAIN + String.format("?errorMessage=%s", e.getMessage());
+      return Navi.REDIRECT_MAIN
+          + String.format("?errorMessage=%s", URLEncoder.encode(e.getMessage(), "UTF-8"));
     } catch (Exception e) {
-      return Navi.REDIRECT_MAIN + String.format("?errorMessage=%s", errorMessage);
+      return Navi.REDIRECT_MAIN
+          + String.format("?errorMessage=%s", URLEncoder.encode("시스템 에러", "UTF-8"));
     }
   }
 
-  private String getProductOrderDetail(HttpServletRequest request, HttpServletResponse response) {
-    String errorMessage = null;
+  private String getProductOrderDetail(HttpServletRequest request, HttpServletResponse response)
+      throws UnsupportedEncodingException {
     try {
-      errorMessage = URLEncoder.encode("시스템 에러", "UTF-8");
-
       Long orderId = Long.parseLong(request.getParameter("orderId"));
       ProductOrderDetailDto productOrderDetail =
           orderService.getOrderDetailsForMemberAndOrderId(orderId, memberId);
@@ -245,9 +242,11 @@ public class OrderController implements ControllerFrame {
       request.setAttribute("productOrderDetail", productOrderDetail);
       return Navi.FORWARD_ORDER_DETAIL;
     } catch (DomainException e) {
-      return Navi.REDIRECT_ORDER_LIST + String.format("?errorMessage=%s", e.getMessage());
+      return Navi.REDIRECT_ORDER_LIST
+          + String.format("?errorMessage=%s", URLEncoder.encode(e.getMessage(), "UTF-8"));
     } catch (Exception e) {
-      return Navi.REDIRECT_MAIN + String.format("?errorMessage=%s", errorMessage);
+      return Navi.REDIRECT_MAIN
+          + String.format("?errorMessage=%s", URLEncoder.encode("시스템 에러", "UTF-8"));
     }
   }
 }
