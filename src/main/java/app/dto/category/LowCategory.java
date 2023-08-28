@@ -1,6 +1,5 @@
-package app.dto.category.response;
+package app.dto.category;
 
-import app.dto.category.MiddleCategory;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,8 +12,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
-public class CategoryHierarchy {
+public class LowCategory {
   private Long id;
   private String name;
-  private MiddleCategory middleCategory;
 }
