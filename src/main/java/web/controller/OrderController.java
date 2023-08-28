@@ -106,7 +106,7 @@ public class OrderController implements ControllerFrame {
       throws UnsupportedEncodingException {
     try {
       Long couponId =
-          Long.parseLong(request.getParameter("couponId")) == 0
+          request.getParameter("couponId") == null
               ? null
               : Long.parseLong(request.getParameter("couponId"));
       Long productId = Long.parseLong(request.getParameter("productId"));
@@ -168,7 +168,7 @@ public class OrderController implements ControllerFrame {
       throws UnsupportedEncodingException {
     try {
       Long couponId =
-          Long.parseLong(request.getParameter("couponId")) == 0
+          request.getParameter("couponId") == null
               ? null
               : Long.parseLong(request.getParameter("couponId"));
       String roadName = request.getParameter("roadName");
