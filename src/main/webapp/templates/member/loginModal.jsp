@@ -38,18 +38,7 @@
 
                     <div class="text-center text-muted delimiter">or use a social network</div>
                     <div class="d-flex justify-content-center social-buttons">
-                        <button type="button" class="btn btn-secondary btn-round" data-toggle="tooltip"
-                                data-placement="top" title="Twitter">
-                            <i class="fab fa-twitter"></i>
-                        </button>
-                        <button type="button" class="btn btn-secondary btn-round" data-toggle="tooltip"
-                                data-placement="top" title="Facebook">
-                            <i class="fab fa-facebook"></i>
-                        </button>
-                        <button type="button" class="btn btn-secondary btn-round" data-toggle="tooltip"
-                                data-placement="top" title="Linkedin">
-                            <i class="fab fa-linkedin"></i>
-                        </button>
+                        <a href="#"><img src="img/icon/kakaotalk_sharing_btn_small.png"/></a>
                     </div>
                 </div>
             </div>
