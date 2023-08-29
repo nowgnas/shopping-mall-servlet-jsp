@@ -95,7 +95,9 @@
                             <tr>
                                 <td class="product__cart__item">
                                     <div class="product__cart__item__pic">
-                                        <img src="${product.thumbnailUrl}" width="80" height="80" alt="">
+                                        <a href="/product.bit?view=shop-detail&productId=${product.productId}">
+                                            <img src="${product.thumbnailUrl}" width="80" height="80" alt="">
+                                        </a>
                                     </div>
                                     <div class="product__cart__item__text">
                                         <h6>${product.productName}</h6>
