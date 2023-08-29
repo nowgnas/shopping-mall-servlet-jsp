@@ -115,7 +115,8 @@
                                             <li>
                                                 <a href="#" class="likes-btn"
                                                    data-product-id="${product.id}"
-                                                   data-login-info="${loginMember}"><img
+                                                   data-login-info="${loginMember}"
+                                                ><img
                                                         src="img/icon/heart.png" alt=""></a>
                                             </li>
                                         </c:if>

@@ -71,12 +71,12 @@
                             <p>주소<span>*</span></p>
                             <input type="text" placeholder="도로명 주소" class="checkout__input__add"
                                    name="roadName"
-                                   value="${defaultAddress.roadName}" required
+                                   value="<c:if test="${defaultAddress.roadName != null}">${defaultAddress.roadName}</c:if>" required
                                    oninvalid="this.setCustomValidity('도로명 주소를 입력해주세요.')"
                                    oninput="this.setCustomValidity('')">
                             <input type="text" placeholder="상세 주소" class="checkout__input__add"
                                    name="addrDetail"
-                                   value="${defaultAddress.addrDetail}" required
+                                   value="<c:if test="${defaultAddress.addrDetail != null}">${defaultAddress.addrDetail}</c:if>" required
                                    oninvalid="this.setCustomValidity('상세 주소를 입력해주세요.')"
                                    oninput="this.setCustomValidity('')">
                         </div>
@@ -84,7 +84,7 @@
                             <p>우편번호<span>*</span></p>
                             <input type="text" placeholder="우편번호" class="checkout__input__add"
                                    name="zipCode"
-                                   value="${defaultAddress.zipCode}" required
+                                   value="<c:if test="${defaultAddress.zipCode != null}">${defaultAddress.zipCode}</c:if>" required
                                    oninvalid="this.setCustomValidity('우편번호를 입력해주세요.')"
                                    oninput="this.setCustomValidity('')">
                         </div>

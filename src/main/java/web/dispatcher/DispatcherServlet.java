@@ -20,9 +20,9 @@ import java.util.Map;
 @WebServlet({"/DispatcherServlet", "/web/dispatcher", "*.bit"})
 public class DispatcherServlet extends HttpServlet {
   private static final long serialVersionUID = 1L;
-  private Map<String, ControllerFrame> controllerMapper = new HashMap<>();
-  private Map<String, RestControllerFrame> restControllerMapper = new HashMap<>();
-  private Logger work_log = Logger.getLogger("work");
+  private final Map<String, ControllerFrame> controllerMapper = new HashMap<>();
+  private final Map<String, RestControllerFrame> restControllerMapper = new HashMap<>();
+  private final Logger work_log = Logger.getLogger("work");
 
   public DispatcherServlet() {
     super();
