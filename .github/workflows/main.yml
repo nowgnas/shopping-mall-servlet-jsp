@@ -15,4 +15,4 @@ jobs:
 
       - name: Make CURL POST request
         run: |
-          curl -X POST http://bitbit.kro.kr:8088/job/lotte-mall/build
+          curl -X POST http://bitbit.kro.kr:8088/job/lotte-mall/build --user 116eb06dd739dc0e07100177055cc4cc69 -v
