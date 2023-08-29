@@ -3,7 +3,6 @@ package app.service.cart;
 import app.dao.cart.CartDaoFrame;
 import app.entity.Cart;
 import app.entity.ProductAndMemberCompositeKey;
-import app.exception.ErrorCode;
 import app.exception.cart.CartQuantityIsUnder0Exception;
 import lombok.AllArgsConstructor;
 import org.apache.ibatis.session.SqlSession;
