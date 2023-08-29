@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import app.entity.Delivery;
-import app.exception.ErrorCode;
 import config.TestConfig;
 import org.apache.ibatis.session.SqlSession;
 import org.junit.jupiter.api.AfterEach;
@@ -68,8 +67,7 @@ public class DeliveryDaoInsertTest {
     // when, then
     assertThrows(
         Exception.class,
-        () -> deliveryDao.insert(delivery, session),
-        ErrorCode.CANNOT_INSERT_DELIVERY.getMessage());
+        () -> deliveryDao.insert(delivery, session));
     session.commit();
     session.close();
   }

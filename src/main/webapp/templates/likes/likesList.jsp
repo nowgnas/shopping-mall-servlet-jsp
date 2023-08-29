@@ -32,6 +32,11 @@
     <link rel="stylesheet" href="css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="css/style.css" type="text/css">
 </head>
+<style>
+    .product__checkbox {
+      padding: 35px;
+    }
+</style>
 
 <body>
 <!-- Page Preloder -->
@@ -64,12 +69,12 @@
 <section class="shopping-cart spad">
     <div class="container">
         <div class="row">
-            <div class="col-lg-8">
+            <div class="col-lg-12">
                 <div class="shopping__cart__table">
                     <table>
                         <thead>
                         <tr>
-                            <th>Select</th> <!-- 체크박스 추가 -->
+                            <th class="col-md-2">Select</th> <!-- 체크박스 추가 -->
                             <th>Thumbnail</th>
                             <th>Product</th>
                             <th>Price</th>
@@ -79,7 +84,7 @@
                         <c:forEach items="${products.list}" var="product">
                             <tr>
                                 <td class="product__cart__item">
-                                    <div class="product__cart__item__pic">
+                                    <div class="product__checkbox">
                                         <input type="checkbox"
                                                onclick="addToSelectedProducts(this)"
                                                name="selectedProducts" value="${product.id}">
@@ -113,44 +118,46 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="product__pagination">
-                            <c:if test="${products.paging.currentPage > 1}">
-                                <a class="mr-3"
-                                   href="/likes.bit?view=likes&curPage=${products.paging.currentPage - 1}">PREV</a>
-                            </c:if>
+                            <c:if test="${not empty products.list}">
+                                <c:if test="${products.paging.currentPage > 1}">
+                                    <a class="mr-3"
+                                       href="/likes.bit?view=likes&curPage=${products.paging.currentPage - 1}">PREV</a>
+                                </c:if>
 
-                            <c:set var="startPage" value="${products.paging.currentPage - 2}"/>
-                            <c:set var="endPage" value="${products.paging.currentPage + 2}"/>
+                                <c:set var="startPage" value="${products.paging.currentPage - 2}"/>
+                                <c:set var="endPage" value="${products.paging.currentPage + 2}"/>
 
-                            <c:if test="${startPage < 1}">
-                                <c:set var="startPage" value="1"/>
-                                <c:set var="endPage" value="5"/>
-                            </c:if>
+                                <c:if test="${startPage < 1}">
+                                    <c:set var="startPage" value="1"/>
+                                    <c:set var="endPage" value="5"/>
+                                </c:if>
 
-                            <c:if test="${endPage > products.paging.totalPage}">
-                                <c:set var="endPage" value="${products.paging.totalPage}"/>
-                                <c:set var="startPage" value="${products.paging.totalPage - 4}"/>
-                                <c:choose>
-                                    <c:when test="${startPage < 1}">
-                                        <c:set var="startPage" value="1"/>
-                                    </c:when>
-                                </c:choose>
-                            </c:if>
-                            <c:forEach begin="${startPage}" end="${endPage}" var="page">
-                                <c:choose>
-                                    <c:when test="${page == products.paging.currentPage}">
-                                        <a id="curPage">${page}</a>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <a href="/likes.bit?view=likes&curPage=${page}">${page}</a>
-                                    </c:otherwise>
-                                </c:choose>
-                            </c:forEach>
+                                <c:if test="${endPage > products.paging.totalPage}">
+                                    <c:set var="endPage" value="${products.paging.totalPage}"/>
+                                    <c:set var="startPage"
+                                           value="${products.paging.totalPage - 4}"/>
+                                    <c:choose>
+                                        <c:when test="${startPage < 1}">
+                                            <c:set var="startPage" value="1"/>
+                                        </c:when>
+                                    </c:choose>
+                                </c:if>
+                                <c:forEach begin="${startPage}" end="${endPage}" var="page">
+                                    <c:choose>
+                                        <c:when test="${page == products.paging.currentPage}">
+                                            <a id="curPage">${page}</a>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <a href="/likes.bit?view=likes&curPage=${page}">${page}</a>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </c:forEach>
 
-                            <c:if test="${products.paging.currentPage < products.paging.totalPage}">
-                                <a href="/likes.bit?view=likes&curPage=${products.paging.currentPage + 1}">NEXT</a>
+                                <c:if test="${products.paging.currentPage < products.paging.totalPage}">
+                                    <a href="/likes.bit?view=likes&curPage=${products.paging.currentPage + 1}">NEXT</a>
+                                </c:if>
                             </c:if>
                         </div>
-
                     </div>
                 </div>
                 <div class="row">

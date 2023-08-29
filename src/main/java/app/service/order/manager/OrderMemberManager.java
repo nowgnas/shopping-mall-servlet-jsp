@@ -1,7 +1,7 @@
 package app.service.order.manager;
 
 import app.dao.member.MemberDao;
-import app.dto.response.OrderMemberDetail;
+import app.dto.member.response.OrderMemberDetail;
 import app.entity.Member;
 import app.exception.member.MemberEntityNotFoundException;
 import app.exception.order.OrderMemberNotEnoughMoneyException;

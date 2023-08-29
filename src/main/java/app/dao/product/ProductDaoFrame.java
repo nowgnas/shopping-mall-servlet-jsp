@@ -8,9 +8,10 @@ import app.dto.product.ProductListItemOfLike;
 import app.dto.product.response.ProductDetailForOrder;
 import app.entity.Category;
 import app.entity.Product;
+import org.apache.ibatis.session.SqlSession;
+
 import java.util.List;
 import java.util.Map;
-import org.apache.ibatis.session.SqlSession;
 
 public interface ProductDaoFrame<K, V extends Product> extends DaoFrame<K, V> {
 

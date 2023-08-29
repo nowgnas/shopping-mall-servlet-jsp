@@ -2,7 +2,7 @@ package web.controller;
 
 import app.dto.product.response.ProductDetailWithCategory;
 import app.dto.product.response.ProductListWithPagination;
-import app.dto.response.MemberDetail;
+import app.dto.member.response.MemberDetail;
 import app.entity.Category;
 import app.service.category.CategoryService;
 import app.service.category.CategoryServiceImpl;

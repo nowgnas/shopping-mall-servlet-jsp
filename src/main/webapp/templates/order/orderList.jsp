@@ -101,12 +101,12 @@
                                         </div>
                                         <div class="product__cart__item__text">
                                             <h6>${product.name}</h6>
-                                            <h5>${product.price} 원</h5>
+                                            <h5>${product.price}원</h5>
                                         </div>
                                     </td>
                                     <td class="quantity__item">
                                         <div class="quantity">
-                                            <h5>${product.quantity} 개</h5>
+                                            <h5>${product.quantity}개</h5>
                                         </div>
                                     </td>
                                 </tr>

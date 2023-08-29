@@ -1,13 +1,17 @@
 package app.exception.cart;
 
-import app.exception.CustomException;
-import app.exception.ErrorCode;
+import app.exception.DomainException;
 
-public class OutOfStockException extends CustomException {
+public class OutOfStockException extends DomainException {
 
-  public OutOfStockException(ErrorCode errorCode) {
-    super(errorCode);
+  private static final String errorMessage = "상품의 재고가 없습니다";
+
+  public OutOfStockException() {
+    super(errorMessage);
   }
 
+  @Override
+  public int getStatusCode() {
+    return 400;
+  }
 }
-

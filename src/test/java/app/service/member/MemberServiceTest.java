@@ -1,9 +1,9 @@
 package app.service.member;
 
 import app.dao.member.MemberDao;
-import app.dto.request.LoginDto;
-import app.dto.request.MemberRegisterDto;
-import app.dto.response.MemberDetail;
+import app.dto.member.request.LoginDto;
+import app.dto.member.request.MemberRegisterDto;
+import app.dto.member.response.MemberDetail;
 import app.entity.Member;
 import app.exception.member.DuplicatedEmailException;
 import app.exception.member.MemberEntityNotFoundException;

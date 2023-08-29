@@ -50,15 +50,15 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="product__details__breadcrumb">
-                        <a href="./index.html">Home</a>
-                        <a href="./shop.html">Shop</a>
+                        <a href="/main.bit">Home</a>
+                        <a href="/product.bit?view=shop&curPage=0&sort=DATE_DESC">Shop</a>
                         <span>Product Details</span>
                     </div>
                 </div>
             </div>
             <div class="row justify-content-center">
                 <div class="product__details__pic__item">
-                    <img src="${productDetail.detail.url}" alt="">
+                    <img src="${productDetail.detail.url}" alt="" width="500px" height="500px">
                 </div>
             </div>
         </div>
@@ -110,13 +110,19 @@
                             </div>
                         </div>
                         <p>Total Price: $<span id="totalPrice">10.00</span></p>
-                        <div class="product__details__btns__option">
+                        <div id="common-parent-element" class="product__details__btns__option">
                             <%-- todo: likes --%>
                             <c:if test="${productDetail.detail.isLiked eq false}">
-                                <a href="#"><span>&#9825;</span>add to wishlist</a>
+                                <a href="#" class="likes-btn"
+                                   data-product-id="${productDetail.detail.id}"
+                                   data-login-info="${loginMember}"><span>&#9825;</span>add to
+                                    wishlist</a>
                             </c:if>
                             <c:if test="${productDetail.detail.isLiked eq true}">
-                                <a href="#"><span>&#9829;</span>add to wishlist</a>
+                                <a href="#" class="likes-cancel-btn"
+                                   data-product-id="${productDetail.detail.id}"
+                                   data-login-info="${loginMember}"><span>&#9829;</span>cancel to
+                                    wishlist</a>
                             </c:if>
                         </div>
                         <a id="order-link" href="" class="btn btn-outline-success">buy</a>
@@ -148,6 +154,7 @@
 <script src="../../js/mixitup.min.js"></script>
 <script src="../../js/owl.carousel.min.js"></script>
 <script src="../../js/main.js"></script>
+<script src="../../js/detail-likes.js"></script>
 
 <script>
   // Set the default value when the page loads

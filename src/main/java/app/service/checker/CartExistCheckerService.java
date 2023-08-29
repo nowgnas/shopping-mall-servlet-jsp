@@ -4,18 +4,23 @@ import app.dao.DaoFrame;
 import app.entity.Cart;
 import app.entity.ProductAndMemberCompositeKey;
 import app.exception.ErrorCode;
+import app.exception.cart.CartNotFoundException;
 import lombok.AllArgsConstructor;
 import org.apache.ibatis.session.SqlSession;
 
 @AllArgsConstructor
-public class CartExistCheckerService implements
-    EntityExistCheckerService<ProductAndMemberCompositeKey, Cart> {
+public class CartExistCheckerService
+    implements EntityExistCheckerService<ProductAndMemberCompositeKey, Cart> {
 
   @Override
-  public Cart isExisted(DaoFrame<ProductAndMemberCompositeKey, Cart> daoFrame,
-      ProductAndMemberCompositeKey id, SqlSession session) throws Exception {
-    return daoFrame.selectById(id, session)
-        .orElseThrow(() -> new app.exception.cart.CartNotFoundException(
-            ErrorCode.CART_IS_NOT_EXISTED));
+  public Cart isExisted(
+      DaoFrame<ProductAndMemberCompositeKey, Cart> daoFrame,
+      ProductAndMemberCompositeKey id,
+      SqlSession session)
+      throws Exception {
+    return daoFrame
+        .selectById(id, session)
+        .orElseThrow(
+            CartNotFoundException::new);
   }
 }

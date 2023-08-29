@@ -4,17 +4,15 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import app.entity.ProductOrder;
-import app.exception.ErrorCode;
 import config.TestConfig;
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.ibatis.session.SqlSession;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import utils.GetSessionFactory;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class ProductOrderDaoInsertTest {
 
@@ -61,8 +59,7 @@ public class ProductOrderDaoInsertTest {
     // when, then
     assertThrows(
         Exception.class,
-        () -> productOrderDao.insert(productOrder, session),
-        ErrorCode.CANNOT_INSERT_PRODUCT_ORDER.getMessage());
+        () -> productOrderDao.insert(productOrder, session));
     session.commit();
     session.close();
   }

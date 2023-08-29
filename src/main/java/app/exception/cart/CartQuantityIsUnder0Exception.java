@@ -1,12 +1,16 @@
 package app.exception.cart;
 
+import app.exception.DomainException;
 
-import app.exception.CustomException;
-import app.exception.ErrorCode;
+public class CartQuantityIsUnder0Exception extends DomainException {
+  private static final String errorMessage = "0개 이하의 상품을 담을 수 없습니다.";
 
-public class CartQuantityIsUnder0Exception extends CustomException {
+  public CartQuantityIsUnder0Exception() {
+    super(errorMessage);
+  }
 
-  public CartQuantityIsUnder0Exception(ErrorCode errorCode) {
-    super(errorCode);
+  @Override
+  public int getStatusCode() {
+    return 400;
   }
 }

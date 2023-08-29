@@ -90,7 +90,7 @@
            p.id                id,
            CASE
              WHEN l.product_id IS NOT NULL THEN true
-             ELSE false END AS is_Liked
+             ELSE false END AS isLiked
     FROM product p
            left join likes l on p.id = l.product_id and l.member_id = #{memberId}
            left join product_image pi on p.id = pi.product_id

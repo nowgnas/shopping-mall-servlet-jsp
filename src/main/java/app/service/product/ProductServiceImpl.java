@@ -11,13 +11,14 @@ import app.entity.Category;
 import app.enums.SortOption;
 import app.exception.product.ProductNotFoundException;
 import app.utils.GetSessionFactory;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.logging.Logger;
-import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
 
 public class ProductServiceImpl implements ProductService {
   private static ProductServiceImpl instance;
@@ -96,7 +97,6 @@ public class ProductServiceImpl implements ProductService {
     map.put("keyword", keyword.trim());
     List<ProductListItem> products = dao.selectProductsByKeyword(map, session);
     session.close();
-    if (products.isEmpty()) throw new ProductNotFoundException();
     int totalPage = (int) Math.ceil(products.size() / 9);
     Pagination pagination = Pagination.builder().currentPage(curPage).perPage(9).build();
     return ProductListWithPagination.makeListWithPaging(products, pagination, totalPage);

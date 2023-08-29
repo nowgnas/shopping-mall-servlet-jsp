@@ -1,12 +1,15 @@
 package app.exception.cart;
 
+import app.exception.DomainException;
 
-import app.exception.CustomException;
-import app.exception.ErrorCode;
+public class CartNotFoundException extends DomainException {
+    private static final String errorMessage = "존재하지 않는 장바구니 입니다.";
+  public CartNotFoundException() {
+    super(errorMessage);
+  }
 
-public class CartNotFoundException extends CustomException {
-
-  public CartNotFoundException(ErrorCode errorCode) {
-    super(errorCode);
+  @Override
+  public int getStatusCode() {
+    return 404;
   }
 }

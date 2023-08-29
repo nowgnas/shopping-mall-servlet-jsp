@@ -14,10 +14,10 @@ import app.entity.ProductAndMemberCompositeKey;
 import app.exception.likes.LikesEntityNotFoundException;
 import app.utils.GetSessionFactory;
 import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
 
 import java.sql.SQLException;
 import java.util.List;
-import org.apache.ibatis.session.SqlSessionFactory;
 
 public class ProductLikesService implements LikesService {
 
@@ -62,8 +62,8 @@ public class ProductLikesService implements LikesService {
 
       return LikesListWithPagination.builder().list(memberLikesList).paging(paging).build();
     } catch (LikesEntityNotFoundException e) {
-      e.printStackTrace();
-      throw e;
+      //      e.printStackTrace();
+      return LikesListWithPagination.builder().build();
     } catch (Exception e) {
       e.printStackTrace();
       throw new Exception(e.getMessage());

@@ -1,11 +1,12 @@
 package app.utils;
 
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
+
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
-import org.apache.log4j.Logger;
-import org.apache.log4j.PropertyConfigurator;
 
 @WebServlet("/Log4jInit")
 public class Log4jInit extends HttpServlet {

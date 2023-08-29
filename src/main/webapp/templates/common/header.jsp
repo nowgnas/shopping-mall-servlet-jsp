@@ -68,7 +68,7 @@
     </div>
     <div id="mobile-menu-wrap"></div>
     <div class="offcanvas__text">
-        <p>Welcome</p>
+        <p></p>
     </div>
 </div>
 <!-- Offcanvas Menu End -->
@@ -80,7 +80,7 @@
             <div class="row">
                 <div class="col-lg-6 col-md-7">
                     <div class="header__top__left">
-                        <p>Welcome</p>
+                        <p><img src="img/logo2.png"/></p>
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-5">
@@ -110,17 +110,8 @@
             <div class="col-lg-6 col-md-6">
                 <nav class="header__menu mobile-menu">
                     <ul>
-                        <li class="active"><a href="/main.bit">Home</a></li>
+                        <li><a href="/main.bit">Home</a></li>
                         <li><a href="/product.bit?view=shop&curPage=1&sort=PRICE_ASC">Shop</a></li>
-                        <li><a href="#">Pages</a>
-                            <ul class="dropdown">
-                                <li><a href="./about.html">About Us</a></li>
-                                <li><a href="./shop-details.html">Shop Details</a></li>
-                                <li><a href="./shopping-cart.html">Shopping Cart</a></li>
-                                <li><a href="./checkout.html">Check Out</a></li>
-                                <li><a href="./blog-details.html">Blog Details</a></li>
-                            </ul>
-                        </li>
                         <c:if test="${ !empty loginMember }">
                             <li><a href="/order.bit?view=list&cmd=get">Order List</a></li>
                         </c:if>
@@ -136,7 +127,8 @@
                     <c:if test="${ !empty loginMember }">
                         <a href="/likes.bit?view=likes"><img src="img/icon/heart.png" alt=""></a>
                     </c:if>
-                    <a href="shopping-cart.html"><img src="img/icon/cart.png" alt=""> <span>0</span></a>
+                    <a href="/cart.bit?action=get"><img src="img/icon/cart.png" alt="">
+                        <span>0</span></a>
                 </div>
             </div>
         </div>
@@ -147,5 +139,4 @@
 <jsp:include page="../member/loginModal.jsp"/>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="js/header.js"></script>
-
 

@@ -1,5 +1,7 @@
 package web.dispatcher;
 
+import app.exception.member.LoginFailException;
+import app.exception.member.MemberEntityNotFoundException;
 import app.utils.HttpUtil;
 import org.apache.log4j.Logger;
 import web.ControllerFrame;
@@ -7,6 +9,7 @@ import web.RestControllerFrame;
 import web.controller.*;
 import web.restController.LikesRestController;
 import web.restController.MemberRestController;
+import web.restController.OrderRestController;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -26,6 +29,7 @@ public class DispatcherServlet extends HttpServlet {
 
   public DispatcherServlet() {
     super();
+    controllerMapper.put("cart", new CartController());
     controllerMapper.put("main", new MainController());
     controllerMapper.put("member", new MemberController());
     controllerMapper.put("order", new OrderController());
@@ -33,6 +37,7 @@ public class DispatcherServlet extends HttpServlet {
     controllerMapper.put("likes", new LikesController());
     restControllerMapper.put("likes-rest", new LikesRestController());
     restControllerMapper.put("member-rest", new MemberRestController());
+    restControllerMapper.put("order-rest", new OrderRestController());
   }
 
   protected void service(HttpServletRequest request, HttpServletResponse response)
@@ -65,6 +70,10 @@ public class DispatcherServlet extends HttpServlet {
         response.setContentType("text/json;charset=UTF-8");
         response.getWriter().print(result);
       }
+    } catch (MemberEntityNotFoundException e) {
+      response.sendError(e.getStatusCode(), e.getMessage());
+    } catch (LoginFailException e) {
+      response.sendError(e.getStatusCode(), e.getMessage());
     } catch (Exception e) {
       e.printStackTrace();
     }

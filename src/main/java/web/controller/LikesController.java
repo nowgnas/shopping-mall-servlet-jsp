@@ -1,7 +1,7 @@
 package web.controller;
 
 import app.dto.likes.response.LikesListWithPagination;
-import app.dto.response.MemberDetail;
+import app.dto.member.response.MemberDetail;
 import app.exception.DomainException;
 import app.service.likes.ProductLikesService;
 import web.ControllerFrame;
