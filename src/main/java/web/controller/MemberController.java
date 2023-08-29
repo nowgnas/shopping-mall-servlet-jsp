@@ -1,7 +1,5 @@
 package web.controller;
 
-import app.dto.request.LoginDto;
-import app.dto.response.MemberDetail;
 import app.service.member.MemberService;
 import web.ControllerFrame;
 import web.dispatcher.Navi;
@@ -49,7 +47,6 @@ public class MemberController implements ControllerFrame {
   private String loginForm() {
     return Navi.FORWARD_LOGIN_FORM;
   }
-
 
   private String logout(HttpServletRequest request) {
     HttpSession session = request.getSession();

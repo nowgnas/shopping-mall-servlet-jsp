@@ -9,12 +9,13 @@ import app.entity.Category;
 import app.exception.product.CategoryListNotFound;
 import app.exception.product.ProductNotFoundException;
 import app.utils.GetSessionFactory;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
-import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
 
 public class CategoryServiceImpl implements CategoryService {
   private static CategoryServiceImpl instance;

@@ -8,7 +8,7 @@ import app.dto.order.request.OrderCreateDto;
 import app.dto.order.response.ProductOrderDetailDto;
 import app.dto.order.response.ProductOrderDto;
 import app.dto.product.response.ProductDetailForOrder;
-import app.dto.response.OrderMemberDetail;
+import app.dto.member.response.OrderMemberDetail;
 import app.entity.*;
 import app.enums.CouponStatus;
 import app.enums.DeliveryStatus;
@@ -20,11 +20,12 @@ import app.service.order.interfaces.OrderDeleteService;
 import app.service.order.interfaces.OrderReadService;
 import app.service.order.manager.*;
 import app.utils.GetSessionFactory;
-import java.util.ArrayList;
-import java.util.List;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.log4j.Logger;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class OrderService
     implements OrderCreateService, OrderCartCreateService, OrderReadService, OrderDeleteService {

@@ -19,8 +19,7 @@ public class DeleteCartWhenRestOfQuantityUnder0 implements CartProductDeletePoli
       cartDaoFrame.deleteById(
           new ProductAndMemberCompositeKey(cart.getProductId(), cart.getMemberId()), session);
     } else {
-      cartDaoFrame.update(Cart.updateCart(cart, totalRequestQuantity),
-          session);
+      cartDaoFrame.update(Cart.updateCart(cart, totalRequestQuantity), session);
     }
   }
 }

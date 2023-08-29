@@ -5,11 +5,12 @@ import app.dto.product.response.ProductDetailForOrder;
 import app.entity.Category;
 import app.entity.Product;
 import app.exception.CustomException;
+import org.apache.ibatis.session.SqlSession;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.logging.Logger;
-import org.apache.ibatis.session.SqlSession;
 
 public class ProductDao implements ProductDaoFrame<Long, Product> {
   private static ProductDao instance;
@@ -101,7 +102,7 @@ public class ProductDao implements ProductDaoFrame<Long, Product> {
 
   @Override
   public ProductDetail selectProductDetailWithCategory(
-      Long memberId, Long productId, SqlSession session) throws Exception{
+      Long memberId, Long productId, SqlSession session) throws Exception {
     return session.selectOne(
         "product.selectDetail",
         ProductDetailParameter.builder().productId(productId).memberId(memberId).build());

@@ -21,5 +21,6 @@ public interface ProductService {
    */
   ProductDetailForOrder getProductDetailForOrder(Long productId, int quantity) throws Exception;
 
-  ProductListWithPagination getProductsByKeyword(String keyword,Long memberId, int curPage) throws Exception;
+  ProductListWithPagination getProductsByKeyword(String keyword, Long memberId, int curPage)
+      throws Exception;
 }

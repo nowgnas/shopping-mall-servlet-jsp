@@ -1,6 +1,6 @@
 package app.dao.member;
 
-import app.dto.response.OrderMemberDetail;
+import app.dto.member.response.OrderMemberDetail;
 import app.entity.Member;
 import config.TestConfig;
 import org.apache.ibatis.session.SqlSession;

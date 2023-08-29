@@ -9,19 +9,17 @@ import app.utils.GetSessionFactory;
 import lombok.AllArgsConstructor;
 import org.apache.ibatis.session.SqlSession;
 
-
 @AllArgsConstructor
-public class MemberExistCheckerService implements
-    EntityExistCheckerService<Long, Member> {
+public class MemberExistCheckerService implements EntityExistCheckerService<Long, Member> {
 
   private MemberDaoFrame<Long, Member> memberDao;
-
 
   @Override
   public Member isExisted(DaoFrame<Long, Member> daoFrame, Long id, SqlSession session)
       throws Exception {
     session = GetSessionFactory.getInstance().openSession();
-    return memberDao.selectById(id, session).orElseThrow(() -> new MemberNotFoundException(
-        ErrorCode.MEMBER_NOT_FOUND));
+    return memberDao
+        .selectById(id, session)
+        .orElseThrow(() -> new MemberNotFoundException(ErrorCode.MEMBER_NOT_FOUND));
   }
 }

@@ -13,13 +13,14 @@ import app.enums.SortOption;
 import app.exception.product.ProductNotFoundException;
 import app.exception.product.ProductQuantityLackException;
 import app.utils.GetSessionFactory;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.logging.Logger;
-import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
 
 public class ProductServiceImpl implements ProductService {
   private static ProductServiceImpl instance;

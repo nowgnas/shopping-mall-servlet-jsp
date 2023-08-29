@@ -8,6 +8,4 @@ public class OutOfStockException extends CustomException {
   public OutOfStockException(ErrorCode errorCode) {
     super(errorCode);
   }
-
 }
-

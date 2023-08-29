@@ -1,6 +1,9 @@
-package app.dto.response;
+package app.dto.member.response;
 
 import java.util.List;
+
+import app.dto.response.AddressDetail;
+import app.dto.response.CouponDetail;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -1,8 +1,8 @@
 package web.restController;
 
-import app.dto.request.LoginDto;
-import app.dto.request.MemberRegisterDto;
-import app.dto.response.MemberDetail;
+import app.dto.member.request.LoginDto;
+import app.dto.member.request.MemberRegisterDto;
+import app.dto.member.response.MemberDetail;
 import app.exception.member.RegisterException;
 import app.service.member.MemberService;
 import web.RestControllerFrame;

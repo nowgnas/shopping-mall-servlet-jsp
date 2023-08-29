@@ -1,6 +1,6 @@
 package web.restController;
 
-import app.dto.response.MemberDetail;
+import app.dto.member.response.MemberDetail;
 import app.entity.ProductAndMemberCompositeKey;
 import app.exception.likes.LikesEntityDuplicateException;
 import app.service.likes.ProductLikesService;

@@ -14,7 +14,7 @@
         <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt"/>
     </resultMap>
 
-    <resultMap id="OrderMemberDetail" type="app.dto.response.OrderMemberDetail">
+    <resultMap id="OrderMemberDetail" type="app.dto.member.response.OrderMemberDetail">
         <result property="id" column="id"/>
         <result property="email" column="email"/>
         <result property="name" column="name"/>
@@ -40,7 +40,7 @@
         WHERE id = #{id}
     </select>
 
-    <select id="selectByEmailAndPassword" parameterType="app.dto.request.LoginDto" resultMap="BaseResultMap">
+    <select id="selectByEmailAndPassword" parameterType="app.dto.member.request.LoginDto" resultMap="BaseResultMap">
         SELECT *
         FROM member
         WHERE email = #{email}
