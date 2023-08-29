@@ -22,9 +22,9 @@ public class CartDao implements CartDaoFrame<ProductAndMemberCompositeKey, Cart>
   @Override
   public int deleteById(ProductAndMemberCompositeKey productAndMemberCompositeKey,
       SqlSession session) throws Exception {
-    session.delete("cart.delete", productAndMemberCompositeKey);
+    int returnValue = session.delete("cart.delete", productAndMemberCompositeKey);
     session.commit();
-    return 1;
+    return returnValue;
   }
 
   @Override
