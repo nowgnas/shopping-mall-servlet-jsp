@@ -1,0 +1,35 @@
+.pagination {
+    text-align: center; /* Center-align the entire pagination section */
+    margin: 20px 200px; /* Add some spacing at the top */
+}
+
+.pagination a,
+.pagination-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 5px; /* Add spacing between buttons */
+    text-align: center;
+    text-decoration: none; /* Remove default underline */
+}
+
+.pagination a:hover,
+.pagination-button:hover {
+    background-color: #2980b9;
+}
+
+.pagination .current {
+    font-weight: bold;
+}
+
+.pagination-button {
+    background-color: #e74c3c;
+}
+
+.pagination-button:hover {
+    background-color: #c0392b;
+}
