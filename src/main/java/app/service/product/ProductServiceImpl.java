@@ -111,7 +111,6 @@ public class ProductServiceImpl implements ProductService {
     map.put("keyword", keyword.trim());
     List<ProductListItem> products = dao.selectProductsByKeyword(map, session);
     session.close();
-    if (products.isEmpty()) throw new ProductNotFoundException();
     int totalPage = (int) Math.ceil(products.size() / 9);
     Pagination pagination = Pagination.builder().currentPage(curPage).perPage(9).build();
     return ProductListWithPagination.makeListWithPaging(products, pagination, totalPage);
