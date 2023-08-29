@@ -22,7 +22,7 @@ public class UpdateCartServiceImpl implements UpdateCartService {
     if (requestQuantity.intValue() <= 0) {
       cartProductDeletePolicy.deleteRequestQuantity(cart, requestQuantity, session);
     } else if (stock < requestQuantity) {
-      throw new OutOfStockException(ErrorCode.CART_PRODUCT_IS_OUT_OF_STOCK);
+      throw new OutOfStockException();
     } else {
       cartDao.update(Cart.updateCart(cart, requestQuantity), session);
     }

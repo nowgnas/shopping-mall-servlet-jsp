@@ -1,11 +1,11 @@
 package app.exception.cart;
 
-import app.exception.CustomException;
-import app.exception.ErrorCode;
 
-public class ProductIsNotExistedInCartException extends CustomException {
+import app.exception.EntityNotFoundException;
 
-  public ProductIsNotExistedInCartException(ErrorCode errorCode) {
-    super(errorCode);
+public class ProductIsNotExistedInCartException extends EntityNotFoundException {
+    private static final String errorMessage = "상품이 장바구니에 존재하지 않습니다";
+  public ProductIsNotExistedInCartException() {
+    super(errorMessage);
   }
 }

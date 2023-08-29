@@ -4,7 +4,6 @@ import app.dto.product.*;
 import app.dto.product.response.ProductDetailForOrder;
 import app.entity.Category;
 import app.entity.Product;
-import app.exception.CustomException;
 import org.apache.ibatis.session.SqlSession;
 
 import java.util.List;
