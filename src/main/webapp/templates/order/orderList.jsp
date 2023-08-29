@@ -42,7 +42,7 @@
             text: errorMessage,
             footer: '<a href="https://github.com/lotte-bit-1/shopping-mall-servlet-jsp/issues">이슈 남기러 가기</a>'
         }).then((result) => {
-            window.location.replace("http://" + hostName + "/order.bit?view=list&cmd=get");
+            window.location.replace("/order.bit?view=list&cmd=get");
         });
     }
 </script>

@@ -60,8 +60,6 @@ public class OrderController implements ControllerFrame {
       return getProductOrderDetail(request, response);
     } else if (view.equals("list") && cmd.equals("get")) {
       return getProductOrders(request, response);
-    } else if (view.equals("detail") && cmd.equals("delete")) {
-      return deleteOrder(request, response);
     }
 
     return Navi.REDIRECT_MAIN;
@@ -107,21 +105,6 @@ public class OrderController implements ControllerFrame {
       return Navi.FORWARD_ORDER_CART_FORM;
     } catch (DomainException e) {
       return Navi.REDIRECT_CART_FORM
-          + String.format("?errorMessage=%s", URLEncoder.encode(e.getMessage(), "UTF-8"));
-    } catch (Exception e) {
-      return Navi.REDIRECT_MAIN
-          + String.format("?errorMessage=%s", URLEncoder.encode("시스템 에러", "UTF-8"));
-    }
-  }
-
-  private String deleteOrder(HttpServletRequest request, HttpServletResponse response)
-      throws UnsupportedEncodingException {
-    try {
-      Long orderId = Long.parseLong(request.getParameter("orderId"));
-      orderService.cancelOrder(orderId);
-      return String.format(Navi.REDIRECT_ORDER_DETAIL, orderId);
-    } catch (DomainException e) {
-      return Navi.REDIRECT_ORDER_DETAIL
           + String.format("?errorMessage=%s", URLEncoder.encode(e.getMessage(), "UTF-8"));
     } catch (Exception e) {
       return Navi.REDIRECT_MAIN

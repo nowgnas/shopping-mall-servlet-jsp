@@ -288,7 +288,7 @@
                         });
                     },
                     success: function (data) {
-                        window.location.replace(`http://localhost:8080/order.bit?view=detail&cmd=get&orderId=` + data);
+                        window.location.replace(`/order.bit?view=detail&cmd=get&orderId=` + data);
                     }
                 });
             }
