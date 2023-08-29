@@ -4,7 +4,6 @@ import app.dto.product.*;
 import app.dto.product.response.ProductDetailForOrder;
 import app.entity.Category;
 import app.entity.Product;
-import app.exception.CustomException;
 import org.apache.ibatis.session.SqlSession;
 
 import java.util.List;
@@ -30,7 +29,7 @@ public class ProductDao implements ProductDaoFrame<Long, Product> {
 
   @Override
   public List<ProductListItemOfLike> selectProductListItemOfLike(
-      List<Long> productId, SqlSession session) throws CustomException {
+      List<Long> productId, SqlSession session) {
     return session.selectList("product.selectProductListItemOfLike", productId);
   }
 
