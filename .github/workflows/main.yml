@@ -1,15 +1,18 @@
-name: CI
+name: Make CURL POST Request
+
 on:
-    push:
-      branches: [ main ]
-    pull_request:
-      branches: [ main ]
+  push:
+    branches:
+      - main  # Change this to the appropriate branch name
+
 jobs:
-    build:
-      runs-on: ubuntu-latest
-	
-      steps:
-      - uses: actions/checkout@v2
-	
-      - name: Run a one-line script
-        run: curl -X POST http://bitbit.kro.kr:8088/job/lotte-mall/build --user bit116eb06dd739dc0e07100177055cc4cc69 -v
+  make-request:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Make CURL POST request
+        run: |
+          curl -X POST http://bitbit.kro.kr:8088/job/lotte-mall/build --user bit116eb06dd739dc0e07100177055cc4cc69 -v
