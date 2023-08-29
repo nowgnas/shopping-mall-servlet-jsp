@@ -23,7 +23,7 @@ FROM tomcat:9.0-jre11
 WORKDIR /app
 
 # Copy the built WAR file from the builder stage
-COPY --from=builder /app/target/shopping-mall-servlet-jsp-1.0-SNAPSHOT.war /usr/local/tomcat/webapps/
+COPY --from=builder /app/target/shopping-mall-servlet-jsp-1.0-SNAPSHOT.war /usr/local/tomcat/webapps/.war
 
 # Expose the default Tomcat port
 EXPOSE 8080
