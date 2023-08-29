@@ -5,13 +5,13 @@ FROM maven:3.8.4-openjdk-11 AS builder
 WORKDIR /app
 
 # Copy the pom.xml file to the container
-COPY pom.xml .
+COPY shopping-mall-servlet-jsp/pom.xml .
 
 # Download project dependencies
 RUN mvn dependency:go-offline -B
 
 # Copy the rest of the application code
-COPY src ./src
+COPY shopping-mall-servlet-jsp/src ./src
 
 # Build the application
 RUN mvn clean install -DskipTests
