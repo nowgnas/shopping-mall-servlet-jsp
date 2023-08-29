@@ -68,7 +68,7 @@
     </div>
     <div id="mobile-menu-wrap"></div>
     <div class="offcanvas__text">
-        <p>Welcome</p>
+        <p></p>
     </div>
 </div>
 <!-- Offcanvas Menu End -->
@@ -80,7 +80,7 @@
             <div class="row">
                 <div class="col-lg-6 col-md-7">
                     <div class="header__top__left">
-                        <p>Welcome</p>
+                        <p><img src="img/logo2.png"/></p>
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-5">
