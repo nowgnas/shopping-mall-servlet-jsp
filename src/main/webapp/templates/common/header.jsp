@@ -80,7 +80,7 @@
             <div class="row">
                 <div class="col-lg-6 col-md-7">
                     <div class="header__top__left">
-                        <p><img src="img/logo2.png"/></p>
+                        <a href="/"><img src="img/logo2.png"/></a>
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-5">
