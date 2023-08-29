@@ -1,6 +1,7 @@
 package app.dao.category;
 
 import app.dao.DaoFrame;
+import app.dto.category.response.CategoryHierarchy;
 import app.dto.product.ProductListItem;
 import app.entity.Category;
 import java.util.List;
@@ -14,5 +15,5 @@ public interface CategoryDaoFrame<K, V extends Category> extends DaoFrame<K, V> 
 
   List<ProductListItem> selectProductBySubCategoryName(Map<String, Object> map, SqlSession session);
 
-  List<Category> hierarchyCategory(SqlSession session);
+  List<CategoryHierarchy> hierarchyCategory(SqlSession session);
 }

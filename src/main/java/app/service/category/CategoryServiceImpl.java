@@ -2,6 +2,7 @@ package app.service.category;
 
 import app.dao.category.CategoryDao;
 import app.dao.category.CategoryDaoFrame;
+import app.dto.category.response.CategoryHierarchy;
 import app.dto.paging.Pagination;
 import app.dto.product.ProductListItem;
 import app.dto.product.response.ProductListWithPagination;
@@ -9,6 +10,7 @@ import app.entity.Category;
 import app.exception.product.CategoryListNotFound;
 import app.exception.product.ProductNotFoundException;
 import app.utils.GetSessionFactory;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

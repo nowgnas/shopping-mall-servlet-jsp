@@ -9,5 +9,4 @@ public interface CategoryService {
 
   ProductListWithPagination getProductListByCategoryName(
       Long memberId, String keyword, int curPage);
-
 }

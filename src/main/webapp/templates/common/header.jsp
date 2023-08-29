@@ -9,43 +9,43 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!-- Offcanvas Menu Begin -->
 <style>
-    .container {
-        padding: 2rem 0rem;
+  .container {
+    padding: 2rem 0rem;
+  }
+
+  @media (min-width: 576px) {
+    .modal-dialog {
+      max-width: 400px;
     }
 
-    @media (min-width: 576px) {
-        .modal-dialog {
-            max-width: 400px;
-        }
-
-        .modal-dialog .modal-content {
-            padding: 1rem;
-        }
+    .modal-dialog .modal-content {
+      padding: 1rem;
     }
+  }
 
-    .modal-header .close {
-        margin-top: -1.5rem;
-    }
+  .modal-header .close {
+    margin-top: -1.5rem;
+  }
 
-    .form-title {
-        margin: -2rem 0rem 2rem;
-    }
+  .form-title {
+    margin: -2rem 0rem 2rem;
+  }
 
-    .btn-round {
-        border-radius: 3rem;
-    }
+  .btn-round {
+    border-radius: 3rem;
+  }
 
-    .delimiter {
-        padding: 1rem;
-    }
+  .delimiter {
+    padding: 1rem;
+  }
 
-    .social-buttons .btn {
-        margin: 0 0.5rem 1rem;
-    }
+  .social-buttons .btn {
+    margin: 0 0.5rem 1rem;
+  }
 
-    .signup-section {
-        padding: 0.3rem 0rem;
-    }
+  .signup-section {
+    padding: 0.3rem 0rem;
+  }
 </style>
 <div class="offcanvas-menu-overlay"></div>
 <div class="offcanvas-menu-wrapper">
@@ -86,7 +86,8 @@
                     <div class="header__top__right">
                         <div class="header__top__links">
                             <c:if test="${ empty loginMember }">
-                                <a href="#" data-toggle="modal" data-target="#loginModal">Sign in</a>
+                                <a href="#" data-toggle="modal" data-target="#loginModal">Sign
+                                    in</a>
                             </c:if>
                             <c:if test="${ !empty loginMember }">
                                 <a href="#" disabled>${loginMember.name}님</a>
@@ -146,3 +147,5 @@
 <jsp:include page="../member/loginModal.jsp"/>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="js/header.js"></script>
+
+
