@@ -38,6 +38,23 @@
 <jsp:include page="../common/header.jsp"/>
 <!-- Header Section End -->
 
+<script>
+    const hostName = location.host;
+    const queryParameters = new URLSearchParams(decodeURI(location.search));
+    const productId = queryParameters.get("productId");
+    const errorMessage = queryParameters.get("errorMessage");
+    if (errorMessage !== null) {
+        Swal.fire({
+            icon: 'error',
+            title: "ERROR",
+            text: errorMessage,
+            footer: '<a href="https://github.com/lotte-bit-1/shopping-mall-servlet-jsp/issues">이슈 남기러 가기</a>'
+        }).then((result) => {
+            window.location.replace('/product.bit?view=shop-detail&productId=' + productId);
+        });
+    }
+</script>
+
 <!-- Shop Details Section Begin -->
 <section class="shop-details">
     <div class="product__details__pic">

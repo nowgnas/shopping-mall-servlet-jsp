@@ -68,8 +68,9 @@ public class OrderController implements ControllerFrame {
   // TODO: 상품 주문 폼
   private String getCreateOrderForm(HttpServletRequest request, HttpServletResponse response)
       throws UnsupportedEncodingException {
+    Long productId = 0L;
     try {
-      Long productId = Long.parseLong(request.getParameter("productId"));
+      productId = Long.parseLong(request.getParameter("productId"));
       Long quantity = Long.parseLong(request.getParameter("quantity"));
 
       OrderCreateForm createOrderForm = orderService.getCreateOrderForm(memberId, productId);
@@ -84,8 +85,9 @@ public class OrderController implements ControllerFrame {
 
       return Navi.FORWARD_ORDER_FORM;
     } catch (DomainException e) {
-      return Navi.REDIRECT_SHOP_DETAIL
-          + String.format("?errorMessage=%s", URLEncoder.encode(e.getMessage(), "UTF-8"));
+      if(productId == 0L) return Navi.REDIRECT_MAIN;
+      else return String.format(Navi.REDIRECT_SHOP_DETAIL, productId)
+          + String.format("&errorMessage=%s", URLEncoder.encode(e.getMessage(), "UTF-8"));
     } catch (Exception e) {
       return Navi.REDIRECT_MAIN
           + String.format("?errorMessage=%s", URLEncoder.encode("시스템 에러", "UTF-8"));

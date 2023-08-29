@@ -8,9 +8,9 @@ public abstract class Navi {
   public static final String REDIRECT_ORDER_DETAIL =
       "redirect:order.bit?view=detail&cmd=get&orderId=%s";
   public static final String FORWARD_SHOP_DETAIL = "forward:templates/product/shop-details.jsp";
-  public static final String REDIRECT_SHOP_DETAIL = "";
+  public static final String REDIRECT_SHOP_DETAIL = "redirect:product.bit?view=shop-detail&productId=%s";
   public static final String FORWARD_CART_FORM = "forward:templates/cart/cart.jsp";
-  public static final String REDIRECT_CART_FORM = "redirect:templates/cart/cart.jsp";
+  public static final String REDIRECT_CART_FORM = "redirect:cart.bit";
   public static final String FORWARD_ORDER_DETAIL = "forward:templates/order/orderDetail.jsp";
   public static final String FORWARD_ORDER_LIST = "forward:templates/order/orderList.jsp";
   public static final String REDIRECT_ORDER_LIST = "redirect:order.bit?view=list&cmd=get";
