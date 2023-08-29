@@ -5,13 +5,11 @@ import app.dao.product.ProductDaoFrame;
 import app.dto.paging.Pagination;
 import app.dto.product.ProductDetail;
 import app.dto.product.ProductListItem;
-import app.dto.product.response.ProductDetailForOrder;
 import app.dto.product.response.ProductDetailWithCategory;
 import app.dto.product.response.ProductListWithPagination;
 import app.entity.Category;
 import app.enums.SortOption;
 import app.exception.product.ProductNotFoundException;
-import app.exception.product.ProductQuantityLackException;
 import app.utils.GetSessionFactory;
 import java.util.HashMap;
 import java.util.List;
@@ -86,17 +84,6 @@ public class ProductServiceImpl implements ProductService {
         .item(products)
         .paging(pagination)
         .build();
-  }
-
-  @Override
-  public ProductDetailForOrder getProductDetailForOrder(Long productId, int quantity)
-      throws Exception {
-    SqlSession session = sessionFactory.openSession();
-    int qty = dao.selectProductQuantity(productId, session);
-    if (qty < quantity) throw new ProductQuantityLackException();
-    ProductDetailForOrder detail = dao.selectProductDetail(productId, session);
-    session.close();
-    return detail;
   }
 
   @Override

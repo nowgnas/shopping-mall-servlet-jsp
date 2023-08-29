@@ -1,5 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -25,7 +26,11 @@
     <link rel="stylesheet" href="../../css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="../../css/style.css" type="text/css">
 
-
+    <style>
+      .hover-color-change:hover {
+        color: red; /* Change to the desired color */
+      }
+    </style>
 </head>
 
 <body>
@@ -62,6 +67,20 @@
         <div class="container">
             <div class="row d-flex justify-content-center">
                 <div class="col-lg-8">
+                    <div class="row">
+                        <c:forEach varStatus="idx" begin="0"
+                                   items="${productDetail.category.categoryList}"
+                                   var="category">
+                            <c:set var="splitCategory" value="${fn:split(category, '=')[1]}"/>
+                            <div class="col-md-2 element"><a class="hover-color-change"
+                                                             href="/product.bit?view=category&keyword=${splitCategory}&curPage=1">${splitCategory}</a>
+                                <c:if test="${idx.index < 2}">
+                                    &nbsp;&nbsp;&nbsp;>
+                                </c:if>
+                            </div>
+                        </c:forEach>
+                    </div>
+
                     <div class="product__details__text">
                         <%-- todo: product name --%>
                         <h4>${productDetail.detail.name}</h4>

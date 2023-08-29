@@ -54,7 +54,7 @@ public class CategorySelectServiceTest {
   @Test
   @DisplayName("select product list by category name")
   void selectProductByCategoryName() {
-    ProductListWithPagination name = service.getProductListByCategoryName(1L, "컴퓨터", 0);
+    ProductListWithPagination name = service.getProductListByCategoryName(1L, "세탁기", 0);
     System.out.println(name.toString());
   }
 }

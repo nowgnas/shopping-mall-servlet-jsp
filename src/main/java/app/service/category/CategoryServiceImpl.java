@@ -2,6 +2,7 @@ package app.service.category;
 
 import app.dao.category.CategoryDao;
 import app.dao.category.CategoryDaoFrame;
+import app.dto.category.response.SubCategory;
 import app.dto.paging.Pagination;
 import app.dto.product.ProductListItem;
 import app.dto.product.response.ProductListWithPagination;
@@ -9,6 +10,7 @@ import app.entity.Category;
 import app.exception.product.CategoryListNotFound;
 import app.exception.product.ProductNotFoundException;
 import app.utils.GetSessionFactory;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,8 +46,16 @@ public class CategoryServiceImpl implements CategoryService {
   public ProductListWithPagination getProductListByCategoryName(
       Long memberId, String keyword, int curPage) {
     SqlSession session = sessionFactory.openSession();
-    List<Long> idListItems = dao.selectSubCategoryByName(keyword, session);
+    List<Long> idListItems = new ArrayList<>();
+    List<SubCategory> categoryByName = dao.selectSubCategoryByName(keyword, session);
 
+    for (SubCategory s : categoryByName) {
+      if (s.getHigh() == null && s.getMiddle() == null) idListItems.add(s.getLow());
+      else if (s.getHigh() == null) idListItems.add(s.getMiddle());
+      else idListItems.add(s.getHigh());
+    }
+
+    log.info("id list " + idListItems.toString());
     if (idListItems.isEmpty()) throw new CategoryListNotFound();
     Map<String, Object> map = new HashMap<>();
     map.put("memberId", memberId);

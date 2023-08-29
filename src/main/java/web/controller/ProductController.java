@@ -8,14 +8,13 @@ import app.service.category.CategoryService;
 import app.service.category.CategoryServiceImpl;
 import app.service.product.ProductService;
 import app.service.product.ProductServiceImpl;
-import web.ControllerFrame;
-import web.dispatcher.Navi;
-
+import java.util.List;
+import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.util.List;
-import java.util.logging.Logger;
+import web.ControllerFrame;
+import web.dispatcher.Navi;
 
 public class ProductController implements ControllerFrame {
   private static final long serialVersionUID = 1L;
@@ -72,7 +71,6 @@ public class ProductController implements ControllerFrame {
       request.setAttribute("productList", productList);
       return productList();
     } else if (view.equals("search")) {
-      // fixme: 카테고리 입력 만들었는데 슬 수가 없음 - 입력 필드 없음
       Long memberId = -1L;
       HttpSession session = request.getSession();
       MemberDetail loginMember = (MemberDetail) session.getAttribute("loginMember");
@@ -103,6 +101,8 @@ public class ProductController implements ControllerFrame {
       ProductListWithPagination productListByCategoryName =
           categoryService.getProductListByCategoryName(
               memberId, keyword, Integer.parseInt(curPage));
+      List<Category> categories = categoryService.getAllCategory();
+      request.setAttribute("categories", categories);
       request.setAttribute("productList", productListByCategoryName);
       return productList();
     }
