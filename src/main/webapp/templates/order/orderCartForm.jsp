@@ -24,6 +24,9 @@
     <link rel="stylesheet" href="../../css/owl.carousel.min.css" type="text/css">
     <link rel="stylesheet" href="../../css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="../../css/style.css" type="text/css">
+
+    <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.5.js"></script>
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 </head>
 
 <body>
@@ -69,24 +72,28 @@
                         </div>
                         <div class="checkout__input">
                             <p>주소<span>*</span></p>
+                            <input type="button" onclick="getDaumPostcode()" value="우편번호 찾기" style="color: black;"><br>
                             <input type="text" placeholder="도로명 주소" class="checkout__input__add"
+                                   id="roadName"
                                    name="roadName"
                                    value="<c:if test="${defaultAddress.roadName != null}">${defaultAddress.roadName}</c:if>" required
                                    oninvalid="this.setCustomValidity('도로명 주소를 입력해주세요.')"
-                                   oninput="this.setCustomValidity('')">
+                                   oninput="this.setCustomValidity('')" style="color: black;">
                             <input type="text" placeholder="상세 주소" class="checkout__input__add"
+                                   id="addrDetail"
                                    name="addrDetail"
                                    value="<c:if test="${defaultAddress.addrDetail != null}">${defaultAddress.addrDetail}</c:if>" required
                                    oninvalid="this.setCustomValidity('상세 주소를 입력해주세요.')"
-                                   oninput="this.setCustomValidity('')">
+                                   oninput="this.setCustomValidity('')" style="color: black;">
                         </div>
                         <div class="checkout__input">
                             <p>우편번호<span>*</span></p>
                             <input type="text" placeholder="우편번호" class="checkout__input__add"
+                                   id="zipCode"
                                    name="zipCode"
                                    value="<c:if test="${defaultAddress.zipCode != null}">${defaultAddress.zipCode}</c:if>" required
                                    oninvalid="this.setCustomValidity('우편번호를 입력해주세요.')"
-                                   oninput="this.setCustomValidity('')">
+                                   oninput="this.setCustomValidity('')" style="color: black;">
                         </div>
                         <div class="checkout__input">
                             <p>쿠폰 선택<span></span></p>
@@ -199,6 +206,8 @@
 <script>
     function kakaoPay() {
         const calculatedTotalPrice = document.getElementById("totalPrice").value;
+        const roadName = document.getElementById('roadName').value;
+        const zipCode = document.getElementById('zipCode').value;
 
         var IMP = window.IMP;
         IMP.init('imp11402415');
@@ -211,8 +220,8 @@
             buyer_email : 'test@naver.com',
             buyer_name : '<c:out value="${memberName}"/>',
             buyer_tel : '010-1234-5678',
-            buyer_addr : '<c:out value="${defaultAddress.roadName}"/>',
-            buyer_postcode : '<c:out value="${defaultAddress.zipCode}"/>',
+            buyer_addr : roadName,
+            buyer_postcode : zipCode,
             m_redirect_url : 'http://localhost:8080'
         }, function(response) {
             // 실패 시
@@ -241,6 +250,27 @@
         });
     }
 </script>
+
+<script>
+    function getDaumPostcode() {
+        new daum.Postcode({
+            oncomplete: function(data) {
+                let roadName = data.roadAddress;
+                let addrDetail = data.jibunAddress;
+                let zipCode = data.zonecode;
+
+                // 우편번호와 주소 정보를 해당 필드에 넣는다.
+                let roadNameInput = document.getElementById('roadName');
+                let addrDetailInput = document.getElementById("addrDetail");
+                let zipCodeInput = document.getElementById('zipCode');
+                roadNameInput.value = roadName;
+                addrDetailInput.value = addrDetail;
+                zipCodeInput.value = zipCode;
+            }
+        }).open();
+    }
+</script>
+
 </body>
 
 </html>
