@@ -121,7 +121,7 @@
                                 </div>
                             </div>
                         </div>
-                        <p>Total Price: $<span id="totalPrice">10.00</span></p>
+                        <p>Total Price: &#8361;<span id="totalPrice">10.00</span></p>
                         <div id="common-parent-element" class="product__details__btns__option">
                             <%-- todo: likes --%>
                             <c:if test="${productDetail.detail.isLiked eq false}">
