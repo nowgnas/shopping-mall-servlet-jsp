@@ -122,7 +122,7 @@
                         </div>
                         <a id="order-link" href="" class="btn btn-outline-success">buy</a>
                         <div>
-                            PRODUCT CODE: ${productDetail.detail.description}
+                            상세 정보 : ${productDetail.detail.description}
                         </div>
                     </div>
                 </div>

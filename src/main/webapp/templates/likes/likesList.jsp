@@ -50,7 +50,7 @@
                 <div class="breadcrumb__text">
                     <h4>Likes</h4>
                     <div class="breadcrumb__links">
-                        <a href="index.jsp">Home</a>
+                        <a href="/">Home</a>
                         <span>Likes</span>
                     </div>
                 </div>
@@ -158,7 +158,7 @@
                 <div class="row">
                     <div class="col-lg-6 col-md-6 col-sm-6">
                         <div class="continue__btn">
-                            <a href="/product.bit?view=shop&curPage=0&sort=DATE_DESC">Continue
+                            <a href="/product.bit?view=shop&curPage=1&sort=PRICE_ASC">Continue
                                 Shopping</a>
                         </div>
                     </div>
