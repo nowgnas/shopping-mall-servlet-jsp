@@ -285,7 +285,7 @@
                         });
                     },
                     success: function (data) {
-                        window.location.replace(`order.bit?view=detail&cmd=get&orderId=` + data);
+                        window.location.replace(`/order.bit?view=detail&cmd=get&orderId=` + data);
                     }
                 });
             }

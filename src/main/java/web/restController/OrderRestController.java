@@ -12,6 +12,7 @@ import web.dispatcher.Navi;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
 public class OrderRestController implements RestControllerFrame {
@@ -48,6 +49,8 @@ public class OrderRestController implements RestControllerFrame {
         return createOrder(request, response);
       case "orderCartCreate":
         return createCartOrder(request, response);
+      case "orderDelete":
+        return deleteOrder(request, response);
     }
     return result;
   }
@@ -123,6 +126,23 @@ public class OrderRestController implements RestControllerFrame {
 
       Order order = orderService.createCartOrder(orderCartCreateDto);
       return order.getId();
+    } catch (DomainException e) {
+      response.setStatus(e.getStatusCode());
+      return e.getMessage();
+    } catch (RuntimeException e) {
+      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+      return e.getMessage();
+    } catch (Exception e) {
+      response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+      return "시스템 에러";
+    }
+  }
+
+  private Object deleteOrder(HttpServletRequest request, HttpServletResponse response) {
+    try {
+      Long orderId = Long.parseLong(request.getParameter("orderId"));
+      orderService.cancelOrder(orderId);
+      return orderId;
     } catch (DomainException e) {
       response.setStatus(e.getStatusCode());
       return e.getMessage();
