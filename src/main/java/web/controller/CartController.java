@@ -5,6 +5,7 @@ import app.dao.cart.CartDaoFrame;
 import app.dao.member.MemberDao;
 import app.dao.member.MemberDaoFrame;
 import app.dto.cart.AllCartProductInfoDtoWithPagination;
+import app.dto.response.MemberDetail;
 import app.entity.Cart;
 import app.entity.Member;
 import app.entity.Product;
@@ -24,20 +25,17 @@ import app.service.checker.MemberExistCheckerService;
 import app.service.checker.ProductExistCheckerService;
 import app.service.product.StockCheckerService;
 import app.service.product.StockCheckerServiceImpl;
-import app.utils.HttpUtil;
-import java.io.IOException;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import lombok.NoArgsConstructor;
+import web.ControllerFrame;
+import web.dispatcher.Navi;
 
 @NoArgsConstructor
-@WebServlet({"/cart"})
-public class CartController extends HttpServlet {
+public class CartController implements ControllerFrame {
 
- private final CartDaoFrame<ProductAndMemberCompositeKey, Cart> cartDaoFrame = new CartDao();
+  private final CartDaoFrame<ProductAndMemberCompositeKey, Cart> cartDaoFrame = new CartDao();
   private final MemberDaoFrame<Long, Member> memberDao = new MemberDao();
   private final EntityExistCheckerService<Long, Member> memberExistCheckerService = new MemberExistCheckerService(
       memberDao);
@@ -45,70 +43,100 @@ public class CartController extends HttpServlet {
   private final EntityExistCheckerService<ProductAndMemberCompositeKey, Cart> cartExistCheckerService = new CartExistCheckerService();
   private final UpdateCartService updateCartService = new UpdateCartServiceImpl(cartDaoFrame,
       new DeleteCartWhenRestOfQuantityUnder0(cartDaoFrame));
-    private final StockCheckerService stockCheckerService = new StockCheckerServiceImpl();
+  private final StockCheckerService stockCheckerService = new StockCheckerServiceImpl();
   private final CartService cartService = new CartServiceImpl(cartDaoFrame, memberDao,
       memberExistCheckerService, productExistCheckerService, cartExistCheckerService,
       stockCheckerService, updateCartService);
+  private Long memberId;
 
 
-  @Override
-  protected void doGet(HttpServletRequest request, HttpServletResponse response)
-      throws ServletException, IOException {
-//    Long memberId = (Long) request.getSession().getAttribute("memberId");
-    log("once is completed");
-    Long memberId = 1L;
-
+  public String addProductInCart(HttpServletRequest request) throws Exception {
     try {
+      Long productId = Long.parseLong(request.getParameter("productId"));
+      Long quantity = Long.parseLong(request.getParameter("quantity"));
+      cartService.putItemIntoCart(new ProductAndMemberCompositeKey(memberId, productId), quantity);
+      return Navi.FORWARD_CART_FORM;
+  } catch (ProductNotFoundException | CartNotFoundException  e) {
+      return Navi.REDIRECT_CART_FORM + String.format("?errorMessage=%s", e.getMessage());
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return Navi.REDIRECT_MAIN;
+  }
 
+  public String deleteProductInCart(HttpServletRequest request) {
+     try {
+      Long productId = Long.parseLong(request.getParameter("productId"));
+        cartService.delete(new ProductAndMemberCompositeKey(memberId, productId));
+      return Navi.FORWARD_CART_FORM;
+  } catch (ProductNotFoundException | CartNotFoundException  e) {
+      return Navi.REDIRECT_CART_FORM + String.format("?errorMessage=%s", e.getMessage());
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return Navi.REDIRECT_MAIN;
+  }
+
+  public String updateProductInCart(HttpServletRequest request) {
+ try {
+      Long productId = Long.parseLong(request.getParameter("productId"));
+      Long quantity = Long.parseLong(request.getParameter("quantity"));
+      cartService.updateQuantityOfCartProduct(new ProductAndMemberCompositeKey(memberId, productId), quantity);
+      return Navi.FORWARD_CART_FORM;
+  } catch (ProductNotFoundException | CartNotFoundException  e) {
+      return Navi.REDIRECT_CART_FORM + String.format("?errorMessage=%s", e.getMessage());
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return Navi.REDIRECT_MAIN;
+  }
+
+  public String getCartList(HttpServletRequest request) {
+    try {
       AllCartProductInfoDtoWithPagination cartInfo = cartService.getCartProductListByMemberPagination(
           memberId);
       request.setAttribute("productList",
           cartInfo.getCartProductInfoDto().getCartProductDtoList());
       request.setAttribute("totalPrice", cartInfo.getCartProductInfoDto().getTotalPrice());
       request.setAttribute("pagination", cartInfo.getPaging());
-      request.getRequestDispatcher("templates/cart/cart.jsp").forward(request, response);
-    } catch (MemberNotFoundException e) {
-      throw new MemberNotFoundException(ErrorCode.MEMBER_NOT_FOUND);
+      return Navi.FORWARD_CART_FORM;
+    }
+     catch (ProductNotFoundException | CartNotFoundException  e) {
+      return Navi.REDIRECT_CART_FORM + String.format("?errorMessage=%s", e.getMessage());
     } catch (Exception e) {
       e.printStackTrace();
+    }
+    return Navi.REDIRECT_MAIN;
+  }
+
+  private String build(HttpServletRequest request, HttpServletResponse response, String action)
+      throws Exception {
+    switch (action) {
+      case "get":
+        return getCartList(request);
+      case "add":
+        return addProductInCart(request);
+      case "delete":
+        return deleteProductInCart(request);
+      case "update":
+        return updateProductInCart(request);
+      default:
+        return Navi.FORWARD_MAIN;
     }
 
   }
 
   @Override
-  protected void doPost(HttpServletRequest request, HttpServletResponse response)
-      throws ServletException, IOException {
-    String action = request.getParameter("action");
+  public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    HttpSession session = request.getSession();
+    MemberDetail loginMember = (MemberDetail) session.getAttribute("loginMember");
 
-    try {
-      Long memberId = 1L;
-//      Long memberId = (Long) request.getSession().getAttribute("memberId");
-      Long productId = Long.parseLong(request.getParameter("productId"));
-
-      ProductAndMemberCompositeKey compositeKey = new ProductAndMemberCompositeKey(productId,
-          memberId);
-
-      if ("add".equals(action)) {
-        Long quantity = Long.parseLong(request.getParameter("quantity"));
-        cartService.putItemIntoCart(compositeKey, quantity);
-      } else if ("update".equals(action)) {
-        Long updatedQuantity = Long.parseLong(request.getParameter("updatedQuantity"));
-        cartService.updateQuantityOfCartProduct(compositeKey, updatedQuantity);
-      } else if ("delete".equals(action)) {
-        cartService.delete(compositeKey);
-      }
-      HttpUtil.redirect(response, "/cart");
-    } catch (MemberNotFoundException e) {
-      throw new MemberNotFoundException(ErrorCode.MEMBER_NOT_FOUND);
-    } catch (ProductNotFoundException e) {
-      throw new ProductNotFoundException(ErrorCode.ITEM_NOT_FOUND);
-    } catch (CartNotFoundException e) {
-      throw new CartNotFoundException(ErrorCode.CART_IS_NOT_EXISTED);
-    } catch (Exception e) {
-      e.printStackTrace();
+    String next = Navi.REDIRECT_MAIN;
+    String view = request.getParameter("action");
+    if (view != null && loginMember !=null) {
+      memberId = loginMember.getId();
+      next = build(request, response, view);
     }
-
-
+    return next;
   }
-
 }

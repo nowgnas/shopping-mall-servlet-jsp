@@ -23,7 +23,6 @@
 
     <!-- custom cart css-->
     <link rel="stylesheet" href="css/cart-pagination.css">
-    <link rel="stylesheet" href="css/preloader .css" type="text/css">
 
     <!-- Css Styles -->
     <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css">
@@ -40,7 +39,7 @@
 
 <body>
 <!-- Page Preloder -->
-<div id="preloader">
+<div id="preloder">
     <div class="loader"></div>
 </div>
 

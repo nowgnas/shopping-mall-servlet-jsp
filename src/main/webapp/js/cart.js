@@ -43,35 +43,34 @@ document.addEventListener("DOMContentLoaded", function () {
 
 $(document).ready(function () {
 
-  var preloader = document.querySelector(".preloader");
+
 
   $('.shopping__cart__table').on('change', '.quantity-select',
-      function (event) {
-        console.log('Change event occurred');
-        // Get the selected quantity value from the <option> element
-        var selectedQuantity = parseInt($(this).val());
-        console.log("current selected quantity:" + selectedQuantity);
-        console.log('Selected Quantity:', selectedQuantity);
-        var productId = $(this).data('product-id');
-        console.log('Product ID:', productId);
+    function (event) {
+      console.log('Change event occurred');
+      // Get the selected quantity value from the <option> element
+      var selectedQuantity = parseInt($(this).val());
+      console.log("current selected quantity:" + selectedQuantity);
+      console.log('Selected Quantity:', selectedQuantity);
+      var productId = $(this).data('product-id');
+      console.log('Product ID:', productId);
 
-        var data = {
-          action: 'update',
-          productId: productId,
-          updatedQuantity: selectedQuantity
-        };
+
+      var data = {
+        action: 'update',
+        productId: productId,
+        updatedQuantity: selectedQuantity
+      };
 
         $.post('/cart', data)
-            .done(function (response) {
-              const startTime = performance.now();
-              location.reload()
-              const endTime = performance.now();
-              const timeTaken = endTime - startTime;
-              console.log(`Time taken: ${timeTaken} milliseconds`);
-            })
-            .fail(function (error) {
-              console.log('Error updating quantity:', error);
-            });
-      });
+          .done(function (response) {
+            console.log("시작")
+            location.reload()
+          console.log("끝");
+        })
+        .fail(function (error) {
+          console.log('Error updating quantity:', error);
+        });
+    });
 });
 
