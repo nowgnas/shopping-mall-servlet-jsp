@@ -17,13 +17,16 @@ COPY src ./src
 RUN mvn clean install -DskipTests
 
 # Use a smaller base image for the runtime
-FROM openjdk:11-jre-slim
+FROM tomcat:9.0-jre11
 
 # Set the working directory in the container
 WORKDIR /app
 
-# Copy the built JAR file from the builder stage
-COPY --from=builder /app/target/shopping-mall-servlet-jsp-1.0-SNAPSHOT.war .
+# Copy the built WAR file from the builder stage
+COPY --from=builder /app/target/shopping-mall-servlet-jsp-1.0-SNAPSHOT.war /usr/local/tomcat/webapps/
 
-# Command to run your application
-CMD ["java", "-jar", "shopping-mall-servlet-jsp-1.0-SNAPSHOT.war"]
+# Expose the default Tomcat port
+EXPOSE 8080
+
+# Command to start Tomcat
+CMD ["catalina.sh", "run"]
