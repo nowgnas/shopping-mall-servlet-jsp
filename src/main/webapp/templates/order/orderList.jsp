@@ -35,7 +35,7 @@
     const hostName = location.host;
     const queryParameters = new URLSearchParams(decodeURI(location.search));
     const errorMessage = queryParameters.get("errorMessage");
-    if(errorMessage !== null) {
+    if (errorMessage !== null) {
         Swal.fire({
             icon: 'error',
             title: "ERROR",
@@ -73,18 +73,19 @@
 <section class="shopping-cart spad">
     <div class="container">
         <div class="row">
-            <div class="col-lg-8">
+            <div class="col-lg-9 centered">
                 <div class="shopping__cart__table">
                     <c:forEach var="productOrder" items="${productOrders}">
-                        <table class="table table-borderless">
-                            <thead class="thead-light">
+                        <table class="table"
+                               style="border: 2px solid whitesmoke; box-shadow: 1px 2px whitesmoke; margin-bottom: 30px; text-align: center; vertical-align: center; align-content: center;">
+                            <thead>
                             <tr>
                                 <fmt:parseDate pattern="yyyy-MM-dd'T'HH:mm" value="${productOrder.orderDate}"
                                                var="parsedOrderDate"/>
                                 <th><fmt:formatDate pattern="yyyy.MM.dd HH:mm" value="${parsedOrderDate}"/> 주문</th>
                                 <th>${productOrder.orderStatus.getMessage()}</th>
                                 <th><a href="/order.bit?view=detail&cmd=get&orderId=${productOrder.orderId}"
-                                       class="primary-btn">상세 보기</a></th>
+                                       class="btn btn-light" style="border: 2px solid whitesmoke;"><b>상세 보기</b></a></th>
                             </tr>
                             </thead>
                             <tbody>
@@ -94,16 +95,17 @@
                                         <div class="product__cart__item__pic">
                                             <img src="${product.thumbnailUrl}" width="80" height="80" alt="">
                                         </div>
-                                        <div class="product__cart__item__text">
+                                        <div class="product__cart__item__text" style="display: block">
                                             <h6>${product.name}</h6>
                                             <h5>${product.price}원</h5>
                                         </div>
                                     </td>
-                                    <td class="quantity__item">
-                                        <div class="quantity">
+                                    <td class="product__cart__item">
+                                        <div class="product__cart__item__text">
                                             <h5>${product.quantity}개</h5>
                                         </div>
                                     </td>
+                                    <td class="product__cart__item"></td>
                                 </tr>
                             </c:forEach>
                             </tbody>
