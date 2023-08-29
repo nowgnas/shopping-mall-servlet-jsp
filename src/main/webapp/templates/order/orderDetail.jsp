@@ -67,11 +67,11 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="breadcrumb__text">
-                    <h4>주문 상세조회</h4>
+                    <h4>Order Details</h4>
                     <div class="breadcrumb__links">
-                        <a href="/main.bit">홈</a>
-                        <a href="/order.bit?view=list&cmd=get">주문 조회</a>
-                        <span>주문 상세조회</span>
+                        <a href="/main.bit">Home</a>
+                        <a href="/order.bit?view=list&cmd=get">Order List</a>
+                        <span>Order Details</span>
                     </div>
                 </div>
             </div>
@@ -104,16 +104,16 @@
                                     </div>
                                     <div class="product__cart__item__text">
                                         <h6>${product.productName}</h6>
-                                        <h5>${product.price} 원</h5>
+                                        <h5>${product.price}원</h5>
                                     </div>
                                 </td>
                                 <td class="quantity__item">
                                     <div class="quantity">
-                                        <h5>${product.quantity} 개</h5>
+                                        <h5>${product.quantity}개</h5>
                                     </div>
                                 </td>
                                 <c:set var="rowTotalPrice" value="${product.price * product.quantity}"/>
-                                <td class="cart__price"><c:out value="${rowTotalPrice}"/> 원</td>
+                                <td class="cart__price"><c:out value="${rowTotalPrice}"/>원</td>
                             </tr>
                         </c:forEach>
                         </tbody>
@@ -134,20 +134,20 @@
                         <li>주문 날짜 <span><fmt:formatDate pattern="yyyy.MM.dd HH:mm" value="${parsedOrderDate}"/></span>
                         </li>
                         <li>주문 상태 <span>${productOrderDetail.orderStatus.getMessage()}</span></li>
-                        <li>총 가격 <span>${productOrderDetail.getTotalPrice()} 원</span></li>
+                        <li>총 가격 <span>${productOrderDetail.getTotalPrice()}원</span></li>
                         <li>할인 가격
                             <span>
                                 <c:choose>
                                     <c:when test="${productOrderDetail.getDiscountPrice() == 0}">
-                                        ${productOrderDetail.getDiscountPrice()} 원
+                                        ${productOrderDetail.getDiscountPrice()}원
                                     </c:when>
                                     <c:otherwise>
-                                        - ${productOrderDetail.getDiscountPrice()} 원
+                                        -${productOrderDetail.getDiscountPrice()}원
                                     </c:otherwise>
                                 </c:choose>
                             </span>
                         </li>
-                        <li>결제 금액 <span>${payment.actualAmount} 원</span></li>
+                        <li>결제 금액 <span>${payment.actualAmount}원</span></li>
                         <li>결제 종류 <span>${payment.paymentType.getMessage()}</span></li>
                     </ul>
                     <c:choose>
@@ -171,16 +171,7 @@
 <jsp:include page="../common/footer.jsp"/>
 <!-- Footer Section End -->
 
-<!-- Search Begin -->
-<div class="search-model">
-    <div class="h-100 d-flex align-items-center justify-content-center">
-        <div class="search-close-switch">+</div>
-        <form class="search-model-form">
-            <input type="text" id="search-input" placeholder="Search here.....">
-        </form>
-    </div>
-</div>
-<!-- Search End -->
+<jsp:include page="../common/search.jsp"/>
 
 <!-- Js Plugins -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

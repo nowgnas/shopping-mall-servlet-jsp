@@ -15,4 +15,15 @@
         $(".offcanvas-menu-overlay").removeClass("active");
     });
 
+    $(".likes-icon").on("click", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        login();
+    });
+
+
 })(jQuery);
+
+function login() {
+    $('#loginModal').modal('show');
+}

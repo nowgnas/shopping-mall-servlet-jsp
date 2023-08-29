@@ -62,10 +62,10 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="breadcrumb__text">
-                    <h4>주문 조회</h4>
+                    <h4>Order List</h4>
                     <div class="breadcrumb__links">
-                        <a href="/main.bit">홈</a>
-                        <span>주문 조회</span>
+                        <a href="/main.bit">Home</a>
+                        <span>Order List</span>
                     </div>
                 </div>
             </div>
@@ -101,12 +101,12 @@
                                         </div>
                                         <div class="product__cart__item__text">
                                             <h6>${product.name}</h6>
-                                            <h5>${product.price} 원</h5>
+                                            <h5>${product.price}원</h5>
                                         </div>
                                     </td>
                                     <td class="quantity__item">
                                         <div class="quantity">
-                                            <h5>${product.quantity} 개</h5>
+                                            <h5>${product.quantity}개</h5>
                                         </div>
                                     </td>
                                 </tr>
@@ -125,16 +125,7 @@
 <jsp:include page="../common/footer.jsp"/>
 <!-- Footer Section End -->
 
-<!-- Search Begin -->
-<div class="search-model">
-    <div class="h-100 d-flex align-items-center justify-content-center">
-        <div class="search-close-switch">+</div>
-        <form class="search-model-form">
-            <input type="text" id="search-input" placeholder="Search here.....">
-        </form>
-    </div>
-</div>
-<!-- Search End -->
+<jsp:include page="../common/search.jsp"/>
 
 <!-- Js Plugins -->
 <script src="../../js/jquery-3.3.1.min.js"></script>

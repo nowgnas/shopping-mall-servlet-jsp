@@ -1,14 +1,16 @@
 package app.dao.likes;
 
+import app.dto.likes.request.LikesSelectForPage;
 import app.entity.Likes;
 import app.entity.ProductAndMemberCompositeKey;
 import app.exception.likes.LikesEntityDuplicateException;
 import app.exception.likes.LikesEntityNotFoundException;
+import org.apache.ibatis.exceptions.PersistenceException;
+import org.apache.ibatis.session.SqlSession;
+
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
-import org.apache.ibatis.exceptions.PersistenceException;
-import org.apache.ibatis.session.SqlSession;
 
 public class LikesDao implements LikesDaoFrame<ProductAndMemberCompositeKey, Likes> {
 
@@ -58,9 +60,15 @@ public class LikesDao implements LikesDaoFrame<ProductAndMemberCompositeKey, Lik
   }
 
   @Override
-  public List<Long> selectAllProduct(Long memberId, SqlSession session) throws SQLException {
-    List<Long> productIdList = session.selectList("likes.selectall", memberId);
+  public List<Long> selectAllProduct(LikesSelectForPage likesSelectForPage, SqlSession session)
+      throws SQLException {
+    List<Long> productIdList = session.selectList("likes.selectall", likesSelectForPage);
     if (productIdList.isEmpty()) throw new LikesEntityNotFoundException();
     return productIdList;
+  }
+
+  public Integer selectTotalPage(Long memberId, Integer perPage, SqlSession session) {
+    Long totalCnt = session.selectOne("likes.selectTotalCount", memberId);
+    return (int) Math.ceil((float) totalCnt / perPage);
   }
 }

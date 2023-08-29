@@ -8,24 +8,25 @@ import app.dto.product.ProductListItem;
 import app.dto.product.response.ProductDetailForOrder;
 import app.dto.product.response.ProductDetailWithCategory;
 import app.dto.product.response.ProductListWithPagination;
-import app.dto.product.response.ProductSearchByKeyword;
 import app.entity.Category;
-import app.entity.Product;
 import app.enums.SortOption;
-import app.exception.CustomException;
-import app.exception.ErrorCode;
+import app.exception.product.ProductNotFoundException;
+import app.exception.product.ProductQuantityLackException;
 import app.utils.GetSessionFactory;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
+import java.util.logging.Logger;
 
 public class ProductServiceImpl implements ProductService {
   private static ProductServiceImpl instance;
   private final SqlSessionFactory sessionFactory = GetSessionFactory.getInstance();
-  private ProductDaoFrame dao;
+  Logger log = Logger.getLogger("ProductServiceImpl");
+  private ProductDaoFrame<Long, app.entity.Product> dao;
 
   public ProductServiceImpl() {
     this.dao = ProductDao.getInstance();
@@ -40,18 +41,18 @@ public class ProductServiceImpl implements ProductService {
   public ProductDetailWithCategory getProductDetail(Long memberId, Long productId)
       throws Exception {
     SqlSession session = sessionFactory.openSession();
-    Optional<ProductDetail> detail =
-        Optional.ofNullable(dao.selectProductDetailWithCategory(memberId, productId, session));
-    ProductDetailWithCategory productDetailWithCategory = null;
-    if (detail.isPresent()) {
-      ProductDetail productDetail = detail.get();
-      List<Category> categories =
-          dao.selectProductParentCategory(Long.valueOf(productDetail.getCategoryId()), session);
-      productDetailWithCategory =
-          ProductDetailWithCategory.getProductDetail(categories, productDetail);
-    } else throw new Exception("상품이 없습니다");
+
+    ProductDetail productDetail =
+        Optional.ofNullable(dao.selectProductDetailWithCategory(memberId, productId, session))
+            .orElseThrow(ProductNotFoundException::new);
+
+    List<Category> categories =
+        dao.selectProductParentCategory(Long.valueOf(productDetail.getCategoryId()), session);
+    ProductDetailWithCategory productDetail1 =
+        ProductDetailWithCategory.getProductDetail(categories, productDetail);
+
     session.close();
-    return productDetailWithCategory;
+    return productDetail1;
   }
 
   @Override
@@ -60,7 +61,7 @@ public class ProductServiceImpl implements ProductService {
     SqlSession session = sessionFactory.openSession();
     Map<String, Object> map = new HashMap<>();
     map.put("current", currentPage);
-    map.put("perPage", 10);
+    map.put("perPage", 9);
     map.put("userId", userId.toString());
 
     List<ProductListItem> products = null;
@@ -76,12 +77,12 @@ public class ProductServiceImpl implements ProductService {
         products = dao.selectAllSortByDate(map, session);
         break;
       default:
-        throw new CustomException(ErrorCode.ITEM_NOT_FOUND);
+        throw new ProductNotFoundException();
     }
     int totalPage = dao.getTotalPage(session);
     session.close();
     Pagination pagination =
-        Pagination.builder().totalPage(totalPage).perPage(10).currentPage(currentPage).build();
+        Pagination.builder().totalPage(totalPage).perPage(9).currentPage(currentPage).build();
 
     return ProductListWithPagination.<List<ProductListItem>, Pagination>builder()
         .item(products)
@@ -94,18 +95,24 @@ public class ProductServiceImpl implements ProductService {
       throws Exception {
     SqlSession session = sessionFactory.openSession();
     int qty = dao.selectProductQuantity(productId, session);
-    if (qty < quantity) throw new Exception("주문 가능한 수량이 부족합니다");
+    if (qty < quantity) throw new ProductQuantityLackException();
     ProductDetailForOrder detail = dao.selectProductDetail(productId, session);
     session.close();
     return detail;
   }
 
   @Override
-  public List<ProductSearchByKeyword> getProductsByKeyword(String keyword) throws Exception {
+  public ProductListWithPagination getProductsByKeyword(String keyword, Long memberId, int curPage)
+      throws Exception {
     SqlSession session = sessionFactory.openSession();
-    List<Product> products = dao.selectProductsByKeyword(keyword, session);
-    if (products.size() == 0) throw new Exception("상품이 존재하지 않습니다");
+    Map<String, Object> map = new HashMap<>();
+    map.put("userId", memberId);
+    map.put("current", curPage);
+    map.put("keyword", keyword.trim());
+    List<ProductListItem> products = dao.selectProductsByKeyword(map, session);
     session.close();
-    return Product.productSearchByKeyword(products);
+    int totalPage = (int) Math.ceil(products.size() / 9);
+    Pagination pagination = Pagination.builder().currentPage(curPage).perPage(9).build();
+    return ProductListWithPagination.makeListWithPaging(products, pagination, totalPage);
   }
 }

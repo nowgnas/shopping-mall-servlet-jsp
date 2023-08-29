@@ -1,7 +1,7 @@
 package app.dao.member;
 
 import app.dao.DaoFrame;
-import app.dto.request.LoginDto;
+import app.dto.member.request.LoginDto;
 import app.entity.Member;
 import java.sql.SQLException;
 import java.util.Optional;

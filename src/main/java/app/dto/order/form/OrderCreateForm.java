@@ -1,7 +1,7 @@
 package app.dto.order.form;
 
 import app.dto.product.response.ProductDetailForOrder;
-import app.dto.response.OrderMemberDetail;
+import app.dto.member.response.OrderMemberDetail;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

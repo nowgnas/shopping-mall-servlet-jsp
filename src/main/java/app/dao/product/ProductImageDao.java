@@ -38,7 +38,7 @@ public class ProductImageDao implements ProductImageFrame<Long, ProductImage> {
    * 상품 이미지 조회
    *
    * @param productId 상품 아이디
-   * @param session   sql session
+   * @param session sql session
    * @return ProductImage
    * @throws Exception 조회 오류
    */

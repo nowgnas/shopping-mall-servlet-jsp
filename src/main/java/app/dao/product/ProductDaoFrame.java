@@ -8,9 +8,10 @@ import app.dto.product.ProductListItemOfLike;
 import app.dto.product.response.ProductDetailForOrder;
 import app.entity.Category;
 import app.entity.Product;
+import org.apache.ibatis.session.SqlSession;
+
 import java.util.List;
 import java.util.Map;
-import org.apache.ibatis.session.SqlSession;
 
 public interface ProductDaoFrame<K, V extends Product> extends DaoFrame<K, V> {
 
@@ -52,7 +53,7 @@ public interface ProductDaoFrame<K, V extends Product> extends DaoFrame<K, V> {
    * <p>parameter: List<productId> | return: product id, quantity, name, url, price
    *
    * @param productId 상품 id list
-   * @param session   sql session
+   * @param session sql session
    * @return 상품 정보 (이름, 이미지, 가격, 개수)
    */
   List<ProductItemQuantity> selectProductQuantity(List<Long> productId, SqlSession session);
@@ -92,12 +93,13 @@ public interface ProductDaoFrame<K, V extends Product> extends DaoFrame<K, V> {
   /**
    * 상품 상세 정보 조회
    *
-   * @param memberId  사용자 id - 찜 확인
+   * @param memberId 사용자 id - 찜 확인
    * @param productId 상품 id
-   * @param session   sql session
+   * @param session sql session
    * @return
    */
-  ProductDetail selectProductDetailWithCategory(Long memberId, Long productId, SqlSession session);
+  ProductDetail selectProductDetailWithCategory(Long memberId, Long productId, SqlSession session)
+      throws Exception;
 
   /**
    * 상품 카테고리 - 상세 정보를 위함
@@ -125,5 +127,5 @@ public interface ProductDaoFrame<K, V extends Product> extends DaoFrame<K, V> {
    * @param session sql session
    * @return
    */
-  List<Product> selectProductsByKeyword(String keyword, SqlSession session);
+  List<ProductListItem> selectProductsByKeyword(Map<String, Object> map, SqlSession session);
 }

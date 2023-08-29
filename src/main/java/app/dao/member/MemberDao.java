@@ -1,7 +1,7 @@
 package app.dao.member;
 
-import app.dto.request.LoginDto;
-import app.dto.response.OrderMemberDetail;
+import app.dto.member.request.LoginDto;
+import app.dto.member.response.OrderMemberDetail;
 import app.entity.Member;
 import java.sql.SQLException;
 import java.util.List;

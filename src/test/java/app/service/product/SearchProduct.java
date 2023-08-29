@@ -1,10 +1,9 @@
 package app.service.product;
 
 import app.dao.product.ProductDao;
-import app.dto.product.response.ProductSearchByKeyword;
+import app.dto.product.response.ProductListWithPagination;
 import app.utils.GetSessionFactory;
 import config.TestConfig;
-import java.util.List;
 import java.util.logging.Logger;
 import org.apache.ibatis.session.SqlSession;
 import org.junit.jupiter.api.AfterEach;
@@ -39,8 +38,9 @@ public class SearchProduct {
   @DisplayName("상품 이름 검색 ")
   void searchByKeyword() throws Exception {
     String word = "맥";
-    List<ProductSearchByKeyword> productsByKeyword = service.getProductsByKeyword(word);
-    Assertions.assertEquals(2, productsByKeyword.size());
+    ProductListWithPagination productsByKeyword = service.getProductsByKeyword(word, 1L, 0);
+    log.info(productsByKeyword.toString());
+    Assertions.assertEquals(2, productsByKeyword.getItem().size());
   }
 
   @Test
@@ -51,7 +51,8 @@ public class SearchProduct {
         Assertions.assertThrows(
             Exception.class,
             () -> {
-              List<ProductSearchByKeyword> productsByKeyword = service.getProductsByKeyword(word);
+              ProductListWithPagination productsByKeyword =
+                  service.getProductsByKeyword(word, 1L, 0);
             });
   }
 }

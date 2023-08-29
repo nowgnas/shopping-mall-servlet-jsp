@@ -91,13 +91,19 @@
                             </div>
                         </div>
                         <p>Total Price: $<span id="totalPrice">10.00</span></p>
-                        <div class="product__details__btns__option">
+                        <div id="common-parent-element" class="product__details__btns__option">
                             <%-- todo: likes --%>
                             <c:if test="${productDetail.detail.isLiked eq false}">
-                                <a href="#"><span>&#9825;</span>add to wishlist</a>
+                                <a href="#" class="likes-btn"
+                                   data-product-id="${productDetail.detail.id}"
+                                   data-login-info="${loginMember}"><span>&#9825;</span>add to
+                                    wishlist</a>
                             </c:if>
                             <c:if test="${productDetail.detail.isLiked eq true}">
-                                <a href="#"><span>&#9829;</span>add to wishlist</a>
+                                <a href="#" class="likes-cancel-btn"
+                                   data-product-id="${productDetail.detail.id}"
+                                   data-login-info="${loginMember}"><span>&#9829;</span>cancel to
+                                    wishlist</a>
                             </c:if>
                         </div>
                         <a id="order-link" href="" class="btn btn-outline-success">buy</a>
@@ -116,16 +122,7 @@
 <jsp:include page="../common/footer.jsp"/>
 <!-- Footer Section End -->
 
-<!-- Search Begin -->
-<div class="search-model">
-    <div class="h-100 d-flex align-items-center justify-content-center">
-        <div class="search-close-switch">+</div>
-        <form class="search-model-form">
-            <input type="text" id="search-input" placeholder="Search here.....">
-        </form>
-    </div>
-</div>
-<!-- Search End -->
+<jsp:include page="../common/search.jsp"/>
 
 <!-- Js Plugins -->
 <script src="../../js/jquery-3.3.1.min.js"></script>
@@ -138,6 +135,7 @@
 <script src="../../js/mixitup.min.js"></script>
 <script src="../../js/owl.carousel.min.js"></script>
 <script src="../../js/main.js"></script>
+<script src="../../js/detail-likes.js"></script>
 
 <script>
   // Set the default value when the page loads

@@ -22,7 +22,7 @@
                     <h4>Login</h4>
                 </div>
                 <div class="d-flex flex-column text-center">
-                    <form id="loginForm" method="POST" action="member.bit?view=login">
+                    <form id="loginForm" >
                         <div class="form-group">
                             <input type="email" class="form-control" name="email" id="email"
                                    placeholder="Your email address...">
@@ -33,23 +33,12 @@
                                    placeholder="Your password...">
                             <span id="checkPassword"></span>
                         </div>
-                        <button type="button" class="btn btn-info btn-block btn-round" id="loginbtn">Login</button>
+                        <button type="button" class="btn btn-info btn-block btn-round" id="login-btn">Login</button>
                     </form>
 
                     <div class="text-center text-muted delimiter">or use a social network</div>
                     <div class="d-flex justify-content-center social-buttons">
-                        <button type="button" class="btn btn-secondary btn-round" data-toggle="tooltip"
-                                data-placement="top" title="Twitter">
-                            <i class="fab fa-twitter"></i>
-                        </button>
-                        <button type="button" class="btn btn-secondary btn-round" data-toggle="tooltip"
-                                data-placement="top" title="Facebook">
-                            <i class="fab fa-facebook"></i>
-                        </button>
-                        <button type="button" class="btn btn-secondary btn-round" data-toggle="tooltip"
-                                data-placement="top" title="Linkedin">
-                            <i class="fab fa-linkedin"></i>
-                        </button>
+                        <a href="#" id="kakaoLogin-btn" ><img src="img/icon/kakaotalk_sharing_btn_small.png"/></a>
                     </div>
                 </div>
             </div>
@@ -61,7 +50,7 @@
 </div>
 
 <!-- login modal end -->
-
+<script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
 <script src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js'></script>
 <script src="js/jquery-3.3.1.min.js"></script>
 <script src="js/login.js"></script>

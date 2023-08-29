@@ -1,4 +1,4 @@
-package app.dto.response;
+package app.dto.member.response;
 
 import app.entity.Member;
 import lombok.AllArgsConstructor;

@@ -1,16 +1,12 @@
 package web.dispatcher;
 
-import java.io.IOException;
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
+import org.apache.log4j.Logger;
+
+import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.apache.log4j.Logger;
+import java.io.IOException;
 
 @WebFilter(urlPatterns = "/*")
 public class BadRequestFilter implements Filter {
@@ -33,10 +29,8 @@ public class BadRequestFilter implements Filter {
     // 1. request 파라미터를 이용한 요청 필터 작업 수행
     request.setCharacterEncoding("UTF-8");
     String uri = ((HttpServletRequest) request).getRequestURI();
-    work_log.debug("doFilter----" + uri);
 
     String path = uri.substring(uri.lastIndexOf("/"));
-    work_log.debug("doFilter----" + path);
     // 사용자의 요청이 루트라면 main.bit로 리다이렉트
     if (path.equals("/")) {
       ((HttpServletResponse) response).sendRedirect("main.bit");

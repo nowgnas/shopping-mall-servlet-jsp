@@ -24,6 +24,9 @@
     <link rel="stylesheet" href="../../css/owl.carousel.min.css" type="text/css">
     <link rel="stylesheet" href="../../css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="../../css/style.css" type="text/css">
+
+    <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.5.js"></script>
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 </head>
 
 <body>
@@ -42,11 +45,11 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="breadcrumb__text">
-                    <h4>주문하기</h4>
+                    <h4>Direct Order</h4>
                     <div class="breadcrumb__links">
-                        <a href="../../index.html">홈</a>
-                        <a href="../../shop.html">상품</a>
-                        <span>주문하기</span>
+                        <a href="../../index.html">Home</a>
+                        <a href="../../shop.html">Product</a>
+                        <span>Direct Order</span>
                     </div>
                 </div>
             </div>
@@ -59,7 +62,7 @@
 <section class="checkout spad">
     <div class="container">
         <div class="checkout__form">
-            <form action="/order.bit?view=direct&cmd=create" method="post">
+            <form id="order-form" action="/order.bit?view=direct&cmd=create" method="post">
                 <div class="row">
                     <div class="col-lg-8 col-md-6">
                         <h6 class="checkout__title">사용자 정보</h6>
@@ -69,24 +72,28 @@
                         </div>
                         <div class="checkout__input">
                             <p>주소<span>*</span></p>
+                            <input type="button" onclick="getDaumPostcode()" value="우편번호 찾기" style="color: black;"><br>
                             <input type="text" placeholder="도로명 주소" class="checkout__input__add"
+                                   id="roadName"
                                    name="roadName"
-                                   value="${defaultAddress.roadName}" required
+                                   value="<c:if test="${defaultAddress.roadName != null}">${defaultAddress.roadName}</c:if>" required
                                    oninvalid="this.setCustomValidity('도로명 주소를 입력해주세요.')"
-                                   oninput="this.setCustomValidity('')">
+                                   oninput="this.setCustomValidity('')" style="color: black;">
                             <input type="text" placeholder="상세 주소" class="checkout__input__add"
+                                   id="addrDetail"
                                    name="addrDetail"
-                                   value="${defaultAddress.addrDetail}" required
+                                   value="<c:if test="${defaultAddress.addrDetail != null}">${defaultAddress.addrDetail}</c:if>" required
                                    oninvalid="this.setCustomValidity('상세 주소를 입력해주세요.')"
-                                   oninput="this.setCustomValidity('')">
+                                   oninput="this.setCustomValidity('')" style="color: black;">
                         </div>
                         <div class="checkout__input">
                             <p>우편번호<span>*</span></p>
                             <input type="text" placeholder="우편번호" class="checkout__input__add"
+                                   id="zipCode"
                                    name="zipCode"
-                                   value="${defaultAddress.zipCode}" required
+                                   value="<c:if test="${defaultAddress.zipCode != null}">${defaultAddress.zipCode}</c:if>" required
                                    oninvalid="this.setCustomValidity('우편번호를 입력해주세요.')"
-                                   oninput="this.setCustomValidity('')">
+                                   oninput="this.setCustomValidity('')" style="color: black;">
                         </div>
                         <div class="checkout__input">
                             <p>쿠폰 선택<span></span></p>
@@ -114,7 +121,7 @@
                                     <input type="hidden" class="product-quantity" name="productQuantity"
                                            value="${productQuantity}">
                                     ${product.name} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ${productQuantity}개<span
-                                        class="product-price">${product.price} 원</span>
+                                        class="product-price">${product.price}원</span>
                                 </li>
                             </ul>
                             <ul class="checkout__total__all">
@@ -122,7 +129,7 @@
                                 <input type="hidden" id="totalPrice" name="totalPrice">
                                 <li>총 가격 <span id="calculated-total"></span></li>
                             </ul>
-                            <button type="submit" class="site-btn">주문 하기</button>
+                            <a id="payment-btn" href="#" onclick="kakaoPay()"><img src="../../img/payments/payment_icon_yellow_large.png" height="70"></a>
                         </div>
                     </div>
                 </div>
@@ -137,16 +144,7 @@
 <jsp:include page="../common/footer.jsp"/>
 <!-- Footer Section End -->
 
-<!-- Search Begin -->
-<div class="search-model">
-    <div class="h-100 d-flex align-items-center justify-content-center">
-        <div class="search-close-switch">+</div>
-        <form class="search-model-form">
-            <input type="text" id="search-input" placeholder="Search here.....">
-        </form>
-    </div>
-</div>
-<!-- Search End -->
+<jsp:include page="../common/search.jsp"/>
 
 <!-- Js Plugins -->
 <script src="../../js/jquery-3.3.1.min.js"></script>
@@ -159,7 +157,6 @@
 <script src="../../js/mixitup.min.js"></script>
 <script src="../../js/owl.carousel.min.js"></script>
 <script src="../../js/main.js"></script>
-
 
 <script>
     const productItems = document.querySelectorAll(".product-item");
@@ -185,22 +182,91 @@
         const couponDiscountPolicy = selectedOption.getAttribute("name");
         const couponDiscountValue = parseInt(selectedOption.getAttribute("id"));
 
-        calculatedDiscountPrice.textContent = '0 원';
+        calculatedDiscountPrice.textContent = '0원';
         if (couponDiscountPolicy === 'CASH') {
             calculatedTotal -= couponDiscountValue;
-            calculatedDiscountPrice.textContent = '-' + couponDiscountValue + ' 원';
+            calculatedDiscountPrice.textContent = '-' + couponDiscountValue + '원';
         }
         if (couponDiscountPolicy === 'DISCOUNT') {
             calculatedTotal -= (calculatedTotal * (couponDiscountValue / 100));
-            calculatedDiscountPrice.textContent = '-' + (calculatedTotal * (couponDiscountValue / 100)) + ' 원';
+            calculatedDiscountPrice.textContent = '-' + (calculatedTotal * (couponDiscountValue / 100)) + '원';
         }
 
-        calculatedTotalElem.textContent = calculatedTotal < 0 ? 0 : calculatedTotal + ' 원';
+        calculatedTotalElem.textContent = calculatedTotal < 0 ? 0 : calculatedTotal + '원';
         calculatedTotalPrice.value = calculatedTotal < 0 ? 0 : calculatedTotal;
     }
 
     // 초기 총 가격 계산
     updateTotalPrice();
+</script>
+
+<script>
+    function kakaoPay() {
+        const calculatedTotalPrice = document.getElementById("totalPrice").value;
+        const roadName = document.getElementById('roadName').value;
+        const zipCode = document.getElementById('zipCode').value;
+
+        var IMP = window.IMP;
+        IMP.init('imp11402415');
+        IMP.request_pay({
+            pg : 'kakaopay',
+            pay_method : 'card',
+            merchant_uid: "order_no_" + new Date().getTime(),
+            name : '<c:out value="${product.name}"/>',
+            amount : calculatedTotalPrice,
+            buyer_email : 'test@naver.com',
+            buyer_name : '<c:out value="${memberName}"/>',
+            buyer_tel : '010-1234-5678',
+            buyer_addr : roadName,
+            buyer_postcode : zipCode,
+            m_redirect_url : 'http://localhost:8080'
+        }, function(response) {
+            // 실패 시
+            if (!response.success) {
+                var msg = '오류로 인하여 결제가 시작되지 못하였습니다.';
+                msg += '에러내용 : ' + response.error_msg;
+
+                alert(msg);
+            } else {
+                const formData = $('#order-form').serialize();
+                $.ajax({
+                    type: "POST",
+                    url: "/order-rest.bit?cmd=orderCreate",
+                    dataType: 'text',
+                    data: formData,
+                    contentType: "application/x-www-form-urlencoded;charset=UTF-8",
+                    error: function (error) {
+                        console.log(error);
+                        alert('상품 주문 에러: ' + error);
+                    },
+                    success: function (data) {
+                        console.log('성공')
+                        window.location.replace(`http://localhost:8080/order.bit?view=detail&cmd=get&orderId=` + data);
+                    }
+                });
+            }
+        });
+    }
+</script>
+
+<script>
+    function getDaumPostcode() {
+        new daum.Postcode({
+            oncomplete: function(data) {
+                let roadName = data.roadAddress;
+                let addrDetail = data.jibunAddress;
+                let zipCode = data.zonecode;
+
+                // 우편번호와 주소 정보를 해당 필드에 넣는다.
+                let roadNameInput = document.getElementById('roadName');
+                let addrDetailInput = document.getElementById("addrDetail");
+                let zipCodeInput = document.getElementById('zipCode');
+                roadNameInput.value = roadName;
+                addrDetailInput.value = addrDetail;
+                zipCodeInput.value = zipCode;
+            }
+        }).open();
+    }
 </script>
 </body>
 

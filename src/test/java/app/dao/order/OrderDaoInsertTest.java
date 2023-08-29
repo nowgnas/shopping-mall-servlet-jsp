@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import app.entity.Order;
 import app.enums.OrderStatus;
-import app.exception.ErrorCode;
 import config.TestConfig;
 import org.apache.ibatis.session.SqlSession;
 import org.junit.jupiter.api.AfterEach;
@@ -57,8 +56,7 @@ public class OrderDaoInsertTest {
     // when, then
     assertThrows(
         Exception.class,
-        () -> orderDao.insert(order, session),
-        ErrorCode.CANNOT_INSERT_ORDER.getMessage());
+        () -> orderDao.insert(order, session));
     session.commit();
     session.close();
   }

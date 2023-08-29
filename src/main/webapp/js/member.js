@@ -6,23 +6,64 @@
     let rePasswordFlag = false;
     let nameFlag = false;
 
-    $('.validation-form').on('submit', function (event) {
+    $('#register-btn').on('click', function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+
         const forms = $('.validation-form');
+        let flag = true;
         Array.prototype.filter.call(forms, (form) => {
             if (form.checkValidity() === false) {
-                event.preventDefault();
-                event.stopPropagation();
+                flag = false;
             }
             form.classList.add('was-validated');
         }, false);
 
-        if (!checkValid()) {
-            alert("입력값을 확인해주세요.");
+        if (!flag) {
             return;
         }
-        alert("회원가입을 축하합니다.");
-    });
 
+        if (!checkValid()) {
+            Swal.fire({
+                icon: 'error',
+                title: '입력 값을 확인 해주세요.',
+            })
+            return;
+        }
+
+        const email = $("#registerEmail").val();
+        const password = $("#registerPassword").val();
+        const name = $("#registerName").val();
+
+        $.post("member-rest.bit?cmd=register", {
+            registerEmail: email,
+            registerPassword: password,
+            registerName: name
+        }, function (result) {
+            if (result) {
+                Swal.fire({
+                    icon: 'success',
+                    title: '가입을 축하합니다.',
+                    showConfirmButton: false,
+                    timer: 1000
+                }).then(() => {
+                    location.href = "main.bit";
+                });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: '회원가입에 실패하였습니다.',
+                })
+            }
+
+        })
+            .fail(function (err) {
+                Swal.fire({
+                    icon: 'error',
+                    title: '회원가입에 실패하였습니다.',
+                })
+            });
+    });
 
     $("#registerEmail").on("focusout", function () {
         let email = $("#registerEmail").val();

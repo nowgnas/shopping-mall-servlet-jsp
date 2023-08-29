@@ -118,10 +118,11 @@
            p.price                                                        price,
            pi.url                                                         url,
            p.id                                                           id,
-           CASE WHEN l.product_id IS NOT NULL THEN true ELSE false END AS isLiked
+           CASE WHEN l.product_id IS NOT NULL THEN true ELSE false END AS is_liked
     FROM product p
            LEFT JOIN likes l ON l.product_id = p.id AND l.member_id = #{userId}
            left join product_image pi on p.id = pi.product_id
+    WHERE pi.is_thumbnail = true
     ORDER BY p.price desc
       LIMIT #{current}, #{perPage}
   </select>
@@ -130,22 +131,24 @@
            p.price                                                        price,
            pi.url                                                         url,
            p.id                                                           id,
-           CASE WHEN l.product_id IS NOT NULL THEN true ELSE false END AS isLiked
+           CASE WHEN l.product_id IS NOT NULL THEN true ELSE false END AS is_liked
     FROM product p
            LEFT JOIN likes l ON l.product_id = p.id AND l.member_id = #{userId}
            left join product_image pi on p.id = pi.product_id
+    WHERE pi.is_thumbnail = true
     ORDER BY p.created_at desc
-    LIMIT #{current}, #{perPage}
+      LIMIT #{current}, #{perPage}
   </select>
   <select id="sortbyprice" parameterType="hashMap" resultMap="ListResultMap">
     SELECT p.name                                                         name,
            p.price                                                        price,
            pi.url                                                         url,
            p.id                                                           id,
-           CASE WHEN l.product_id IS NOT NULL THEN true ELSE false END AS isLiked
+           CASE WHEN l.product_id IS NOT NULL THEN true ELSE false END AS is_liked
     FROM product p
            LEFT JOIN likes l ON l.product_id = p.id AND l.member_id = #{userId}
            left join product_image pi on p.id = pi.product_id
+    WHERE pi.is_thumbnail = true
     ORDER BY p.price
       LIMIT #{current}, #{perPage}
   </select>
@@ -201,10 +204,36 @@
       and pi.is_thumbnail = true
   </select>
 
-  <select id="searchByWord" parameterType="String" resultType="product">
-    SELECT *
-    FROM product
-    WHERE name LIKE '%' || #{keyword} || '%'
-    ORDER BY name
+  <select id="searchByWord" parameterType="hashMap" resultMap="ListResultMap">
+    SELECT p.name                                                         name,
+           p.price                                                        price,
+           pi.url                                                         url,
+           p.id                                                           id,
+           CASE WHEN l.product_id IS NOT NULL THEN true ELSE false END AS is_Liked
+    FROM product p
+           LEFT JOIN likes l ON l.product_id = p.id AND l.member_id = #{userId}
+           left join product_image pi on p.id = pi.product_id
+    WHERE pi.is_thumbnail = true
+      and p.name LIKE CONCAT('%', #{keyword}, '%')
+      LIMIT #{current}
+        , 9
+  </select>
+
+  <select id="search-subcategory-product" parameterType="hashMap"
+    resultType="productListItem">
+    SELECT p.name name,
+    p.price price,
+    pi.url url,
+    p.id id,
+    CASE WHEN l.product_id IS NOT NULL THEN true ELSE false END AS isLiked
+    from product p
+    LEFT JOIN likes l ON l.product_id = p.id AND l.member_id = #{memberId}
+    left join product_image pi on p.id = pi.product_id
+    where p.category_id in
+    <foreach collection="id" item="id" open="(" separator="," close=")">
+      #{id}
+    </foreach>
+    and pi.is_thumbnail = true
+    limit #{curPage}, 9
   </select>
 </mapper>

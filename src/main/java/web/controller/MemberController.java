@@ -1,7 +1,5 @@
 package web.controller;
 
-import app.dto.request.LoginDto;
-import app.dto.response.MemberDetail;
 import app.service.member.MemberService;
 import web.ControllerFrame;
 import web.dispatcher.Navi;
@@ -29,15 +27,13 @@ public class MemberController implements ControllerFrame {
     return next;
   }
 
-  private String build(HttpServletRequest request, String view) {
+  private String build(HttpServletRequest request, String view) throws Exception {
     String path = Navi.FORWARD_MAIN;
     switch (view) {
       case "registerForm":
         return registerForm();
       case "loginForm":
         return loginForm();
-      case "login":
-        return login(request);
       case "logout":
         return logout(request);
     }
@@ -50,18 +46,6 @@ public class MemberController implements ControllerFrame {
 
   private String loginForm() {
     return Navi.FORWARD_LOGIN_FORM;
-  }
-
-  private String login(HttpServletRequest request) {
-    String email = request.getParameter("email");
-    String password = request.getParameter("password");
-
-    LoginDto loginDto = new LoginDto(email, password);
-    MemberDetail loginMember = memberService.login(loginDto);
-
-    HttpSession session = request.getSession();
-    session.setAttribute("loginMember", loginMember);
-    return Navi.REDIRECT_MAIN;
   }
 
   private String logout(HttpServletRequest request) {

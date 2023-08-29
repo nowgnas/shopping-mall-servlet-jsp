@@ -2,13 +2,11 @@ package app.service.member;
 
 import app.dao.encryption.EncryptionDao;
 import app.dao.member.MemberDao;
-import app.dto.request.LoginDto;
-import app.dto.request.MemberRegisterDto;
-import app.dto.response.MemberDetail;
+import app.dto.member.request.LoginDto;
+import app.dto.member.request.MemberRegisterDto;
+import app.dto.member.response.MemberDetail;
 import app.entity.Encryption;
 import app.entity.Member;
-import app.exception.CustomException;
-import app.exception.ErrorCode;
 import app.exception.member.DuplicatedEmailException;
 import app.exception.member.LoginFailException;
 import app.exception.member.MemberEntityNotFoundException;
@@ -21,6 +19,7 @@ import org.apache.ibatis.session.SqlSessionFactory;
 
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
+import java.util.Optional;
 
 public class MemberService {
 
@@ -61,7 +60,7 @@ public class MemberService {
     return result == 1 ? true : false;
   }
 
-  public MemberDetail login(LoginDto dto) {
+  public MemberDetail login(LoginDto dto) throws Exception {
     SqlSession sqlSession = sessionFactory.openSession();
     MemberDetail loginMember = null;
     try {
@@ -74,7 +73,31 @@ public class MemberService {
 
     } catch (SQLException e) {
 
-    } catch (Exception e) {
+    } finally {
+      sqlSession.close();
+    }
+    return loginMember;
+  }
+
+  public MemberDetail kakaoLogin(MemberRegisterDto dto) {
+    SqlSession sqlSession = sessionFactory.openSession();
+    MemberDetail loginMember = null;
+    Member member = null;
+    try {
+      Optional<Member> optionalMember = memberDao.selectByEmail(dto.getEmail(), sqlSession);
+      if (optionalMember.isEmpty()) {
+
+        member = dto.toEntity("ASDQWEASDQWEASD");
+        memberDao.insert(member, sqlSession);
+        sqlSession.commit();
+        loginMember = MemberDetail.of(member);
+      } else {
+        member = optionalMember.get();
+        loginMember = MemberDetail.of(member);
+      }
+
+    } catch (SQLException e) {
+      sqlSession.rollback();
     } finally {
       sqlSession.close();
     }
@@ -107,7 +130,7 @@ public class MemberService {
     return result == 0 ? true : false;
   }
 
-  private String getHashedPassword(LoginDto dto, SqlSession sqlSession) throws SQLException {
+  private String getHashedPassword(LoginDto dto, SqlSession sqlSession) throws Exception {
     Encryption encryption =
         encryptionDao
             .selectByEmail(dto.getEmail(), sqlSession)
@@ -116,7 +139,7 @@ public class MemberService {
     return hashedPassword;
   }
 
-  private String createHashedPassword(String password, String salt) throws SQLException {
+  private String createHashedPassword(String password, String salt) throws Exception {
     new String();
     CipherUtil.getSHA256(password, salt);
     return new String(CipherUtil.getSHA256(password, salt)).replaceAll(" ", "");

@@ -5,7 +5,6 @@ import app.dto.product.response.ProductDetailForOrder;
 import app.entity.Category;
 import app.entity.Product;
 import app.exception.CustomException;
-import app.exception.ErrorCode;
 import org.apache.ibatis.session.SqlSession;
 
 import java.util.List;
@@ -103,7 +102,7 @@ public class ProductDao implements ProductDaoFrame<Long, Product> {
 
   @Override
   public ProductDetail selectProductDetailWithCategory(
-      Long memberId, Long productId, SqlSession session) {
+      Long memberId, Long productId, SqlSession session) throws Exception {
     return session.selectOne(
         "product.selectDetail",
         ProductDetailParameter.builder().productId(productId).memberId(memberId).build());
@@ -133,7 +132,8 @@ public class ProductDao implements ProductDaoFrame<Long, Product> {
   }
 
   @Override
-  public List<Product> selectProductsByKeyword(String keyword, SqlSession session) {
-    return session.selectList("product.searchByWord", keyword);
+  public List<ProductListItem> selectProductsByKeyword(
+      Map<String, Object> map, SqlSession session) {
+    return session.selectList("product.searchByWord", map);
   }
 }

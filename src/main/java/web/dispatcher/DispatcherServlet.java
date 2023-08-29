@@ -1,5 +1,7 @@
 package web.dispatcher;
 
+import app.exception.member.LoginFailException;
+import app.exception.member.MemberEntityNotFoundException;
 import app.utils.HttpUtil;
 import org.apache.log4j.Logger;
 import web.ControllerFrame;
@@ -7,6 +9,7 @@ import web.RestControllerFrame;
 import web.controller.*;
 import web.restController.LikesRestController;
 import web.restController.MemberRestController;
+import web.restController.OrderRestController;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -20,9 +23,9 @@ import java.util.Map;
 @WebServlet({"/DispatcherServlet", "/web/dispatcher", "*.bit"})
 public class DispatcherServlet extends HttpServlet {
   private static final long serialVersionUID = 1L;
-  private Map<String, ControllerFrame> controllerMapper = new HashMap<>();
-  private Map<String, RestControllerFrame> restControllerMapper = new HashMap<>();
-  private Logger work_log = Logger.getLogger("work");
+  private final Map<String, ControllerFrame> controllerMapper = new HashMap<>();
+  private final Map<String, RestControllerFrame> restControllerMapper = new HashMap<>();
+  private final Logger work_log = Logger.getLogger("work");
 
   public DispatcherServlet() {
     super();
@@ -31,9 +34,9 @@ public class DispatcherServlet extends HttpServlet {
     controllerMapper.put("order", new OrderController());
     controllerMapper.put("product", new ProductController());
     controllerMapper.put("likes", new LikesController());
-    controllerMapper.put("cart", new CartController());
+    restControllerMapper.put("likes-rest", new LikesRestController());
     restControllerMapper.put("member-rest", new MemberRestController());
-    restControllerMapper.put("likes", new LikesRestController());
+    restControllerMapper.put("order-rest", new OrderRestController());
   }
 
   protected void service(HttpServletRequest request, HttpServletResponse response)
@@ -66,6 +69,10 @@ public class DispatcherServlet extends HttpServlet {
         response.setContentType("text/json;charset=UTF-8");
         response.getWriter().print(result);
       }
+    } catch (MemberEntityNotFoundException e) {
+      response.sendError(e.getStatusCode(), e.getMessage());
+    } catch (LoginFailException e) {
+      response.sendError(e.getStatusCode(), e.getMessage());
     } catch (Exception e) {
       e.printStackTrace();
     }
