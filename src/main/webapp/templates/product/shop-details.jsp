@@ -53,7 +53,7 @@
             </div>
             <div class="row justify-content-center">
                 <div class="product__details__pic__item">
-                    <img src="${productDetail.detail.url}" alt="">
+                    <img src="${productDetail.detail.url}" alt="" width="500px" height="500px">
                 </div>
             </div>
         </div>
