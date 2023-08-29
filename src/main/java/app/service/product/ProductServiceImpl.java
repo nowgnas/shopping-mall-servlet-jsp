@@ -59,8 +59,7 @@ public class ProductServiceImpl implements ProductService {
       throws Exception {
     SqlSession session = sessionFactory.openSession();
     Map<String, Object> map = new HashMap<>();
-    map.put("current", currentPage);
-    map.put("perPage", 9);
+    map.put("offset", (currentPage - 1) * 9);
     map.put("userId", userId.toString());
 
     List<ProductListItem> products = null;
@@ -106,7 +105,7 @@ public class ProductServiceImpl implements ProductService {
     SqlSession session = sessionFactory.openSession();
     Map<String, Object> map = new HashMap<>();
     map.put("userId", memberId);
-    map.put("current", curPage);
+    map.put("offset", (curPage - 1) * 9);
     map.put("keyword", keyword.trim());
     List<ProductListItem> products = dao.selectProductsByKeyword(map, session);
     session.close();

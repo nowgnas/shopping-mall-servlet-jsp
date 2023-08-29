@@ -135,6 +135,8 @@
   window.onload = function () {
     var quantityInput = document.getElementById("quantity-input");
     quantityInput.value = "1"; // Set the default value
+    var totalPriceSpan = document.getElementById("totalPrice");
+    totalPriceSpan.textContent = '0';
   };
 </script>
 

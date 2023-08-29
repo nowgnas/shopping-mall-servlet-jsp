@@ -80,7 +80,7 @@
                                             <ul class="nice-scroll">
                                                 <c:forEach var="category" items="${categories}">
                                                     <li>
-                                                        <a href="/product.bit?view=category&keyword=${category.name}&curPage=0">${category.name}</a>
+                                                        <a href="/product.bit?view=category&keyword=${category.name}&curPage=1">${category.name}</a>
                                                     </li>
                                                 </c:forEach>
                                             </ul>
@@ -98,16 +98,6 @@
                         <div class="col-lg-6 col-md-6 col-sm-6">
                             <div class="shop__product__option__left">
                                 <p>Showing 1–12 of 126 results</p>
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-md-6 col-sm-6">
-                            <div class="shop__product__option__right">
-                                <p>Sort Option:</p>
-                                <select id="sortOption">
-                                    <option value="DATE_DESC">Date</option>
-                                    <option value="PRICE_DESC">Lowest Price First</option>
-                                    <option value="PRICE_ASC">Highest Price First</option>
-                                </select>
                             </div>
                         </div>
                     </div>
