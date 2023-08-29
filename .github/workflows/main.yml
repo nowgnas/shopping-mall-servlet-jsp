@@ -1,0 +1,15 @@
+name: CI
+	on:
+    push:
+      branches: [ main ]
+    pull_request:
+      branches: [ main ]
+	jobs:
+    build:
+      runs-on: ubuntu-latest
+	
+      steps:
+      - uses: actions/checkout@v2
+	
+      - name: Run a one-line script
+        run: curl -X POST http://bitbit.kro.kr:8088/job/lotte-mall/build --user bit116eb06dd739dc0e07100177055cc4cc69 -v
