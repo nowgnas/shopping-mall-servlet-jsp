@@ -22,7 +22,7 @@
                     <h4>Login</h4>
                 </div>
                 <div class="d-flex flex-column text-center">
-                    <form id="loginForm" >
+                    <form id="loginForm" method="POST" action="member.bit?view=login">
                         <div class="form-group">
                             <input type="email" class="form-control" name="email" id="email"
                                    placeholder="Your email address...">
@@ -33,7 +33,7 @@
                                    placeholder="Your password...">
                             <span id="checkPassword"></span>
                         </div>
-                        <button type="button" class="btn btn-info btn-block btn-round" id="login-btn">Login</button>
+                        <button type="button" class="btn btn-info btn-block btn-round" id="loginbtn">Login</button>
                     </form>
 
                     <div class="text-center text-muted delimiter">or use a social network</div>

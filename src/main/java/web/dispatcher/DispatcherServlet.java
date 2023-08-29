@@ -1,7 +1,5 @@
 package web.dispatcher;
 
-import app.exception.member.LoginFailException;
-import app.exception.member.MemberEntityNotFoundException;
 import app.utils.HttpUtil;
 import org.apache.log4j.Logger;
 import web.ControllerFrame;
@@ -69,10 +67,6 @@ public class DispatcherServlet extends HttpServlet {
         response.setContentType("text/json;charset=UTF-8");
         response.getWriter().print(result);
       }
-    } catch (MemberEntityNotFoundException e) {
-      response.sendError(e.getStatusCode(), e.getMessage());
-    } catch (LoginFailException e) {
-      response.sendError(e.getStatusCode(), e.getMessage());
     } catch (Exception e) {
       e.printStackTrace();
     }
