@@ -9,7 +9,7 @@
 | 기술 스택           | Java, Servlet & JSP, MyBatis, Tomcat            |
 | 데이터베이스          | MySQL                                           |
 | 버전 관리           | Github, Git                                     |
-| 오픈소스 및 외부 라이브러리 |                                                 |
+| 오픈소스 및 외부 라이브러리 |                                              |
 
 ## 🛠 세부 기술 스택(Tech Stack)
 
