@@ -1,5 +1,6 @@
 package web.restController;
 
+import app.dto.request.LoginDto;
 import app.dto.request.MemberRegisterDto;
 import app.dto.response.MemberDetail;
 import app.exception.member.RegisterException;
@@ -31,17 +32,31 @@ public class MemberRestController implements RestControllerFrame {
     return result;
   }
 
-  private Object build(HttpServletRequest request, String cmd) throws IOException {
+  private Object build(HttpServletRequest request, String cmd) throws Exception {
     Object result = null;
     switch (cmd) {
       case "loginCheck":
         return loginCheck(request);
       case "register":
         return register(request);
+      case "login":
+        return login(request);
       case "kakaoLogin":
         kakaoLogin(request);
     }
     return result;
+  }
+
+  private Boolean login(HttpServletRequest request) throws Exception {
+    String email = request.getParameter("email");
+    String password = request.getParameter("password");
+
+    LoginDto loginDto = new LoginDto(email, password);
+    MemberDetail loginMember = memberService.login(loginDto);
+
+    HttpSession session = request.getSession();
+    session.setAttribute("loginMember", loginMember);
+    return true;
   }
 
   private void kakaoLogin(HttpServletRequest request) throws IOException {

@@ -36,8 +36,6 @@ public class MemberController implements ControllerFrame {
         return registerForm();
       case "loginForm":
         return loginForm();
-      case "login":
-        return login(request);
       case "logout":
         return logout(request);
     }
@@ -52,17 +50,6 @@ public class MemberController implements ControllerFrame {
     return Navi.FORWARD_LOGIN_FORM;
   }
 
-  private String login(HttpServletRequest request) throws Exception {
-    String email = request.getParameter("email");
-    String password = request.getParameter("password");
-
-    LoginDto loginDto = new LoginDto(email, password);
-    MemberDetail loginMember = memberService.login(loginDto);
-
-    HttpSession session = request.getSession();
-    session.setAttribute("loginMember", loginMember);
-    return Navi.REDIRECT_MAIN;
-  }
 
   private String logout(HttpServletRequest request) {
     HttpSession session = request.getSession();
