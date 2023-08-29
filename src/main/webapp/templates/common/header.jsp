@@ -10,43 +10,43 @@
 <!-- Offcanvas Menu Begin -->
 <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.3.1/css/all.css'>
 <style>
-    .container {
-        padding: 2rem 0rem;
+  .container {
+    padding: 2rem 0rem;
+  }
+
+  @media (min-width: 576px) {
+    .modal-dialog {
+      max-width: 400px;
     }
 
-    @media (min-width: 576px) {
-        .modal-dialog {
-            max-width: 400px;
-        }
-
-        .modal-dialog .modal-content {
-            padding: 1rem;
-        }
+    .modal-dialog .modal-content {
+      padding: 1rem;
     }
+  }
 
-    .modal-header .close {
-        margin-top: -1.5rem;
-    }
+  .modal-header .close {
+    margin-top: -1.5rem;
+  }
 
-    .form-title {
-        margin: -2rem 0rem 2rem;
-    }
+  .form-title {
+    margin: -2rem 0rem 2rem;
+  }
 
-    .btn-round {
-        border-radius: 3rem;
-    }
+  .btn-round {
+    border-radius: 3rem;
+  }
 
-    .delimiter {
-        padding: 1rem;
-    }
+  .delimiter {
+    padding: 1rem;
+  }
 
-    .social-buttons .btn {
-        margin: 0 0.5rem 1rem;
-    }
+  .social-buttons .btn {
+    margin: 0 0.5rem 1rem;
+  }
 
-    .signup-section {
-        padding: 0.3rem 0rem;
-    }
+  .signup-section {
+    padding: 0.3rem 0rem;
+  }
 </style>
 <div class="offcanvas-menu-overlay"></div>
 <div class="offcanvas-menu-wrapper">
@@ -87,7 +87,8 @@
                     <div class="header__top__right">
                         <div class="header__top__links">
                             <c:if test="${ empty loginMember }">
-                                <a href="#" data-toggle="modal" data-target="#loginModal">Sign in</a>
+                                <a href="#" data-toggle="modal" data-target="#loginModal">Sign
+                                    in</a>
                             </c:if>
                             <c:if test="${ !empty loginMember }">
                                 <a href="#" disabled>${loginMember.name}님</a>
@@ -109,9 +110,8 @@
             <div class="col-lg-6 col-md-6">
                 <nav class="header__menu mobile-menu">
                     <ul>
-
                         <li><a href="/main.bit">Home</a></li>
-                        <li><a href="/product.bit?view=shop&curPage=0&sort=DATE_DESC">Shop</a></li>
+                        <li><a href="/product.bit?view=shop&curPage=1&sort=PRICE_ASC">Shop</a></li>
                         <c:if test="${ !empty loginMember }">
                             <li><a href="/order.bit?view=list&cmd=get">Order List</a></li>
                         </c:if>
@@ -127,7 +127,8 @@
                     <c:if test="${ !empty loginMember }">
                         <a href="/likes.bit?view=likes"><img src="img/icon/heart.png" alt=""></a>
                     </c:if>
-                    <a href="/cart.bit?action=get"><img src="img/icon/cart.png" alt=""> <span>0</span></a>
+                    <a href="/cart.bit?action=get"><img src="img/icon/cart.png" alt="">
+                        <span>0</span></a>
                 </div>
             </div>
         </div>
@@ -138,3 +139,4 @@
 <jsp:include page="../member/loginModal.jsp"/>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="js/header.js"></script>
+

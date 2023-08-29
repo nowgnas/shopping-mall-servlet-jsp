@@ -5,13 +5,11 @@ import app.dao.product.ProductDaoFrame;
 import app.dto.paging.Pagination;
 import app.dto.product.ProductDetail;
 import app.dto.product.ProductListItem;
-import app.dto.product.response.ProductDetailForOrder;
 import app.dto.product.response.ProductDetailWithCategory;
 import app.dto.product.response.ProductListWithPagination;
 import app.entity.Category;
 import app.enums.SortOption;
 import app.exception.product.ProductNotFoundException;
-import app.exception.product.ProductQuantityLackException;
 import app.utils.GetSessionFactory;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -60,8 +58,7 @@ public class ProductServiceImpl implements ProductService {
       throws Exception {
     SqlSession session = sessionFactory.openSession();
     Map<String, Object> map = new HashMap<>();
-    map.put("current", currentPage);
-    map.put("perPage", 9);
+    map.put("offset", (currentPage - 1) * 9);
     map.put("userId", userId.toString());
 
     List<ProductListItem> products = null;
@@ -91,23 +88,12 @@ public class ProductServiceImpl implements ProductService {
   }
 
   @Override
-  public ProductDetailForOrder getProductDetailForOrder(Long productId, int quantity)
-      throws Exception {
-    SqlSession session = sessionFactory.openSession();
-    int qty = dao.selectProductQuantity(productId, session);
-    if (qty < quantity) throw new ProductQuantityLackException();
-    ProductDetailForOrder detail = dao.selectProductDetail(productId, session);
-    session.close();
-    return detail;
-  }
-
-  @Override
   public ProductListWithPagination getProductsByKeyword(String keyword, Long memberId, int curPage)
       throws Exception {
     SqlSession session = sessionFactory.openSession();
     Map<String, Object> map = new HashMap<>();
     map.put("userId", memberId);
-    map.put("current", curPage);
+    map.put("offset", (curPage - 1) * 9);
     map.put("keyword", keyword.trim());
     List<ProductListItem> products = dao.selectProductsByKeyword(map, session);
     session.close();
