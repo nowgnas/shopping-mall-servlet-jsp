@@ -19,7 +19,7 @@ public class ThrowExceptionUserRequestOverProductQuantityInCart implements CartP
 
     Long totalRequestQuantity = cart.getProductQuantity() - requestQuantity;
     if (totalRequestQuantity <= 0) {
-      throw new CartQuantityIsUnder0Exception(ErrorCode.CART_CAN_NOT_STORE_UNDER_0_VALUE);
+      throw new CartQuantityIsUnder0Exception();
     } else {
       cartDaoFrame.update(Cart.updateCart(cart, totalRequestQuantity), session);
     }

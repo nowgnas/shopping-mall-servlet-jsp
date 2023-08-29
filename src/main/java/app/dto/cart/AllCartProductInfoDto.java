@@ -1,5 +1,6 @@
 package app.dto.cart;
 
+import app.entity.Product;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,7 +23,7 @@ public class AllCartProductInfoDto {
       List<ProductInCartDto> cartProductDtoList) {
     Long totalProductPriceInCart = 0L;
     for (ProductInCartDto cartProduct : cartProductDtoList) {
-      totalProductPriceInCart += cartProduct.getPrice();
+      totalProductPriceInCart += (long)(cartProduct.getProductPrice().intValue() * cartProduct.getProductInCart().intValue());
     }
     return AllCartProductInfoDto.builder()
         .cartProductDtoList(cartProductDtoList)

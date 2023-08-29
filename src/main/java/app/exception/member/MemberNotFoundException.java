@@ -1,11 +1,16 @@
 package app.exception.member;
 
-import app.exception.CustomException;
-import app.exception.ErrorCode;
+import app.exception.DomainException;
 
-public class MemberNotFoundException extends CustomException {
+public class MemberNotFoundException extends DomainException {
+  private static final String errorMessage = "로그인을 먼저 하십시오";
 
-  public MemberNotFoundException(ErrorCode errorCode) {
-    super(errorCode);
+  public MemberNotFoundException() {
+    super(errorMessage);
+  }
+
+  @Override
+  public int getStatusCode() {
+    return 402;
   }
 }

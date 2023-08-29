@@ -5,6 +5,7 @@ import app.entity.Cart;
 import app.entity.ProductAndMemberCompositeKey;
 import app.exception.ErrorCode;
 import app.exception.cart.OutOfStockException;
+import java.util.Objects;
 import lombok.AllArgsConstructor;
 import org.apache.ibatis.session.SqlSession;
 
@@ -14,21 +15,16 @@ public class UpdateCartServiceImpl implements UpdateCartService {
   private CartDaoFrame<ProductAndMemberCompositeKey, Cart> cartDao;
   private CartProductDeletePolicy cartProductDeletePolicy;
 
-  @Override
-  public void increaseQuantity(Cart cart, Long requestQuantity, Long stock, SqlSession session)
-      throws Exception {
-    // 상품의 재고가 부족한 경우
-    Long totalRequestQuantity = requestQuantity + cart.getProductQuantity();
-    if (totalRequestQuantity > stock) {
-      throw new OutOfStockException(ErrorCode.QUANTITY_IS_NOT_SUFFICIENT);
-    } else {
-      cartDao.update(Cart.updateCart(cart, totalRequestQuantity), session);
-    }
-  }
 
   @Override
-  public void decreaseQuantity(Cart cart, Long requestQuantity, SqlSession session)
+  public void update(Cart cart, Long requestQuantity, Long stock, SqlSession session)
       throws Exception {
-    cartProductDeletePolicy.deleteRequestQuantity(cart, requestQuantity, session);
+    if (requestQuantity.intValue() <= 0) {
+      cartProductDeletePolicy.deleteRequestQuantity(cart, requestQuantity, session);
+    } else if (stock < requestQuantity) {
+      throw new OutOfStockException();
+    } else {
+      cartDao.update(Cart.updateCart(cart, requestQuantity), session);
+    }
   }
 }
