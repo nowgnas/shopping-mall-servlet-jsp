@@ -1,15 +1,11 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="description" content="Male_Fashion Template">
-    <meta name="keywords" content="Male_Fashion, unica, creative, html">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Male-Fashion | Template</title>
+    <jsp:include page="../common/meta-data.jsp"/>
 
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&display=swap"
@@ -25,7 +21,11 @@
     <link rel="stylesheet" href="../../css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="../../css/style.css" type="text/css">
 
-
+    <style>
+      .hover-color-change:hover {
+        color: red; /* Change to the desired color */
+      }
+    </style>
 </head>
 
 <body>
@@ -62,6 +62,20 @@
         <div class="container">
             <div class="row d-flex justify-content-center">
                 <div class="col-lg-8">
+                    <div class="row">
+                        <c:forEach varStatus="idx" begin="0"
+                                   items="${productDetail.category.categoryList}"
+                                   var="category">
+                            <c:set var="splitCategory" value="${fn:split(category, '=')[1]}"/>
+                            <div class="col-md-2 element"><a class="hover-color-change"
+                                                             href="/product.bit?view=category&keyword=${splitCategory}&curPage=1">${splitCategory}</a>
+                                <c:if test="${idx.index < 2}">
+                                    &nbsp;&nbsp;&nbsp;>
+                                </c:if>
+                            </div>
+                        </c:forEach>
+                    </div>
+
                     <div class="product__details__text">
                         <%-- todo: product name --%>
                         <h4>${productDetail.detail.name}</h4>
@@ -142,6 +156,8 @@
   window.onload = function () {
     var quantityInput = document.getElementById("quantity-input");
     quantityInput.value = "1"; // Set the default value
+    var totalPriceSpan = document.getElementById("totalPrice");
+    totalPriceSpan.textContent = '0';
   };
 </script>
 

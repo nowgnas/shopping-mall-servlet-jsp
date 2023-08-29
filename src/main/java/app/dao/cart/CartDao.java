@@ -3,9 +3,10 @@ package app.dao.cart;
 import app.dto.cart.CartAndProductDto;
 import app.entity.Cart;
 import app.entity.ProductAndMemberCompositeKey;
+import org.apache.ibatis.session.SqlSession;
+
 import java.util.List;
 import java.util.Optional;
-import org.apache.ibatis.session.SqlSession;
 
 public class CartDao implements CartDaoFrame<ProductAndMemberCompositeKey, Cart> {
 
@@ -20,18 +21,19 @@ public class CartDao implements CartDaoFrame<ProductAndMemberCompositeKey, Cart>
   }
 
   @Override
-  public int deleteById(ProductAndMemberCompositeKey productAndMemberCompositeKey,
-      SqlSession session) throws Exception {
+  public int deleteById(
+      ProductAndMemberCompositeKey productAndMemberCompositeKey, SqlSession session)
+      throws Exception {
     int returnValue = session.delete("cart.delete", productAndMemberCompositeKey);
     session.commit();
     return returnValue;
   }
 
   @Override
-  public Optional<Cart> selectById(ProductAndMemberCompositeKey productAndMemberCompositeKey,
-      SqlSession session) throws Exception {
-    return Optional.ofNullable(
-        session.selectOne("cart.select", productAndMemberCompositeKey));
+  public Optional<Cart> selectById(
+      ProductAndMemberCompositeKey productAndMemberCompositeKey, SqlSession session)
+      throws Exception {
+    return Optional.ofNullable(session.selectOne("cart.select", productAndMemberCompositeKey));
   }
 
   @Override
@@ -39,10 +41,9 @@ public class CartDao implements CartDaoFrame<ProductAndMemberCompositeKey, Cart>
     return session.selectList("select-all");
   }
 
-
   @Override
   public Long getTheNumberOfTotalProductInCart(Long memberId, SqlSession session) {
-    return session.selectOne("get-total-page",memberId);
+    return session.selectOne("get-total-page", memberId);
   }
 
   @Override
@@ -51,14 +52,14 @@ public class CartDao implements CartDaoFrame<ProductAndMemberCompositeKey, Cart>
   }
 
   @Override
-  public List<CartAndProductDto> getAllCartsAndAllProductsByMember(Long memberId,
-      SqlSession session) {
+  public List<CartAndProductDto> getAllCartsAndAllProductsByMember(
+      Long memberId, SqlSession session) {
     return session.selectList("select-all-cart-and-product-by-member", memberId);
   }
 
   @Override
-  public int bulkDelete(List<ProductAndMemberCompositeKey> productAndMemberCompositeKeys,
-      SqlSession session) {
+  public int bulkDelete(
+      List<ProductAndMemberCompositeKey> productAndMemberCompositeKeys, SqlSession session) {
     return session.delete("cart.bulkDelete", productAndMemberCompositeKeys);
   }
 }

@@ -31,6 +31,7 @@
       alias="ProductSearchBySubCategory"/>
     <typeAlias type="app.dto.likes.request.LikesSelectForPage"
       alias="likesSelectForPage"/>
+    <typeAlias type="app.dto.category.response.CategoryHierarchy" alias="categoryHierarchy"/>
 
   </typeAliases>
   <environments default="dev">

@@ -17,8 +17,7 @@ document.addEventListener("DOMContentLoaded", function () {
       params.append("productId", productId);
       params.append("action", "delete");
 
-      // Make an AJAX POST request with Axios
-      axios.post('/cart', params.toString())
+      axios.post('/cart.bit', params.toString())
           .then(response => {
             console.log(response.data);
           })
@@ -42,9 +41,6 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 $(document).ready(function () {
-
-
-
   $('.shopping__cart__table').on('change', '.quantity-select',
     function (event) {
       console.log('Change event occurred');
@@ -62,7 +58,7 @@ $(document).ready(function () {
         updatedQuantity: selectedQuantity
       };
 
-        $.post('/cart', data)
+        $.post('/cart.bit', data)
           .done(function (response) {
             console.log("시작")
             location.reload()
