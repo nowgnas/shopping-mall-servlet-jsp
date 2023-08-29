@@ -80,9 +80,9 @@
                         <%-- todo: product name --%>
                         <h4>${productDetail.detail.name}</h4>
                         <%-- todo: price --%>
-                        <div class="row">
-                            <div class="col-md">&#8361;</div>
-                            <div class="col-md" id="unitPrice">${productDetail.detail.price}</div>
+                        <div class="row justify-content-center">
+                            <div>&#8361;</div>
+                            <div id="unitPrice">${productDetail.detail.price}</div>
                         </div>
                         <%-- todo: description --%>
                         <p>${productDetail.detail.code}</p>
@@ -158,7 +158,7 @@
     var quantityInput = document.getElementById("quantity-input");
     quantityInput.value = "1"; // Set the default value
     var totalPriceSpan = document.getElementById("totalPrice");
-    totalPriceSpan.textContent = '0';
+    totalPriceSpan.textContent = parseFloat(document.getElementById("unitPrice").textContent);
   };
 </script>
 
