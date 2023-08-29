@@ -154,6 +154,7 @@
 <script src="../../js/owl.carousel.min.js"></script>
 <script src="../../js/main.js"></script>
 
+<%--화면단의 총 가격 업데이트--%>
 <script>
     const productItems = document.querySelectorAll(".product-item");
     const calculatedTotalElem = document.getElementById("calculated-total");
@@ -195,7 +196,49 @@
     // 초기 총 가격 계산
     updateTotalPrice();
 </script>
+<%--주소 검색 로직--%>
+<script>
+    function getDaumPostcode() {
+        new daum.Postcode({
+            oncomplete: function(data) {
+                let roadName = data.roadAddress;
+                let addrDetail = data.jibunAddress;
+                let zipCode = data.zonecode;
 
+                // 우편번호와 주소 정보를 해당 필드에 넣는다.
+                let roadNameInput = document.getElementById('roadName');
+                let addrDetailInput = document.getElementById("addrDetail");
+                let zipCodeInput = document.getElementById('zipCode');
+                roadNameInput.value = roadName;
+                addrDetailInput.value = addrDetail;
+                zipCodeInput.value = zipCode;
+            }
+        }).open();
+    }
+</script>
+
+<%--카카오 페이 결제하기 버튼 클릭 전의 validation 이벤트--%>
+<script>
+    const paymentBtn = document.getElementById("payment-btn");
+    paymentBtn.addEventListener('click', () => {
+        const memberName = document.getElementById("memberName").value;
+        const roadName = document.getElementById("roadName").value;
+        const addrDetail = document.getElementById("addrDetail").value;
+        const zipCode = document.getElementById("zipCode").value;
+        if(memberName === '' || roadName === '' || addrDetail === '' || zipCode === '') {
+            Swal.fire({
+                icon: 'error',
+                title: "ERROR",
+                text: '모든 필드를 입력해주세요.',
+                footer: '<a href="https://github.com/lotte-bit-1/shopping-mall-servlet-jsp/issues">이슈 남기러 가기</a>'
+            });
+        } else {
+            kakaoPay();
+        }
+    })
+</script>
+
+<%--카카오 페이 결제하기--%>
 <script>
     function kakaoPay() {
         const calculatedTotalPrice = document.getElementById("totalPrice").value;
@@ -248,46 +291,6 @@
             }
         });
     }
-</script>
-
-<script>
-    function getDaumPostcode() {
-        new daum.Postcode({
-            oncomplete: function(data) {
-                let roadName = data.roadAddress;
-                let addrDetail = data.jibunAddress;
-                let zipCode = data.zonecode;
-
-                // 우편번호와 주소 정보를 해당 필드에 넣는다.
-                let roadNameInput = document.getElementById('roadName');
-                let addrDetailInput = document.getElementById("addrDetail");
-                let zipCodeInput = document.getElementById('zipCode');
-                roadNameInput.value = roadName;
-                addrDetailInput.value = addrDetail;
-                zipCodeInput.value = zipCode;
-            }
-        }).open();
-    }
-</script>
-
-<script>
-    const paymentBtn = document.getElementById("payment-btn");
-    paymentBtn.addEventListener('click', () => {
-        const memberName = document.getElementById("memberName").value;
-        const roadName = document.getElementById("roadName").value;
-        const addrDetail = document.getElementById("addrDetail").value;
-        const zipCode = document.getElementById("zipCode").value;
-        if(memberName === '' || roadName === '' || addrDetail === '' || zipCode === '') {
-            Swal.fire({
-                icon: 'error',
-                title: "ERROR",
-                text: '모든 필드를 입력해주세요.',
-                footer: '<a href="https://github.com/lotte-bit-1/shopping-mall-servlet-jsp/issues">이슈 남기러 가기</a>'
-            });
-        } else {
-            kakaoPay();
-        }
-    })
 </script>
 
 </body>
