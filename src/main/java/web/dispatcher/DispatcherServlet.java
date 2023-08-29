@@ -29,6 +29,7 @@ public class DispatcherServlet extends HttpServlet {
 
   public DispatcherServlet() {
     super();
+    controllerMapper.put("cart", new CartController());
     controllerMapper.put("main", new MainController());
     controllerMapper.put("member", new MemberController());
     controllerMapper.put("order", new OrderController());
