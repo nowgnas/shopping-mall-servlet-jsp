@@ -6,14 +6,15 @@
         window.Kakao.init("4337d77950ddb4dce28d3222251115bf");
     });
 
-    $('#loginbtn').on('click', function (e) {
+    $('#login-btn').on('click', function (e) {
         e.preventDefault();
+        e.stopPropagation();
         if (!loginCheck()) {
             return;
         }
         $("#checkEmail").text("");
         $("#checkPassword").text("");
-        $('#loginForm').submit();
+        login();
     });
 
     $('#password').on('keyup', (event) => {
@@ -21,9 +22,11 @@
             if (!loginCheck()) {
                 return;
             }
+            event.preventDefault();
+            event.stopPropagation();
             $("#checkEmail").text("");
             $("#checkPassword").text("");
-            $('#loginForm').submit();
+            login();
         }
 
     });
@@ -43,6 +46,26 @@
         e.stopPropagation();
         kakaoLogin();
     });
+
+    function login() {
+        const email = $('#email').val();
+        const password = $('#password').val();
+        $.post("member-rest.bit?cmd=login", {
+            email: email,
+            password: password
+        }, function (result) {
+            if (result) {
+                window.location.href = "main.bit";
+            }
+        }).fail((err) => {
+            console.log(err);
+            Swal.fire({
+                icon: 'error',
+                title: '로그인 실패',
+                text: '아이디나 비밀번호를 확인해주세요'
+            })
+        })
+    }
 
     function kakaoLogin() {
         window.Kakao.Auth.login({
