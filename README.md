@@ -7,7 +7,7 @@
 | 운영체제            | Mac OS, Windows                                 |
 | 개발도구            | Intellij IDEA, Maven, Notion, ERDCloud, draw.io |
 | 기술 스택           | Java, Servlet & JSP, MyBatis, Tomcat            |
-| 데이터베이스          | MySQL                                           |
+| 데이터베이스          | MySQL                                          |
 | 버전 관리           | Github, Git                                     |
 | 오픈소스 및 외부 라이브러리 |                                              |
 
