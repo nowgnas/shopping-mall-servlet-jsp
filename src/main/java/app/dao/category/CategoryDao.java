@@ -1,15 +1,13 @@
 package app.dao.category;
 
-import app.dto.category.response.CategoryHierarchy;
 import app.dto.category.response.SubCategory;
 import app.dto.product.ProductListItem;
 import app.entity.Category;
-import org.apache.ibatis.session.SqlSession;
-
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.logging.Logger;
+import org.apache.ibatis.session.SqlSession;
 
 public class CategoryDao implements CategoryDaoFrame<Long, Category> {
   private static CategoryDao instance;
@@ -48,12 +46,6 @@ public class CategoryDao implements CategoryDaoFrame<Long, Category> {
   }
 
   @Override
-  public List<ProductListItem> selectProductByCategoryName(
-      Map<String, Object> map, SqlSession session) {
-    return session.selectList("category.search-product-by-category", map);
-  }
-
-  @Override
   public List<SubCategory> selectSubCategoryByName(String keyword, SqlSession session) {
     return session.selectList("category.select-subcategory", keyword);
   }
@@ -62,10 +54,5 @@ public class CategoryDao implements CategoryDaoFrame<Long, Category> {
   public List<ProductListItem> selectProductBySubCategoryName(
       Map<String, Object> map, SqlSession session) {
     return session.selectList("product.search-subcategory-product", map);
-  }
-
-  @Override
-  public List<CategoryHierarchy> hierarchyCategory(SqlSession session) {
-    return session.selectList("category.selectall");
   }
 }
