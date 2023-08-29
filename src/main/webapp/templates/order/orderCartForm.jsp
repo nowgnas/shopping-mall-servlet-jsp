@@ -20,6 +20,7 @@
     <link rel="stylesheet" href="../../css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="../../css/style.css" type="text/css">
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.5.js"></script>
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 </head>
@@ -126,7 +127,7 @@
                                 <input type="hidden" id="totalPrice" name="totalPrice">
                                 <li>총 가격 <span id="calculated-total"></span></li>
                             </ul>
-                            <a id="payment-btn" href="#" onclick="kakaoPay()"><img src="../../img/payments/payment_icon_yellow_large.png" height="70"></a>
+                            <a id="payment-btn" href="#"><img src="../../img/payments/payment_icon_yellow_large.png" height="70"></a>
                         </div>
                     </div>
                 </div>
@@ -221,10 +222,12 @@
         }, function(response) {
             // 실패 시
             if (!response.success) {
-                var msg = '오류로 인하여 결제가 시작되지 못하였습니다.';
-                msg += '에러내용 : ' + response.error_msg;
-
-                alert(msg);
+                Swal.fire({
+                    icon: 'error',
+                    title: "ERROR",
+                    text: response.error_msg,
+                    footer: '<a href="https://github.com/lotte-bit-1/shopping-mall-servlet-jsp/issues">이슈 남기러 가기</a>'
+                });
             } else {
                 const formData = $('#order-form').serialize();
                 $.ajax({
@@ -233,9 +236,13 @@
                     dataType: 'text',
                     data: formData,
                     contentType: "application/x-www-form-urlencoded;charset=UTF-8",
-                    error: function (error) {
-                        console.log(error);
-                        alert('상품 주문 에러: ' + error);
+                    error: function (request, status, error) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: "ERROR",
+                            text: request.responseText,
+                            footer: '<a href="https://github.com/lotte-bit-1/shopping-mall-servlet-jsp/issues">이슈 남기러 가기</a>'
+                        });
                     },
                     success: function (data) {
                         window.location.replace(`http://localhost:8080/order.bit?view=detail&cmd=get&orderId=` + data);
@@ -264,6 +271,26 @@
             }
         }).open();
     }
+</script>
+
+<script>
+    const paymentBtn = document.getElementById("payment-btn");
+    paymentBtn.addEventListener('click', () => {
+        const memberName = document.getElementById("memberName").value;
+        const roadName = document.getElementById("roadName").value;
+        const addrDetail = document.getElementById("addrDetail").value;
+        const zipCode = document.getElementById("zipCode").value;
+        if(memberName === '' || roadName === '' || addrDetail === '' || zipCode === '') {
+            Swal.fire({
+                icon: 'error',
+                title: "ERROR",
+                text: '모든 필드를 입력해주세요.',
+                footer: '<a href="https://github.com/lotte-bit-1/shopping-mall-servlet-jsp/issues">이슈 남기러 가기</a>'
+            });
+        } else {
+            kakaoPay();
+        }
+    })
 </script>
 
 </body>
