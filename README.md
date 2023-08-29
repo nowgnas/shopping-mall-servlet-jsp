@@ -2,7 +2,7 @@
 
 ## ⚙️ 개발 환경(Development Environment)
 
-| 분류              | 개발환경                                            | 
+| 분류              | 개발환경                                           | 
 |-----------------|-------------------------------------------------|
 | 운영체제            | Mac OS, Windows                                 |
 | 개발도구            | Intellij IDEA, Maven, Notion, ERDCloud, draw.io |
