@@ -4,12 +4,7 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="description" content="Male_Fashion Template">
-    <meta name="keywords" content="Male_Fashion, unica, creative, html">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>롯데 시장</title>
+    <jsp:include page="./common/meta-data.jsp"/>
 
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&display=swap"
@@ -69,7 +64,7 @@
                     </div>
                     <div class="banner__item__text">
                         <h2>Clothing Collections 2030</h2>
-                        <a href="/product.bit?view=shop&curPage=0&sort=DATE_DESC">Shop now</a>
+                        <a href="/product.bit?view=shop&curPage=1&sort=PRICE_ASC">Shop now</a>
                     </div>
                 </div>
             </div>
@@ -80,7 +75,7 @@
                     </div>
                     <div class="banner__item__text">
                         <h2>Accessories</h2>
-                        <a href="/product.bit?view=shop&curPage=0&sort=DATE_DESC">Shop now</a>
+                        <a href="/product.bit?view=shop&curPage=1&sort=PRICE_ASC">Shop now</a>
                     </div>
                 </div>
             </div>
@@ -91,7 +86,7 @@
                     </div>
                     <div class="banner__item__text">
                         <h2>Shoes Spring 2030</h2>
-                        <a href="/product.bit?view=shop&curPage=0&sort=DATE_DESC">Shop now</a>
+                        <a href="/product.bit?view=shop&curPage=1&sort=PRICE_ASC">Shop now</a>
                     </div>
                 </div>
             </div>

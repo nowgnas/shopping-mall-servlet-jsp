@@ -17,15 +17,48 @@
     <result column="is_liked" jdbcType="BOOLEAN" property="isLiked"/>
     <result column="url" jdbcType="VARCHAR" property="url"/>
   </resultMap>
+  <resultMap id="hierarchy" type="categoryHierarchy">
+    <result column="name1" jdbcType="VARCHAR" property="name1"/>
+    <result column="name2" jdbcType="VARCHAR" property="name2"/>
+    <result column="name3" jdbcType="VARCHAR" property="name3"/>
+    <result column="high" jdbcType="VARCHAR" property="high"/>
+    <result column="middle" jdbcType="VARCHAR" property="middle"/>
+    <result column="low" jdbcType="VARCHAR" property="low"/>
+  </resultMap>
 
   <select id="select" parameterType="Long" resultType="category">
     SELECT *
     FROM category
     WHERE id = #{id}
   </select>
-  <select id="selectall" resultMap="BaseResultMap">
-    SELECT *
-    FROM category
+  <select id="selectall" resultMap="hierarchy">
+    select null pp_id, null pp_name, null p_id, null p_name, c.id id, c.name name, c.level level
+    from category c
+    where level = 1
+    union
+    select null     pp_id,
+           null     pp_name,
+           c1.id    p_id,
+           c1.name  p_name,
+           c2.id    id,
+           c2.name  name,
+           c2.level level
+    from category c1
+           left join category c2
+                     on c1.id = c2.parent_id
+    where c2.level = 2
+    union
+    select c1.id    pp_id,
+           c1.name  pp_name,
+           c2.id    p_id,
+           c2.name  p_name,
+           c3.id    id,
+           c3.name  name,
+           c3.level level
+    from category c1
+           left join category c2 on c1.id = c2.parent_id
+           left join category c3 on c2.id = c3.parent_id
+    where c3.level = 3;
   </select>
   <insert id="insert" parameterType="category">
     INSERT INTO category (parent_id, name, level)
@@ -93,16 +126,17 @@
     where level = 3
       and pi.is_thumbnail = true
       and c.name LIKE CONCAT('%', #{keyword}, '%')
-      limit #{curPage}, 9
+      limit #{curPage}
+        , 9
   </select>
 
-<select id="select-subcategory" parameterType="String" resultType="Long">
-  select c3.id
-  from category c1
-         left join category c2 on c1.id = c2.parent_id
-         left join category c3 on c2.id = c3.parent_id
-  where c1.name = #{keyword}
-</select>
+  <select id="select-subcategory" parameterType="String" resultType="app.dto.category.response.SubCategory">
+    select c1.id low, c2.id middle, c3.id high
+    from category c1
+           left join category c2 on c1.id = c2.parent_id
+           left join category c3 on c2.id = c3.parent_id
+    where c1.name = #{keyword}
+  </select>
 
 </mapper>
 

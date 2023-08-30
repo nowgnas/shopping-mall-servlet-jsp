@@ -5,12 +5,7 @@
 <html lang="zxx">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="description" content="Male_Fashion Template">
-    <meta name="keywords" content="Male_Fashion, unica, creative, html">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Male-Fashion | Template</title>
+    <jsp:include page="../common/meta-data.jsp"/>
 
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&display=swap"
@@ -204,22 +199,25 @@
 
                 $.ajax({
                     type: "GET",
-                    url: "/order.bit?view=detail&cmd=delete&orderId=${productOrderDetail.orderId}",
+                    url: "/order-rest.bit?cmd=orderDelete&orderId=${productOrderDetail.orderId}",
                     dataType: "text",
                     contentType: "application/x-www-form-urlencoded;charset=UTF-8",
-                    error: function () {
-                        Swal.fire(
-                            '주문 취소 에러',
-                            '해당 주문이 취소되지 않았습니다.',
-                            'error'
-                        )
+                    error: function (request, status, error) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: "ERROR",
+                            text: request.responseText,
+                            footer: '<a href="https://github.com/lotte-bit-1/shopping-mall-servlet-jsp/issues">이슈 남기러 가기</a>'
+                        })
                     },
                     success: function (data) {
                         Swal.fire(
                             '주문 취소 완료',
                             '해당 주문이 취소되었습니다.',
                             'success'
-                        )
+                        ).then(() => {
+                            window.location.replace("/order.bit?view=detail&cmd=get&orderId=" + data);
+                        })
                     }
                 });
             }

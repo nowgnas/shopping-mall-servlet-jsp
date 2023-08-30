@@ -4,12 +4,7 @@
 <html lang="zxx">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="description" content="Male_Fashion Template">
-    <meta name="keywords" content="Male_Fashion, unica, creative, html">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Male-Fashion | Template</title>
+    <jsp:include page="../common/meta-data.jsp"/>
 
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&display=swap"
@@ -59,12 +54,6 @@
         <div class="row">
             <div class="col-lg-3">
                 <div class="shop__sidebar">
-                    <div class="shop__sidebar__search">
-                        <form action="#">
-                            <input type="text" placeholder="Search...">
-                            <button type="submit"><span class="icon_search"></span></button>
-                        </form>
-                    </div>
                     <%--  category --%>
                     <div class="shop__sidebar__accordion">
                         <div class="accordion" id="accordionExample">
@@ -80,7 +69,7 @@
                                             <ul class="nice-scroll">
                                                 <c:forEach var="category" items="${categories}">
                                                     <li>
-                                                        <a href="/product.bit?view=category&keyword=${category.name}&curPage=0">${category.name}</a>
+                                                        <a href="/product.bit?view=category&keyword=${category.name}&curPage=1">${category.name}</a>
                                                     </li>
                                                 </c:forEach>
                                             </ul>
@@ -98,16 +87,6 @@
                         <div class="col-lg-6 col-md-6 col-sm-6">
                             <div class="shop__product__option__left">
 <%--                                <p>Showing 1–12 of 126 results</p>--%>
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-md-6 col-sm-6">
-                            <div class="shop__product__option__right">
-                                <p>Sort Option:</p>
-                                <select id="sortOption">
-                                    <option value="DATE_DESC">Date</option>
-                                    <option value="PRICE_DESC">Lowest Price First</option>
-                                    <option value="PRICE_ASC">Highest Price First</option>
-                                </select>
                             </div>
                         </div>
                     </div>
@@ -157,7 +136,7 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="product__pagination">
-                            <c:if test="${productList.paging.currentPage > 0}">
+                            <c:if test="${productList.paging.currentPage > 1}">
                                 <a class="mr-3"
                                    href="/product.bit?view=shop&curPage=${productList.paging.currentPage - 1}&sort=PRICE_ASC">PREV</a>
                             </c:if>
@@ -190,7 +169,7 @@
                                 </c:choose>
                             </c:forEach>
 
-                            <c:if test="${productList.paging.currentPage < productList.paging.totalPage - 1}">
+                            <c:if test="${productList.paging.currentPage < productList.paging.totalPage}">
                                 <a href="/product.bit?view=shop&curPage=${productList.paging.currentPage + 1}&sort=PRICE_ASC">NEXT</a>
                             </c:if>
                         </div>

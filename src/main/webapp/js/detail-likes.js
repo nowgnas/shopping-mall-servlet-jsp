@@ -32,6 +32,13 @@
         likesBtn.find('span').html('&#9829;');
         likesBtn.contents().last().replaceWith('cancel to wishlist');
       }
+    }).fail(() => {
+      Swal.fire({
+        icon: 'warning',
+        title: '이미 찜한 상품입니다.'
+      }).then(() => {
+        window.location.reload();
+      });
     });
   });
 
@@ -55,6 +62,13 @@
         likesCancelBtn.removeClass('likes-cancel-btn').addClass('likes-btn');
         likesCancelBtn.find('span').html('&#9825;');
         likesCancelBtn.contents().last().replaceWith('add to wishlist');
+      } else {
+        Swal.fire({
+          icon: 'warning',
+          title: '이미 찜 취소한 상품입니다.'
+        }).then(() => {
+          window.location.reload();
+        });
       }
     });
   });

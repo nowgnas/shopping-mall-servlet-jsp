@@ -4,12 +4,7 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="description" content="Male_Fashion Template">
-    <meta name="keywords" content="Male_Fashion, unica, creative, html">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Male-Fashion | Template</title>
+    <jsp:include page="../common/meta-data.jsp"/>
 
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&display=swap"
@@ -25,6 +20,7 @@
     <link rel="stylesheet" href="../../css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="../../css/style.css" type="text/css">
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.5.js"></script>
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 </head>
@@ -68,7 +64,7 @@
                         <h6 class="checkout__title">사용자 정보</h6>
                         <div class="checkout__input">
                             <p>이름<span></span></p>
-                            <input type="text" name="memberName" value="${memberName}" disabled>
+                            <input id="memberName" type="text" name="memberName" value="${memberName}" disabled>
                         </div>
                         <div class="checkout__input">
                             <p>주소<span>*</span></p>
@@ -129,7 +125,7 @@
                                 <input type="hidden" id="totalPrice" name="totalPrice">
                                 <li>총 가격 <span id="calculated-total"></span></li>
                             </ul>
-                            <a id="payment-btn" href="#" onclick="kakaoPay()"><img src="../../img/payments/payment_icon_yellow_large.png" height="70"></a>
+                            <a id="payment-btn" href="#"><img src="../../img/payments/payment_icon_yellow_large.png" height="70"></a>
                         </div>
                     </div>
                 </div>
@@ -158,6 +154,7 @@
 <script src="../../js/owl.carousel.min.js"></script>
 <script src="../../js/main.js"></script>
 
+<%--화면단의 총 가격 업데이트--%>
 <script>
     const productItems = document.querySelectorAll(".product-item");
     const calculatedTotalElem = document.getElementById("calculated-total");
@@ -199,7 +196,49 @@
     // 초기 총 가격 계산
     updateTotalPrice();
 </script>
+<%--주소 검색 로직--%>
+<script>
+    function getDaumPostcode() {
+        new daum.Postcode({
+            oncomplete: function(data) {
+                let roadName = data.roadAddress;
+                let addrDetail = data.jibunAddress;
+                let zipCode = data.zonecode;
 
+                // 우편번호와 주소 정보를 해당 필드에 넣는다.
+                let roadNameInput = document.getElementById('roadName');
+                let addrDetailInput = document.getElementById("addrDetail");
+                let zipCodeInput = document.getElementById('zipCode');
+                roadNameInput.value = roadName;
+                addrDetailInput.value = addrDetail;
+                zipCodeInput.value = zipCode;
+            }
+        }).open();
+    }
+</script>
+
+<%--카카오 페이 결제하기 버튼 클릭 전의 validation 이벤트--%>
+<script>
+    const paymentBtn = document.getElementById("payment-btn");
+    paymentBtn.addEventListener('click', () => {
+        const memberName = document.getElementById("memberName").value;
+        const roadName = document.getElementById("roadName").value;
+        const addrDetail = document.getElementById("addrDetail").value;
+        const zipCode = document.getElementById("zipCode").value;
+        if(memberName === '' || roadName === '' || addrDetail === '' || zipCode === '') {
+            Swal.fire({
+                icon: 'error',
+                title: "ERROR",
+                text: '모든 필드를 입력해주세요.',
+                footer: '<a href="https://github.com/lotte-bit-1/shopping-mall-servlet-jsp/issues">이슈 남기러 가기</a>'
+            });
+        } else {
+            kakaoPay();
+        }
+    })
+</script>
+
+<%--카카오 페이 결제하기--%>
 <script>
     function kakaoPay() {
         const calculatedTotalPrice = document.getElementById("totalPrice").value;
@@ -223,10 +262,12 @@
         }, function(response) {
             // 실패 시
             if (!response.success) {
-                var msg = '오류로 인하여 결제가 시작되지 못하였습니다.';
-                msg += '에러내용 : ' + response.error_msg;
-
-                alert(msg);
+                Swal.fire({
+                    icon: 'error',
+                    title: "ERROR",
+                    text: response.error_msg,
+                    footer: '<a href="https://github.com/lotte-bit-1/shopping-mall-servlet-jsp/issues">이슈 남기러 가기</a>'
+                });
             } else {
                 const formData = $('#order-form').serialize();
                 $.ajax({
@@ -235,13 +276,16 @@
                     dataType: 'text',
                     data: formData,
                     contentType: "application/x-www-form-urlencoded;charset=UTF-8",
-                    error: function (error) {
-                        console.log(error);
-                        alert('상품 주문 에러: ' + error);
+                    error: function (request, status, error) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: "ERROR",
+                            text: request.responseText,
+                            footer: '<a href="https://github.com/lotte-bit-1/shopping-mall-servlet-jsp/issues">이슈 남기러 가기</a>'
+                        });
                     },
                     success: function (data) {
-                        console.log('성공')
-                        window.location.replace(`http://localhost:8080/order.bit?view=detail&cmd=get&orderId=` + data);
+                        window.location.replace(`/order.bit?view=detail&cmd=get&orderId=` + data);
                     }
                 });
             }
@@ -249,25 +293,6 @@
     }
 </script>
 
-<script>
-    function getDaumPostcode() {
-        new daum.Postcode({
-            oncomplete: function(data) {
-                let roadName = data.roadAddress;
-                let addrDetail = data.jibunAddress;
-                let zipCode = data.zonecode;
-
-                // 우편번호와 주소 정보를 해당 필드에 넣는다.
-                let roadNameInput = document.getElementById('roadName');
-                let addrDetailInput = document.getElementById("addrDetail");
-                let zipCodeInput = document.getElementById('zipCode');
-                roadNameInput.value = roadName;
-                addrDetailInput.value = addrDetail;
-                zipCodeInput.value = zipCode;
-            }
-        }).open();
-    }
-</script>
 </body>
 
 </html>

@@ -3,7 +3,6 @@ package app.service.checker;
 import app.dao.DaoFrame;
 import app.entity.Cart;
 import app.entity.ProductAndMemberCompositeKey;
-import app.exception.ErrorCode;
 import app.exception.cart.CartNotFoundException;
 import lombok.AllArgsConstructor;
 import org.apache.ibatis.session.SqlSession;

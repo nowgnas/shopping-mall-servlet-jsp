@@ -1,15 +1,11 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="description" content="Male_Fashion Template">
-    <meta name="keywords" content="Male_Fashion, unica, creative, html">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Male-Fashion | Template</title>
+    <jsp:include page="../common/meta-data.jsp"/>
 
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&display=swap"
@@ -25,7 +21,11 @@
     <link rel="stylesheet" href="../../css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="../../css/style.css" type="text/css">
 
-
+    <style>
+      .hover-color-change:hover {
+        color: red; /* Change to the desired color */
+      }
+    </style>
 </head>
 
 <body>
@@ -37,6 +37,23 @@
 <!-- Header Section Begin -->
 <jsp:include page="../common/header.jsp"/>
 <!-- Header Section End -->
+
+<script>
+    const hostName = location.host;
+    const queryParameters = new URLSearchParams(decodeURI(location.search));
+    const productId = queryParameters.get("productId");
+    const errorMessage = queryParameters.get("errorMessage");
+    if (errorMessage !== null) {
+        Swal.fire({
+            icon: 'error',
+            title: "ERROR",
+            text: errorMessage,
+            footer: '<a href="https://github.com/lotte-bit-1/shopping-mall-servlet-jsp/issues">이슈 남기러 가기</a>'
+        }).then((result) => {
+            window.location.replace('/product.bit?view=shop-detail&productId=' + productId);
+        });
+    }
+</script>
 
 <!-- Shop Details Section Begin -->
 <section class="shop-details">
@@ -62,13 +79,27 @@
         <div class="container">
             <div class="row d-flex justify-content-center">
                 <div class="col-lg-8">
+                    <div class="row">
+                        <c:forEach varStatus="idx" begin="0"
+                                   items="${productDetail.category.categoryList}"
+                                   var="category">
+                            <c:set var="splitCategory" value="${fn:split(category, '=')[1]}"/>
+                            <div class="col-md-2 element"><a class="hover-color-change"
+                                                             href="/product.bit?view=category&keyword=${splitCategory}&curPage=1">${splitCategory}</a>
+                                <c:if test="${idx.index < 2}">
+                                    &nbsp;&nbsp;&nbsp;>
+                                </c:if>
+                            </div>
+                        </c:forEach>
+                    </div>
+
                     <div class="product__details__text">
                         <%-- todo: product name --%>
                         <h4>${productDetail.detail.name}</h4>
                         <%-- todo: price --%>
-                        <div class="row">
-                            <div class="col-md">&#8361;</div>
-                            <div class="col-md" id="unitPrice">${productDetail.detail.price}</div>
+                        <div class="row justify-content-center">
+                            <div>&#8361;</div>
+                            <div id="unitPrice">${productDetail.detail.price}</div>
                         </div>
                         <%-- todo: description --%>
                         <p>${productDetail.detail.code}</p>
@@ -90,7 +121,7 @@
                                 </div>
                             </div>
                         </div>
-                        <p>Total Price: $<span id="totalPrice">10.00</span></p>
+                        <p>Total Price: &#8361;<span id="totalPrice">10.00</span></p>
                         <div id="common-parent-element" class="product__details__btns__option">
                             <%-- todo: likes --%>
                             <c:if test="${productDetail.detail.isLiked eq false}">
@@ -108,7 +139,7 @@
                         </div>
                         <a id="order-link" href="" class="btn btn-outline-success">buy</a>
                         <div>
-                            PRODUCT CODE: ${productDetail.detail.description}
+                            상세 정보 : ${productDetail.detail.description}
                         </div>
                     </div>
                 </div>
@@ -125,6 +156,7 @@
 <jsp:include page="../common/search.jsp"/>
 
 <!-- Js Plugins -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="../../js/jquery-3.3.1.min.js"></script>
 <script src="../../js/bootstrap.min.js"></script>
 <script src="../../js/jquery.nice-select.min.js"></script>
@@ -142,6 +174,8 @@
   window.onload = function () {
     var quantityInput = document.getElementById("quantity-input");
     quantityInput.value = "1"; // Set the default value
+    var totalPriceSpan = document.getElementById("totalPrice");
+    totalPriceSpan.textContent = parseFloat(document.getElementById("unitPrice").textContent);
   };
 </script>
 

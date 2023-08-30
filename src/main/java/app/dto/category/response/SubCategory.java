@@ -1,4 +1,4 @@
-package app.dto.category;
+package app.dto.category.response;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -12,7 +12,8 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
-public class LowCategory {
-  private Long id;
-  private String name;
+public class SubCategory {
+  private Long low;
+  private Long middle;
+  private Long high;
 }

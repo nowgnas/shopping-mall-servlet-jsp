@@ -48,8 +48,8 @@
   </resultMap>
 
   <select id="gettotalpage" resultType="int" parameterType="int">
-    SELECT CEIL(COUNT(*) / #{perPage})
-    FROM product;
+    SELECT CEIL(COUNT(*) / 9)
+    FROM product
   </select>
 
   <select id="selectProductListItemOfLike" parameterType="Long" resultMap="productOfLike">
@@ -124,7 +124,8 @@
            left join product_image pi on p.id = pi.product_id
     WHERE pi.is_thumbnail = true
     ORDER BY p.price desc
-      LIMIT #{current}, #{perPage}
+      LIMIT 9
+    OFFSET #{offset}
   </select>
   <select id="sortbydate" parameterType="hashMap" resultMap="ListResultMap">
     SELECT p.name                                                         name,
@@ -137,7 +138,10 @@
            left join product_image pi on p.id = pi.product_id
     WHERE pi.is_thumbnail = true
     ORDER BY p.created_at desc
-      LIMIT #{current}, #{perPage}
+      LIMIT
+    9
+OFFSET
+    #{offset}
   </select>
   <select id="sortbyprice" parameterType="hashMap" resultMap="ListResultMap">
     SELECT p.name                                                         name,
@@ -149,8 +153,9 @@
            LEFT JOIN likes l ON l.product_id = p.id AND l.member_id = #{userId}
            left join product_image pi on p.id = pi.product_id
     WHERE pi.is_thumbnail = true
-    ORDER BY p.price
-      LIMIT #{current}, #{perPage}
+    ORDER BY p.price LIMIT
+    9
+    OFFSET #{offset}
   </select>
   <insert id="insert" parameterType="product">
     INSERT INTO product (category_id, name, description, price, quantity, code)
@@ -215,8 +220,10 @@
            left join product_image pi on p.id = pi.product_id
     WHERE pi.is_thumbnail = true
       and p.name LIKE CONCAT('%', #{keyword}, '%')
-      LIMIT #{current}
-        , 9
+      LIMIT
+    9
+OFFSET
+    #{offset}
   </select>
 
   <select id="search-subcategory-product" parameterType="hashMap"
@@ -234,6 +241,9 @@
       #{id}
     </foreach>
     and pi.is_thumbnail = true
-    limit #{curPage}, 9
+    LIMIT
+    9
+    OFFSET
+    #{offset}
   </select>
 </mapper>

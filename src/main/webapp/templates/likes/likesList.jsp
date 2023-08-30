@@ -11,12 +11,7 @@
 <html lang="zxx">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="description" content="Male_Fashion Template">
-    <meta name="keywords" content="Male_Fashion, unica, creative, html">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Male-Fashion | Template</title>
+    <jsp:include page="../common/meta-data.jsp"/>
 
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&display=swap"
@@ -32,6 +27,11 @@
     <link rel="stylesheet" href="css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="css/style.css" type="text/css">
 </head>
+<style>
+    .product__checkbox {
+      padding: 35px;
+    }
+</style>
 
 <body>
 <!-- Page Preloder -->
@@ -50,7 +50,7 @@
                 <div class="breadcrumb__text">
                     <h4>Likes</h4>
                     <div class="breadcrumb__links">
-                        <a href="index.jsp">Home</a>
+                        <a href="/">Home</a>
                         <span>Likes</span>
                     </div>
                 </div>
@@ -64,12 +64,12 @@
 <section class="shopping-cart spad">
     <div class="container">
         <div class="row">
-            <div class="col-lg-8">
+            <div class="col-lg-12">
                 <div class="shopping__cart__table">
                     <table>
                         <thead>
                         <tr>
-                            <th>Select</th> <!-- 체크박스 추가 -->
+                            <th class="col-md-2">Select</th> <!-- 체크박스 추가 -->
                             <th>Thumbnail</th>
                             <th>Product</th>
                             <th>Price</th>
@@ -79,7 +79,7 @@
                         <c:forEach items="${products.list}" var="product">
                             <tr>
                                 <td class="product__cart__item">
-                                    <div class="product__cart__item__pic">
+                                    <div class="product__checkbox">
                                         <input type="checkbox"
                                                onclick="addToSelectedProducts(this)"
                                                name="selectedProducts" value="${product.id}">
@@ -158,7 +158,7 @@
                 <div class="row">
                     <div class="col-lg-6 col-md-6 col-sm-6">
                         <div class="continue__btn">
-                            <a href="/product.bit?view=shop&curPage=0&sort=DATE_DESC">Continue
+                            <a href="/product.bit?view=shop&curPage=1&sort=PRICE_ASC">Continue
                                 Shopping</a>
                         </div>
                     </div>
