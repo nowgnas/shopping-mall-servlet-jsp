@@ -11,6 +11,7 @@ import app.entity.Member;
 import app.entity.Product;
 import app.entity.ProductAndMemberCompositeKey;
 import app.exception.cart.CartNotFoundException;
+import app.exception.cart.OutOfStockException;
 import app.exception.product.ProductNotFoundException;
 import app.service.cart.CartService;
 import app.service.cart.CartServiceImpl;
@@ -59,7 +60,9 @@ public class CartController implements ControllerFrame {
       cartService.putItemIntoCart(new ProductAndMemberCompositeKey(productId, memberDetail.getId()),
           quantity);
       return Navi.FORWARD_CART_FORM;
-    } catch (ProductNotFoundException | CartNotFoundException  e) {
+
+    }
+    catch (ProductNotFoundException | CartNotFoundException  e) {
       return Navi.REDIRECT_CART_FORM + String.format("?errorMessage=%s", e.getMessage());
     } catch (Exception e) {
       e.printStackTrace();
