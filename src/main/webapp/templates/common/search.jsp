@@ -23,7 +23,7 @@
     if (event.key === "Enter") {
       event.preventDefault(); // Prevent form submission
       const inputData = document.getElementById("search-input").value;
-      window.location.href = `/product.bit?view=search&keyword=` + inputData + `&curPage=0`;
+      window.location.href = `/product.bit?view=search&keyword=` + inputData + `&curPage=1`;
     }
   })
 </script>
