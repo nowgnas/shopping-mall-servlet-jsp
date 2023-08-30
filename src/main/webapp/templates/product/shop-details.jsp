@@ -39,20 +39,20 @@
 <!-- Header Section End -->
 
 <script>
-    const hostName = location.host;
-    const queryParameters = new URLSearchParams(decodeURI(location.search));
-    const productId = queryParameters.get("productId");
-    const errorMessage = queryParameters.get("errorMessage");
-    if (errorMessage !== null) {
-        Swal.fire({
-            icon: 'error',
-            title: "ERROR",
-            text: errorMessage,
-            footer: '<a href="https://github.com/lotte-bit-1/shopping-mall-servlet-jsp/issues">이슈 남기러 가기</a>'
-        }).then((result) => {
-            window.location.replace('/product.bit?view=shop-detail&productId=' + productId);
-        });
-    }
+  const hostName = location.host;
+  const queryParameters = new URLSearchParams(decodeURI(location.search));
+  const productId = queryParameters.get("productId");
+  const errorMessage = queryParameters.get("errorMessage");
+  if (errorMessage !== null) {
+    Swal.fire({
+      icon: 'error',
+      title: "ERROR",
+      text: errorMessage,
+      footer: '<a href="https://github.com/lotte-bit-1/shopping-mall-servlet-jsp/issues">이슈 남기러 가기</a>'
+    }).then((result) => {
+      window.location.replace('/product.bit?view=shop-detail&productId=' + productId);
+    });
+  }
 </script>
 
 <!-- Shop Details Section Begin -->
@@ -105,7 +105,7 @@
                         <p>${productDetail.detail.code}</p>
                         <div class="product__details__cart__option">
                             <div class="input-group">
-                                <input type="text" name="quantity-input"
+                                <input type="text" name="quantity-input" disabled
                                        class="form-control text-center"
                                        id="quantity-input">
                                 <div class="input-group-append">
@@ -196,8 +196,16 @@
 
   increaseBtn.addEventListener("click", function () {
     var currentQuantity = parseInt(quantityInput.value);
-    quantityInput.value = currentQuantity + 1;
-    updateTotalPrice();
+    if (currentQuantity <${productDetail.detail.quantity}) {
+      quantityInput.value = currentQuantity + 1;
+      updateTotalPrice();
+    } else {
+      Swal.fire({
+        icon: 'warning',
+        title: '최대 수량 이상 입력할 수 없습니다.',
+        text: '수량을 조절해 주세요'
+      })
+    }
   });
 
   decreaseBtn.addEventListener("click", function () {
