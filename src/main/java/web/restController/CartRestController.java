@@ -71,11 +71,7 @@ public class CartRestController implements RestControllerFrame {
 
     MemberDetail memberDetail = (MemberDetail) request.getSession().getAttribute("loginMember");
     Long productId = Long.parseLong(request.getParameter("productId"));
-    Optional<String> optionalQuantity = Optional.ofNullable(request.getParameter("quantity"));
-    Long quantity = 1L;
-    if (optionalQuantity.isPresent()) {
-      quantity = Long.parseLong(optionalQuantity.get());
-    }
+    Long quantity = Long.parseLong(request.getParameter("quantity"));
     cartService.putItemIntoCart(
         new ProductAndMemberCompositeKey(productId, memberDetail.getId()), quantity);
     return true;

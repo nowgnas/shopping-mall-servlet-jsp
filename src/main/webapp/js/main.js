@@ -210,8 +210,23 @@
         e.stopPropagation();
         let target = $(this);
         const productId = target.data('product-id');
+        addCart(productId, 1);
+    })
+
+    $('#add-cart-btn').on('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        let target = $(this);
+        const productId = target.data('p-id');
+        const quantity = $('#quantity-input').val();
+        addCart(productId, quantity);
+    })
+
+    function addCart(productId, quantity) {
+        console.log(quantity);
         $.post('cart-rest.bit?cmd=add',
-            {productId: productId},
+            {productId: productId,
+            quantity: quantity},
             function (res) {
                 Swal.fire({
                     icon: 'success',
@@ -220,7 +235,7 @@
             }).fail((err) => {
             login();
         });
-    })
+    }
 
 
 })(jQuery);

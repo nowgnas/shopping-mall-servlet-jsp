@@ -38,7 +38,7 @@ public class LoginFilter implements Filter {
         return;
       }
     }
-    if(path.equals("likes-rest") || path.equals("cart-rest")) {
+    if(path.equals("likes-rest") || path.equals("cart-rest") || path.equals("order-rest")) {
       HttpSession session = ((HttpServletRequest) request).getSession(false);
       if (session == null || session.getAttribute("loginMember") == null) {
         ((HttpServletResponse)response).setStatus(HttpServletResponse.SC_UNAUTHORIZED);
