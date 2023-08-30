@@ -36,9 +36,15 @@ public class OrderCartCreateForm {
                 .collect(Collectors.toList()))
         .defaultAddress(
             new OrderCartCreateForm.AddressDto(
-                orderMemberDetail.getAddress().getRoadName(),
-                orderMemberDetail.getAddress().getAddrDetail(),
-                orderMemberDetail.getAddress().getZipCode()))
+                    orderMemberDetail.getAddress() == null
+                            ? null
+                            : orderMemberDetail.getAddress().getRoadName(),
+                    orderMemberDetail.getAddress() == null
+                            ? null
+                            : orderMemberDetail.getAddress().getAddrDetail(),
+                    orderMemberDetail.getAddress() == null
+                            ? null
+                            : orderMemberDetail.getAddress().getZipCode()))
         .coupons(
             orderMemberDetail.getCoupons().stream()
                 .map(
