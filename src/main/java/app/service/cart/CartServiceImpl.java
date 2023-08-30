@@ -97,7 +97,7 @@ public class CartServiceImpl implements CartService {
 
     Optional<Cart> cartOptional = cartDao.selectById(productAndMemberCompositeKey, session);
     if (cartOptional.isPresent()) {
-      updateCartService.update(cartOptional.get(), requestQuantity, product.getQuantity(),
+      updateCartService.update(cartOptional.get(), cartOptional.get().getProductQuantity() + 1, product.getQuantity(),
           session);
     } else {
       cartDao.insert(Cart.cartCompKeyBuilder(productAndMemberCompositeKey, requestQuantity),
