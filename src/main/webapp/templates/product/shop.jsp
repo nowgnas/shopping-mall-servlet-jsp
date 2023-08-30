@@ -132,7 +132,7 @@
                                             <h6>${product.name}</h6>
                                             <a href="#" class="add-cart">+ Add To Cart</a>
                                                 <%-- price--%>
-                                            <h5>${product.price}</h5>
+                                            <h5>${product.price}원</h5>
                                         </div>
                                     </div>
                                 </div>
