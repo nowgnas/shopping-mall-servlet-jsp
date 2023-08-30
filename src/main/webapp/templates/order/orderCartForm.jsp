@@ -68,17 +68,18 @@
                         </div>
                         <div class="checkout__input">
                             <p>주소<span>*</span></p>
-                            <input type="button" onclick="getDaumPostcode()" value="우편번호 찾기" style="color: black;"><br>
                             <input type="text" placeholder="도로명 주소" class="checkout__input__add"
                                    id="roadName"
                                    name="roadName"
                                    value="<c:if test="${defaultAddress.roadName != null}">${defaultAddress.roadName}</c:if>" required
+                                   onclick="getDaumPostcode()" readonly
                                    oninvalid="this.setCustomValidity('도로명 주소를 입력해주세요.')"
                                    oninput="this.setCustomValidity('')" style="color: black;">
                             <input type="text" placeholder="상세 주소" class="checkout__input__add"
                                    id="addrDetail"
                                    name="addrDetail"
                                    value="<c:if test="${defaultAddress.addrDetail != null}">${defaultAddress.addrDetail}</c:if>" required
+                                   onclick="getDaumPostcode()" readonly
                                    oninvalid="this.setCustomValidity('상세 주소를 입력해주세요.')"
                                    oninput="this.setCustomValidity('')" style="color: black;">
                         </div>
@@ -88,6 +89,7 @@
                                    id="zipCode"
                                    name="zipCode"
                                    value="<c:if test="${defaultAddress.zipCode != null}">${defaultAddress.zipCode}</c:if>" required
+                                   onclick="getDaumPostcode()" readonly
                                    oninvalid="this.setCustomValidity('우편번호를 입력해주세요.')"
                                    oninput="this.setCustomValidity('')" style="color: black;">
                         </div>
