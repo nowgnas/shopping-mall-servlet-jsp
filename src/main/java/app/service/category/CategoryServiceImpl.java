@@ -21,7 +21,6 @@ import org.apache.ibatis.session.SqlSessionFactory;
 public class CategoryServiceImpl implements CategoryService {
   private static CategoryServiceImpl instance;
   private final SqlSessionFactory sessionFactory = GetSessionFactory.getInstance();
-  Logger log = Logger.getLogger("CategoryServiceImpl");
   private CategoryDaoFrame<Long, Category> dao;
 
   public CategoryServiceImpl() {
@@ -54,8 +53,6 @@ public class CategoryServiceImpl implements CategoryService {
       else if (s.getHigh() == null) idListItems.add(s.getMiddle());
       else idListItems.add(s.getHigh());
     }
-
-    log.info("id list " + idListItems.toString());
     if (idListItems.isEmpty()) throw new CategoryListNotFound();
     Map<String, Object> map = new HashMap<>();
     map.put("memberId", memberId);

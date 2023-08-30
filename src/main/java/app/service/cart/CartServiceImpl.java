@@ -12,9 +12,16 @@ import app.entity.Cart;
 import app.entity.Member;
 import app.entity.Product;
 import app.entity.ProductAndMemberCompositeKey;
+import app.exception.cart.CartNotFoundException;
+import app.exception.member.MemberNotFoundException;
 import app.service.checker.EntityExistCheckerService;
 import app.service.product.StockCheckerService;
 import app.utils.GetSessionFactory;
+import java.sql.SQLException;
+import java.sql.SQLSyntaxErrorException;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -45,13 +52,16 @@ public class CartServiceImpl implements CartService {
     SqlSession session = GetSessionFactory.getInstance().openSession();
 
     Long totalPaging = cartDao.getTheNumberOfTotalProductInCart(memberId, session);
-    Pagination pagination =
-        Pagination.builder()
-            .currentPage(1)
-            .totalPage(Integer.valueOf(Math.toIntExact(totalPaging)))
-            .build();
-    return AllCartProductInfoDtoWithPagination.getCartProductListWithPagination(
+
+    Pagination pagination = Pagination.builder().currentPage(1)
+        .totalPage(Math.toIntExact(totalPaging)).build();
+
+    AllCartProductInfoDtoWithPagination
+        allCartProduct = AllCartProductInfoDtoWithPagination.getCartProductListWithPagination(
         this.getCartProductListByMember(memberId), pagination);
+
+    return allCartProduct;
+
   }
 
   @Override
@@ -60,12 +70,20 @@ public class CartServiceImpl implements CartService {
     // MemberNotFoundException
     memberExistCheckerService.isExisted(memberDao, memberId, session).getId();
     List<Cart> cartList = cartDao.getCartProductListByMember(memberId, session);
-    List<Long> productIdList =
-        cartList.stream().map(p -> p.getProductId()).collect(Collectors.toList());
-    List<ProductItemQuantity> allProductInfo =
-        productDao.selectProductQuantity(productIdList, session);
+    List<Long> productIdList = cartList.stream().map(p -> p.getProductId())
+        .collect(Collectors.toList());
+
+    List<ProductItemQuantity> allProductInfo = null;
+
+    try {
+      allProductInfo = productDao.selectProductQuantity(productIdList,
+          session);
+    } catch (Exception e) {
+      throw new CartNotFoundException();
+    }
     return AllCartProductInfoDto.getCustomerViewOfCartInfo(
         ProductInCartDto.getProductInfo(allProductInfo, cartList));
+
   }
 
   @Override
