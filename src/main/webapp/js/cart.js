@@ -10,8 +10,10 @@ document.addEventListener("DOMContentLoaded", function () {
           "product-id");
       const productPrice = parseFloat(
           productRow.querySelector(".cart__price").textContent);
-      const quantitySelect = productRow.querySelector(".quantity-select");
-      const selectedQuantity = parseInt(quantitySelect.value);
+      const selectedQuantityElement = productRow.querySelector(
+          ".quantity-select");
+      const selectedQuantity = parseFloat(selectedQuantityElement.value);
+      console.log(selectedQuantity);
       console.log(selectedQuantity);
       let totalPrice = selectedQuantity * productPrice;
       console.log("totalPrice: " + totalPrice)
@@ -36,10 +38,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
 $('.shopping__cart__table').on('change', '.quantity-select',
     function (event) {
-      var productId = $(this).find('.quantity-select').data('product-id');
-      var selectedQuantity = parseInt(
-          $(this).find('.quantity-select').val());
-
+      var productId = $(this).data('product-id');
+      var selectedQuantity = parseInt($(this).val());
+      console.log("productId: " + productId)
+      console.log("selectedQuantity: " + selectedQuantity)
       var productRows = $('.shopping__cart__table tbody tr');
       var productTotalPrices = {};
       productRows.each(function () {
@@ -53,9 +55,10 @@ $('.shopping__cart__table').on('change', '.quantity-select',
         productTotalPrices[id] = totalPrice;
       });
       var totalPriceSum = 0;
-      for (var productPk in productTotalPrices) {
-        totalPriceSum += productTotalPrices[productPk];
+      for (var pk in productTotalPrices) {
+        totalPriceSum += productTotalPrices[pk];
       }
+      console.log(totalPriceSum)
 
       var data = {
         action: 'update',
@@ -67,6 +70,10 @@ $('.shopping__cart__table').on('change', '.quantity-select',
       $.post('/cart.bit', data, function (response) {
         console.log(data);
         console.log('Quantity updated successfully');
+        const subtotalElement = document.getElementById("subtotal");
+        const totalElement = document.getElementById("total");
+        console.log(subtotalElement);
+
         subtotalElement.textContent = `${totalPriceSum}원`;
         totalElement.textContent = `${totalPriceSum}원`
 
