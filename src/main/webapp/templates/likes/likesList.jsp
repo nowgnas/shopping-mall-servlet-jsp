@@ -102,7 +102,7 @@
                                 </td>
                                 <td class="product__cart__item">
                                     <div class="cart__price">
-                                        <h5>${product.price}</h5>
+                                        <h5>${product.price}&#8361;</h5>
                                     </div>
                                 </td>
                             </tr>
