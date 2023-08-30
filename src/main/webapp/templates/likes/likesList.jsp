@@ -96,8 +96,8 @@
                                 <td class="product__cart__item">
                                     <a href="/product.bit?view=shop-detail&productId=${product.id}">
                                         <div class="product__cart__item__pic">
-                                            <img alt="" src="${product.url}" width="200px"
-                                                 height="150px">
+                                            <img alt="" src="${product.url}" width="250px"
+                                                 height="250px">
                                         </div>
                                     </a>
                                 </td>
