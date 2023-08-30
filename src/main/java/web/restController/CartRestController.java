@@ -20,10 +20,10 @@ import web.RestControllerFrame;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Optional;
 
 public class CartRestController implements RestControllerFrame {
 
+  private final StockCheckerService stockCheckerService = new StockCheckerServiceImpl();
   private final CartDaoFrame<ProductAndMemberCompositeKey, Cart> cartDaoFrame = new CartDao();
   private final MemberDaoFrame<Long, Member> memberDao = new MemberDao();
   private final EntityExistCheckerService<Long, Member> memberExistCheckerService =
@@ -34,7 +34,6 @@ public class CartRestController implements RestControllerFrame {
       cartExistCheckerService = new CartExistCheckerService();
   private final UpdateCartService updateCartService =
       new UpdateCartServiceImpl(cartDaoFrame, new DeleteCartWhenRestOfQuantityUnder0(cartDaoFrame));
-    private final StockCheckerService stockCheckerService = new StockCheckerServiceImpl();
   private final CartService cartService =
       new CartServiceImpl(
           cartDaoFrame,
@@ -44,7 +43,6 @@ public class CartRestController implements RestControllerFrame {
           cartExistCheckerService,
           stockCheckerService,
           updateCartService);
-
 
   @Override
   public Object execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
