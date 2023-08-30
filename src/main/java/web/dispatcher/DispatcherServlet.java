@@ -1,5 +1,6 @@
 package web.dispatcher;
 
+import app.exception.DomainException;
 import app.exception.likes.LikesEntityDuplicateException;
 import app.exception.member.LoginFailException;
 import app.exception.member.MemberEntityNotFoundException;
@@ -78,6 +79,8 @@ public class DispatcherServlet extends HttpServlet {
     } catch (LoginFailException e) {
       response.sendError(e.getStatusCode(), e.getMessage());
     } catch (LikesEntityDuplicateException e) {
+      response.sendError(e.getStatusCode(), e.getMessage());
+    } catch (DomainException e) {
       response.sendError(e.getStatusCode(), e.getMessage());
     } catch (Exception e) {
       e.printStackTrace();

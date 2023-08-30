@@ -9,8 +9,6 @@ import app.entity.Cart;
 import app.entity.Member;
 import app.entity.Product;
 import app.entity.ProductAndMemberCompositeKey;
-import app.exception.cart.CartNotFoundException;
-import app.exception.product.ProductNotFoundException;
 import app.service.cart.*;
 import app.service.checker.CartExistCheckerService;
 import app.service.checker.EntityExistCheckerService;
@@ -18,69 +16,68 @@ import app.service.checker.MemberExistCheckerService;
 import app.service.checker.ProductExistCheckerService;
 import app.service.product.StockCheckerService;
 import app.service.product.StockCheckerServiceImpl;
-
 import web.RestControllerFrame;
-
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Optional;
 
-
 public class CartRestController implements RestControllerFrame {
 
-    private final CartDaoFrame<ProductAndMemberCompositeKey, Cart> cartDaoFrame = new CartDao();
-    private final MemberDaoFrame<Long, Member> memberDao = new MemberDao();
-    private final EntityExistCheckerService<Long, Member> memberExistCheckerService = new MemberExistCheckerService(
-            memberDao);
-    private final EntityExistCheckerService<Long, Product> productExistCheckerService = new ProductExistCheckerService();
-    private final EntityExistCheckerService<ProductAndMemberCompositeKey, Cart> cartExistCheckerService = new CartExistCheckerService();
-    private final UpdateCartService updateCartService = new UpdateCartServiceImpl(cartDaoFrame,
-            new DeleteCartWhenRestOfQuantityUnder0(cartDaoFrame));
+  private final CartDaoFrame<ProductAndMemberCompositeKey, Cart> cartDaoFrame = new CartDao();
+  private final MemberDaoFrame<Long, Member> memberDao = new MemberDao();
+  private final EntityExistCheckerService<Long, Member> memberExistCheckerService =
+      new MemberExistCheckerService(memberDao);
+  private final EntityExistCheckerService<Long, Product> productExistCheckerService =
+      new ProductExistCheckerService();
+  private final EntityExistCheckerService<ProductAndMemberCompositeKey, Cart>
+      cartExistCheckerService = new CartExistCheckerService();
+  private final UpdateCartService updateCartService =
+      new UpdateCartServiceImpl(cartDaoFrame, new DeleteCartWhenRestOfQuantityUnder0(cartDaoFrame));
     private final StockCheckerService stockCheckerService = new StockCheckerServiceImpl();
-    private final CartService cartService = new CartServiceImpl(cartDaoFrame, memberDao,
-            memberExistCheckerService, productExistCheckerService, cartExistCheckerService,
-            stockCheckerService, updateCartService);
+  private final CartService cartService =
+      new CartServiceImpl(
+          cartDaoFrame,
+          memberDao,
+          memberExistCheckerService,
+          productExistCheckerService,
+          cartExistCheckerService,
+          stockCheckerService,
+          updateCartService);
 
-    @Override
-    public Object execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        String cmd = request.getParameter("cmd");
-        Object result = "";
 
-        if (cmd != null) {
-            result = build(request, cmd);
-        }
-        return result;
+  @Override
+  public Object execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    String cmd = request.getParameter("cmd");
+    Object result = "";
+
+    if (cmd != null) {
+      result = build(request, cmd);
     }
+    return result;
+  }
 
-    private Object build(HttpServletRequest request, String cmd) throws Exception {
-        Object result = null;
-        switch (cmd) {
-            case "add":
-                result = addCart(request);
-            break;
-        }
-        return result;
+  private Object build(HttpServletRequest request, String cmd) throws Exception {
+    Object result = null;
+    switch (cmd) {
+      case "add":
+        result = addCart(request);
+        break;
     }
+    return result;
+  }
 
-    private Object addCart(HttpServletRequest request) {
-        try {
-            MemberDetail memberDetail = (MemberDetail) request.getSession().getAttribute("loginMember");
-            Long productId = Long.parseLong(request.getParameter("productId"));
-            Optional<String> optionalQuantity = Optional.ofNullable(request.getParameter("quantity"));
-            Long quantity = 1L;
-            if(optionalQuantity.isPresent()){
-                quantity = Long.parseLong(optionalQuantity.get());
-            }
-            cartService.putItemIntoCart(new ProductAndMemberCompositeKey(productId, memberDetail.getId()),
-                    quantity);
-            return true;
-        } catch (ProductNotFoundException | CartNotFoundException e) {
-            e.printStackTrace();
-            return false;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
+  private Object addCart(HttpServletRequest request) throws Exception {
+
+    MemberDetail memberDetail = (MemberDetail) request.getSession().getAttribute("loginMember");
+    Long productId = Long.parseLong(request.getParameter("productId"));
+    Optional<String> optionalQuantity = Optional.ofNullable(request.getParameter("quantity"));
+    Long quantity = 1L;
+    if (optionalQuantity.isPresent()) {
+      quantity = Long.parseLong(optionalQuantity.get());
     }
+    cartService.putItemIntoCart(
+        new ProductAndMemberCompositeKey(productId, memberDetail.getId()), quantity);
+    return true;
+  }
 }

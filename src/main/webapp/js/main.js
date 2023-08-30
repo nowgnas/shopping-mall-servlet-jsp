@@ -218,7 +218,7 @@
                     title: '상품 추가 되었습니다.'
                 })
             }).fail((err) => {
-            console.log(err);
+            login();
         });
     })
 
