@@ -39,7 +39,7 @@
                     <h4>Shop</h4>
                     <div class="breadcrumb__links">
                         <a href="main.bit">Home</a>
-                        <span>Shop</span>
+                        <a href="/product.bit?view=shop&curPage=1&sort=PRICE_ASC">Shop</a>
                     </div>
                 </div>
             </div>
@@ -86,96 +86,107 @@
                     <div class="row">
                         <div class="col-lg-6 col-md-6 col-sm-6">
                             <div class="shop__product__option__left">
-<%--                                <p>Showing 1–12 of 126 results</p>--%>
                             </div>
                         </div>
                     </div>
                 </div>
-                <%--  product item list --%>
-                <div class="row" id="common-parent-element">
-                    <c:forEach var="product" items="${productList.item}">
-                        <%-- each item --%>
-                        <div class="col-lg-4 col-md-6 col-sm-6">
-                            <div class="product__item">
-                                <div class="product__item__pic set-bg"
-                                     data-setbg="${product.url}">
-                                    <ul class="product__hover">
-                                        <c:if test="${!product.isLiked}">
-                                            <li>
-                                                <a href="#" class="likes-btn"
-                                                   data-product-id="${product.id}"
-                                                   data-login-info="${loginMember}"
-                                                ><img
-                                                        src="img/icon/heart.png" alt=""></a>
-                                            </li>
-                                        </c:if>
-                                        <c:if test="${product.isLiked}">
-                                            <li>
-                                                <a href="#" class="likes-cancel-btn"
-                                                   data-product-id="${product.id}"
-                                                   data-login-info="${loginMember}"><img
-                                                        src="img/icon/fill_heart.png" alt=""></a>
-                                            </li>
-                                        </c:if>
-                                        <li>
-                                            <a href="/product.bit?view=shop-detail&productId=${product.id}"><img
-                                                    src="img/icon/search.png" alt=""></a>
-                                        </li>
-                                    </ul>
+                <c:choose>
+                    <c:when test="${not empty error}">
+                        <div class="align-content-center">검색된 상품이 없습니다</div>
+                    </c:when>
+                    <c:otherwise>
+                        <%--  product item list --%>
+                        <div class="row" id="common-parent-element">
+                            <c:forEach var="product" items="${productList.item}">
+                                <%-- each item --%>
+                                <div class="col-lg-4 col-md-6 col-sm-6">
+                                    <div class="product__item">
+                                        <div class="product__item__pic set-bg"
+                                             data-setbg="${product.url}">
+                                            <ul class="product__hover">
+                                                <c:if test="${!product.isLiked}">
+                                                    <li>
+                                                        <a href="#" class="likes-btn"
+                                                           data-product-id="${product.id}"
+                                                           data-login-info="${loginMember}"
+                                                        ><img
+                                                                src="img/icon/heart.png" alt=""></a>
+                                                    </li>
+                                                </c:if>
+                                                <c:if test="${product.isLiked}">
+                                                    <li>
+                                                        <a href="#" class="likes-cancel-btn"
+                                                           data-product-id="${product.id}"
+                                                           data-login-info="${loginMember}"><img
+                                                                src="img/icon/fill_heart.png"
+                                                                alt=""></a>
+                                                    </li>
+                                                </c:if>
+                                                <li>
+                                                    <a href="/product.bit?view=shop-detail&productId=${product.id}"><img
+                                                            src="img/icon/search.png" alt=""></a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="product__item__text">
+                                            <h6>${product.name}</h6>
+                                            <a href="#" class="add-cart">+ Add To Cart</a>
+                                                <%-- price--%>
+                                            <h5>${product.price}</h5>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="product__item__text">
-                                    <h6>${product.name}</h6>
-                                    <a href="#" data-product-id="${product.id}" class="add-cart">+ Add To Cart</a>
-                                        <%-- price--%>
-                                    <h5>${product.price}</h5>
-                                </div>
-                            </div>
-                        </div>
-                    </c:forEach>
-                </div>
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="product__pagination">
-                            <c:if test="${productList.paging.currentPage > 1}">
-                                <a class="mr-3"
-                                   href="/product.bit?view=shop&curPage=${productList.paging.currentPage - 1}&sort=PRICE_ASC">PREV</a>
-                            </c:if>
-
-                            <c:set var="startPage" value="${productList.paging.currentPage - 2}"/>
-                            <c:set var="endPage" value="${productList.paging.currentPage + 2}"/>
-
-                            <c:if test="${startPage < 1}">
-                                <c:set var="startPage" value="1"/>
-                                <c:set var="endPage" value="5"/>
-                            </c:if>
-
-                            <c:if test="${endPage > productList.paging.totalPage}">
-                                <c:set var="endPage" value="${productList.paging.totalPage}"/>
-                                <c:set var="startPage" value="${productList.paging.totalPage - 4}"/>
-                                <c:choose>
-                                    <c:when test="${startPage < 1}">
-                                        <c:set var="startPage" value="1"/>
-                                    </c:when>
-                                </c:choose>
-                            </c:if>
-                            <c:forEach begin="${startPage}" end="${endPage}" var="page">
-                                <c:choose>
-                                    <c:when test="${page == productList.paging.currentPage}">
-                                        <a id="curPage">${page}</a>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <a href="/product.bit?view=shop&curPage=${page}&sort=PRICE_ASC">${page}</a>
-                                    </c:otherwise>
-                                </c:choose>
                             </c:forEach>
-
-                            <c:if test="${productList.paging.currentPage < productList.paging.totalPage}">
-                                <a href="/product.bit?view=shop&curPage=${productList.paging.currentPage + 1}&sort=PRICE_ASC">NEXT</a>
-                            </c:if>
                         </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="product__pagination">
+                                    <c:if test="${productList.paging.currentPage > 1}">
+                                        <a class="mr-3"
+                                           href="/product.bit?view=shop&curPage=${productList.paging.currentPage - 1}&sort=PRICE_ASC">PREV</a>
+                                    </c:if>
 
-                    </div>
-                </div>
+                                    <c:set var="startPage"
+                                           value="${productList.paging.currentPage - 2}"/>
+                                    <c:set var="endPage"
+                                           value="${productList.paging.currentPage + 2}"/>
+
+                                    <c:if test="${startPage < 1}">
+                                        <c:set var="startPage" value="1"/>
+                                        <c:set var="endPage" value="5"/>
+                                    </c:if>
+
+                                    <c:if test="${endPage > productList.paging.totalPage}">
+                                        <c:set var="endPage"
+                                               value="${productList.paging.totalPage}"/>
+                                        <c:set var="startPage"
+                                               value="${productList.paging.totalPage - 4}"/>
+                                        <c:choose>
+                                            <c:when test="${startPage < 1}">
+                                                <c:set var="startPage" value="1"/>
+                                            </c:when>
+                                        </c:choose>
+                                    </c:if>
+                                    <c:forEach begin="${startPage}" end="${endPage}" var="page">
+                                        <c:choose>
+                                            <c:when test="${page == productList.paging.currentPage}">
+                                                <a id="curPage">${page}</a>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <a href="/product.bit?view=shop&curPage=${page}&sort=PRICE_ASC">${page}</a>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </c:forEach>
+
+                                    <c:if test="${productList.paging.currentPage < productList.paging.totalPage}">
+                                        <a href="/product.bit?view=shop&curPage=${productList.paging.currentPage + 1}&sort=PRICE_ASC">NEXT</a>
+                                    </c:if>
+                                </div>
+
+                            </div>
+                        </div>
+                    </c:otherwise>
+                </c:choose>
             </div>
         </div>
     </div>

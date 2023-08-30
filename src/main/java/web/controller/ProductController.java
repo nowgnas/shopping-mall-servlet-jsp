@@ -4,6 +4,7 @@ import app.dto.member.response.MemberDetail;
 import app.dto.product.response.ProductDetailWithCategory;
 import app.dto.product.response.ProductListWithPagination;
 import app.entity.Category;
+import app.exception.product.ProductNotFoundException;
 import app.service.category.CategoryService;
 import app.service.category.CategoryServiceImpl;
 import app.service.product.ProductService;
@@ -75,9 +76,13 @@ public class ProductController implements ControllerFrame {
     List<Category> categories = categoryService.getAllCategory();
     int curPage = Integer.parseInt(request.getParameter("curPage"));
     String keyword = request.getParameter("keyword");
-    ProductListWithPagination productsByKeyword =
-        service.getProductsByKeyword(keyword, memberId, curPage);
-
+    ProductListWithPagination productsByKeyword = null;
+    try {
+      productsByKeyword = service.getProductsByKeyword(keyword, memberId, curPage);
+    } catch (ProductNotFoundException e) {
+      request.setAttribute("error", e.getMessage());
+      return productList();
+    }
     request.setAttribute("categories", categories);
     request.setAttribute("productList", productsByKeyword);
     return productList();
