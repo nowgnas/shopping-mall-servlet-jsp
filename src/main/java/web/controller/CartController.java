@@ -11,6 +11,7 @@ import app.entity.Member;
 import app.entity.Product;
 import app.entity.ProductAndMemberCompositeKey;
 import app.exception.cart.CartNotFoundException;
+import app.exception.cart.OutOfStockException;
 import app.exception.product.ProductNotFoundException;
 import app.service.cart.CartService;
 import app.service.cart.CartServiceImpl;
@@ -59,7 +60,9 @@ public class CartController implements ControllerFrame {
       cartService.putItemIntoCart(new ProductAndMemberCompositeKey(productId, memberDetail.getId()),
           quantity);
       return Navi.FORWARD_CART_FORM;
-    } catch (ProductNotFoundException | CartNotFoundException  e) {
+
+    }
+    catch (ProductNotFoundException | CartNotFoundException  e) {
       return Navi.REDIRECT_CART_FORM + String.format("?errorMessage=%s", e.getMessage());
     } catch (Exception e) {
       e.printStackTrace();
@@ -67,13 +70,12 @@ public class CartController implements ControllerFrame {
     return Navi.FORWARD_CART_FORM;
   }
 
-  public String deleteProductInCart(HttpServletRequest request) {
+  public String deleteProductInCart(HttpServletRequest request, HttpServletResponse response) {
     try {
 
       MemberDetail memberDetail = (MemberDetail) request.getSession().getAttribute("loginMember");
-      System.out.println(memberDetail.getId());
-      System.out.println("----------------------------------------------------------------");
       Long productId = Long.parseLong(request.getParameter("productId"));
+      response.setHeader("X-Content-Type-Options", "nosniff");
       cartService.delete(new ProductAndMemberCompositeKey(productId, memberDetail.getId()));
       return Navi.FORWARD_CART_FORM;
     } catch (ProductNotFoundException | CartNotFoundException e) {
@@ -84,7 +86,7 @@ public class CartController implements ControllerFrame {
     return Navi.FORWARD_CART_FORM;
   }
 
-  public String updateProductInCart(HttpServletRequest request) {
+  public String updateProductInCart(HttpServletRequest request, HttpServletResponse response) {
     try {
       MemberDetail memberDetail = (MemberDetail) request.getSession().getAttribute("loginMember");
       Long productId = Long.parseLong(request.getParameter("productId"));
@@ -92,6 +94,7 @@ public class CartController implements ControllerFrame {
       cartService.updateQuantityOfCartProduct(
           new ProductAndMemberCompositeKey(productId, memberDetail.getId()),
           quantity);
+      response.setHeader("X-Content-Type-Options", "nosniff");
       return Navi.FORWARD_CART_FORM;
     } catch (ProductNotFoundException | CartNotFoundException e) {
       return Navi.REDIRECT_CART_FORM + String.format("?errorMessage=%s", e.getMessage());
@@ -101,7 +104,7 @@ public class CartController implements ControllerFrame {
     return Navi.FORWARD_CART_FORM;
   }
 
-  public String getCartList(HttpServletRequest request) {
+  public String getCartList(HttpServletRequest request, HttpServletResponse response) {
     try {
       MemberDetail memberDetail = (MemberDetail) request.getSession().getAttribute("loginMember");
       AllCartProductInfoDtoWithPagination cartInfo = cartService.getCartProductListByMemberPagination(
@@ -110,6 +113,7 @@ public class CartController implements ControllerFrame {
           cartInfo.getCartProductInfoDto().getCartProductDtoList());
       request.setAttribute("totalPrice", cartInfo.getCartProductInfoDto().getTotalPrice());
       request.setAttribute("pagination", cartInfo.getPaging());
+      response.setHeader("X-Content-Type-Options", "nosniff");
       return Navi.FORWARD_CART_FORM;
     } catch (ProductNotFoundException | CartNotFoundException  e) {
       log.info("카트에 상품이 존재하지 않습니다");
@@ -124,13 +128,13 @@ public class CartController implements ControllerFrame {
       throws Exception {
     switch (action) {
       case "get":
-        return getCartList(request);
+        return getCartList(request, response);
       case "add":
         return addProductInCart(request);
       case "delete":
-        return deleteProductInCart(request);
+        return deleteProductInCart(request, response);
       case "update":
-        return updateProductInCart(request);
+        return updateProductInCart(request, response);
       default:
         return Navi.FORWARD_CART_FORM;
     }
@@ -140,6 +144,7 @@ public class CartController implements ControllerFrame {
   @Override
   public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
     String view = request.getParameter("action");
+    log.info(request.getSession().toString());
     return build(request, response, view);
   }
 }

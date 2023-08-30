@@ -7,6 +7,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page session="false" %>
 <html lang="zxx">
 
 <head>
@@ -23,7 +24,6 @@
 
     <!-- custom cart css-->
     <link rel="stylesheet" href="css/cart-pagination.css">
-    <link rel="stylesheet" href="css/preloader .css" type="text/css">
 
     <!-- Css Styles -->
     <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css">
@@ -160,6 +160,9 @@
 <script src="js/main.js"></script>
 <script src="js/cart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js.map"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js.map"></script>
+
 
 
 </body>

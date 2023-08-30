@@ -1,5 +1,6 @@
 package web.dispatcher;
 
+import lombok.extern.java.Log;
 import org.apache.log4j.Logger;
 
 import javax.servlet.*;
@@ -10,6 +11,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.net.URLEncoder;
 
+@Log
 @WebFilter(urlPatterns = "*.bit")
 public class LoginFilter implements Filter {
 
@@ -31,6 +33,7 @@ public class LoginFilter implements Filter {
     }
     path = path.substring(1, path.lastIndexOf("."));
     String encode = URLEncoder.encode("로그인이필요합니다.", "UTF-8");
+    log.info(((HttpServletRequest) request).getSession().toString());
     if (path.equals("order") || path.equals("likes") || path.equals("cart")) {
       HttpSession session = ((HttpServletRequest) request).getSession(false);
       if (session == null || session.getAttribute("loginMember") == null) {

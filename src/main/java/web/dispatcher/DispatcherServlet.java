@@ -71,7 +71,7 @@ public class DispatcherServlet extends HttpServlet {
         Object result = restController.execute(request, response);
 
         response.setCharacterEncoding("UTF-8");
-        response.setContentType("text/json;charset=UTF-8");
+        response.setContentType("application/json");
         response.getWriter().print(result);
       }
     } catch (MemberEntityNotFoundException e) {

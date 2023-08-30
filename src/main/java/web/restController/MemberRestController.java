@@ -5,6 +5,7 @@ import app.dto.member.request.MemberRegisterDto;
 import app.dto.member.response.MemberDetail;
 import app.exception.member.RegisterException;
 import app.service.member.MemberService;
+import javax.servlet.ServletContext;
 import web.RestControllerFrame;
 import web.controller.validation.MemberValidation;
 
