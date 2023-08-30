@@ -92,7 +92,7 @@
                 </div>
                 <c:choose>
                     <c:when test="${not empty error}">
-                        <div class="align-content-center">검색된 상품이 없습니다</div>
+                        <div  class="d-flex justify-content-center">검색된 상품이 없습니다.</div>
                     </c:when>
                     <c:otherwise>
                         <%--  product item list --%>

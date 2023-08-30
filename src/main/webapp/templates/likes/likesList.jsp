@@ -28,9 +28,9 @@
     <link rel="stylesheet" href="../../css/style.css" type="text/css">
 </head>
 <style>
-    .product__checkbox {
-      padding: 35px;
-    }
+  .product__checkbox {
+    padding: 35px;
+  }
 </style>
 
 <body>
@@ -76,6 +76,14 @@
                         </tr>
                         </thead>
                         <tbody>
+
+                        <c:if test="${empty products.list}">
+                            <tr>
+                                <td colspan="4">
+                                    <div class="d-flex justify-content-center mt-3 mb-3">찜 목록이 비어있습니다.</div>
+                                </td>
+                            </tr>
+                        </c:if>
                         <c:forEach items="${products.list}" var="product">
                             <tr>
                                 <td class="product__cart__item">
