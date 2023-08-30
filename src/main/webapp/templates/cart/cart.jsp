@@ -98,12 +98,11 @@
                                                            var="quantity">
                                                     <option value="${quantity}"
                                                             data-quantity-in-cart="${product.productInCart}"
-                                                        <c:if test="${quantity == product.productInCart}">selected</c:if>>
+                                                        ${quantity == product.productInCart ? 'selected' : ''}>
                                                             ${quantity}
                                                     </option>
                                                 </c:forEach>
                                             </select>
-
                                         </div>
                                     </div>
                                 </td>
@@ -149,7 +148,7 @@
 
 
 <!-- Js Plugins -->
-<script src="js/jquery-3.3.1.min.js"></1script>
+<script src="js/jquery-3.3.1.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
 <script src="js/jquery.nice-select.min.js"></script>
 <script src="js/jquery.nicescroll.min.js"></script>

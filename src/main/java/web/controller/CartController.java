@@ -23,14 +23,18 @@ import app.service.checker.MemberExistCheckerService;
 import app.service.checker.ProductExistCheckerService;
 import app.service.product.StockCheckerService;
 import app.service.product.StockCheckerServiceImpl;
+import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import lombok.extern.java.Log;
 import web.ControllerFrame;
 import web.dispatcher.Navi;
 
-@NoArgsConstructor
+@Log
+@AllArgsConstructor
 public class CartController implements ControllerFrame {
 
   private final CartDaoFrame<ProductAndMemberCompositeKey, Cart> cartDaoFrame = new CartDao();
@@ -45,7 +49,6 @@ public class CartController implements ControllerFrame {
   private final CartService cartService = new CartServiceImpl(cartDaoFrame, memberDao,
       memberExistCheckerService, productExistCheckerService, cartExistCheckerService,
       stockCheckerService, updateCartService);
-  private Long memberId;
 
 
   public String addProductInCart(HttpServletRequest request) throws Exception {
@@ -56,7 +59,7 @@ public class CartController implements ControllerFrame {
       cartService.putItemIntoCart(new ProductAndMemberCompositeKey(productId, memberDetail.getId()),
           quantity);
       return Navi.FORWARD_CART_FORM;
-  } catch (ProductNotFoundException | CartNotFoundException  e) {
+    } catch (ProductNotFoundException | CartNotFoundException  e) {
       return Navi.REDIRECT_CART_FORM + String.format("?errorMessage=%s", e.getMessage());
     } catch (Exception e) {
       e.printStackTrace();
@@ -74,7 +77,7 @@ public class CartController implements ControllerFrame {
       cartService.delete(new ProductAndMemberCompositeKey(productId, memberDetail.getId()));
       return Navi.FORWARD_CART_FORM;
     } catch (ProductNotFoundException | CartNotFoundException e) {
-      return Navi.REDIRECT_CART_FORM + String.format("?errorMessage=%s", e.getMessage());
+      return Navi.FORWARD_CART_FORM;
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -108,9 +111,9 @@ public class CartController implements ControllerFrame {
       request.setAttribute("totalPrice", cartInfo.getCartProductInfoDto().getTotalPrice());
       request.setAttribute("pagination", cartInfo.getPaging());
       return Navi.FORWARD_CART_FORM;
-    }
-     catch (ProductNotFoundException | CartNotFoundException  e) {
-      return Navi.REDIRECT_CART_FORM + String.format("?errorMessage=%s", e.getMessage());
+    } catch (ProductNotFoundException | CartNotFoundException  e) {
+      log.info("카트에 상품이 존재하지 않습니다");
+      return Navi.FORWARD_CART_FORM;
     } catch (Exception e) {
       e.printStackTrace();
     }
