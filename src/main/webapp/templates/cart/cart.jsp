@@ -117,17 +117,17 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="pagination">
+<%--                <div class="pagination">--%>
 
-                    <a href="${pageContext.request.contextPath}/cart?page=${pagination.currentPage - 1}">Previous</a>
-                    <c:forEach begin="1" end="${pagination.totalPage}" var="pageNumber">
-                        <a href="${pageContext.request.contextPath}/cart?page=${pageNumber}">${pageNumber}</a>
+<%--                    <a href="${pageContext.request.contextPath}/cart?page=${pagination.currentPage - 1}">Previous</a>--%>
+<%--                    <c:forEach begin="1" end="${pagination.totalPage}" var="pageNumber">--%>
+<%--                        <a href="${pageContext.request.contextPath}/cart?page=${pageNumber}">${pageNumber}</a>--%>
 
-                    </c:forEach>
-                    <c:if test="${pagination.currentPage < pagination.totalPage}">
-                        <a href="${pageContext.request.contextPath}/cart?page=${pagination.currentPage + 1}">Next</a>
-                    </c:if>
-                </div>
+<%--                    </c:forEach>--%>
+<%--                    <c:if test="${pagination.currentPage < pagination.totalPage}">--%>
+<%--                        <a href="${pageContext.request.contextPath}/cart?page=${pagination.currentPage + 1}">Next</a>--%>
+<%--                    </c:if>--%>
+<%--                </div>--%>
 
 
                 <div class="cart__total">
