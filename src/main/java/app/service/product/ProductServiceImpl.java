@@ -8,7 +8,6 @@ import app.dto.product.ProductListItem;
 import app.dto.product.response.ProductDetailWithCategory;
 import app.dto.product.response.ProductListWithPagination;
 import app.entity.Category;
-import app.enums.SortOption;
 import app.exception.product.ProductNotFoundException;
 import app.utils.GetSessionFactory;
 import java.util.HashMap;
@@ -58,21 +57,9 @@ public class ProductServiceImpl implements ProductService {
     map.put("offset", (currentPage - 1) * 9);
     map.put("userId", userId.toString());
 
-    List<ProductListItem> products = null;
+    List<ProductListItem> products = dao.selectAllSortByPrice(map, session);
+    if (products.isEmpty()) throw new ProductNotFoundException();
 
-    switch (SortOption.valueOf(sortOption)) {
-      case PRICE_DESC:
-        products = dao.selectAllSortByPriceDesc(map, session);
-        break;
-      case PRICE_ASC:
-        products = dao.selectAllSortByPrice(map, session);
-        break;
-      case DATE_DESC:
-        products = dao.selectAllSortByDate(map, session);
-        break;
-      default:
-        throw new ProductNotFoundException();
-    }
     int totalPage = dao.getTotalPage(session);
     session.close();
     Pagination pagination =
