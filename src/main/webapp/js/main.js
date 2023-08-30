@@ -223,7 +223,6 @@
     })
 
     function addCart(productId, quantity) {
-        console.log(quantity);
         $.post('cart-rest.bit?cmd=add',
             {productId: productId,
             quantity: quantity},
@@ -233,7 +232,7 @@
                     title: '상품 추가 되었습니다.'
                 })
             }).fail((err) => {
-            login();
+                login();
         });
     }
 
