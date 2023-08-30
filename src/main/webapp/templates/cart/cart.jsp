@@ -47,8 +47,7 @@
                     <div class="breadcrumb__text">
                         <h4>Shopping Cart</h4>
                         <div class="breadcrumb__links">
-                            <a href="./index.html">Home</a>
-                            <a href="./shop.html">Shop</a>
+                            <a href="/main.bit">Home</a>
                             <span>Shopping Cart</span>
                         </div>
                     </div>
@@ -81,7 +80,7 @@
                                     </div>
                                     <div class="product__cart__item__text">
                                         <h6>${product.productName}</h6>
-                                        <h5>$${product.productPrice}</h5>
+                                        <h5>${product.productPrice}원</h5>
                                     </div>
                                 </td>
                                 <td class="quantity__item">
@@ -104,7 +103,7 @@
 
                                 <td class="cart__price">${product.price}원</td>
                                 <td class="cart__close" product-id="${product.productId}">
-                                    <button class="delete-button"><i class="fa fa-close"></i>
+                                    <button class="delete-button" style="border: white; background: white"><i class="fa fa-close"></i>
                                     </button>
                                 </td>
                             </tr>
@@ -158,7 +157,9 @@
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js.map"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js.map"></script>
 
+<script>
 
+</script>
 
 </body>
 

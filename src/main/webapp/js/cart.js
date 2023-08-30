@@ -42,7 +42,6 @@ $('.shopping__cart__table').on('change', '.quantity-select',
                 $(this).find('.quantity-select').val());
             var productPrice = parseFloat(
                 $(this).find('.cart__price').text().replace(/[^0-9.]/g, ""));
-
             var totalPrice = quantity * productPrice;
             productTotalPrices[id] = totalPrice;
         });
