@@ -17,7 +17,8 @@ import java.util.stream.Collectors;
 @ToString
 public class ProductInCartDto {
 
-  private Long id;
+  private Long memberId;
+  private Long productId;
   private String productName;
   private Long productPrice;
   private Integer stock;
@@ -25,27 +26,36 @@ public class ProductInCartDto {
   private String imgUrl;
   private Long price;
 
-   public static List<ProductInCartDto> getProductInfo(
-            List<ProductItemQuantity> productItemQuantityList, List<Cart> cartList) {
+public static List<ProductInCartDto> getProductInfo(
+        List<ProductItemQuantity> productItemQuantityList, List<Cart> cartList) {
 
-        Map<Long, Long> productIdToQuantityMap = cartList.stream()
-            .collect(Collectors.toMap(Cart::getProductId, Cart::getProductQuantity));
+    Map<Long, Long> productIdToQuantityMap = cartList.stream()
+        .collect(Collectors.toMap(Cart::getProductId, Cart::getProductQuantity));
 
-        return productItemQuantityList.stream()
-            .map(productItemQuantity -> {
-                Long productId = productItemQuantity.getId();
-                Integer quantityInCart = Math.toIntExact(
-                    productIdToQuantityMap.get(productId));
-                return getProductInfo(productItemQuantity, quantityInCart);
-            })
-            .collect(Collectors.toList());
-    }
+    return productItemQuantityList.stream()
+        .map(productItemQuantity -> {
+            Long productId = productItemQuantity.getId();
+            Integer quantityInCart = Math.toIntExact(
+                productIdToQuantityMap.getOrDefault(productId, 0L));
+
+            Cart cartItem = cartList.stream()
+                .filter(cart -> cart.getProductId().equals(productId))
+                .findFirst()
+                .orElse(null);
+
+            Long memberId = (cartItem != null) ? cartItem.getMemberId() : null;
+
+            return getProductInfo(productItemQuantity, quantityInCart, memberId);
+        })
+        .collect(Collectors.toList());
+}
 
     private static ProductInCartDto getProductInfo(
-            ProductItemQuantity productItemQuantity, Integer quantityInCart) {
+            ProductItemQuantity productItemQuantity, Integer quantityInCart, Long memberId) {
         return ProductInCartDto.builder()
-            .id(productItemQuantity.getId())
+            .productId(productItemQuantity.getId())
             .stock(productItemQuantity.getQuantity())
+            .memberId(memberId)
             .productInCart(quantityInCart)
             .productPrice(productItemQuantity.getPrice())
             .imgUrl(productItemQuantity.getUrl())

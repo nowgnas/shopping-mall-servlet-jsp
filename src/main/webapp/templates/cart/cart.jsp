@@ -10,7 +10,12 @@
 <html lang="zxx">
 
 <head>
-    <jsp:include page="../common/meta-data.jsp"/>
+    <meta charset="UTF-8">
+    <meta name="description" content="Male_Fashion Template">
+    <meta name="keywords" content="Male_Fashion, unica, creative, html">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Male-Fashion | Template</title>
 
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&display=swap"
@@ -18,6 +23,7 @@
 
     <!-- custom cart css-->
     <link rel="stylesheet" href="css/cart-pagination.css">
+    <link rel="stylesheet" href="css/preloader .css" type="text/css">
 
     <!-- Css Styles -->
     <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css">
@@ -37,12 +43,8 @@
 <div id="preloder">
     <div class="loader"></div>
 </div>
-
-<!-- Header Section Begin -->
 <jsp:include page="../common/header.jsp"/>
-<!-- Header Section End -->
 
-<!-- Breadcrumb Section Begin -->
 <section class="breadcrumb-option">
         <div class="container">
             <div class="row">
@@ -60,7 +62,7 @@
         </div>
 </section>
 
-<
+
 <section class="shopping-cart spad">
     <div class="container">
         <div class="row">
@@ -91,23 +93,22 @@
                                     <div class="quantity">
                                         <div class="pro-qty-2">
                                             <select class="quantity-select"
-                                                    data-product-id="${product.id}">
+                                                    data-product-id="${product.productId}">
                                                 <c:forEach begin="1" end="${product.stock}"
                                                            var="quantity">
                                                     <option value="${quantity}"
                                                             data-quantity-in-cart="${product.productInCart}"
-                                                            <c:if test="${quantity == product.productInCart}">selected</c:if>>
+                                                        ${quantity == product.productInCart ? 'selected' : ''}>
                                                             ${quantity}
                                                     </option>
                                                 </c:forEach>
                                             </select>
-
                                         </div>
                                     </div>
                                 </td>
 
                                 <td class="cart__price">${product.price}원</td>
-                                <td class="cart__close" product-id="${product.id}">
+                                <td class="cart__close" product-id="${product.productId}">
                                     <button class="delete-button"><i class="fa fa-close"></i>
                                     </button>
                                 </td>
@@ -157,8 +158,8 @@
 <script src="js/mixitup.min.js"></script>
 <script src="js/owl.carousel.min.js"></script>
 <script src="js/main.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="js/cart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
 
 </body>

@@ -17,7 +17,9 @@ public class CartDao implements CartDaoFrame<ProductAndMemberCompositeKey, Cart>
 
   @Override
   public int update(Cart cart, SqlSession session) throws Exception {
-    return session.update("cart.update", cart);
+    int returnValue = session.update("cart.update", cart);
+    session.commit();
+    return returnValue;
   }
 
   @Override
