@@ -98,8 +98,8 @@
                         <h4>${productDetail.detail.name}</h4>
                         <%-- todo: price --%>
                         <div class="row justify-content-center">
-                            <div>&#8361;</div>
                             <div id="unitPrice">${productDetail.detail.price}</div>
+                            <div>원</div>
                         </div>
                         <%-- todo: description --%>
                         <p>${productDetail.detail.code}</p>
@@ -127,7 +127,7 @@
                             </div>
                         </c:if>
 
-                        <p>Total Price: &#8361;<span id="totalPrice">0</span></p>
+                        <p>Total Price: <span id="totalPrice">0</span>원</p>
                         <div id="common-parent-element" class="product__details__btns__option">
                             <%-- todo: likes --%>
                             <c:if test="${productDetail.detail.isLiked eq false}">
