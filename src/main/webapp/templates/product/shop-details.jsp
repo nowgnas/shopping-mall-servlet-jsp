@@ -63,7 +63,7 @@
                 <div class="col-lg-12">
                     <div class="product__details__breadcrumb">
                         <a href="/main.bit">Home</a>
-                        <a href="/product.bit?view=shop&curPage=0&sort=DATE_DESC">Shop</a>
+                        <a href="/product.bit?view=shop&curPage=1&sort=PRICE_ASC">Shop</a>
                         <span>Product Details</span>
                     </div>
                 </div>
