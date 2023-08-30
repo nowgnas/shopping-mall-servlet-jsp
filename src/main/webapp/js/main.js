@@ -204,5 +204,38 @@
         });
     });
 
+    // 나중에 리팩토링 car.js로
+    $('#common-parent-element').on('click', '.add-cart', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        let target = $(this);
+        const productId = target.data('product-id');
+        addCart(productId, 1);
+    })
+
+    $('#add-cart-btn').on('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        let target = $(this);
+        const productId = target.data('p-id');
+        const quantity = $('#quantity-input').val();
+        addCart(productId, quantity);
+    })
+
+    function addCart(productId, quantity) {
+        console.log(quantity);
+        $.post('cart-rest.bit?cmd=add',
+            {productId: productId,
+            quantity: quantity},
+            function (res) {
+                Swal.fire({
+                    icon: 'success',
+                    title: '상품 추가 되었습니다.'
+                })
+            }).fail((err) => {
+            login();
+        });
+    }
+
 
 })(jQuery);

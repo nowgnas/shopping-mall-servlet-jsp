@@ -11,8 +11,10 @@ import app.dto.product.ProductListItemOfLike;
 import app.entity.Likes;
 import app.entity.Product;
 import app.entity.ProductAndMemberCompositeKey;
+import app.exception.likes.LikesEntityDuplicateException;
 import app.exception.likes.LikesEntityNotFoundException;
 import app.utils.GetSessionFactory;
+import org.apache.ibatis.exceptions.PersistenceException;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 
@@ -79,21 +81,6 @@ public class ProductLikesService implements LikesService {
    * @return true(찜 O), false(찜 X)
    * @throws Exception
    */
-  @Override
-  public boolean getMemberProductLikes(ProductAndMemberCompositeKey productAndMemberCompositeKey)
-      throws Exception {
-    Likes likes = null;
-    try {
-      session = sessionFactory.openSession();
-      likes = likesDao.selectById(productAndMemberCompositeKey, session).orElse(null);
-      return likes != null;
-    } catch (Exception e) {
-      e.printStackTrace();
-      throw new Exception(e.getMessage());
-    } finally {
-      session.close();
-    }
-  }
 
   /**
    * 회원이 지정한 상품 찜 추가
@@ -114,12 +101,17 @@ public class ProductLikesService implements LikesService {
                   productAndMemberCompositeKey.getProductId()),
               session);
       session.commit();
+    } catch (PersistenceException e) {
+      session.rollback();
+      e.printStackTrace();
+      throw new LikesEntityDuplicateException();
     } catch (SQLException e) {
       session.rollback();
       e.printStackTrace();
       throw new LikesEntityNotFoundException();
     } catch (Exception e) {
       session.rollback();
+      e.printStackTrace();
     } finally {
       session.close();
     }

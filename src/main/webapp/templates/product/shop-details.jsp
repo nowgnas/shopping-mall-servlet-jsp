@@ -22,9 +22,9 @@
     <link rel="stylesheet" href="../../css/style.css" type="text/css">
 
     <style>
-      .hover-color-change:hover {
-        color: red; /* Change to the desired color */
-      }
+        .hover-color-change:hover {
+            color: red; /* Change to the desired color */
+        }
     </style>
 </head>
 
@@ -63,7 +63,7 @@
                 <div class="col-lg-12">
                     <div class="product__details__breadcrumb">
                         <a href="/main.bit">Home</a>
-                        <a href="/product.bit?view=shop&curPage=0&sort=DATE_DESC">Shop</a>
+                        <a href="/product.bit?view=shop&curPage=1&sort=PRICE_ASC">Shop</a>
                         <span>Product Details</span>
                     </div>
                 </div>
@@ -103,25 +103,31 @@
                         </div>
                         <%-- todo: description --%>
                         <p>${productDetail.detail.code}</p>
-                        <div class="product__details__cart__option">
-                            <div class="input-group">
-                                <input type="text" name="quantity-input"
-                                       class="form-control text-center"
-                                       id="quantity-input">
-                                <div class="input-group-append">
-                                    <button class="btn btn-outline-secondary" type="button"
-                                            id="increase-btn">+
-                                    </button>
-                                </div>
-                                <div class="input-group-prepend">
-                                    <button class="btn btn-outline-secondary" type="button"
-                                            id="decrease-btn">-
-                                    </button>
-                                    <a href="#" class="primary-btn">add to cart</a>
+                        <c:if test="${productDetail.detail.quantity eq 0}">
+                            <h3 style="color: red; text-decoration: line-through">재고없음</h3>
+                        </c:if>
+                        <c:if test="${productDetail.detail.quantity ne 0}">
+                            <div class="product__details__cart__option">
+                                <div class="input-group">
+                                    <input type="text" name="quantity-input" disabled
+                                           class="form-control text-center"
+                                           id="quantity-input">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary" type="button"
+                                                id="increase-btn">+
+                                        </button>
+                                    </div>
+                                    <div class="input-group-prepend">
+                                        <button class="btn btn-outline-secondary" type="button"
+                                                id="decrease-btn">-
+                                        </button>
+                                        <a href="#" data-p-id="${productDetail.detail.id}" id="add-cart-btn" class="primary-btn">add to cart</a>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <p>Total Price: &#8361;<span id="totalPrice">10.00</span></p>
+                        </c:if>
+
+                        <p>Total Price: &#8361;<span id="totalPrice">0</span></p>
                         <div id="common-parent-element" class="product__details__btns__option">
                             <%-- todo: likes --%>
                             <c:if test="${productDetail.detail.isLiked eq false}">
@@ -137,7 +143,9 @@
                                     wishlist</a>
                             </c:if>
                         </div>
-                        <a id="order-link" href="" class="btn btn-outline-success">buy</a>
+                        <c:if test="${productDetail.detail.quantity ne 0}">
+                            <a id="order-link" href="" class="btn btn-dark btn-block">buy</a>
+                        </c:if>
                         <div>
                             상세 정보 : ${productDetail.detail.description}
                         </div>
@@ -170,65 +178,72 @@
 <script src="../../js/detail-likes.js"></script>
 
 <script>
-  // Set the default value when the page loads
-  window.onload = function () {
-    var quantityInput = document.getElementById("quantity-input");
-    quantityInput.value = "1"; // Set the default value
-    var totalPriceSpan = document.getElementById("totalPrice");
-    totalPriceSpan.textContent = parseFloat(document.getElementById("unitPrice").textContent);
-  };
+    window.onload = function () {
+        var quantityInput = document.getElementById("quantity-input");
+        quantityInput.value = "1"; // Set the default value
+        var totalPriceSpan = document.getElementById("totalPrice");
+        totalPriceSpan.textContent = parseFloat(document.getElementById("unitPrice").textContent);
+    };
 </script>
 
 
 <script>
-  var unitPrice = parseFloat(document.getElementById("unitPrice").textContent);
-  var quantityInput = document.getElementById("quantity-input");
-  var increaseBtn = document.getElementById("increase-btn");
-  var decreaseBtn = document.getElementById("decrease-btn");
-  var totalPriceSpan = document.getElementById("totalPrice");
+    var unitPrice = parseFloat(document.getElementById("unitPrice").textContent);
+    var quantityInput = document.getElementById("quantity-input");
+    var increaseBtn = document.getElementById("increase-btn");
+    var decreaseBtn = document.getElementById("decrease-btn");
+    var totalPriceSpan = document.getElementById("totalPrice");
 
-  // Update total price when quantity changes
-  function updateTotalPrice() {
-    var quantity = parseInt(quantityInput.value);
-    var totalPrice = unitPrice * quantity;
-    totalPriceSpan.textContent = totalPrice;
-  }
-
-  increaseBtn.addEventListener("click", function () {
-    var currentQuantity = parseInt(quantityInput.value);
-    quantityInput.value = currentQuantity + 1;
-    updateTotalPrice();
-  });
-
-  decreaseBtn.addEventListener("click", function () {
-    var currentQuantity = parseInt(quantityInput.value);
-    if (currentQuantity > 1) {
-      quantityInput.value = currentQuantity - 1;
-      updateTotalPrice();
+    // Update total price when quantity changes
+    function updateTotalPrice() {
+        var quantity = parseInt(quantityInput.value);
+        var totalPrice = unitPrice * quantity;
+        totalPriceSpan.textContent = totalPrice;
     }
-  });
 
-  // Update total price when quantity input changes directly
-  quantityInput.addEventListener("input", updateTotalPrice);
+    increaseBtn.addEventListener("click", function () {
+        var currentQuantity = parseInt(quantityInput.value);
+        if (currentQuantity <${productDetail.detail.quantity}) {
+            quantityInput.value = currentQuantity + 1;
+            updateTotalPrice();
+        } else {
+            Swal.fire({
+                icon: 'warning',
+                title: '최대 수량 이상 입력할 수 없습니다.',
+                text: '수량을 조절해 주세요'
+            })
+        }
+    });
 
-  // Initial total price calculation
-  updateTotalPrice();
+    decreaseBtn.addEventListener("click", function () {
+        var currentQuantity = parseInt(quantityInput.value);
+        if (currentQuantity > 1) {
+            quantityInput.value = currentQuantity - 1;
+            updateTotalPrice();
+        }
+    });
+
+    // Update total price when quantity input changes directly
+    quantityInput.addEventListener("input", updateTotalPrice);
+
+    // Initial total price calculation
+    updateTotalPrice();
 </script>
 
 <%--get product quantity--%>
 <script>
-  function getQuantity() {
-    var editableDiv = document.getElementById("quantity-input");
-    console.log(editableDiv.value);
-    return parseInt(editableDiv.value);
-  }
+    function getQuantity() {
+        var editableDiv = document.getElementById("quantity-input");
+        console.log(editableDiv.value);
+        return parseInt(editableDiv.value);
+    }
 
-  // Update the href attribute of the link
-  var orderLink = document.getElementById("order-link");
-  orderLink.addEventListener('click', () => {
-    orderLink.href = "/order.bit?view=direct&cmd=form&productId=${productDetail.detail.id}&quantity="
-        + getQuantity();
-  });
+    // Update the href attribute of the link
+    var orderLink = document.getElementById("order-link");
+    orderLink.addEventListener('click', () => {
+        orderLink.href = "/order.bit?view=direct&cmd=form&productId=${productDetail.detail.id}&quantity="
+            + getQuantity();
+    });
 </script>
 </body>
 

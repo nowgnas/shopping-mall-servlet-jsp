@@ -1,5 +1,6 @@
 package web.dispatcher;
 
+import app.exception.DomainException;
 import app.exception.likes.LikesEntityDuplicateException;
 import app.exception.member.LoginFailException;
 import app.exception.member.MemberEntityNotFoundException;
@@ -8,6 +9,7 @@ import org.apache.log4j.Logger;
 import web.ControllerFrame;
 import web.RestControllerFrame;
 import web.controller.*;
+import web.restController.CartRestController;
 import web.restController.LikesRestController;
 import web.restController.MemberRestController;
 import web.restController.OrderRestController;
@@ -39,6 +41,7 @@ public class DispatcherServlet extends HttpServlet {
     restControllerMapper.put("likes-rest", new LikesRestController());
     restControllerMapper.put("member-rest", new MemberRestController());
     restControllerMapper.put("order-rest", new OrderRestController());
+    restControllerMapper.put("cart-rest", new CartRestController());
   }
 
   protected void service(HttpServletRequest request, HttpServletResponse response)
@@ -76,6 +79,8 @@ public class DispatcherServlet extends HttpServlet {
     } catch (LoginFailException e) {
       response.sendError(e.getStatusCode(), e.getMessage());
     } catch (LikesEntityDuplicateException e) {
+      response.sendError(e.getStatusCode(), e.getMessage());
+    } catch (DomainException e) {
       response.sendError(e.getStatusCode(), e.getMessage());
     } catch (Exception e) {
       e.printStackTrace();

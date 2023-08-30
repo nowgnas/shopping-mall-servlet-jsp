@@ -82,7 +82,7 @@
                             <tr>
                                 <td class="product__cart__item">
                                     <div class="product__cart__item__pic">
-                                        <img alt="" src="${product.imgUrl}">
+                                        <img style="height: 250px; width: 250px" alt="" src="${product.imgUrl}">
                                     </div>
                                     <div class="product__cart__item__text">
                                         <h6>${product.productName}</h6>
@@ -137,7 +137,7 @@
                         <li>Subtotal <span id="subtotal">${totalPrice}원</span></li>
                         <li>Total <span id="total">${totalPrice}원</span></li>
                     </ul>
-                    <a href="#" class="primary-btn">Proceed to checkout</a>
+                    <a href="order.bit?view=cart&cmd=form" class="primary-btn">Proceed to checkout</a>
                 </div>
 
             </div>

@@ -8,22 +8,18 @@ import app.dto.product.ProductListItem;
 import app.dto.product.response.ProductDetailWithCategory;
 import app.dto.product.response.ProductListWithPagination;
 import app.entity.Category;
-import app.enums.SortOption;
 import app.exception.product.ProductNotFoundException;
 import app.utils.GetSessionFactory;
-import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.logging.Logger;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
 
 public class ProductServiceImpl implements ProductService {
   private static ProductServiceImpl instance;
   private final SqlSessionFactory sessionFactory = GetSessionFactory.getInstance();
-  Logger log = Logger.getLogger("ProductServiceImpl");
   private ProductDaoFrame<Long, app.entity.Product> dao;
 
   public ProductServiceImpl() {
@@ -61,21 +57,9 @@ public class ProductServiceImpl implements ProductService {
     map.put("offset", (currentPage - 1) * 9);
     map.put("userId", userId.toString());
 
-    List<ProductListItem> products = null;
+    List<ProductListItem> products = dao.selectAllSortByPrice(map, session);
+    if (products.isEmpty()) throw new ProductNotFoundException();
 
-    switch (SortOption.valueOf(sortOption)) {
-      case PRICE_DESC:
-        products = dao.selectAllSortByPriceDesc(map, session);
-        break;
-      case PRICE_ASC:
-        products = dao.selectAllSortByPrice(map, session);
-        break;
-      case DATE_DESC:
-        products = dao.selectAllSortByDate(map, session);
-        break;
-      default:
-        throw new ProductNotFoundException();
-    }
     int totalPage = dao.getTotalPage(session);
     session.close();
     Pagination pagination =
@@ -88,14 +72,15 @@ public class ProductServiceImpl implements ProductService {
   }
 
   @Override
-  public ProductListWithPagination getProductsByKeyword(String keyword, Long memberId, int curPage)
-      throws Exception {
+  public ProductListWithPagination getProductsByKeyword(
+      String keyword, Long memberId, int curPage) {
     SqlSession session = sessionFactory.openSession();
     Map<String, Object> map = new HashMap<>();
     map.put("userId", memberId);
     map.put("offset", (curPage - 1) * 9);
     map.put("keyword", keyword.trim());
     List<ProductListItem> products = dao.selectProductsByKeyword(map, session);
+    if (products.isEmpty()) throw new ProductNotFoundException();
     session.close();
     int totalPage = (int) Math.ceil(products.size() / 9);
     Pagination pagination = Pagination.builder().currentPage(curPage).perPage(9).build();

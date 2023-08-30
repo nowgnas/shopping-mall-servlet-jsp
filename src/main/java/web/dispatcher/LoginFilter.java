@@ -41,6 +41,15 @@ public class LoginFilter implements Filter {
         return;
       }
     }
+    if(path.equals("likes-rest") || path.equals("cart-rest") || path.equals("order-rest")) {
+      HttpSession session = ((HttpServletRequest) request).getSession(false);
+      if (session == null || session.getAttribute("loginMember") == null) {
+        ((HttpServletResponse)response).setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.setContentType("text/json;charset=UTF-8");
+        response.getWriter().print("login required");
+        return;
+      }
+    }
 
     // 2. 체인의 다음 필터 처리
     chain.doFilter(request, response);
