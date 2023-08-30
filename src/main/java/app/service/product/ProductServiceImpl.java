@@ -72,14 +72,15 @@ public class ProductServiceImpl implements ProductService {
   }
 
   @Override
-  public ProductListWithPagination getProductsByKeyword(String keyword, Long memberId, int curPage)
-      throws Exception {
+  public ProductListWithPagination getProductsByKeyword(
+      String keyword, Long memberId, int curPage) {
     SqlSession session = sessionFactory.openSession();
     Map<String, Object> map = new HashMap<>();
     map.put("userId", memberId);
     map.put("offset", (curPage - 1) * 9);
     map.put("keyword", keyword.trim());
     List<ProductListItem> products = dao.selectProductsByKeyword(map, session);
+    if (products.isEmpty()) throw new ProductNotFoundException();
     session.close();
     int totalPage = (int) Math.ceil(products.size() / 9);
     Pagination pagination = Pagination.builder().currentPage(curPage).perPage(9).build();
