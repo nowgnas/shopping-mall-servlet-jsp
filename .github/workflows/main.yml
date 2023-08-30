@@ -1,18 +1,21 @@
-name: Make CURL POST Request
+name: Base Repository Workflow
 
 on:
   push:
     branches:
-      - main  # Change this to the appropriate branch name
+      - main  # Change this to the branch you want to trigger the workflow on
+  pull_request:
+    branches:
+      - main  # Change this to the branch you want to trigger the workflow on
 
 jobs:
-  make-request:
-    runs-on: ubuntu-latest
+  build:
+    runs-on: ubuntu-latest  # You can choose the runner environment here
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-
+        
       - name: Make CURL POST request
         run: |
           curl -X POST http://bitbit.kro.kr:8088/job/lotte-mall/build --user 116eb06dd739dc0e07100177055cc4cc69 -v
