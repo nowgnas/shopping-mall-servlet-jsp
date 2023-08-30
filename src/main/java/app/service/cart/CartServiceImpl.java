@@ -28,6 +28,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.apache.ibatis.session.SqlSession;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
@@ -42,13 +46,13 @@ public class CartServiceImpl implements CartService {
   private StockCheckerService stockCheckerService;
   private UpdateCartService updateCartService;
 
-
   @Override
   public AllCartProductInfoDtoWithPagination getCartProductListByMemberPagination(Long memberId)
       throws Exception {
     SqlSession session = GetSessionFactory.getInstance().openSession();
 
     Long totalPaging = cartDao.getTheNumberOfTotalProductInCart(memberId, session);
+
     Pagination pagination = Pagination.builder().currentPage(1)
         .totalPage(Math.toIntExact(totalPaging)).build();
 
@@ -60,12 +64,10 @@ public class CartServiceImpl implements CartService {
 
   }
 
-
   @Override
-  public AllCartProductInfoDto getCartProductListByMember(
-      Long memberId) throws Exception {
+  public AllCartProductInfoDto getCartProductListByMember(Long memberId) throws Exception {
     SqlSession session = GetSessionFactory.getInstance().openSession();
-    //MemberNotFoundException
+    // MemberNotFoundException
     memberExistCheckerService.isExisted(memberDao, memberId, session).getId();
     List<Cart> cartList = cartDao.getCartProductListByMember(memberId, session);
     List<Long> productIdList = cartList.stream().map(p -> p.getProductId())
@@ -85,57 +87,55 @@ public class CartServiceImpl implements CartService {
   }
 
   @Override
-  public void putItemIntoCart(ProductAndMemberCompositeKey productAndMemberCompositeKey,
-      Long requestQuantity) throws Exception {
+  public void putItemIntoCart(
+      ProductAndMemberCompositeKey productAndMemberCompositeKey, Long requestQuantity)
+      throws Exception {
     SqlSession session = GetSessionFactory.getInstance().openSession();
     Long memberId = productAndMemberCompositeKey.getMemberId();
     Long productId = productAndMemberCompositeKey.getProductId();
-    //MemberNotFoundException
+    // MemberNotFoundException
     memberExistCheckerService.isExisted(memberDao, memberId, session);
-    //ProductNotFoundException
+    // ProductNotFoundException
     Product product = productExistCheckerService.isExisted(productDao, productId, session);
-
     Optional<Cart> cartOptional = cartDao.selectById(productAndMemberCompositeKey, session);
     if (cartOptional.isPresent()) {
-      updateCartService.update(cartOptional.get(), requestQuantity, product.getQuantity(),
-          session);
+      updateCartService.update(cartOptional.get(), requestQuantity, product.getQuantity(), session);
     } else {
-      cartDao.insert(Cart.cartCompKeyBuilder(productAndMemberCompositeKey, requestQuantity),
-          session);
+      cartDao.insert(
+          Cart.cartCompKeyBuilder(productAndMemberCompositeKey, requestQuantity), session);
     }
+    session.commit();
+    session.close();
   }
 
   @Override
   public void updateQuantityOfCartProduct(
-      ProductAndMemberCompositeKey productAndMemberCompositeKey,
-      Long requestUpdateQuantity)
+      ProductAndMemberCompositeKey productAndMemberCompositeKey, Long requestUpdateQuantity)
       throws Exception {
     SqlSession session = GetSessionFactory.getInstance().openSession();
     Long memberId = productAndMemberCompositeKey.getMemberId();
     Long productId = productAndMemberCompositeKey.getProductId();
-    //MemberNotFoundException
+    // MemberNotFoundException
     memberExistCheckerService.isExisted(memberDao, memberId, session);
-    //ProductNotFoundException
+    // ProductNotFoundException
     Product product = productExistCheckerService.isExisted(productDao, productId, session);
-    //CartNotFoundException
+    // CartNotFoundException
     Cart cart = cartExistCheckerService.isExisted(cartDao, productAndMemberCompositeKey, session);
-      updateCartService.update(cart, requestUpdateQuantity, product.getQuantity(),session);
+    updateCartService.update(cart, requestUpdateQuantity, product.getQuantity(), session);
   }
 
   @Override
-  public void delete(ProductAndMemberCompositeKey productAndMemberCompositeKey)
-      throws Exception {
+  public void delete(ProductAndMemberCompositeKey productAndMemberCompositeKey) throws Exception {
     SqlSession session = GetSessionFactory.getInstance().openSession();
     Long memberId = productAndMemberCompositeKey.getMemberId();
     Long productId = productAndMemberCompositeKey.getProductId();
-    //MemberNotFoundException
+    // MemberNotFoundException
     memberExistCheckerService.isExisted(memberDao, memberId, session);
-    //ProductNotFoundException
+    // ProductNotFoundException
     productExistCheckerService.isExisted(productDao, productId, session);
-    //CartNotFoundException
+    // CartNotFoundException
     cartExistCheckerService.isExisted(cartDao, productAndMemberCompositeKey, session);
 
     cartDao.deleteById(productAndMemberCompositeKey, session);
-
   }
 }

@@ -121,7 +121,7 @@
                                         <button class="btn btn-outline-secondary" type="button"
                                                 id="decrease-btn">-
                                         </button>
-                                        <a href="#" class="primary-btn">add to cart</a>
+                                        <a href="#" data-p-id="${productDetail.detail.id}" id="add-cart-btn" class="primary-btn">add to cart</a>
                                     </div>
                                 </div>
                             </div>
