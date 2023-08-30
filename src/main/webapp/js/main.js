@@ -204,5 +204,23 @@
         });
     });
 
+    // 나중에 리팩토링 car.js로
+    $('#common-parent-element').on('click', '.add-cart', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        let target = $(this);
+        const productId = target.data('product-id');
+        $.post('cart-rest.bit?cmd=add',
+            {productId: productId},
+            function (res) {
+                Swal.fire({
+                    icon: 'success',
+                    title: '상품 추가 되었습니다.'
+                })
+            }).fail((err) => {
+            console.log(err);
+        });
+    })
+
 
 })(jQuery);

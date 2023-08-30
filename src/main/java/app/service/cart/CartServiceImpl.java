@@ -19,6 +19,8 @@ import app.utils.GetSessionFactory;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import com.sun.security.jgss.GSSUtil;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -75,11 +77,10 @@ public class CartServiceImpl implements CartService {
     SqlSession session = GetSessionFactory.getInstance().openSession();
     Long memberId = productAndMemberCompositeKey.getMemberId();
     Long productId = productAndMemberCompositeKey.getProductId();
-    //MemberNotFoundException
+    // MemberNotFoundException
     memberExistCheckerService.isExisted(memberDao, memberId, session);
-    //ProductNotFoundException
+    // ProductNotFoundException
     Product product = productExistCheckerService.isExisted(productDao, productId, session);
-
     Optional<Cart> cartOptional = cartDao.selectById(productAndMemberCompositeKey, session);
     if (cartOptional.isPresent()) {
       updateCartService.update(cartOptional.get(), requestQuantity, product.getQuantity(),
@@ -88,6 +89,8 @@ public class CartServiceImpl implements CartService {
       cartDao.insert(Cart.cartCompKeyBuilder(productAndMemberCompositeKey, requestQuantity),
           session);
     }
+    session.commit();
+    session.close();
   }
 
   @Override

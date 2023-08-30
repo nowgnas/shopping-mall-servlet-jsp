@@ -125,7 +125,7 @@
                                 </div>
                                 <div class="product__item__text">
                                     <h6>${product.name}</h6>
-                                    <a href="#" class="add-cart">+ Add To Cart</a>
+                                    <a href="#" data-product-id="${product.id}" class="add-cart">+ Add To Cart</a>
                                         <%-- price--%>
                                     <h5>${product.price}</h5>
                                 </div>
