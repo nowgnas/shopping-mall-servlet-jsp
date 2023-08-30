@@ -42,7 +42,6 @@ class LikesDaoTest {
   @Test
   void insert() throws Exception {
     int res = likesDao.insert(Likes.builder().memberId(1L).productId(1L).build(), session);
-    int res2 = likesDao.insert(Likes.builder().memberId(1L).productId(1L).build(), session);
     session.commit();
 
     assertTrue(res == 1);

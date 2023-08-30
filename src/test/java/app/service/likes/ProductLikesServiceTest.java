@@ -68,18 +68,6 @@ class ProductLikesServiceTest {
 
   }
 
-  @DisplayName("회원의 물품 찜 여부 조회 테스트")
-  @Test
-  void getMemberProductLikes() throws Exception {
-
-    // 회원 id 1, 상품 id 2인 찜 정보 여부 조회
-    boolean res =
-        likesService.getMemberProductLikes(
-            ProductAndMemberCompositeKey.builder().memberId(1L).productId(2L).build());
-
-    assertTrue(res);
-  }
-
   @DisplayName("회원 찜 추가 테스트")
   @Test
   void addLikes() throws Exception {
@@ -91,11 +79,6 @@ class ProductLikesServiceTest {
 
     // 추가 로직 작동여부 파악
     assertEquals(res, 1);
-
-    // 추가된 찜 정보 조회
-    assertTrue(
-        likesService.getMemberProductLikes(
-            ProductAndMemberCompositeKey.builder().memberId(1L).productId(3L).build()));
   }
 
   @DisplayName("회원 찜 삭제 테스트")
@@ -109,11 +92,6 @@ class ProductLikesServiceTest {
 
     // 삭제 로직 작동여부 파악
     assertEquals(res, 1);
-
-    // 삭제된 찜 정보 조회 없어야 함
-    assertFalse(
-        likesService.getMemberProductLikes(
-            ProductAndMemberCompositeKey.builder().memberId(1L).productId(2L).build()));
   }
 
   @DisplayName("회원 찜 벌크 삭제 테스트")

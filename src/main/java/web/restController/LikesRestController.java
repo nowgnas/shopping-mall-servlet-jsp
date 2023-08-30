@@ -69,10 +69,6 @@ public class LikesRestController implements RestControllerFrame {
 
   // 찜 추가
   private Object addLikes(HttpServletRequest request) throws Exception {
-    if (likesService.getMemberProductLikes(
-        ProductAndMemberCompositeKey.builder().memberId(memberId).productId(productId).build()))
-      throw new LikesEntityDuplicateException();
-
     return likesService.addLikes(
         ProductAndMemberCompositeKey.builder().memberId(memberId).productId(productId).build());
   }

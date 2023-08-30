@@ -26,12 +26,8 @@ public class LikesDao implements LikesDaoFrame<ProductAndMemberCompositeKey, Lik
   }
 
   @Override
-  public int insert(Likes likes, SqlSession session) throws SQLException {
-    try {
+  public int insert(Likes likes, SqlSession session) throws Exception {
       return session.insert("likes.insert", likes);
-    } catch (PersistenceException e) {
-      throw new LikesEntityDuplicateException();
-    }
   }
 
   @Override

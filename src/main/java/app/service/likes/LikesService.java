@@ -9,9 +9,6 @@ public interface LikesService {
 
   LikesListWithPagination getMemberLikes(Long memberId, Integer curPage) throws Exception;
 
-  boolean getMemberProductLikes(ProductAndMemberCompositeKey productAndMemberCompositeKey)
-      throws Exception;
-
   int addLikes(ProductAndMemberCompositeKey productAndMemberCompositeKey);
 
   int removeLikes(ProductAndMemberCompositeKey productAndMemberCompositeKey);
